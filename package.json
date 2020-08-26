@@ -1,0 +1,32 @@
+{
+  "name": "markerjs2",
+  "version": "1.0.0-alpha.1",
+  "description": "JavaScript image annotation",
+  "main": "markerjs2.js",
+  "module": "markerjs2.esm.js",
+  "author": "Alan Mendelevich",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "build": "rollup --config rollup.config.prod.js",
+    "start": "rollup --config rollup.config.dev.js -w"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^5.0.2",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "eslint": "^7.7.0",
+    "eslint-config-prettier": "^6.11.0",
+    "prettier": "^2.1.1",
+    "rollup": "^2.26.5",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-dev": "^1.1.2",
+    "rollup-plugin-dts": "^1.4.12",
+    "rollup-plugin-generate-html-template": "^1.7.0",
+    "rollup-plugin-generate-package-json": "^3.2.0",
+    "rollup-plugin-livereload": "^1.3.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "tslib": "^2.0.1",
+    "typescript": "^4.0.2"
+  }
+}
