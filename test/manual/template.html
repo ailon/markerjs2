@@ -4,10 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>marker.js 2 manual testing</title>
+  <script>
+    let experiments;
+    document.addEventListener("DOMContentLoaded", function () {
+      experiments = new markerjs2.Experiments();
+    });    
+  </script>
 </head>
 <body>
   <img src="images/image1.jpg" style="max-width: 90%;" id="testImage1" />
   <br />
-  <button onclick="markerjs2.Experiments.openMarkerArea(document.getElementById('testImage1'))">mark image 1</button>
+  <button onclick="experiments.openMarkerArea(document.getElementById('testImage1'))">mark image 1</button>
+  <button onclick="experiments.render(document.getElementById('resultImage1'))">render image 1</button>
+  <img id="resultImage1" />
 </body>
 </html>

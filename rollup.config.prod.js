@@ -5,6 +5,7 @@ import pkg from './package.json';
 import generatePackageJson from 'rollup-plugin-generate-package-json';
 import { terser } from 'rollup-plugin-terser';
 import dts from 'rollup-plugin-dts';
+import svgo from 'rollup-plugin-svgo';
 
 const outputDir = './dist/';
 
@@ -43,6 +44,7 @@ export default [{
       }
     }),
     typescript(),
+    svgo(),
     terser(),
     copy({
       targets: [{
@@ -51,17 +53,19 @@ export default [{
     })
   ]
 }, {
-  input: ['src/index.ts'],
+  input: ['./src/index.ts'],
   output: {
     dir: './dts/'
   },
   plugins: [
+    del({ targets: 'dts/*' }),
     typescript({ 
       declaration: true, 
       outDir: './dts/', 
       rootDir: './src/', 
-      exclude: ['./test/**/*'] 
-    })
+      exclude: ['./test/**/*', './dts/**/*', './dist/**/*'] 
+    }),
+    svgo()
   ]
 }, {
   input: "./dts/index.d.ts",
