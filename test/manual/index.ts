@@ -6,7 +6,7 @@ export class Experiments {
   private markerArea1: MarkerArea;
   public openMarkerArea(target: HTMLImageElement): void {
     this.markerArea1 = new MarkerArea(target);
-    this.markerArea1.open();
+    this.markerArea1.show();
   }
 
   public async render(resultTarget: HTMLImageElement): Promise<void> {

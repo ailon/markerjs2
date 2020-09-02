@@ -3,6 +3,8 @@ import { Activator } from './core/Activator';
 import { Renderer } from './core/Renderer';
 
 import Logo from './assets/markerjs-logo-m.svg';
+import { MarkerBase } from './core/MarkerBase';
+import { DummyMarker } from '../test/manual';
 
 export class MarkerArea {
   private target: HTMLImageElement;
@@ -18,6 +20,8 @@ export class MarkerArea {
   private defs: SVGDefsElement;
 
   private logoUI: HTMLElement;
+
+  private toolbarMarkers: typeof MarkerBase[] = [DummyMarker];
 
   constructor(target: HTMLImageElement) {
     this.target = target;
@@ -46,6 +50,11 @@ export class MarkerArea {
     }
   }
 
+  public show(): void {
+    this.open();
+    this.showUI();
+  }
+
   public async render(): Promise<string> {
     const renderer = new Renderer();
     return await renderer.rasterize(this.target, this.markerImage);
@@ -53,13 +62,16 @@ export class MarkerArea {
 
   public close(): void {
     if (this.markerImage) {
-        this.targetRoot.removeChild(this.markerImageHolder);
+      this.targetRoot.removeChild(this.markerImageHolder);
     }
     if (this.logoUI) {
-        this.targetRoot.removeChild(this.logoUI);
+      this.targetRoot.removeChild(this.logoUI);
     }
   }
 
+  public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
+    this.toolbarMarkers.push(...markers);
+  }
 
   private setTopLeft() {
     const targetRect = this.target.getBoundingClientRect() as DOMRect;
@@ -169,5 +181,12 @@ export class MarkerArea {
         this.top + this.target.offsetHeight - this.logoUI.clientHeight - 10
       }px`;
     }
+  }
+
+  private showUI(): void {
+    this.toolbarMarkers.forEach(mt => { 
+      console.log(mt.title);
+      console.log(mt.icon);
+    });
   }
 }
