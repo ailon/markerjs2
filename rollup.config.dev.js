@@ -2,7 +2,7 @@ import typescript from '@rollup/plugin-typescript';
 import htmlTemplate from 'rollup-plugin-generate-html-template';
 import dev from 'rollup-plugin-dev';
 import livereload from 'rollup-plugin-livereload';
-import del from 'rollup-plugin-delete';
+// import del from 'rollup-plugin-delete';
 import copy from 'rollup-plugin-copy';
 import svgo from 'rollup-plugin-svgo';
 
@@ -15,7 +15,7 @@ export default {
     name: 'markerjs2'
   },
   plugins: [
-    del({ targets: 'build-dev/*' }),
+    //del({ targets: 'build-dev/*' }),
     typescript(), 
     svgo(),
     htmlTemplate({

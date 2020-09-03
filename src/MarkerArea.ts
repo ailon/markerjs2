@@ -5,6 +5,7 @@ import { Renderer } from './core/Renderer';
 import Logo from './assets/markerjs-logo-m.svg';
 import { MarkerBase } from './core/MarkerBase';
 import { DummyMarker } from '../test/manual';
+import { Toolbar } from './ui/Toolbar';
 
 export class MarkerArea {
   private target: HTMLImageElement;
@@ -22,6 +23,8 @@ export class MarkerArea {
   private logoUI: HTMLElement;
 
   private toolbarMarkers: typeof MarkerBase[] = [DummyMarker];
+
+  private toolbar: Toolbar;
 
   constructor(target: HTMLImageElement) {
     this.target = target;
@@ -184,9 +187,7 @@ export class MarkerArea {
   }
 
   private showUI(): void {
-    this.toolbarMarkers.forEach(mt => { 
-      console.log(mt.title);
-      console.log(mt.icon);
-    });
+    this.toolbar = new Toolbar(this.toolbarMarkers);
+    this.toolbar.show();
   }
 }
