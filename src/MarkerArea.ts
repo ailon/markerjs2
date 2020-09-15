@@ -5,7 +5,15 @@ import { Renderer } from './core/Renderer';
 import Logo from './assets/markerjs-logo-m.svg';
 import { MarkerBase } from './core/MarkerBase';
 import { DummyMarker } from '../test/manual';
-import { Toolbar } from './ui/Toolbar';
+import { Toolbar, ToolbarButtonType } from './ui/Toolbar';
+import { Toolbox } from './ui/Toolbox';
+
+export type MarkerAreaMode = 'select' | 'create' | 'delete';
+
+export interface IPoint {
+  x: number,
+  y: number
+}
 
 export class MarkerArea {
   private target: HTMLImageElement;
@@ -25,6 +33,14 @@ export class MarkerArea {
   private toolbarMarkers: typeof MarkerBase[] = [DummyMarker];
 
   private toolbar: Toolbar;
+  private toolbox: Toolbox;
+
+  private mode: MarkerAreaMode = 'select';
+
+  private currentMarker?: MarkerBase;
+  private markers: MarkerBase[] = [];
+
+  private isDragging = false;
 
   constructor(target: HTMLImageElement) {
     this.target = target;
@@ -35,6 +51,14 @@ export class MarkerArea {
 
     this.open = this.open.bind(this);
     this.setTopLeft = this.setTopLeft.bind(this);
+
+    this.toolbarButtonClicked = this.toolbarButtonClicked.bind(this);
+    this.createNewMarker = this.createNewMarker.bind(this);
+    this.markerCreated = this.markerCreated.bind(this);
+    this.setCurrentMarker = this.setCurrentMarker.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
   }
 
   public open(): void {
@@ -109,7 +133,7 @@ export class MarkerArea {
 
     this.defs = SvgHelper.createDefs();
     this.markerImage.appendChild(this.defs);
-
+    
     this.markerImageHolder.appendChild(this.markerImage);
 
     this.targetRoot.appendChild(this.markerImageHolder);
@@ -121,24 +145,9 @@ export class MarkerArea {
   }
 
   private attachEvents() {
-    this.markerImage.addEventListener('mousedown', this.mouseDown);
-    this.markerImage.addEventListener('mousemove', this.mouseMove);
-    this.markerImage.addEventListener('mouseup', this.mouseUp);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private mouseDown(event: MouseEvent) {
-    // @todo handle all mouse events here (instead of attaching events on markers)
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private mouseMove(event: MouseEvent) {
-    // @todo handle all mouse events here (instead of attaching events on markers)
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private mouseUp(event: MouseEvent) {
-    // @todo handle all mouse events here (instead of attaching events on markers)
+    this.markerImage.addEventListener('mousedown', this.onMouseDown);
+    this.markerImage.addEventListener('mousemove', this.onMouseMove);
+    this.markerImage.addEventListener('mouseup', this.onMouseUp);
   }
 
   /**
@@ -188,6 +197,87 @@ export class MarkerArea {
 
   private showUI(): void {
     this.toolbar = new Toolbar(this.toolbarMarkers);
+    this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
     this.toolbar.show();
+
+    this.toolbox = new Toolbox();
+    this.toolbox.show();
+  }
+
+  private toolbarButtonClicked(
+    buttonType: ToolbarButtonType,
+    value?: typeof MarkerBase | string
+  ) {
+    if (buttonType === 'marker' && value !== undefined) {
+      this.createNewMarker(<typeof MarkerBase>value);
+    }
+  }
+
+  private createNewMarker(markerType: typeof MarkerBase) {
+    const g = SvgHelper.createGroup();
+    this.markerImage.appendChild(g);
+
+    this.currentMarker = new markerType(g);
+    this.currentMarker.onMarkerCreated = this.markerCreated;
+    console.log(this.currentMarker.name);
+  }
+
+  private markerCreated(marker: MarkerBase) {
+    console.log('created');
+    this.mode = 'select';
+    this.markers.push(marker);
+    this.setCurrentMarker(marker);
+  }
+
+  private setCurrentMarker(marker: MarkerBase) {
+    if (this.currentMarker !== undefined) {
+      this.currentMarker.deselect();
+    }
+    this.currentMarker = marker;
+    this.currentMarker.select();
+    this.toolbox.setPanels(this.currentMarker.toolboxPanels);
+  }
+
+  private onMouseDown(ev: MouseEvent) {
+    console.log(ev.target);
+    this.isDragging = true;
+    if (
+      this.currentMarker !== undefined &&
+      (this.currentMarker.state === 'new' ||
+        this.currentMarker.state === 'creating')
+    ) {
+      this.currentMarker.mouseDown(this.clientToLocalCoordinates(ev.clientX, ev.clientY));
+      console.log('mouse down' + ev.target);
+    } else if (this.mode === 'select') {
+      const hitMarker = this.markers.find(m => m.ownsTarget(ev.target));
+      if (hitMarker !== undefined) {
+        this.setCurrentMarker(hitMarker);
+        this.currentMarker.mouseDown(
+          this.clientToLocalCoordinates(ev.clientX, ev.clientY), 
+          ev.target
+        );
+      }
+    }
+  }
+
+  private onMouseMove(ev: MouseEvent) {
+    if (
+      this.currentMarker !== undefined && this.isDragging
+    ) {
+      this.currentMarker.manipulate(this.clientToLocalCoordinates(ev.clientX, ev.clientY));
+    }
+  }
+  private onMouseUp(ev: MouseEvent) {
+    this.isDragging = false;
+    if (
+      this.currentMarker !== undefined
+    ) {
+      this.currentMarker.mouseUp(this.clientToLocalCoordinates(ev.clientX, ev.clientY));
+    }
+  }
+
+  private clientToLocalCoordinates(x: number, y: number): IPoint {
+    const clientRect = this.markerImage.getBoundingClientRect();
+    return { x: (x - clientRect.x), y: (y - clientRect.y) };
   }
 }
