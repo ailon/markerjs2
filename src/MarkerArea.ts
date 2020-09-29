@@ -211,8 +211,19 @@ export class MarkerArea {
     if (buttonType === 'marker' && value !== undefined) {
       this.createNewMarker(<typeof MarkerBase>value);
     } else if (buttonType === 'action') {
-      if (value === 'select') {
-        this.mode = 'select';
+      switch (value) {
+        case 'select': {
+          this.mode = 'select';
+          break;
+        }
+        case 'delete': {
+          if (this.currentMarker !== undefined) {
+            this.currentMarker.dispose();
+            this.markerImage.removeChild(this.currentMarker.container);
+            this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+          }
+          break;
+        }
       }
     }
   }
@@ -229,6 +240,7 @@ export class MarkerArea {
   private markerCreated(marker: MarkerBase) {
     console.log('created');
     this.mode = 'select';
+    this.toolbar.setSelectMode();
     this.markers.push(marker);
     this.setCurrentMarker(marker);
   }

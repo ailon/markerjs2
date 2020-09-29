@@ -4,7 +4,10 @@ import { ToolboxPanel } from '../ui/ToolboxPanel';
 export type MarkerState = 'new' | 'creating' | 'created';
 
 export class MarkerBase {
-  protected container: SVGGElement;
+  protected _container: SVGGElement;
+  public get container(): SVGGElement {
+    return this._container;
+  }
   protected _state: MarkerState = 'new';
   public get state(): MarkerState {
     return this._state;
@@ -27,7 +30,7 @@ export class MarkerBase {
   public onMarkerCreated: (marker: MarkerBase) => void;
 
   constructor(container: SVGGElement) {
-    this.container = container;
+    this._container = container;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,4 +57,7 @@ export class MarkerBase {
   public mouseUp(point: IPoint):void {
     console.log(point.x, point.y);
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public dispose(): void {}
 }

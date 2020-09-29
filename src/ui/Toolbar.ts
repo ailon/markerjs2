@@ -16,10 +16,13 @@ export type ToolbarButtonClickHandler = (
 export class Toolbar {
   private markerItems: typeof MarkerBase[];
 
+  private buttons: HTMLDivElement[] = [];
+
   private uiContainer: HTMLDivElement;
   private toolbarStyleClass: StyleClass;
   private toolbarBlockStyleClass: StyleClass;
   private toolbarButtonStyleClass: StyleClass;
+  private toolbarActiveButtonStyleClass: StyleClass;
 
   private buttonClickListeners: ToolbarButtonClickHandler[] = [];
 
@@ -49,9 +52,10 @@ export class Toolbar {
         buttonContainer.className = this.toolbarButtonStyleClass.name;
         buttonContainer.innerHTML = mi.icon;
         buttonContainer.addEventListener('click', () => {
-          this.markerToolbarButtonClicked(mi);
+          this.markerToolbarButtonClicked(buttonContainer, mi);
         });
         markerButtonBlock.appendChild(buttonContainer);
+        this.buttons.push(buttonContainer);
       });
     }
 
@@ -63,6 +67,7 @@ export class Toolbar {
     this.addActionButton(resultButtonBlock, CloseIcon, 'close');
 
     document.body.appendChild(this.uiContainer);
+    this.setSelectMode();
   }
 
   public addButtonClickListener(listener: ToolbarButtonClickHandler): void {
@@ -78,14 +83,28 @@ export class Toolbar {
     }
   }
 
-  private addActionButton(container: HTMLDivElement, icon: string, value: string) {
-    const action = document.createElement('div');
-    action.className = this.toolbarButtonStyleClass.name;
-    action.innerHTML = icon;
-    action.addEventListener('click', () => {
-      this.actionToolbarButtonClicked(value);
+  public setSelectMode(): void {
+    this.resetButtonStyles();
+    this.setActiveButton(this.buttons[0]);
+  }
+
+  private resetButtonStyles() {
+    this.buttons.forEach(button => {
+      button.className = button.className
+        .replace(this.toolbarActiveButtonStyleClass.name, '')
+        .trim();
     });
-    container.appendChild(action);
+  }
+
+  private addActionButton(container: HTMLDivElement, icon: string, value: string) {
+    const actionButton = document.createElement('div');
+    actionButton.className = this.toolbarButtonStyleClass.name;
+    actionButton.innerHTML = icon;
+    actionButton.addEventListener('click', () => {
+      this.actionToolbarButtonClicked(actionButton, value);
+    });
+    container.appendChild(actionButton);
+    this.buttons.push(actionButton);
   }
 
   private addStyles() {
@@ -125,6 +144,10 @@ export class Toolbar {
       padding: ${buttonPadding}px;
     `))
 
+    this.toolbarActiveButtonStyleClass = Style.addClass(new StyleClass('toolbar_active_button', `
+      background-color: ${Style.settings.toolbarBackgroundHoverColor}
+    `));
+
     Style.addRule(
       new StyleRule(
         `.${this.toolbarButtonStyleClass.name} svg`,
@@ -145,7 +168,8 @@ export class Toolbar {
     );
   }
 
-  private markerToolbarButtonClicked(markerType: typeof MarkerBase) {
+  private markerToolbarButtonClicked(button: HTMLDivElement, markerType: typeof MarkerBase) {
+    this.setActiveButton(button);
     if (this.buttonClickListeners && this.buttonClickListeners.length > 0) {
       this.buttonClickListeners.forEach((listener) =>
         listener('marker', markerType)
@@ -153,11 +177,17 @@ export class Toolbar {
     }
   }
 
-  private actionToolbarButtonClicked(action: string) {
+  private actionToolbarButtonClicked(button: HTMLDivElement, action: string) {
+    this.setActiveButton(button);
     if (this.buttonClickListeners && this.buttonClickListeners.length > 0) {
       this.buttonClickListeners.forEach((listener) =>
         listener('action', action)
       );
     }
+  }
+
+  private setActiveButton(button: HTMLDivElement) {
+    this.resetButtonStyles();
+    button.className += ' ' + this.toolbarActiveButtonStyleClass.name;
   }
 }

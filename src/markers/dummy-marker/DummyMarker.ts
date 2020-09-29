@@ -52,7 +52,7 @@ export class DummyMarker extends MarkerBase {
       translate.setTranslate(point.x, point.y);
       this.visual.transform.baseVal.replaceItem(translate, 0);
 
-      this.container.appendChild(this.visual);
+      this._container.appendChild(this.visual);
       this._state = 'creating';
     } else if (target === this.visual) {
       console.log('hit');
