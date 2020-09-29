@@ -1,9 +1,18 @@
+import { IStyleSettings } from './IStyleSettings';
+
 export class Style {
   public static CLASS_PREFIX = '__markerjs2_';
 
   private static classes: StyleClass[] = [];
   private static rules: StyleRule[] = [];
   private static styleSheet?: HTMLStyleElement;
+
+  public static settings: IStyleSettings = {
+    toolbarBackgroundColor: '#111111',
+    toolbarBackgroundHoverColor: '#333333',
+    toolbarColor: '#eeeeee',
+    toolbarHeight: 40
+  }
 
   public static addClass(styleClass: StyleClass): StyleClass {
     if (Style.styleSheet === undefined) {
@@ -24,7 +33,6 @@ export class Style {
 
   private static addStyleSheet() {
     Style.styleSheet = document.createElement('style');
-    Style.styleSheet.type = 'text/css';
     document.head.appendChild(Style.styleSheet);
   }
 }
