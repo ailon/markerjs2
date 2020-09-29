@@ -210,6 +210,10 @@ export class MarkerArea {
   ) {
     if (buttonType === 'marker' && value !== undefined) {
       this.createNewMarker(<typeof MarkerBase>value);
+    } else if (buttonType === 'action') {
+      if (value === 'select') {
+        this.mode = 'select';
+      }
     }
   }
 
