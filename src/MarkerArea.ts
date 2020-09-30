@@ -28,6 +28,11 @@ export class MarkerArea {
   private markerImageHolder: HTMLDivElement;
   private defs: SVGDefsElement;
 
+  private coverDiv: HTMLDivElement;
+  private uiDiv: HTMLDivElement;
+  private editorCanvas: HTMLDivElement;
+  private editingTarget: HTMLImageElement;
+
   private logoUI: HTMLElement;
 
   private toolbarMarkers: typeof MarkerBase[] = [DummyMarker];
@@ -41,6 +46,11 @@ export class MarkerArea {
   private markers: MarkerBase[] = [];
 
   private isDragging = false;
+
+  // for preserving orginal window state before opening the editor
+  private bodyOverflowState: string;
+  private scrollYState: number;
+  private scrollXState: number;
 
   constructor(target: HTMLImageElement) {
     this.target = target;
@@ -59,9 +69,14 @@ export class MarkerArea {
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
+    this.overrideOverflow = this.overrideOverflow.bind(this);
+    this.restoreOverflow = this.restoreOverflow.bind(this);
+    this.close = this.close.bind(this);
+    this.closeUI = this.closeUI.bind(this);
   }
 
-  public open(): void {
+  private open(): void {
+    this.setEditingTarget();
     this.setTopLeft();
     this.initMarkerCanvas();
     this.attachEvents();
@@ -78,8 +93,8 @@ export class MarkerArea {
   }
 
   public show(): void {
-    this.open();
     this.showUI();
+    this.open();
   }
 
   public async render(): Promise<string> {
@@ -88,11 +103,14 @@ export class MarkerArea {
   }
 
   public close(): void {
-    if (this.markerImage) {
-      this.targetRoot.removeChild(this.markerImageHolder);
-    }
-    if (this.logoUI) {
-      this.targetRoot.removeChild(this.logoUI);
+    // if (this.markerImage) {
+    //   this.targetRoot.removeChild(this.markerImageHolder);
+    // }
+    // if (this.logoUI) {
+    //   this.targetRoot.removeChild(this.logoUI);
+    // }
+    if (this.coverDiv) {
+      this.closeUI();
     }
   }
 
@@ -100,9 +118,15 @@ export class MarkerArea {
     this.toolbarMarkers.push(...markers);
   }
 
+  private setEditingTarget() {
+    this.editingTarget.src = this.target.src;
+    this.editingTarget.width = this.target.clientWidth;
+    this.editingTarget.height = this.target.clientHeight;
+  }
+
   private setTopLeft() {
-    const targetRect = this.target.getBoundingClientRect() as DOMRect;
-    const bodyRect = this.targetRoot.parentElement.getBoundingClientRect();
+    const targetRect = this.editingTarget.getBoundingClientRect();
+    const bodyRect = this.editorCanvas.getBoundingClientRect();
     this.left = targetRect.left - bodyRect.left;
     this.top = targetRect.top - bodyRect.top;
   }
@@ -118,16 +142,16 @@ export class MarkerArea {
       'svg'
     );
     this.markerImage.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    this.markerImage.setAttribute('width', this.width.toString());
-    this.markerImage.setAttribute('height', this.height.toString());
+    this.markerImage.setAttribute('width', this.editingTarget.width.toString());
+    this.markerImage.setAttribute('height', this.editingTarget.height.toString());
     this.markerImage.setAttribute(
       'viewBox',
-      '0 0 ' + this.width.toString() + ' ' + this.height.toString()
+      '0 0 ' + this.editingTarget.width.toString() + ' ' + this.editingTarget.height.toString()
     );
 
     this.markerImageHolder.style.position = 'absolute';
-    this.markerImageHolder.style.width = `${this.width}px`;
-    this.markerImageHolder.style.height = `${this.height}px`;
+    this.markerImageHolder.style.width = `${this.editingTarget.width}px`;
+    this.markerImageHolder.style.height = `${this.editingTarget.height}px`;
     this.markerImageHolder.style.transformOrigin = 'top left';
     this.positionMarkerImage();
 
@@ -136,7 +160,7 @@ export class MarkerArea {
     
     this.markerImageHolder.appendChild(this.markerImage);
 
-    this.targetRoot.appendChild(this.markerImageHolder);
+    this.editorCanvas.appendChild(this.markerImageHolder);
   }
 
   private positionMarkerImage() {
@@ -195,13 +219,66 @@ export class MarkerArea {
     }
   }
 
+  private overrideOverflow() {
+    // backup current state of scrolling and overflow
+    this.scrollXState = window.scrollX;
+    this.scrollYState = window.scrollY;
+    this.bodyOverflowState = document.body.style.overflow;
+
+    window.scroll({ top: 0, left: 0 });
+    document.body.style.overflow = 'hidden';
+  }
+
+  private restoreOverflow() {
+    document.body.style.overflow = this.bodyOverflowState;
+    window.scroll({ top: this.scrollYState, left: this.scrollXState });
+  }
+
   private showUI(): void {
-    this.toolbar = new Toolbar(this.toolbarMarkers);
+    this.overrideOverflow();
+
+    this.coverDiv = document.createElement('div');
+    this.coverDiv.style.position = 'absolute';
+    this.coverDiv.style.top = '0px';
+    this.coverDiv.style.left = '0px';
+    this.coverDiv.style.width = '100vw';
+    this.coverDiv.style.height = '100vh';
+    this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+    this.coverDiv.style.zIndex = '1000';
+    this.coverDiv.style.display = 'flex';
+
+    document.body.appendChild(this.coverDiv);
+
+    this.uiDiv = document.createElement('div');
+    this.uiDiv.style.display = 'flex';
+    this.uiDiv.style.flexDirection = 'column';
+    this.uiDiv.style.flexGrow = '2';
+    this.uiDiv.style.margin = '30px';
+    this.uiDiv.style.border = '0px';
+    this.uiDiv.style.backgroundColor = '#ffffff';
+    this.coverDiv.appendChild(this.uiDiv);
+
+    this.toolbar = new Toolbar(this.uiDiv, this.toolbarMarkers);
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
     this.toolbar.show();
 
-    this.toolbox = new Toolbox();
+    this.editorCanvas = document.createElement('div');
+    this.editorCanvas.style.flexGrow = '2';
+    this.editorCanvas.style.position = 'relative';
+    this.editorCanvas.style.overflow = 'auto';
+    this.uiDiv.appendChild(this.editorCanvas);
+
+    this.editingTarget = document.createElement('img');
+    this.editorCanvas.appendChild(this.editingTarget);
+
+    this.toolbox = new Toolbox(this.uiDiv);
     this.toolbox.show();
+  }
+
+  private closeUI() {
+    this.restoreOverflow();
+    // @todo better cleanup
+    document.body.removeChild(this.coverDiv);
   }
 
   private toolbarButtonClicked(
@@ -222,6 +299,10 @@ export class MarkerArea {
             this.markerImage.removeChild(this.currentMarker.container);
             this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
           }
+          break;
+        }
+        case 'close': {
+          this.close();
           break;
         }
       }

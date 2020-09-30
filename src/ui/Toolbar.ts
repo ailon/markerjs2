@@ -18,6 +18,7 @@ export class Toolbar {
 
   private buttons: HTMLDivElement[] = [];
 
+  private markerjsContainer: HTMLDivElement;
   private uiContainer: HTMLDivElement;
   private toolbarStyleClass: StyleClass;
   private toolbarBlockStyleClass: StyleClass;
@@ -26,7 +27,8 @@ export class Toolbar {
 
   private buttonClickListeners: ToolbarButtonClickHandler[] = [];
 
-  constructor(markerItems: typeof MarkerBase[]) {
+  constructor(markerjsContainer: HTMLDivElement, markerItems: typeof MarkerBase[]) {
+    this.markerjsContainer = markerjsContainer;
     this.markerItems = markerItems;
     this.addStyles();
   }
@@ -66,7 +68,7 @@ export class Toolbar {
     this.addActionButton(resultButtonBlock, CheckIcon, 'check');
     this.addActionButton(resultButtonBlock, CloseIcon, 'close');
 
-    document.body.appendChild(this.uiContainer);
+    this.markerjsContainer.appendChild(this.uiContainer);
     this.setSelectMode();
   }
 
@@ -112,15 +114,11 @@ export class Toolbar {
       new StyleClass(
         'toolbar',
         `
-      position: fixed;
-      top: 0px;
-      left: 0px;
       width: 100%;
       display: flex;
       flex-direction: row;
       justify-content: space-between;      
       height: ${Style.settings.toolbarHeight}px;
-      zIndex: 10000;
       background-color: ${Style.settings.toolbarBackgroundColor};
       box-shadow: 0px 3px rgba(33, 33, 33, 0.1);
     `
