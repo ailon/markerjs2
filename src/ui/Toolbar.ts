@@ -65,7 +65,7 @@ export class Toolbar {
     resultButtonBlock.className = this.toolbarBlockStyleClass.name;
     this.uiContainer.appendChild(resultButtonBlock);
 
-    this.addActionButton(resultButtonBlock, CheckIcon, 'check');
+    this.addActionButton(resultButtonBlock, CheckIcon, 'render');
     this.addActionButton(resultButtonBlock, CloseIcon, 'close');
 
     this.markerjsContainer.appendChild(this.uiContainer);

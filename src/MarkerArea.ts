@@ -15,6 +15,9 @@ export interface IPoint {
   y: number
 }
 
+export type RenderEventHandler = (dataURL: string) => void;
+export type CloseEventHandler = () => void;
+
 export class MarkerArea {
   private target: HTMLImageElement;
   private targetRoot: HTMLElement;
@@ -52,6 +55,9 @@ export class MarkerArea {
   private scrollYState: number;
   private scrollXState: number;
 
+  private renderEventListeners: RenderEventHandler[] = [];
+  private closeEventListeners: CloseEventHandler[] = [];
+
   constructor(target: HTMLImageElement) {
     this.target = target;
     this.targetRoot = document.body; // @todo allow setting different roots (see v1)
@@ -73,6 +79,10 @@ export class MarkerArea {
     this.restoreOverflow = this.restoreOverflow.bind(this);
     this.close = this.close.bind(this);
     this.closeUI = this.closeUI.bind(this);
+    this.addCloseEventListener = this.addCloseEventListener.bind(this);
+    this.removeCloseEventListener = this.removeCloseEventListener.bind(this);
+    this.addRenderEventListener = this.addRenderEventListener.bind(this);
+    this.removeRenderEventListener = this.removeRenderEventListener.bind(this);
   }
 
   private open(): void {
@@ -112,10 +122,37 @@ export class MarkerArea {
     if (this.coverDiv) {
       this.closeUI();
     }
+    this.closeEventListeners.forEach(listener => listener());
   }
 
   public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
     this.toolbarMarkers.push(...markers);
+  }
+
+  public addRenderEventListener(listener: RenderEventHandler): void {
+    this.renderEventListeners.push(listener);
+  }
+
+  public removeRenderEventListener(listener: RenderEventHandler): void {
+    if (this.renderEventListeners.indexOf(listener) > -1) {
+      this.renderEventListeners.splice(
+        this.renderEventListeners.indexOf(listener),
+        1
+      );
+    }
+  }
+
+  public addCloseEventListener(listener: CloseEventHandler): void {
+    this.closeEventListeners.push(listener);
+  }
+
+  public removeCloseEventListener(listener: CloseEventHandler): void {
+    if (this.closeEventListeners.indexOf(listener) > -1) {
+      this.closeEventListeners.splice(
+        this.closeEventListeners.indexOf(listener),
+        1
+      );
+    }
   }
 
   private setEditingTarget() {
@@ -143,10 +180,16 @@ export class MarkerArea {
     );
     this.markerImage.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     this.markerImage.setAttribute('width', this.editingTarget.width.toString());
-    this.markerImage.setAttribute('height', this.editingTarget.height.toString());
+    this.markerImage.setAttribute(
+      'height',
+      this.editingTarget.height.toString()
+    );
     this.markerImage.setAttribute(
       'viewBox',
-      '0 0 ' + this.editingTarget.width.toString() + ' ' + this.editingTarget.height.toString()
+      '0 0 ' +
+        this.editingTarget.width.toString() +
+        ' ' +
+        this.editingTarget.height.toString()
     );
 
     this.markerImageHolder.style.position = 'absolute';
@@ -157,7 +200,7 @@ export class MarkerArea {
 
     this.defs = SvgHelper.createDefs();
     this.markerImage.appendChild(this.defs);
-    
+
     this.markerImageHolder.appendChild(this.markerImage);
 
     this.editorCanvas.appendChild(this.markerImageHolder);
@@ -204,7 +247,7 @@ export class MarkerArea {
 
     this.logoUI.appendChild(link);
 
-    this.targetRoot.appendChild(this.logoUI);
+    this.editorCanvas.appendChild(this.logoUI);
 
     this.logoUI.style.position = 'absolute';
     this.positionLogo();
@@ -212,9 +255,12 @@ export class MarkerArea {
 
   private positionLogo() {
     if (this.logoUI) {
-      this.logoUI.style.left = `${this.left + 10}px`;
+      this.logoUI.style.left = `${this.markerImageHolder.offsetLeft + 10}px`;
       this.logoUI.style.top = `${
-        this.top + this.target.offsetHeight - this.logoUI.clientHeight - 10
+        this.markerImageHolder.offsetTop +
+        this.markerImageHolder.offsetHeight -
+        this.logoUI.clientHeight -
+        10
       }px`;
     }
   }
@@ -266,6 +312,9 @@ export class MarkerArea {
     this.editorCanvas.style.flexGrow = '2';
     this.editorCanvas.style.position = 'relative';
     this.editorCanvas.style.overflow = 'auto';
+    this.editorCanvas.style.display = 'flex';
+    this.editorCanvas.style.alignItems = 'center';
+    this.editorCanvas.style.justifyContent = 'center';
     this.uiDiv.appendChild(this.editorCanvas);
 
     this.editingTarget = document.createElement('img');
@@ -305,8 +354,18 @@ export class MarkerArea {
           this.close();
           break;
         }
+        case 'render': {
+          this.renderClicked();
+          break;
+        }
       }
     }
+  }
+
+  private async renderClicked() {
+    const result = await this.render();
+    this.renderEventListeners.forEach((listener) => listener(result));
+    this.close();
   }
 
   private createNewMarker(markerType: typeof MarkerBase) {
@@ -343,14 +402,16 @@ export class MarkerArea {
       (this.currentMarker.state === 'new' ||
         this.currentMarker.state === 'creating')
     ) {
-      this.currentMarker.mouseDown(this.clientToLocalCoordinates(ev.clientX, ev.clientY));
+      this.currentMarker.mouseDown(
+        this.clientToLocalCoordinates(ev.clientX, ev.clientY)
+      );
       console.log('mouse down' + ev.target);
     } else if (this.mode === 'select') {
-      const hitMarker = this.markers.find(m => m.ownsTarget(ev.target));
+      const hitMarker = this.markers.find((m) => m.ownsTarget(ev.target));
       if (hitMarker !== undefined) {
         this.setCurrentMarker(hitMarker);
         this.currentMarker.mouseDown(
-          this.clientToLocalCoordinates(ev.clientX, ev.clientY), 
+          this.clientToLocalCoordinates(ev.clientX, ev.clientY),
           ev.target
         );
       }
@@ -358,23 +419,23 @@ export class MarkerArea {
   }
 
   private onMouseMove(ev: MouseEvent) {
-    if (
-      this.currentMarker !== undefined && this.isDragging
-    ) {
-      this.currentMarker.manipulate(this.clientToLocalCoordinates(ev.clientX, ev.clientY));
+    if (this.currentMarker !== undefined && this.isDragging) {
+      this.currentMarker.manipulate(
+        this.clientToLocalCoordinates(ev.clientX, ev.clientY)
+      );
     }
   }
   private onMouseUp(ev: MouseEvent) {
     this.isDragging = false;
-    if (
-      this.currentMarker !== undefined
-    ) {
-      this.currentMarker.mouseUp(this.clientToLocalCoordinates(ev.clientX, ev.clientY));
+    if (this.currentMarker !== undefined) {
+      this.currentMarker.mouseUp(
+        this.clientToLocalCoordinates(ev.clientX, ev.clientY)
+      );
     }
   }
 
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
-    return { x: (x - clientRect.x), y: (y - clientRect.y) };
+    return { x: x - clientRect.x, y: y - clientRect.y };
   }
 }
