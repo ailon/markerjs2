@@ -60,4 +60,12 @@ export class MarkerBase {
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   public dispose(): void {}
+
+  protected addMarkerVisualToContainer(element: SVGElement): void {
+    if (this.container.childNodes.length > 0) {
+      this.container.insertBefore(element, this.container.childNodes[0]);
+    } else {
+      this.container.appendChild(element);
+    }
+  }
 }

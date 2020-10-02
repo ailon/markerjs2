@@ -7,6 +7,7 @@ import { MarkerBase } from './core/MarkerBase';
 import { DummyMarker } from '../test/manual';
 import { Toolbar, ToolbarButtonType } from './ui/Toolbar';
 import { Toolbox } from './ui/Toolbox';
+import { RectangleMarker } from './markers/rectangle-marker/RectangleMarker';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -38,7 +39,7 @@ export class MarkerArea {
 
   private logoUI: HTMLElement;
 
-  private toolbarMarkers: typeof MarkerBase[] = [DummyMarker];
+  private toolbarMarkers: typeof MarkerBase[] = [RectangleMarker, DummyMarker];
 
   private toolbar: Toolbar;
   private toolbox: Toolbox;
