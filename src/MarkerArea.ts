@@ -370,6 +370,7 @@ export class MarkerArea {
   }
 
   private createNewMarker(markerType: typeof MarkerBase) {
+    this.setCurrentMarker();
     const g = SvgHelper.createGroup();
     this.markerImage.appendChild(g);
 
@@ -386,13 +387,15 @@ export class MarkerArea {
     this.setCurrentMarker(marker);
   }
 
-  private setCurrentMarker(marker: MarkerBase) {
+  private setCurrentMarker(marker?: MarkerBase) {
     if (this.currentMarker !== undefined) {
       this.currentMarker.deselect();
     }
     this.currentMarker = marker;
-    this.currentMarker.select();
-    this.toolbox.setPanels(this.currentMarker.toolboxPanels);
+    if (this.currentMarker !== undefined) {
+      this.currentMarker.select();
+      this.toolbox.setPanels(this.currentMarker.toolboxPanels);
+    }
   }
 
   private onMouseDown(ev: MouseEvent) {
@@ -415,6 +418,8 @@ export class MarkerArea {
           this.clientToLocalCoordinates(ev.clientX, ev.clientY),
           ev.target
         );
+      } else {
+        this.setCurrentMarker();
       }
     }
   }

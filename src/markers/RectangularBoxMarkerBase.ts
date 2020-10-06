@@ -15,8 +15,10 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   private controlBox: SVGGElement;
   private readonly CB_DISTANCE: number = 10;
   private controlRect: SVGRectElement;
+  private rotatorGripLine: SVGLineElement;
 
   private controlGrips: RectangularBoxMarkerGrips;
+  private rotatorGrip: ResizeGrip;
   private activeGrip: ResizeGrip;
 
   protected markerElement: SVGGElement;
@@ -77,8 +79,26 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
     this.controlBox.appendChild(this.controlRect);
 
+    this.rotatorGripLine = SvgHelper.createLine(
+      (this.width + this.CB_DISTANCE * 2) / 2,
+      this.top - this.CB_DISTANCE,
+      (this.width + this.CB_DISTANCE * 2) / 2,
+      this.top - this.CB_DISTANCE * 3,
+      [
+        ['stroke', 'black'],
+        ['stroke-width', '1'],
+        ['stroke-opacity', '0.5'],
+        ['stroke-dasharray', '3, 2'],
+      ]
+    )
+
+    this.controlBox.appendChild(this.rotatorGripLine);
+
     this.controlGrips = new RectangularBoxMarkerGrips();
     this.addControlGrips();
+
+
+    this.controlBox.style.display = 'none';
   }
 
   private adjustControlBox() {
@@ -87,6 +107,10 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     this.controlBox.transform.baseVal.replaceItem(translate, 0);
     this.controlRect.setAttribute("width", (this.width + this.CB_DISTANCE).toString());
     this.controlRect.setAttribute("height", (this.height + this.CB_DISTANCE).toString());
+    this.rotatorGripLine.setAttribute("x1", ((this.width + this.CB_DISTANCE) / 2).toString());
+    this.rotatorGripLine.setAttribute("y1", (-this.CB_DISTANCE / 2).toString());
+    this.rotatorGripLine.setAttribute("x2", ((this.width + this.CB_DISTANCE) / 2).toString());
+    this.rotatorGripLine.setAttribute("y2", (-this.CB_DISTANCE * 3).toString());
     this.positionGrips();
   }
 
@@ -99,6 +123,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     this.controlGrips.bottomLeft = this.createGrip();
     this.controlGrips.bottomCenter = this.createGrip();
     this.controlGrips.bottomRight = this.createGrip();
+
+    this.rotatorGrip = this.createGrip();
 
     this.positionGrips();
   }
@@ -129,6 +155,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     this.positionGrip(this.controlGrips.bottomLeft.visual, left, bottom);
     this.positionGrip(this.controlGrips.bottomCenter.visual, cx, bottom);
     this.positionGrip(this.controlGrips.bottomRight.visual, right, bottom);
+
+    this.positionGrip(this.rotatorGrip.visual, cx, top - this.CB_DISTANCE * 3);
   }
 
   private positionGrip(grip: SVGGraphicsElement, x: number, y: number) {

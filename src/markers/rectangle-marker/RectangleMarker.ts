@@ -11,6 +11,9 @@ export class RectangleMarker extends RectangularBoxMarkerBase {
 
   private visual: SVGRectElement;
 
+  private manipulationStartX: number;
+  private manipulationStartY: number;
+
   private fillPanel: ColorPickerPanel = new ColorPickerPanel([
     '#ff0000',
     '#00ff00',
@@ -41,22 +44,42 @@ export class RectangleMarker extends RectangularBoxMarkerBase {
       this.left = point.x;
       this.top = point.y;
 
+      this.manipulationStartX = this.left;
+      this.manipulationStartY = this.top;
+
       this.visual = SvgHelper.createRect(1, 1, [['fill', '#ff0000']]);
       this.visual.transform.baseVal.appendItem(SvgHelper.createTransform());
 
-      const translate = this.visual.transform.baseVal.getItem(0);
-      translate.setTranslate(point.x, point.y);
-      this.visual.transform.baseVal.replaceItem(translate, 0);
+      this.moveVisual(point);
 
       this.addMarkerVisualToContainer(this.visual);
       this._state = 'creating';
     }
   }
 
+  private moveVisual(point: IPoint) {
+    const translate = this.visual.transform.baseVal.getItem(0);
+    translate.setTranslate(point.x, point.y);
+    this.visual.transform.baseVal.replaceItem(translate, 0);
+  }
+
   public manipulate(point: IPoint): void {
     if (this.state === 'creating') {
-      this.width = point.x - this.left;
-      this.height = point.y - this.top;
+      if (point.x - this.manipulationStartX >= 0) {
+        this.width = point.x - this.left;
+      } else {
+        this.width += Math.round(this.left - point.x);
+        this.left =  point.x;
+      }
+      if (point.y - this.manipulationStartY >= 0) {
+        this.height = point.y - this.top;
+      } else {
+        this.height += Math.round(this.top - point.y);
+        this.top = point.y;
+      }
+
+      this.moveVisual({x: this.left, y: this.top});
+
       SvgHelper.setAttributes(this.visual, [
         ['width', this.width.toString()],
         ['height', this.height.toString()],
