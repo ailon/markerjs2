@@ -14,7 +14,9 @@ export class RectangularBoxMarkerGrips {
     this.findGripByVisual = this.findGripByVisual.bind(this);
   }
 
-  public findGripByVisual(gripVisual: SVGGraphicsElement): ResizeGrip {
+  public findGripByVisual(
+    gripVisual: SVGGraphicsElement
+  ): ResizeGrip | undefined {
     switch (gripVisual) {
       case this.topLeft.visual:
         return this.topLeft;
@@ -32,6 +34,8 @@ export class RectangularBoxMarkerGrips {
         return this.bottomCenter;
       case this.bottomRight.visual:
         return this.bottomRight;
+      default:
+        return undefined;
     }
   }
 }

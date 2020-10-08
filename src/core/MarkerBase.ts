@@ -1,7 +1,7 @@
 import { IPoint } from '../MarkerArea';
 import { ToolboxPanel } from '../ui/ToolboxPanel';
 
-export type MarkerState = 'new' | 'creating' | 'created';
+export type MarkerState = 'new' | 'creating' | 'select' | 'move' | 'resize' | 'rotate';
 
 export class MarkerBase {
   protected _container: SVGGElement;

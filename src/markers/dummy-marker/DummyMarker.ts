@@ -79,7 +79,7 @@ export class DummyMarker extends MarkerBase {
 
   public mouseUp(point: IPoint): void {
     this.manipulate(point);
-    this._state = 'created';
+    this._state = 'select';
     if (this.onMarkerCreated) {
       this.onMarkerCreated(this);
     }

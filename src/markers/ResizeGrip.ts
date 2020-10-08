@@ -12,4 +12,12 @@ export class ResizeGrip {
       ['stroke-width', '2'],
     ]);
   }
+
+  public ownsTarget(el: EventTarget): boolean {
+    if (el === this.visual) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
