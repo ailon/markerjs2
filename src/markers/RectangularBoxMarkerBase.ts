@@ -23,6 +23,15 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   protected offsetX = 0;
   protected offsetY = 0;
 
+  protected rotationAngle = 0;
+
+  protected get centerX(): number {
+    return this.left + this.width / 2;
+  }
+  protected get centerY(): number {
+    return this.top + this.height / 2;
+  }
+
   protected visual: SVGGraphicsElement;
 
   private controlBox: SVGGElement;
@@ -38,6 +47,9 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
   constructor(container: SVGGElement) {
     super(container);
+
+    // add rotation transform
+    this.container.transform.baseVal.appendItem(SvgHelper.createTransform());
 
     this.setupControlBox();
   }
@@ -58,16 +70,18 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   public mouseDown(point: IPoint, target?: EventTarget): void {
     super.mouseDown(point, target);
 
+    const rotatedPoint = this.rotateVector(point);
+
     this.manipulationStartLeft = this.left;
     this.manipulationStartTop = this.top;
     this.manipulationStartWidth = this.width;
     this.manipulationStartHeight = this.height;
 
-    this.manipulationStartX = point.x;
-    this.manipulationStartY = point.y;
+    this.manipulationStartX = rotatedPoint.x;
+    this.manipulationStartY = rotatedPoint.y;
 
-    this.offsetX = point.x - this.left;
-    this.offsetY = point.y - this.top;
+    this.offsetX = rotatedPoint.x - this.left;
+    this.offsetY = rotatedPoint.y - this.top;
 
     if (this.state !== 'new') {
       this.select();
@@ -81,8 +95,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
         this._state = 'move';
       }
     } else {
-      this.left = point.x;
-      this.top = point.y;
+      this.left = rotatedPoint.x;
+      this.top = rotatedPoint.y;
     }
   }
 
@@ -101,6 +115,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   }
 
   public manipulate(point: IPoint): void {
+    const rotatedPoint = this.rotateVector(point);
+
     if (this.state === 'creating') {
       if (point.x - this.manipulationStartLeft >= 0) {
         this.width = point.x - this.left;
@@ -124,16 +140,18 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     } else if (this.state === 'move') {
       this.left =
         this.manipulationStartLeft +
-        (point.x - this.manipulationStartLeft) -
+        (rotatedPoint.x - this.manipulationStartLeft) -
         this.offsetX;
       this.top =
         this.manipulationStartTop +
-        (point.y - this.manipulationStartTop) -
+        (rotatedPoint.y - this.manipulationStartTop) -
         this.offsetY;
       this.moveVisual({x: this.left, y: this.top});
       this.adjustControlBox();
     } else if (this.state === 'resize') {
-      this.resize(point);
+      this.resize(rotatedPoint);
+    } else if (this.state === 'rotate') {
+      this.rotate(point);
     }
   }
 
@@ -193,6 +211,41 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     ])
 
     this.adjustControlBox();
+  }
+
+  private rotate(point: IPoint) {
+    const rotate = this.container.transform.baseVal.getItem(0);
+    const sign = Math.sign(point.x - this.centerX);
+    this.rotationAngle =
+      (Math.atan((point.y - this.centerY) / (point.x - this.centerX)) * 180) /
+        Math.PI +
+      90 * sign;
+    rotate.setRotate(this.rotationAngle, this.centerX, this.centerY);
+    this.container.transform.baseVal.replaceItem(rotate, 0);
+  }
+
+  private rotateVector(point: IPoint): IPoint {
+    if (this.rotationAngle === 0) {
+      return point;
+    }
+    
+    let matrix = this.container.getCTM();
+    matrix = matrix.inverse();
+    let svgPoint = SvgHelper.createPoint(point.x, point.y);
+    svgPoint = svgPoint.matrixTransform(matrix);
+
+    const result = { x: svgPoint.x, y: svgPoint.y };
+
+    // console.log(`point: ${point.x}/${point.y}`);
+    // console.log(`result: ${result.x}/${result.y}`);
+
+    return result;
+    // const radiangAngle = this.rotationAngle * Math.PI / 180;
+    // const result: IPoint = {
+    //   x: Math.tan(radiangAngle) * (point.x - this.left),
+    //   y: (point.y - this.top) / Math.tan(radiangAngle)
+    // };
+    // return result;
   }
 
   public select(): void {

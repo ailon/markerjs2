@@ -178,4 +178,16 @@ export class SvgHelper {
 
     return tspan;
   }
+
+  public static createPoint(      
+    x: number,
+    y: number
+  ): SVGPoint {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      const svgPoint = svg.createSVGPoint();
+      svgPoint.x = x;
+      svgPoint.y = y;
+  
+      return svgPoint;
+  }
 }

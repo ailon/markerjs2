@@ -37,7 +37,8 @@ export class RectangleMarker extends RectangularBoxMarkerBase {
     super.mouseDown(point, target);
     if (this.state === 'new') {
       this.visual = SvgHelper.createRect(1, 1, [['fill', '#ff0000']]);
-      this.visual.transform.baseVal.appendItem(SvgHelper.createTransform());
+      const translate = SvgHelper.createTransform();
+      this.visual.transform.baseVal.appendItem(translate);
 
       this.moveVisual(point);
 
