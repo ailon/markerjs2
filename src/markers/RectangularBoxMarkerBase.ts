@@ -70,7 +70,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   public mouseDown(point: IPoint, target?: EventTarget): void {
     super.mouseDown(point, target);
 
-    const rotatedPoint = this.rotateVector(point);
+    const rotatedPoint = this.unrotatePoint(point);
 
     this.manipulationStartLeft = this.left;
     this.manipulationStartTop = this.top;
@@ -90,6 +90,18 @@ export class RectangularBoxMarkerBase extends MarkerBase {
         this._state = 'resize';
       } else if (this.rotatorGrip.visual === target) {
         this.activeGrip = this.rotatorGrip;
+
+        const rotatedCenter = this.rotatePoint({x: this.centerX, y: this.centerY});
+        this.left = rotatedCenter.x - this.width / 2;
+        this.top = rotatedCenter.y - this.height / 2;
+        this.moveVisual({ x: this.left, y: this.top });
+
+        const rotate = this.container.transform.baseVal.getItem(0);
+        rotate.setRotate(this.rotationAngle, this.centerX, this.centerY);
+        this.container.transform.baseVal.replaceItem(rotate, 0);
+
+        this.adjustControlBox();
+
         this._state = 'rotate';
       } else {
         this._state = 'move';
@@ -115,7 +127,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   }
 
   public manipulate(point: IPoint): void {
-    const rotatedPoint = this.rotateVector(point);
+    const rotatedPoint = this.unrotatePoint(point);
 
     if (this.state === 'creating') {
       if (point.x - this.manipulationStartLeft >= 0) {
@@ -214,17 +226,43 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   }
 
   private rotate(point: IPoint) {
-    const rotate = this.container.transform.baseVal.getItem(0);
-    const sign = Math.sign(point.x - this.centerX);
-    this.rotationAngle =
-      (Math.atan((point.y - this.centerY) / (point.x - this.centerX)) * 180) /
-        Math.PI +
-      90 * sign;
-    rotate.setRotate(this.rotationAngle, this.centerX, this.centerY);
-    this.container.transform.baseVal.replaceItem(rotate, 0);
+    // avoid glitch when crossing the 0 rotation point
+    if (Math.abs(point.x - this.centerX) > 0.1) {
+      const rotate = this.container.transform.baseVal.getItem(0);
+      const sign = Math.sign(point.x - this.centerX);
+      this.rotationAngle =
+        (Math.atan((point.y - this.centerY) / (point.x - this.centerX)) * 180) /
+          Math.PI +
+        90 * sign;
+      rotate.setRotate(this.rotationAngle, this.centerX, this.centerY);
+      this.container.transform.baseVal.replaceItem(rotate, 0);
+    }
   }
 
-  private rotateVector(point: IPoint): IPoint {
+  private rotatePoint(point: IPoint): IPoint {
+    if (this.rotationAngle === 0) {
+      return point;
+    }
+    
+    const matrix = this.container.getCTM();
+    let svgPoint = SvgHelper.createPoint(point.x, point.y);
+    svgPoint = svgPoint.matrixTransform(matrix);
+
+    const result = { x: svgPoint.x, y: svgPoint.y };
+
+    // console.log(`point: ${point.x}/${point.y}`);
+    // console.log(`result: ${result.x}/${result.y}`);
+
+    return result;
+    // const radiangAngle = this.rotationAngle * Math.PI / 180;
+    // const result: IPoint = {
+    //   x: Math.tan(radiangAngle) * (point.x - this.left),
+    //   y: (point.y - this.top) / Math.tan(radiangAngle)
+    // };
+    // return result;
+  }
+
+  private unrotatePoint(point: IPoint): IPoint {
     if (this.rotationAngle === 0) {
       return point;
     }
