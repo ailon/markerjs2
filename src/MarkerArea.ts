@@ -84,6 +84,7 @@ export class MarkerArea {
     this.removeCloseEventListener = this.removeCloseEventListener.bind(this);
     this.addRenderEventListener = this.addRenderEventListener.bind(this);
     this.removeRenderEventListener = this.removeRenderEventListener.bind(this);
+    this.clientToLocalCoordinates = this.clientToLocalCoordinates.bind(this);
   }
 
   private open(): void {
@@ -192,6 +193,7 @@ export class MarkerArea {
         ' ' +
         this.editingTarget.height.toString()
     );
+    this.markerImage.style.pointerEvents = 'auto';
 
     this.markerImageHolder.style.position = 'absolute';
     this.markerImageHolder.style.width = `${this.editingTarget.width}px`;
@@ -214,8 +216,8 @@ export class MarkerArea {
 
   private attachEvents() {
     this.markerImage.addEventListener('mousedown', this.onMouseDown);
-    this.markerImage.addEventListener('mousemove', this.onMouseMove);
-    this.markerImage.addEventListener('mouseup', this.onMouseUp);
+    window.addEventListener('mousemove', this.onMouseMove);
+    window.addEventListener('mouseup', this.onMouseUp);
   }
 
   /**
@@ -316,6 +318,7 @@ export class MarkerArea {
     this.editorCanvas.style.display = 'flex';
     this.editorCanvas.style.alignItems = 'center';
     this.editorCanvas.style.justifyContent = 'center';
+    this.editorCanvas.style.pointerEvents = 'none';
     this.uiDiv.appendChild(this.editorCanvas);
 
     this.editingTarget = document.createElement('img');
@@ -400,12 +403,12 @@ export class MarkerArea {
 
   private onMouseDown(ev: MouseEvent) {
     console.log(ev.target);
-    this.isDragging = true;
     if (
       this.currentMarker !== undefined &&
       (this.currentMarker.state === 'new' ||
         this.currentMarker.state === 'creating')
     ) {
+      this.isDragging = true;
       this.currentMarker.mouseDown(
         this.clientToLocalCoordinates(ev.clientX, ev.clientY)
       );
@@ -414,6 +417,7 @@ export class MarkerArea {
       const hitMarker = this.markers.find((m) => m.ownsTarget(ev.target));
       if (hitMarker !== undefined) {
         this.setCurrentMarker(hitMarker);
+        this.isDragging = true;
         this.currentMarker.mouseDown(
           this.clientToLocalCoordinates(ev.clientX, ev.clientY),
           ev.target
@@ -425,7 +429,8 @@ export class MarkerArea {
   }
 
   private onMouseMove(ev: MouseEvent) {
-    if (this.currentMarker !== undefined && this.isDragging) {
+    if (this.currentMarker !== undefined || this.isDragging) {
+      ev.preventDefault();
       this.currentMarker.manipulate(
         this.clientToLocalCoordinates(ev.clientX, ev.clientY)
       );

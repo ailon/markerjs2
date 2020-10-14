@@ -114,6 +114,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   }
 
   public mouseUp(point: IPoint): void {
+    super.mouseUp(point);
     this.manipulate(point);
     this._state = 'select';
     if (this.onMarkerCreated) {
