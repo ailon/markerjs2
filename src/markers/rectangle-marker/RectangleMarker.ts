@@ -47,6 +47,18 @@ export class RectangleMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  public manipulate(point: IPoint): void {
+    super.manipulate(point);
+  }
+
+  protected resize(point: IPoint): void {
+    super.resize(point);
+    SvgHelper.setAttributes(this.visual, [
+      ['width', this.width.toString()],
+      ['height', this.height.toString()]
+    ]);
+  }
+
   public mouseUp(point: IPoint): void {
     super.mouseUp(point);
   }

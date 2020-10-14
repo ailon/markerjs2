@@ -9,8 +9,8 @@ import { ResizeGrip } from './ResizeGrip';
 export class RectangularBoxMarkerBase extends MarkerBase {
   protected left = 0;
   protected top = 0;
-  protected width = 100;
-  protected height = 100;
+  protected width = 0;
+  protected height = 0;
 
   protected manipulationStartLeft: number;
   protected manipulationStartTop: number;
@@ -70,13 +70,17 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   public mouseDown(point: IPoint, target?: EventTarget): void {
     super.mouseDown(point, target);
 
-    const rotatedPoint = this.unrotatePoint(point);
+    if (this.state === 'new') {
+      this.left = point.x;
+      this.top = point.y;
+    }
 
     this.manipulationStartLeft = this.left;
     this.manipulationStartTop = this.top;
     this.manipulationStartWidth = this.width;
     this.manipulationStartHeight = this.height;
 
+    const rotatedPoint = this.unrotatePoint(point);
     this.manipulationStartX = rotatedPoint.x;
     this.manipulationStartY = rotatedPoint.y;
 
@@ -106,9 +110,6 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       } else {
         this._state = 'move';
       }
-    } else {
-      this.left = rotatedPoint.x;
-      this.top = rotatedPoint.y;
     }
   }
 
@@ -130,25 +131,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     const rotatedPoint = this.unrotatePoint(point);
 
     if (this.state === 'creating') {
-      if (point.x - this.manipulationStartLeft >= 0) {
-        this.width = point.x - this.left;
-      } else {
-        this.width += Math.round(this.left - point.x);
-        this.left =  point.x;
-      }
-      if (point.y - this.manipulationStartTop >= 0) {
-        this.height = point.y - this.top;
-      } else {
-        this.height += Math.round(this.top - point.y);
-        this.top = point.y;
-      }
-
-      this.moveVisual({x: this.left, y: this.top});
-
-      SvgHelper.setAttributes(this.visual, [
-        ['width', this.width.toString()],
-        ['height', this.height.toString()],
-      ]);
+      this.resize(point);
     } else if (this.state === 'move') {
       this.left =
         this.manipulationStartLeft +
@@ -167,7 +150,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     }
   }
 
-  private resize(point: IPoint) {
+  protected resize(point: IPoint): void {
     let newX = this.manipulationStartLeft;
     let newWidth = this.manipulationStartWidth;
     let newY = this.manipulationStartTop;
@@ -183,6 +166,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       case this.controlGrips.bottomRight:
       case this.controlGrips.centerRight:
       case this.controlGrips.topRight:
+      case undefined:
         newWidth = this.manipulationStartWidth + point.x - this.manipulationStartX;
         break; 
     }
@@ -197,6 +181,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       case this.controlGrips.bottomCenter:
       case this.controlGrips.bottomLeft:
       case this.controlGrips.bottomRight:
+      case undefined:
         newHeight = this.manipulationStartHeight + point.y - this.manipulationStartY;
         break; 
     }
@@ -217,11 +202,6 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     }
 
     this.moveVisual({x: this.left, y: this.top});
-    SvgHelper.setAttributes(this.visual, [
-      ['width', this.width.toString()],
-      ['height', this.height.toString()]
-    ])
-
     this.adjustControlBox();
   }
 
@@ -239,7 +219,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     }
   }
 
-  private rotatePoint(point: IPoint): IPoint {
+  protected rotatePoint(point: IPoint): IPoint {
     if (this.rotationAngle === 0) {
       return point;
     }
@@ -250,19 +230,10 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
     const result = { x: svgPoint.x, y: svgPoint.y };
 
-    // console.log(`point: ${point.x}/${point.y}`);
-    // console.log(`result: ${result.x}/${result.y}`);
-
     return result;
-    // const radiangAngle = this.rotationAngle * Math.PI / 180;
-    // const result: IPoint = {
-    //   x: Math.tan(radiangAngle) * (point.x - this.left),
-    //   y: (point.y - this.top) / Math.tan(radiangAngle)
-    // };
-    // return result;
   }
 
-  private unrotatePoint(point: IPoint): IPoint {
+  protected unrotatePoint(point: IPoint): IPoint {
     if (this.rotationAngle === 0) {
       return point;
     }
@@ -274,16 +245,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
     const result = { x: svgPoint.x, y: svgPoint.y };
 
-    // console.log(`point: ${point.x}/${point.y}`);
-    // console.log(`result: ${result.x}/${result.y}`);
-
     return result;
-    // const radiangAngle = this.rotationAngle * Math.PI / 180;
-    // const result: IPoint = {
-    //   x: Math.tan(radiangAngle) * (point.x - this.left),
-    //   y: (point.y - this.top) / Math.tan(radiangAngle)
-    // };
-    // return result;
   }
 
   public select(): void {
