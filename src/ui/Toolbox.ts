@@ -12,8 +12,8 @@ export class Toolbox {
       new StyleClass(
         'toolbox',
         `
-      width: 100%;
-      height: 20px;
+      width: 200px;
+      height: 100%;
       background-color: #eeeeff;
       box-shadow: 0px 3px rgba(33, 33, 33, 0.1);
     `

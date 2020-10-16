@@ -34,6 +34,7 @@ export class MarkerArea {
 
   private coverDiv: HTMLDivElement;
   private uiDiv: HTMLDivElement;
+  private contentDiv: HTMLDivElement;
   private editorCanvas: HTMLDivElement;
   private editingTarget: HTMLImageElement;
 
@@ -311,6 +312,12 @@ export class MarkerArea {
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
     this.toolbar.show();
 
+    this.contentDiv = document.createElement('div');
+    this.contentDiv.style.display = 'flex';
+    this.contentDiv.style.flexDirection = 'row';
+    this.contentDiv.style.flexGrow = '2';
+    this.uiDiv.appendChild(this.contentDiv);
+
     this.editorCanvas = document.createElement('div');
     this.editorCanvas.style.flexGrow = '2';
     this.editorCanvas.style.position = 'relative';
@@ -319,12 +326,12 @@ export class MarkerArea {
     this.editorCanvas.style.alignItems = 'center';
     this.editorCanvas.style.justifyContent = 'center';
     this.editorCanvas.style.pointerEvents = 'none';
-    this.uiDiv.appendChild(this.editorCanvas);
+    this.contentDiv.appendChild(this.editorCanvas);
 
     this.editingTarget = document.createElement('img');
     this.editorCanvas.appendChild(this.editingTarget);
 
-    this.toolbox = new Toolbox(this.uiDiv);
+    this.toolbox = new Toolbox(this.contentDiv);
     this.toolbox.show();
   }
 
