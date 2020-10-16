@@ -1,5 +1,6 @@
 import { IPoint } from '../MarkerArea';
 import { ToolboxPanel } from '../ui/ToolboxPanel';
+import { Settings } from './Settings';
 
 export type MarkerState = 'new' | 'creating' | 'select' | 'move' | 'resize' | 'rotate';
 
@@ -17,6 +18,8 @@ export class MarkerBase {
     return this._name;
   }
 
+  protected globalSettings: Settings;
+
   public get toolboxPanels(): ToolboxPanel[] {
     return [];
   }
@@ -29,8 +32,9 @@ export class MarkerBase {
 
   public onMarkerCreated: (marker: MarkerBase) => void;
 
-  constructor(container: SVGGElement) {
+  constructor(container: SVGGElement, settings: Settings) {
     this._container = container;
+    this.globalSettings = settings;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

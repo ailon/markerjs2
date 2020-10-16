@@ -4,10 +4,11 @@ import { Renderer } from './core/Renderer';
 
 import Logo from './assets/markerjs-logo-m.svg';
 import { MarkerBase } from './core/MarkerBase';
-import { DummyMarker } from '../test/manual';
 import { Toolbar, ToolbarButtonType } from './ui/Toolbar';
 import { Toolbox } from './ui/Toolbox';
-import { RectangleMarker } from './markers/rectangle-marker/RectangleMarker';
+import { FrameMarker } from './markers/frame-marker/FrameMarker';
+import { Settings } from './core/Settings';
+import { Style } from './core/Style';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -40,7 +41,7 @@ export class MarkerArea {
 
   private logoUI: HTMLElement;
 
-  private toolbarMarkers: typeof MarkerBase[] = [RectangleMarker, DummyMarker];
+  private toolbarMarkers: typeof MarkerBase[] = [FrameMarker];
 
   private toolbar: Toolbar;
   private toolbox: Toolbox;
@@ -59,6 +60,8 @@ export class MarkerArea {
 
   private renderEventListeners: RenderEventHandler[] = [];
   private closeEventListeners: CloseEventHandler[] = [];
+
+  public settings: Settings = new Settings();
 
   constructor(target: HTMLImageElement) {
     this.target = target;
@@ -288,6 +291,7 @@ export class MarkerArea {
     this.overrideOverflow();
 
     this.coverDiv = document.createElement('div');
+    this.coverDiv.className = Style.CLASS_PREFIX;
     this.coverDiv.style.position = 'absolute';
     this.coverDiv.style.top = '0px';
     this.coverDiv.style.left = '0px';
@@ -384,7 +388,7 @@ export class MarkerArea {
     const g = SvgHelper.createGroup();
     this.markerImage.appendChild(g);
 
-    this.currentMarker = new markerType(g);
+    this.currentMarker = new markerType(g, this.settings);
     this.currentMarker.onMarkerCreated = this.markerCreated;
     console.log(this.currentMarker.name);
   }
@@ -444,12 +448,12 @@ export class MarkerArea {
     }
   }
   private onMouseUp(ev: MouseEvent) {
-    this.isDragging = false;
-    if (this.currentMarker !== undefined) {
+    if (this.isDragging && this.currentMarker !== undefined) {
       this.currentMarker.mouseUp(
         this.clientToLocalCoordinates(ev.clientX, ev.clientY)
       );
     }
+    this.isDragging = false;
   }
 
   private clientToLocalCoordinates(x: number, y: number): IPoint {

@@ -5,6 +5,7 @@ import { SvgHelper } from '../core/SvgHelper';
 
 import { RectangularBoxMarkerGrips } from './RectangularBoxMarkerGrips';
 import { ResizeGrip } from './ResizeGrip';
+import { Settings } from '../core/Settings';
 
 export class RectangularBoxMarkerBase extends MarkerBase {
   protected left = 0;
@@ -45,8 +46,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
   protected markerElement: SVGGElement;
 
-  constructor(container: SVGGElement) {
-    super(container);
+  constructor(container: SVGGElement, settings: Settings) {
+    super(container, settings);
 
     // add rotation transform
     this.container.transform.baseVal.appendItem(SvgHelper.createTransform());

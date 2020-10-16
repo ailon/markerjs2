@@ -1,28 +1,19 @@
-import Icon from './rectangle-marker-icon.svg';
-import { IPoint } from '../../MarkerArea';
-import { SvgHelper } from '../../core/SvgHelper';
-import { ToolboxPanel } from '../../ui/ToolboxPanel';
-import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
-import { RectangularBoxMarkerBase } from '../RectangularBoxMarkerBase';
+import { IPoint } from '../MarkerArea';
+import { SvgHelper } from '../core/SvgHelper';
+import { RectangularBoxMarkerBase } from './RectangularBoxMarkerBase';
+import { Settings } from '../core/Settings';
 
-export class RectangleMarker extends RectangularBoxMarkerBase {
+export abstract class RectangleMarker extends RectangularBoxMarkerBase {
   public static title = 'Rectangle marker';
-  public static icon = Icon;
 
-  private fillPanel: ColorPickerPanel = new ColorPickerPanel([
-    '#ff0000',
-    '#00ff00',
-    '#0000ff',
-  ]);
+  protected fillColor = 'transparent';
+  protected strokeColor = 'transparent';
+  protected strokeWidth = 0;
 
-  constructor(container: SVGGElement) {
-    super(container);
+  constructor(container: SVGGElement, settings: Settings) {
+    super(container, settings);
 
-    this._name = 'rectangle';
-  }
-
-  public get toolboxPanels(): ToolboxPanel[] {
-    return [this.fillPanel];
+    this.setStrokeColor = this.setStrokeColor.bind(this);
   }
 
   public ownsTarget(el: EventTarget): boolean {
@@ -36,7 +27,11 @@ export class RectangleMarker extends RectangularBoxMarkerBase {
   public mouseDown(point: IPoint, target?: EventTarget): void {
     super.mouseDown(point, target);
     if (this.state === 'new') {
-      this.visual = SvgHelper.createRect(1, 1, [['fill', '#ff0000']]);
+      this.visual = SvgHelper.createRect(1, 1, [
+        ['fill', this.fillColor],
+        ['stroke', this.strokeColor],
+        ['stroke-width', this.strokeWidth.toString()],
+      ]);
       const translate = SvgHelper.createTransform();
       this.visual.transform.baseVal.appendItem(translate);
 
@@ -55,11 +50,15 @@ export class RectangleMarker extends RectangularBoxMarkerBase {
     super.resize(point);
     SvgHelper.setAttributes(this.visual, [
       ['width', this.width.toString()],
-      ['height', this.height.toString()]
+      ['height', this.height.toString()],
     ]);
   }
 
   public mouseUp(point: IPoint): void {
     super.mouseUp(point);
+  }
+
+  protected setStrokeColor(color: string): void {
+    SvgHelper.setAttributes(this.visual, [['stroke', color]]);
   }
 }

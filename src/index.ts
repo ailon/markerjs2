@@ -4,5 +4,3 @@ export { SvgHelper } from './core/SvgHelper';
 export { Style, StyleClass } from './core/Style';
 
 export { MarkerBase } from './core/MarkerBase';
-
-export { DummyMarker } from './markers/dummy-marker/DummyMarker';

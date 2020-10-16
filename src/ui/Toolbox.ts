@@ -15,6 +15,7 @@ export class Toolbox {
       width: 200px;
       height: 100%;
       background-color: #eeeeff;
+      padding: 5px;
       box-shadow: 0px 3px rgba(33, 33, 33, 0.1);
     `
       )
@@ -37,7 +38,14 @@ export class Toolbox {
     this.panels = panels;
     if (this.uiContainer !== undefined) {
       this.uiContainer.innerHTML = '';
-      this.panels.forEach(panel => this.uiContainer.appendChild(panel.getUi()));
+      this.panels.forEach(panel => {
+        const panelDiv = document.createElement('div');
+        const panelHeader = document.createElement('h3')
+        panelHeader.innerText = panel.title;
+        panelDiv.appendChild(panelHeader);
+        panelDiv.appendChild(panel.getUi());
+        this.uiContainer.appendChild(panelDiv);
+      });
     }
   }
 

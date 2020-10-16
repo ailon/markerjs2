@@ -34,6 +34,9 @@ export class Style {
   private static addStyleSheet() {
     Style.styleSheet = document.createElement('style');
     document.head.appendChild(Style.styleSheet);
+
+    // add global rules
+    Style.addRule(new StyleRule(`.${Style.CLASS_PREFIX} h3`, 'font-family: sans-serif'));
   }
 }
 
