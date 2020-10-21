@@ -10,6 +10,7 @@ import { FrameMarker } from './markers/frame-marker/FrameMarker';
 import { Settings } from './core/Settings';
 import { Style } from './core/Style';
 import { LineMarker } from './markers/line-marker/LineMarker';
+import { TextMarker } from './markers/text-marker/TextMarker';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -42,7 +43,7 @@ export class MarkerArea {
 
   private logoUI: HTMLElement;
 
-  private toolbarMarkers: typeof MarkerBase[] = [FrameMarker, LineMarker];
+  private toolbarMarkers: typeof MarkerBase[] = [FrameMarker, LineMarker, TextMarker];
 
   private toolbar: Toolbar;
   private toolbox: Toolbox;
