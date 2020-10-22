@@ -9,6 +9,10 @@ export class MarkerBase {
   public get container(): SVGGElement {
     return this._container;
   }
+  protected _overlayContainer: HTMLDivElement;
+  public get overlayContainer(): HTMLDivElement {
+    return this._overlayContainer;
+  }
   protected _state: MarkerState = 'new';
   public get state(): MarkerState {
     return this._state;
@@ -32,8 +36,9 @@ export class MarkerBase {
 
   public onMarkerCreated: (marker: MarkerBase) => void;
 
-  constructor(container: SVGGElement, settings: Settings) {
+  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     this._container = container;
+    this._overlayContainer = overlayContainer;
     this.globalSettings = settings;
   }
 
@@ -53,6 +58,11 @@ export class MarkerBase {
   public mouseDown(point: IPoint, target?: EventTarget):void {
     console.log(point.x, point.y);
   }
+
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public dblClick(point: IPoint, target?: EventTarget):void {}
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 
   public manipulate(point: IPoint):void {
     console.log(point.x, point.y);

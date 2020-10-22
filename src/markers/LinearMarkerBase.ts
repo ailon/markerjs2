@@ -30,8 +30,8 @@ export class LinearMarkerBase extends MarkerBase {
 
   protected markerElement: SVGGElement;
 
-  constructor(container: SVGGElement, settings: Settings) {
-    super(container, settings);
+  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+    super(container, overlayContainer, settings);
 
     this.setupControlBox();
   }

@@ -40,6 +40,7 @@ export class MarkerArea {
   private contentDiv: HTMLDivElement;
   private editorCanvas: HTMLDivElement;
   private editingTarget: HTMLImageElement;
+  private overlayContainer: HTMLDivElement;
 
   private logoUI: HTMLElement;
 
@@ -80,6 +81,7 @@ export class MarkerArea {
     this.markerCreated = this.markerCreated.bind(this);
     this.setCurrentMarker = this.setCurrentMarker.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
+    this.onDblClick = this.onDblClick.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
     this.overrideOverflow = this.overrideOverflow.bind(this);
@@ -97,6 +99,7 @@ export class MarkerArea {
     this.setEditingTarget();
     this.setTopLeft();
     this.initMarkerCanvas();
+    this.initOverlay();
     this.attachEvents();
 
     // @todo restore state (see v1)
@@ -215,6 +218,17 @@ export class MarkerArea {
     this.editorCanvas.appendChild(this.markerImageHolder);
   }
 
+  private initOverlay(): void {
+    this.overlayContainer = document.createElement('div');
+    this.overlayContainer.style.position = 'absolute';
+    this.overlayContainer.style.left = '0px';
+    this.overlayContainer.style.top = '0px';
+    this.overlayContainer.style.width = `${this.editingTarget.width}px`;
+    this.overlayContainer.style.height = `${this.editingTarget.height}px`;
+    this.overlayContainer.style.display = 'flex';
+    this.markerImageHolder.appendChild(this.overlayContainer);
+  }
+
   private positionMarkerImage() {
     this.markerImageHolder.style.top = this.top + 'px';
     this.markerImageHolder.style.left = this.left + 'px';
@@ -222,6 +236,7 @@ export class MarkerArea {
 
   private attachEvents() {
     this.markerImage.addEventListener('mousedown', this.onMouseDown);
+    this.markerImage.addEventListener('dblclick', this.onDblClick)
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('mouseup', this.onMouseUp);
   }
@@ -390,7 +405,7 @@ export class MarkerArea {
     const g = SvgHelper.createGroup();
     this.markerImage.appendChild(g);
 
-    this.currentMarker = new markerType(g, this.settings);
+    this.currentMarker = new markerType(g, this.overlayContainer, this.settings);
     this.currentMarker.onMarkerCreated = this.markerCreated;
     console.log(this.currentMarker.name);
   }
@@ -432,6 +447,23 @@ export class MarkerArea {
         this.setCurrentMarker(hitMarker);
         this.isDragging = true;
         this.currentMarker.mouseDown(
+          this.clientToLocalCoordinates(ev.clientX, ev.clientY),
+          ev.target
+        );
+      } else {
+        this.setCurrentMarker();
+      }
+    }
+  }
+
+  private onDblClick(ev: MouseEvent) {
+    if (this.mode === 'select') {
+      const hitMarker = this.markers.find((m) => m.ownsTarget(ev.target));
+      if (hitMarker !== undefined && hitMarker !== this.currentMarker) {
+        this.setCurrentMarker(hitMarker);
+      }
+      if (this.currentMarker !== undefined) {
+        this.currentMarker.dblClick(
           this.clientToLocalCoordinates(ev.clientX, ev.clientY),
           ev.target
         );

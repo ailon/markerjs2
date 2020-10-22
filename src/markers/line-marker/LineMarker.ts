@@ -18,8 +18,8 @@ export class LineMarker extends LinearMarkerBase {
 
   private strokePanel: ColorPickerPanel;
 
-  constructor(container: SVGGElement, settings: Settings) {
-    super(container, settings);
+  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+    super(container, overlayContainer, settings);
 
     this.setStrokeColor = this.setStrokeColor.bind(this);
 

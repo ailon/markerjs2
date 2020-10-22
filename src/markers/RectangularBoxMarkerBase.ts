@@ -46,8 +46,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
   protected markerElement: SVGGElement;
 
-  constructor(container: SVGGElement, settings: Settings) {
-    super(container, settings);
+  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+    super(container, overlayContainer, settings);
 
     // add rotation transform
     this.container.transform.baseVal.appendItem(SvgHelper.createTransform());
