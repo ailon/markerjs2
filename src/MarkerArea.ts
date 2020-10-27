@@ -11,6 +11,7 @@ import { Settings } from './core/Settings';
 import { Style } from './core/Style';
 import { LineMarker } from './markers/line-marker/LineMarker';
 import { TextMarker } from './markers/text-marker/TextMarker';
+import { FreehandMarker } from './markers/freehand-marker/FreehandMarker';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -44,7 +45,7 @@ export class MarkerArea {
 
   private logoUI: HTMLElement;
 
-  private toolbarMarkers: typeof MarkerBase[] = [FrameMarker, LineMarker, TextMarker];
+  private toolbarMarkers: typeof MarkerBase[] = [FrameMarker, LineMarker, TextMarker, FreehandMarker];
 
   private toolbar: Toolbar;
   private toolbox: Toolbox;
@@ -372,6 +373,9 @@ export class MarkerArea {
       switch (value) {
         case 'select': {
           this.mode = 'select';
+          if (this.currentMarker !== undefined) {
+            this.currentMarker.select();
+          }
           break;
         }
         case 'delete': {

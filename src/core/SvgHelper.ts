@@ -179,6 +179,21 @@ export class SvgHelper {
     return tspan;
   }
 
+  public static createImage(
+    attributes?: Array<[string, string]>
+  ): SVGImageElement {
+    const image = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'image'
+    );
+
+    if (attributes) {
+      SvgHelper.setAttributes(image, attributes);
+    }
+
+    return image;
+  }
+
   public static createPoint(      
     x: number,
     y: number
