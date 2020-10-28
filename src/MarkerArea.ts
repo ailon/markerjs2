@@ -45,7 +45,12 @@ export class MarkerArea {
 
   private logoUI: HTMLElement;
 
-  private toolbarMarkers: typeof MarkerBase[] = [FrameMarker, LineMarker, TextMarker, FreehandMarker];
+  private toolbarMarkers: typeof MarkerBase[] = [
+    FrameMarker,
+    LineMarker,
+    TextMarker,
+    FreehandMarker,
+  ];
 
   private toolbar: Toolbar;
   private toolbox: Toolbox;
@@ -85,6 +90,7 @@ export class MarkerArea {
     this.onDblClick = this.onDblClick.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
+    this.onTouch = this.onTouch.bind(this);
     this.overrideOverflow = this.overrideOverflow.bind(this);
     this.restoreOverflow = this.restoreOverflow.bind(this);
     this.close = this.close.bind(this);
@@ -134,7 +140,7 @@ export class MarkerArea {
     if (this.coverDiv) {
       this.closeUI();
     }
-    this.closeEventListeners.forEach(listener => listener());
+    this.closeEventListeners.forEach((listener) => listener());
   }
 
   public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
@@ -237,9 +243,52 @@ export class MarkerArea {
 
   private attachEvents() {
     this.markerImage.addEventListener('mousedown', this.onMouseDown);
-    this.markerImage.addEventListener('dblclick', this.onDblClick)
+    this.markerImage.addEventListener('dblclick', this.onDblClick);
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('mouseup', this.onMouseUp);
+    this.markerImage.addEventListener('touchstart', this.onTouch, {
+      passive: false,
+    });
+    this.contentDiv.addEventListener('touchend', this.onTouch, { passive: false });
+    this.contentDiv.addEventListener('touchmove', this.onTouch, { passive: false });
+  }
+
+  protected onTouch(ev: TouchEvent): void {
+    ev.preventDefault();
+    const newEvt = document.createEvent('MouseEvents');
+    const touch = ev.changedTouches[0];
+    let type = null;
+
+    switch (ev.type) {
+      case 'touchstart':
+        type = 'mousedown';
+        break;
+      case 'touchmove':
+        type = 'mousemove';
+        break;
+      case 'touchend':
+        type = 'mouseup';
+        break;
+    }
+
+    newEvt.initMouseEvent(
+      type,
+      true,
+      true,
+      window,
+      0,
+      touch.screenX,
+      touch.screenY,
+      touch.clientX,
+      touch.clientY,
+      ev.ctrlKey,
+      ev.altKey,
+      ev.shiftKey,
+      ev.metaKey,
+      0,
+      null
+    );
+    ev.target.dispatchEvent(newEvt);
   }
 
   /**
@@ -409,7 +458,11 @@ export class MarkerArea {
     const g = SvgHelper.createGroup();
     this.markerImage.appendChild(g);
 
-    this.currentMarker = new markerType(g, this.overlayContainer, this.settings);
+    this.currentMarker = new markerType(
+      g,
+      this.overlayContainer,
+      this.settings
+    );
     this.currentMarker.onMarkerCreated = this.markerCreated;
     console.log(this.currentMarker.name);
   }

@@ -149,9 +149,15 @@ export class TextMarker extends RectangularBoxMarkerBase {
     textEditor.style.color = '#eeeeee';
     textEditor.addEventListener('click', (ev) => {
       ev.stopPropagation();
-    })
+    });
+    textEditor.addEventListener('touchend', (ev) => {
+      ev.stopPropagation();
+    });
 
     textEditDiv.addEventListener('click', () => {
+      this.textEditDivClicked(textEditor.innerText);
+    })
+    textEditDiv.addEventListener('touchend', () => {
       this.textEditDivClicked(textEditor.innerText);
     })
 
