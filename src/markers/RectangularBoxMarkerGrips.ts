@@ -15,27 +15,26 @@ export class RectangularBoxMarkerGrips {
   }
 
   public findGripByVisual(
-    gripVisual: SVGGraphicsElement
+    gripVisual: EventTarget
   ): ResizeGrip | undefined {
-    switch (gripVisual) {
-      case this.topLeft.visual:
+      if (this.topLeft.ownsTarget(gripVisual)) {
         return this.topLeft;
-      case this.topCenter.visual:
+      } else if (this.topCenter.ownsTarget(gripVisual)) {
         return this.topCenter;
-      case this.topRight.visual:
+      } else if (this.topRight.ownsTarget(gripVisual)) {
         return this.topRight;
-      case this.centerLeft.visual:
+      } else if (this.centerLeft.ownsTarget(gripVisual)) {
         return this.centerLeft;
-      case this.centerRight.visual:
+      } else if (this.centerRight.ownsTarget(gripVisual)) {
         return this.centerRight;
-      case this.bottomLeft.visual:
+      } else if (this.bottomLeft.ownsTarget(gripVisual)) {
         return this.bottomLeft;
-      case this.bottomCenter.visual:
+      } else if (this.bottomCenter.ownsTarget(gripVisual)) {
         return this.bottomCenter;
-      case this.bottomRight.visual:
+      } else if (this.bottomRight.ownsTarget(gripVisual)) {
         return this.bottomRight;
-      default:
+      } else {
         return undefined;
-    }
+      }
   }
 }

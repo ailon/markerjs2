@@ -59,8 +59,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     if (super.ownsTarget(el)) {
       return true;
     } else if (
-      this.controlGrips.findGripByVisual(el as SVGGraphicsElement) !== undefined ||
-      this.rotatorGrip.visual === el
+      this.controlGrips.findGripByVisual(el) !== undefined ||
+      this.rotatorGrip.ownsTarget(el)
     ) {
       return true;
     } else {
@@ -93,7 +93,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       this.activeGrip = this.controlGrips.findGripByVisual(target as SVGGraphicsElement);
       if (this.activeGrip !== undefined) {
         this._state = 'resize';
-      } else if (this.rotatorGrip.visual === target) {
+      } else if (this.rotatorGrip.ownsTarget(target)) {
         this.activeGrip = this.rotatorGrip;
 
         const rotatedCenter = this.rotatePoint({x: this.centerX, y: this.centerY});

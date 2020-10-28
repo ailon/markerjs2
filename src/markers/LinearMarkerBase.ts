@@ -40,7 +40,7 @@ export class LinearMarkerBase extends MarkerBase {
     if (super.ownsTarget(el)) {
       return true;
     } else if (
-      this.grip1.visual === el || this.grip2.visual === el
+      this.grip1.ownsTarget(el) || this.grip2.ownsTarget(el)
     ) {
       return true;
     } else {
@@ -68,9 +68,9 @@ export class LinearMarkerBase extends MarkerBase {
 
     if (this.state !== 'new') {
       this.select();
-      if (this.grip1.visual === target) {
+      if (this.grip1.ownsTarget(target)) {
         this.activeGrip = this.grip1;
-      } else if (this.grip2.visual === target) {
+      } else if (this.grip2.ownsTarget(target)) {
         this.activeGrip = this.grip2;
       } else {
         this.activeGrip = undefined;
