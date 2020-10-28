@@ -68,8 +68,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     }
   }
 
-  public mouseDown(point: IPoint, target?: EventTarget): void {
-    super.mouseDown(point, target);
+  public pointerDown(point: IPoint, target?: EventTarget): void {
+    super.pointerDown(point, target);
 
     if (this.state === 'new') {
       this.left = point.x;
@@ -114,8 +114,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     }
   }
 
-  public mouseUp(point: IPoint): void {
-    super.mouseUp(point);
+  public pointerUp(point: IPoint): void {
+    super.pointerUp(point);
     this.manipulate(point);
     this._state = 'select';
     if (this.onMarkerCreated) {

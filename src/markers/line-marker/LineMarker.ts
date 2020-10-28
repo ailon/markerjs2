@@ -47,8 +47,8 @@ export class LineMarker extends LinearMarkerBase {
     }
   }
 
-  public mouseDown(point: IPoint, target?: EventTarget): void {
-    super.mouseDown(point, target);
+  public pointerDown(point: IPoint, target?: EventTarget): void {
+    super.pointerDown(point, target);
     if (this.state === 'new') {
       this.visual = SvgHelper.createGroup();
       this.selectorLine = SvgHelper.createLine(

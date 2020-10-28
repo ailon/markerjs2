@@ -47,7 +47,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     }
   }
 
-  public mouseDown(point: IPoint, target?: EventTarget): void {
+  public pointerDown(point: IPoint, target?: EventTarget): void {
     if (this.state === 'new') {
       this.addCanvas();
 
@@ -69,7 +69,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
       this.canvasContext.moveTo(point.x, point.y);
       this.drawing = true;
     } else {
-      super.mouseDown(point, target);
+      super.pointerDown(point, target);
     }
   }
 
@@ -96,14 +96,14 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     ]);
   }
 
-  public mouseUp(point: IPoint): void {
+  public pointerUp(point: IPoint): void {
     if (this._state === 'creating') {
       if (this.drawing) {
         this.canvasContext.closePath();
         this.drawing = false;
       }
     } else {
-      super.mouseUp(point);
+      super.pointerUp(point);
     }
   }
 

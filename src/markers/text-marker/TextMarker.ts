@@ -52,8 +52,8 @@ export class TextMarker extends RectangularBoxMarkerBase {
     }
   }
 
-  public mouseDown(point: IPoint, target?: EventTarget): void {
-    super.mouseDown(point, target);
+  public pointerDown(point: IPoint, target?: EventTarget): void {
+    super.pointerDown(point, target);
     if (this.state === 'new') {
       this.visual = SvgHelper.createGroup();
       this.textElement = SvgHelper.createText([
@@ -125,11 +125,11 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.sizeText();
   }
 
-  public mouseUp(point: IPoint): void {
+  public pointerUp(point: IPoint): void {
     if (this._state === 'creating') {
       this.showTextEditor();
     }
-    super.mouseUp(point);
+    super.pointerUp(point);
   }
 
   private showTextEditor() {
@@ -147,20 +147,13 @@ export class TextMarker extends RectangularBoxMarkerBase {
     textEditor.innerText = this.text;
     textEditor.contentEditable = 'true';
     textEditor.style.color = '#eeeeee';
-    textEditor.addEventListener('click', (ev) => {
-      ev.stopPropagation();
-    });
-    textEditor.addEventListener('touchend', (ev) => {
+    textEditor.addEventListener('pointerup', (ev) => {
       ev.stopPropagation();
     });
 
-    textEditDiv.addEventListener('click', () => {
+    textEditDiv.addEventListener('pointerup', () => {
       this.textEditDivClicked(textEditor.innerText);
     })
-    textEditDiv.addEventListener('touchend', () => {
-      this.textEditDivClicked(textEditor.innerText);
-    })
-
     textEditDiv.appendChild(textEditor);
     this.overlayContainer.appendChild(textEditDiv);
   }

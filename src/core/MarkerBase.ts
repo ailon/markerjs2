@@ -55,7 +55,7 @@ export class MarkerBase {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public mouseDown(point: IPoint, target?: EventTarget):void {
+  public pointerDown(point: IPoint, target?: EventTarget):void {
     console.log(point.x, point.y);
   }
 
@@ -68,7 +68,7 @@ export class MarkerBase {
     console.log(point.x, point.y);
   }
 
-  public mouseUp(point: IPoint):void {
+  public pointerUp(point: IPoint):void {
     console.log(point.x, point.y);
   }
 
