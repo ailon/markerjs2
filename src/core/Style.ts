@@ -11,7 +11,10 @@ export class Style {
     toolbarBackgroundColor: '#111111',
     toolbarBackgroundHoverColor: '#333333',
     toolbarColor: '#eeeeee',
-    toolbarHeight: 40
+    toolbarHeight: 40,
+    toolboxBackgroundColor: '#2a2a2a',
+    toolboxColor: '#eeeeee',
+    toolboxAccentColor: '#3080c3'
   }
 
   public static addClass(styleClass: StyleClass): StyleClass {

@@ -420,6 +420,7 @@ export class MarkerArea {
       this.settings
     );
     this.currentMarker.onMarkerCreated = this.markerCreated;
+    this.toolbox.setPanels(this.currentMarker.toolboxPanels);
     console.log(this.currentMarker.name);
   }
 
@@ -434,6 +435,7 @@ export class MarkerArea {
   private setCurrentMarker(marker?: MarkerBase) {
     if (this.currentMarker !== undefined) {
       this.currentMarker.deselect();
+      this.toolbox.setPanels([]);
     }
     this.currentMarker = marker;
     if (this.currentMarker !== undefined) {

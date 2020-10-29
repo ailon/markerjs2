@@ -59,6 +59,9 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
   }
 
   protected setStrokeColor(color: string): void {
-    SvgHelper.setAttributes(this.visual, [['stroke', color]]);
+    this.strokeColor = color;
+    if (this.visual) {
+      SvgHelper.setAttributes(this.visual, [['stroke', this.strokeColor]]);
+    }
   }
 }

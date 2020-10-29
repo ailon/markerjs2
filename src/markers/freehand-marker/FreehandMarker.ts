@@ -190,6 +190,10 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
   }
 
   public get toolboxPanels(): ToolboxPanel[] {
-    return [this.colorPanel];
+    if (this.state === 'new' || this.state === 'creating') {
+      return [this.colorPanel];
+    } else {
+      return [];
+    }
   }
 }

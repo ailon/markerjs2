@@ -1,3 +1,4 @@
+import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 
 export type ColorChangeHandler = (newColor: string) => void;
@@ -25,13 +26,13 @@ export class ColorPickerPanel extends ToolboxPanel {
       colorBoxContainer.style.display = 'inline-block';
       colorBoxContainer.style.width = '36px';
       colorBoxContainer.style.height = '36px';
-      colorBoxContainer.style.padding = '2px';
+      colorBoxContainer.style.padding = '1px';
       colorBoxContainer.style.marginRight = '2px';
       colorBoxContainer.style.marginBottom = '2px';
-      colorBoxContainer.style.borderWidth = '1px';
+      colorBoxContainer.style.borderWidth = '2px';
       colorBoxContainer.style.borderStyle = 'solid';
       colorBoxContainer.style.borderColor =
-        color === this.currentColor ? '#000000' : 'transparent';
+        color === this.currentColor ? Style.settings.toolboxAccentColor : 'transparent';
 
       colorBoxContainer.addEventListener('click', () => {
         console.log('color!');
@@ -56,7 +57,7 @@ export class ColorPickerPanel extends ToolboxPanel {
     this.currentColor = color;
 
     this.colorBoxes.forEach(box => {
-      box.style.borderColor = box === target ? '#000000' : 'transparent';
+      box.style.borderColor = box === target ? Style.settings.toolboxAccentColor : 'transparent';
     });
 
     if (this.onColorChanged) {

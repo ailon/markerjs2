@@ -3,4 +3,7 @@ export interface IStyleSettings {
   toolbarBackgroundHoverColor?: string;
   toolbarColor?: string;
   toolbarHeight?: number;
+  toolboxBackgroundColor?: string;
+  toolboxColor?: string;
+  toolboxAccentColor?: string;
 }
