@@ -14,6 +14,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     super(container, overlayContainer, settings);
 
     this.setStrokeColor = this.setStrokeColor.bind(this);
+    this.setStrokeWidth = this.setStrokeWidth.bind(this);
   }
 
   public ownsTarget(el: EventTarget): boolean {
@@ -62,6 +63,12 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     this.strokeColor = color;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke', this.strokeColor]]);
+    }
+  }
+  protected setStrokeWidth(width: number): void {
+    this.strokeWidth = width;
+    if (this.visual) {
+      SvgHelper.setAttributes(this.visual, [['stroke-width', this.strokeWidth.toString()]]);
     }
   }
 }

@@ -5,6 +5,7 @@ import { LinearMarkerBase } from '../LinearMarkerBase';
 import Icon from './line-marker-icon.svg';
 import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
+import { LineWidthPanel } from '../../ui/toolbox-panels/LineWidthPanel';
 
 export class LineMarker extends LinearMarkerBase {
   public static title = 'Line marker';
@@ -17,11 +18,13 @@ export class LineMarker extends LinearMarkerBase {
   protected strokeWidth = 0;
 
   private strokePanel: ColorPickerPanel;
+  private strokeWidthPanel: LineWidthPanel;
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
     this.setStrokeColor = this.setStrokeColor.bind(this);
+    this.setStrokeWidth = this.setStrokeWidth.bind(this);
 
     this.strokeColor = settings.defaultStrokeColor;
     this.strokeWidth = settings.defaultStrokeWidth;
@@ -32,6 +35,13 @@ export class LineMarker extends LinearMarkerBase {
       settings.defaultStrokeColor
     );
     this.strokePanel.onColorChanged = this.setStrokeColor;
+    this.strokePanel.onColorChanged = this.setStrokeColor;
+    this.strokeWidthPanel = new LineWidthPanel(
+      'Line width',
+      settings.defaultStrokeWidths,
+      settings.defaultStrokeWidth
+    );
+    this.strokeWidthPanel.onWidthChanged = this.setStrokeWidth;
   }
 
   public ownsTarget(el: EventTarget): boolean {
@@ -95,8 +105,11 @@ export class LineMarker extends LinearMarkerBase {
   protected setStrokeColor(color: string): void {
     SvgHelper.setAttributes(this.visibleLine, [['stroke', color]]);
   }
+  protected setStrokeWidth(width: number): void {
+    SvgHelper.setAttributes(this.visibleLine, [['stroke-width', width.toString()]]);
+  }
 
   public get toolboxPanels(): ToolboxPanel[] {
-    return [this.strokePanel];
+    return [this.strokePanel, this.strokeWidthPanel];
   }
 }

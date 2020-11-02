@@ -16,6 +16,8 @@ export class Toolbox {
       height: 100%;
       background-color: ${Style.settings.toolboxBackgroundColor};
       box-shadow: 0px 3px rgba(33, 33, 33, 0.1);
+      color: ${Style.settings.toolboxColor};
+      font-family: sans-serif;
     `
       )
     );
@@ -64,7 +66,6 @@ export class Toolbox {
         const panelDiv = document.createElement('div');
         panelDiv.style.margin = '5px 10px';
         const panelHeader = document.createElement('h3')
-        panelHeader.style.color = Style.settings.toolboxColor;
         panelHeader.innerText = panel.title;
         panelDiv.appendChild(panelHeader);
         panelDiv.appendChild(panel.getUi());
