@@ -21,16 +21,20 @@ export class ColorPickerPanel extends ToolboxPanel {
 
   public getUi(): HTMLDivElement {
     const panelDiv = document.createElement('div');
+    const buttonPadding = Style.settings.toolbarHeight / 4;
+    const buttonHeight = Style.settings.toolbarHeight - buttonPadding;
+
     this.colors.forEach((color) => {
       const colorBoxContainer = document.createElement('div');
       colorBoxContainer.style.display = 'inline-block';
-      colorBoxContainer.style.width = '36px';
-      colorBoxContainer.style.height = '36px';
+      colorBoxContainer.style.width = `${buttonHeight - 2}px`;
+      colorBoxContainer.style.height = `${buttonHeight - 2}px`;
       colorBoxContainer.style.padding = '1px';
       colorBoxContainer.style.marginRight = '2px';
       colorBoxContainer.style.marginBottom = '2px';
       colorBoxContainer.style.borderWidth = '2px';
       colorBoxContainer.style.borderStyle = 'solid';
+      colorBoxContainer.style.borderRadius = `${(buttonHeight + 2)/2}px`
       colorBoxContainer.style.borderColor =
         color === this.currentColor ? Style.settings.toolboxAccentColor : 'transparent';
 
@@ -42,9 +46,10 @@ export class ColorPickerPanel extends ToolboxPanel {
 
       const colorBox = document.createElement('div');
       colorBox.style.display = 'inline-block';
-      colorBox.style.width = '36px';
-      colorBox.style.height = '36px';
+      colorBox.style.width = `${buttonHeight - 2}px`;
+      colorBox.style.height = `${buttonHeight - 2}px`;
       colorBox.style.backgroundColor = color;
+      colorBox.style.borderRadius = `${buttonHeight/2}px`
 
       colorBoxContainer.appendChild(colorBox);
 

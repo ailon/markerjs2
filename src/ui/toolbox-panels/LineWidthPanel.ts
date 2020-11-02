@@ -1,4 +1,3 @@
-import { SvgHelper } from '../../../dist/markerjs2';
 import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 
@@ -22,10 +21,14 @@ export class LineWidthPanel extends ToolboxPanel {
 
   public getUi(): HTMLDivElement {
     const panelDiv = document.createElement('div');
+    panelDiv.style.display = 'flex';
+    panelDiv.style.overflow = 'hidden';
+    panelDiv.style.flexGrow = '2';
     this.widths.forEach((lineWidth) => {
       const widthBoxContainer = document.createElement('div');
       widthBoxContainer.style.display = 'flex';
-      widthBoxContainer.style.alignItems = 'end';
+      widthBoxContainer.style.flexGrow = '2';
+      widthBoxContainer.style.alignItems = 'center';
       widthBoxContainer.style.justifyContent = 'space-between';
       widthBoxContainer.style.padding = '5px';
       widthBoxContainer.style.borderWidth = '2px';
@@ -40,14 +43,23 @@ export class LineWidthPanel extends ToolboxPanel {
 
       const label = document.createElement('div');
       label.innerText = lineWidth.toString();
+      label.style.marginRight = '5px';
       widthBoxContainer.appendChild(label);
 
       const widthBox = document.createElement('div');
       widthBox.style.minHeight = '20px';
+      widthBox.style.flexGrow = '2';
 
-      widthBox.innerHTML = `<svg viewBox="0 0 140 20" width="140" height="20" xmlns="http://www.w3.org/2000/svg">
-        <line x1="0" y1="10" x2="140" y2="10" stroke="${Style.settings.toolboxColor}" stroke-width="${lineWidth}" />
-      </svg>`;
+      const hr = document.createElement('hr');
+      hr.style.minWidth = '20px';
+      hr.style.border = '0px';
+      hr.style.borderTop = `${lineWidth}px solid ${Style.settings.toolboxColor}`;
+      hr.style.flexGrow = '2';
+      widthBox.appendChild(hr);
+
+      // widthBox.innerHTML = `<svg viewBox="0 0 140 20" width="140" height="20" xmlns="http://www.w3.org/2000/svg">
+      //   <line x1="0" y1="10" x2="140" y2="10" stroke="${Style.settings.toolboxColor}" stroke-width="${lineWidth}" />
+      // </svg>`;
 
       widthBoxContainer.appendChild(widthBox);
 

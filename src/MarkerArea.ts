@@ -311,26 +311,45 @@ export class MarkerArea {
   }
 
   private showUI(): void {
-    this.overrideOverflow();
+    if (this.settings.displayMode === 'popup') {
+      this.overrideOverflow();
+    }
 
     this.coverDiv = document.createElement('div');
     this.coverDiv.className = Style.CLASS_PREFIX;
-    this.coverDiv.style.position = 'absolute';
-    this.coverDiv.style.top = '0px';
-    this.coverDiv.style.left = '0px';
-    this.coverDiv.style.width = '100vw';
-    this.coverDiv.style.height = '100vh';
-    this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
-    this.coverDiv.style.zIndex = '1000';
-    this.coverDiv.style.display = 'flex';
-
+    switch(this.settings.displayMode) {
+      case 'inline': {
+        this.coverDiv.style.position = 'absolute';
+        const top =
+          this.target.offsetTop > Style.settings.toolbarHeight
+            ? this.target.offsetTop - Style.settings.toolbarHeight
+            : 0;
+        this.coverDiv.style.top = `${top}px`;
+        this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
+        this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
+        this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
+        this.coverDiv.style.zIndex = '1000';
+        this.coverDiv.style.display = 'flex';
+        break;
+      }
+      case 'popup': {
+        this.coverDiv.style.position = 'absolute';
+        this.coverDiv.style.top = '0px';
+        this.coverDiv.style.left = '0px';
+        this.coverDiv.style.width = '100vw';
+        this.coverDiv.style.height = '100vh';
+        this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+        this.coverDiv.style.zIndex = '1000';
+        this.coverDiv.style.display = 'flex';
+      }
+    }
     document.body.appendChild(this.coverDiv);
 
     this.uiDiv = document.createElement('div');
     this.uiDiv.style.display = 'flex';
     this.uiDiv.style.flexDirection = 'column';
     this.uiDiv.style.flexGrow = '2';
-    this.uiDiv.style.margin = '30px';
+    this.uiDiv.style.margin = this.settings.displayMode === 'popup' ? '30px' : '0px';
     this.uiDiv.style.border = '0px';
     this.uiDiv.style.backgroundColor = '#ffffff';
     this.coverDiv.appendChild(this.uiDiv);
@@ -358,12 +377,14 @@ export class MarkerArea {
     this.editingTarget = document.createElement('img');
     this.editorCanvas.appendChild(this.editingTarget);
 
-    this.toolbox = new Toolbox(this.contentDiv);
+    this.toolbox = new Toolbox(this.uiDiv);
     this.toolbox.show();
   }
 
   private closeUI() {
-    this.restoreOverflow();
+    if (this.settings.displayMode === 'popup') {
+      this.restoreOverflow();
+    }
     // @todo better cleanup
     document.body.removeChild(this.coverDiv);
   }
@@ -420,7 +441,7 @@ export class MarkerArea {
       this.settings
     );
     this.currentMarker.onMarkerCreated = this.markerCreated;
-    this.toolbox.setPanels(this.currentMarker.toolboxPanels);
+    this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
     console.log(this.currentMarker.name);
   }
 
@@ -435,12 +456,12 @@ export class MarkerArea {
   private setCurrentMarker(marker?: MarkerBase) {
     if (this.currentMarker !== undefined) {
       this.currentMarker.deselect();
-      this.toolbox.setPanels([]);
+      this.toolbox.setPanelButtons([]);
     }
     this.currentMarker = marker;
     if (this.currentMarker !== undefined) {
       this.currentMarker.select();
-      this.toolbox.setPanels(this.currentMarker.toolboxPanels);
+      this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
     }
   }
 
