@@ -99,6 +99,7 @@ export class MarkerArea {
     this.addRenderEventListener = this.addRenderEventListener.bind(this);
     this.removeRenderEventListener = this.removeRenderEventListener.bind(this);
     this.clientToLocalCoordinates = this.clientToLocalCoordinates.bind(this);
+    this.onWindowResize = this.onWindowResize.bind(this);
   }
 
   private open(): void {
@@ -245,6 +246,7 @@ export class MarkerArea {
     this.markerImage.addEventListener('dblclick', this.onDblClick);
     window.addEventListener('pointermove', this.onPointerMove);
     window.addEventListener('pointerup', this.onPointerUp);
+    window.addEventListener('resize', this.onWindowResize)
   }
 
   /**
@@ -320,11 +322,11 @@ export class MarkerArea {
     switch(this.settings.displayMode) {
       case 'inline': {
         this.coverDiv.style.position = 'absolute';
-        const top =
+        const coverTop =
           this.target.offsetTop > Style.settings.toolbarHeight
             ? this.target.offsetTop - Style.settings.toolbarHeight
             : 0;
-        this.coverDiv.style.top = `${top}px`;
+        this.coverDiv.style.top = `${coverTop}px`;
         this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
         this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
@@ -529,5 +531,32 @@ export class MarkerArea {
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
     return { x: x - clientRect.x, y: y - clientRect.y };
+  }
+
+  private onWindowResize() {
+    this.positionUI();
+  }
+
+  private positionUI() {
+    this.setTopLeft();
+    switch(this.settings.displayMode) {
+      case 'inline': {
+        const coverTop =
+          this.target.offsetTop > Style.settings.toolbarHeight
+            ? this.target.offsetTop - Style.settings.toolbarHeight
+            : 0;
+        this.coverDiv.style.top = `${coverTop}px`;
+        this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
+        break;
+      }
+      case 'popup': {
+        this.coverDiv.style.top = '0px';
+        this.coverDiv.style.left = '0px';
+        this.coverDiv.style.width = '100vw';
+        this.coverDiv.style.height = '100vh';
+      }
+    }
+    this.positionMarkerImage();
+    this.positionLogo();
   }
 }
