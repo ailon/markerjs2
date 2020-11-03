@@ -369,10 +369,12 @@ export class MarkerArea {
     this.editorCanvas = document.createElement('div');
     this.editorCanvas.style.flexGrow = '2';
     this.editorCanvas.style.position = 'relative';
-    this.editorCanvas.style.overflow = 'auto';
+    this.editorCanvas.style.overflow = 'hidden';
     this.editorCanvas.style.display = 'flex';
-    this.editorCanvas.style.alignItems = 'center';
-    this.editorCanvas.style.justifyContent = 'center';
+    if (this.settings.displayMode === 'popup') {
+      this.editorCanvas.style.alignItems = 'center';
+      this.editorCanvas.style.justifyContent = 'center';
+    }
     this.editorCanvas.style.pointerEvents = 'none';
     this.contentDiv.appendChild(this.editorCanvas);
 
