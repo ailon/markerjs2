@@ -15,9 +15,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   private colorPanel: ColorPickerPanel;
 
-  private readonly DEFAULT_TEXT = "Double-click to edit text";
+  private readonly DEFAULT_TEXT = "your text here";
   private text: string = this.DEFAULT_TEXT;
   private textElement: SVGTextElement;
+  private bgRectangle: SVGRectElement;
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
@@ -39,7 +40,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
   }
 
   public ownsTarget(el: EventTarget): boolean {
-    if (super.ownsTarget(el) || el === this.visual || el === this.textElement) {
+    if (super.ownsTarget(el) || el === this.visual || el === this.textElement || el === this.bgRectangle) {
       return true;
     } else {
       let found = false;
@@ -56,6 +57,12 @@ export class TextMarker extends RectangularBoxMarkerBase {
     super.pointerDown(point, target);
     if (this.state === 'new') {
       this.visual = SvgHelper.createGroup();
+
+      this.bgRectangle = SvgHelper.createRect(1, 1, [
+        ['fill', 'transparent']
+      ]);
+      this.visual.appendChild(this.bgRectangle);
+
       this.textElement = SvgHelper.createText([
         ['fill', this.color]
       ]);
@@ -83,31 +90,43 @@ export class TextMarker extends RectangularBoxMarkerBase {
     }
 
     const lines = this.text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
-    for (let line of lines) {
+    lines.forEach(line => {
         if (line.trim() === "") {
             line = " "; // workaround for swallowed empty lines
         }
         this.textElement.appendChild(SvgHelper.createTSpan(line, [["x", "0"], ["dy", LINE_SIZE]]));
-    }
+    });
 
     setTimeout(this.sizeText, 10);
   }
 
-  private sizeText() {
+  private getTextScale(): number {
     const textSize = this.textElement.getBBox();
-    let x = 0;
-    let y = 0;
     let scale = 1.0;
     if (textSize.width > 0 && textSize.height > 0) {
         const xScale = this.width * 1.0 / textSize.width;
         const yScale = this.height * 1.0 / textSize.height;
         scale = Math.min(xScale, yScale);
-
-        x = (this.width - textSize.width * scale) / 2;
-        y = (this.height - textSize.height * scale) / 2;
     }
+    return scale;
+  }
 
-    this.textElement.transform.baseVal.getItem(0).setTranslate(x, y);
+  private getTextPosition(scale: number): IPoint {
+    const textSize = this.textElement.getBBox();
+    let x = 0;
+    let y = 0;
+    if (textSize.width > 0 && textSize.height > 0) {
+      x = (this.width - textSize.width * scale) / 2;
+      y = this.height / 2 - textSize.height * scale / 2;
+    }
+    return {x: x, y: y};
+  }
+
+  private sizeText() {
+    const scale = this.getTextScale();
+    const position = this.getTextPosition(scale);
+
+    this.textElement.transform.baseVal.getItem(0).setTranslate(position.x, position.y);
     this.textElement.transform.baseVal.getItem(1).setScale(scale, scale);
   }
 
@@ -119,6 +138,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
   protected resize(point: IPoint): void {
     super.resize(point);
     SvgHelper.setAttributes(this.visual, [
+      ['width', this.width.toString()],
+      ['height', this.height.toString()],
+    ]);
+    SvgHelper.setAttributes(this.bgRectangle, [
       ['width', this.width.toString()],
       ['height', this.height.toString()],
     ]);
@@ -136,17 +159,27 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.overlayContainer.innerHTML = '';
 
     const textEditDiv = document.createElement('div');
-    textEditDiv.style.display = 'flex';
+    // textEditDiv.style.display = 'flex';
     textEditDiv.style.flexGrow = '2';
-    textEditDiv.style.backgroundColor = 'rgb(0,0,0,0.7)';
+    //textEditDiv.style.backgroundColor = 'rgb(0,0,0,0.7)';
     textEditDiv.style.alignItems = 'center';
     textEditDiv.style.justifyContent = 'center';
     textEditDiv.style.pointerEvents = 'auto';
+    textEditDiv.style.overflow = 'hidden';
+
+    const textScale = this.getTextScale();
+    const textPosition = this.getTextPosition(textScale);
 
     const textEditor = document.createElement('div');
+    textEditor.style.position = 'absolute';
+    textEditor.style.top = `${this.top + textPosition.y}px`;
+    textEditor.style.left = `${this.left + textPosition.x}px`;
+    textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - this.left - textPosition.x}px`;
+    textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
+    textEditor.style.lineHeight = '1em';
     textEditor.innerText = this.text;
     textEditor.contentEditable = 'true';
-    textEditor.style.color = '#eeeeee';
+    textEditor.style.color = this.color;
     textEditor.addEventListener('pointerup', (ev) => {
       ev.stopPropagation();
     });
@@ -156,12 +189,18 @@ export class TextMarker extends RectangularBoxMarkerBase {
     })
     textEditDiv.appendChild(textEditor);
     this.overlayContainer.appendChild(textEditDiv);
+
+    textEditor.focus();
+    document.execCommand('selectAll');
+
+    this.hideVisual();
   }
 
   private textEditDivClicked(text: string) {
     this.text = text;
     this.overlayContainer.innerHTML = '';
     this.renderText();
+    this.showVisual();
   }
 
   public dblClick(point: IPoint, target?: EventTarget):void {

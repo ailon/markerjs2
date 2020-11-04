@@ -383,4 +383,13 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     translate.setTranslate(x, y);
     grip.transform.baseVal.replaceItem(translate, 0);
   }
+
+  protected hideVisual(): void {
+    this.visual.style.display = 'none';
+    this.controlBox.style.display = 'none';
+  }
+  protected showVisual(): void {
+    this.visual.style.display = '';
+    this.controlBox.style.display = '';
+  }
 }
