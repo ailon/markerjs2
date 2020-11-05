@@ -331,7 +331,8 @@ export class MarkerArea {
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
         this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
         this.coverDiv.style.zIndex = '1000';
-        this.coverDiv.style.display = 'flex';
+        // flex causes the ui to stretch when toolbox has wider nowrap panels
+        //this.coverDiv.style.display = 'flex';
         break;
       }
       case 'popup': {

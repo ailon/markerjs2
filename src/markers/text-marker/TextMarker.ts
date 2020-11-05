@@ -5,6 +5,7 @@ import { Settings } from '../../core/Settings';
 import Icon from './text-marker-icon.svg';
 import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
+import { FontFamilyPanel } from '../../ui/toolbox-panels/FontFamilyPanel';
 
 
 export class TextMarker extends RectangularBoxMarkerBase {
@@ -12,8 +13,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
   public static icon = Icon;
 
   protected color = 'transparent';
+  protected fontFamily: string;
 
   private colorPanel: ColorPickerPanel;
+  private fontFamilyPanel: FontFamilyPanel;
 
   private readonly DEFAULT_TEXT = "your text here";
   private text: string = this.DEFAULT_TEXT;
@@ -24,8 +27,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
     super(container, overlayContainer, settings);
 
     this.color = settings.defaultStrokeColor;
+    this.fontFamily = settings.defaultFontFamily;
 
     this.setColor = this.setColor.bind(this);
+    this.setFont = this.setFont.bind(this);
     this.renderText = this.renderText.bind(this);
     this.sizeText = this.sizeText.bind(this);
     this.textEditDivClicked = this.textEditDivClicked.bind(this);
@@ -37,6 +42,13 @@ export class TextMarker extends RectangularBoxMarkerBase {
       settings.defaultStrokeColor
     );
     this.colorPanel.onColorChanged = this.setColor;
+
+    this.fontFamilyPanel = new FontFamilyPanel(
+      'Font',
+      settings.defaultFontFamilies,
+      settings.defaultFontFamily
+    );
+    this.fontFamilyPanel.onFontChanged = this.setFont;
   }
 
   public ownsTarget(el: EventTarget): boolean {
@@ -64,7 +76,8 @@ export class TextMarker extends RectangularBoxMarkerBase {
       this.visual.appendChild(this.bgRectangle);
 
       this.textElement = SvgHelper.createText([
-        ['fill', this.color]
+        ['fill', this.color],
+        ['font-family', this.fontFamily]
       ]);
       this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // translate transorm
       this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transorm
@@ -176,6 +189,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     textEditor.style.left = `${this.left + textPosition.x}px`;
     textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - this.left - textPosition.x}px`;
     textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
+    textEditor.style.fontFamily = this.fontFamily;
     textEditor.style.lineHeight = '1em';
     textEditor.innerText = this.text;
     textEditor.contentEditable = 'true';
@@ -212,9 +226,16 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   protected setColor(color: string): void {
     SvgHelper.setAttributes(this.textElement, [['fill', color]]);
+    this.color = color;
+  }
+
+  protected setFont(font: string): void {
+    SvgHelper.setAttributes(this.textElement, [['font-family', font]]);
+    this.fontFamily = font;
+    this.renderText();
   }
 
   public get toolboxPanels(): ToolboxPanel[] {
-    return [this.colorPanel];
+    return [this.colorPanel, this.fontFamilyPanel];
   }
 }
