@@ -13,8 +13,10 @@ export class ResizeGrip {
     this.visual.appendChild(
       SvgHelper.createCircle(this.GRIP_SIZE, [
         ['fill', '#cccccc'],
+        ['fill-opacity', '0.7'],
         ['stroke', '#333333'],
         ['stroke-width', '2'],
+        ['stroke-opacity', '0.7']
       ])
     );
   }

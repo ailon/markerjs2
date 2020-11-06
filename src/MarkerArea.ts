@@ -12,6 +12,7 @@ import { Style } from './core/Style';
 import { LineMarker } from './markers/line-marker/LineMarker';
 import { TextMarker } from './markers/text-marker/TextMarker';
 import { FreehandMarker } from './markers/freehand-marker/FreehandMarker';
+import { ArrowMarker } from './markers/arrow-marker/ArrowMarker';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -48,6 +49,7 @@ export class MarkerArea {
   private toolbarMarkers: typeof MarkerBase[] = [
     FrameMarker,
     LineMarker,
+    ArrowMarker,
     TextMarker,
     FreehandMarker,
   ];

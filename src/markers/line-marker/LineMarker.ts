@@ -17,8 +17,8 @@ export class LineMarker extends LinearMarkerBase {
   protected strokeColor = 'transparent';
   protected strokeWidth = 0;
 
-  private strokePanel: ColorPickerPanel;
-  private strokeWidthPanel: LineWidthPanel;
+  protected strokePanel: ColorPickerPanel;
+  protected strokeWidthPanel: LineWidthPanel;
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
@@ -100,13 +100,18 @@ export class LineMarker extends LinearMarkerBase {
     this.visibleLine.setAttribute('y1', this.y1.toString());
     this.visibleLine.setAttribute('x2', this.x2.toString());
     this.visibleLine.setAttribute('y2', this.y2.toString());
+
+    SvgHelper.setAttributes(this.visibleLine, [['stroke', this.strokeColor]]);
+    SvgHelper.setAttributes(this.visibleLine, [['stroke-width', this.strokeWidth.toString()]]);
   }
 
   protected setStrokeColor(color: string): void {
-    SvgHelper.setAttributes(this.visibleLine, [['stroke', color]]);
+    this.strokeColor = color;
+    this.adjustVisual();
   }
   protected setStrokeWidth(width: number): void {
-    SvgHelper.setAttributes(this.visibleLine, [['stroke-width', width.toString()]]);
+    this.strokeWidth = width
+    this.adjustVisual();
   }
 
   public get toolboxPanels(): ToolboxPanel[] {
