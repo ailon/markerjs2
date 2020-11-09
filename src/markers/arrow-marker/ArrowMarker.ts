@@ -4,6 +4,7 @@ import { Settings } from '../../core/Settings';
 import Icon from './arrow-marker-icon.svg';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { LineMarker } from '../line-marker/LineMarker';
+import { ArrowType, ArrowTypePanel } from '../../ui/toolbox-panels/ArrowTypePanel';
 
 export class ArrowMarker extends LineMarker {
   public static title = 'Arrow marker';
@@ -12,13 +13,21 @@ export class ArrowMarker extends LineMarker {
   private arrow1: SVGPolygonElement;
   private arrow2: SVGPolygonElement;
 
+  private arrowType: ArrowType = 'end';
+
   private arrowBaseHeight = 10;
   private arrowBaseWidth = 10;
+
+  protected arrowTypePanel: ArrowTypePanel;
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
     this.getArrowPoints = this.getArrowPoints.bind(this);
+    this.setArrowType = this.setArrowType.bind(this);
+
+    this.arrowTypePanel = new ArrowTypePanel('Arrow type', 'end');
+    this.arrowTypePanel.onArrowTypeChanged = this.setArrowType;
   }
 
   public ownsTarget(el: EventTarget): boolean {
@@ -58,6 +67,9 @@ export class ArrowMarker extends LineMarker {
     super.adjustVisual();
 
     if (this.arrow1 && this.arrow2) {
+      this.arrow1.style.display = (this.arrowType === 'both' || this.arrowType === 'start') ? '' : 'none';
+      this.arrow2.style.display = (this.arrowType === 'both' || this.arrowType === 'end') ? '' : 'none';
+
       SvgHelper.setAttributes(this.arrow1, [
         ['points', this.getArrowPoints(this.x1, this.y1)],
         ['fill', this.strokeColor]
@@ -82,7 +94,12 @@ export class ArrowMarker extends LineMarker {
     }
   }
 
+  private setArrowType(arrowType: ArrowType) {
+    this.arrowType = arrowType;
+    this.adjustVisual();
+  }
+
   public get toolboxPanels(): ToolboxPanel[] {
-    return [this.strokePanel, this.strokeWidthPanel];
+    return [this.strokePanel, this.strokeWidthPanel, this.arrowTypePanel];
   }
 }
