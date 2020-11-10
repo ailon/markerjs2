@@ -9,6 +9,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
   protected fillColor = 'transparent';
   protected strokeColor = 'transparent';
   protected strokeWidth = 0;
+  protected opacity = 1;
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
@@ -33,6 +34,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
         ['fill', this.fillColor],
         ['stroke', this.strokeColor],
         ['stroke-width', this.strokeWidth.toString()],
+        ['opacity', this.opacity.toString()]
       ]);
       const translate = SvgHelper.createTransform();
       this.visual.transform.baseVal.appendItem(translate);

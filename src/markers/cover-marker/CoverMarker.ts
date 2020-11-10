@@ -8,7 +8,7 @@ export class CoverMarker extends RectangleMarker {
   public static title = 'Cover marker';
   public static icon = Icon;
 
-  private fillPanel: ColorPickerPanel;
+  protected fillPanel: ColorPickerPanel;
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
