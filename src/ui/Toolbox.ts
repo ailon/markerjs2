@@ -3,7 +3,7 @@ import { Style, StyleClass, StyleRule } from './../core/Style';
 
 export class Toolbox {
   private panels: ToolboxPanel[] = [];
-  private activePanel: ToolboxPanel;
+  // private activePanel: ToolboxPanel;
   private panelButtons: HTMLDivElement[] = [];
 
   private markerjsContainer: HTMLDivElement;
@@ -109,7 +109,8 @@ export class Toolbox {
       });
     }
     if (this.panels.length > 0) {
-      this.showPanel(this.activePanel ? this.activePanel : this.panels[0]);
+      // this.showPanel(this.activePanel ? this.activePanel : this.panels[0]);
+      this.showPanel(this.panels[0]);
     }
   }
 
@@ -125,7 +126,7 @@ export class Toolbox {
     const panelUI = panel.getUi();
     panelUI.style.margin = `${Style.settings.toolbarHeight / 4}px`;
     this.panelRow.appendChild(panelUI);
-    this.activePanel = panel;
+    // this.activePanel = panel;
   }
 
 }
