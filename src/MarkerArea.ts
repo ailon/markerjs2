@@ -132,6 +132,7 @@ export class MarkerArea {
   }
 
   public async render(): Promise<string> {
+    this.setCurrentMarker();
     const renderer = new Renderer();
     return await renderer.rasterize(this.target, this.markerImage);
   }
