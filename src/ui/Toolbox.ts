@@ -25,7 +25,7 @@ export class Toolbox {
       width: 100%;
       display: flex;
       flex-direction: column;
-      height: ${Style.settings.toolbarHeight * 2}px;
+      height: ${Style.settings.toolbarHeight * 2.5}px;
       background-color: ${Style.settings.toolbarBackgroundColor};
       box-shadow: 0px 3px rgba(33, 33, 33, 0.1);
       color: ${Style.settings.toolboxColor};
@@ -42,7 +42,8 @@ export class Toolbox {
     this.toolboxPanelRowStyleClass = Style.addClass(new StyleClass('toolbox_panel_row', `
       display: flex;
       cursor: default;
-      background-color: ${Style.settings.toolbarBackgroundHoverColor}
+      background-color: ${Style.settings.toolbarBackgroundHoverColor};
+      height: ${Style.settings.toolbarHeight * 1.5}px;
     `));
 
     this.toolboxButtonStyleClass = Style.addClass(new StyleClass('toolbox_button', `
