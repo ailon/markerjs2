@@ -54,11 +54,12 @@ export default [{
     }
   ],
   plugins: [
-    generatePackageJson({  
-      baseContents: {
-        scripts: {},
-        dependencies: {},
-        devDependencies: {}
+    generatePackageJson({
+      baseContents: (pkg) => {
+        pkg.scripts = {};
+        pkg.dependencies = {};
+        pkg.devDependencies = {};
+        return pkg;
       }
     }),
     typescript(),
