@@ -4,6 +4,7 @@
   "description": "JavaScript image annotation",
   "main": "markerjs2.js",
   "module": "markerjs2.esm.js",
+  "types": "markerjs2.d.ts",
   "author": "Alan Mendelevich",
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
@@ -12,6 +13,21 @@
     "start": "rollup --config rollup.config.dev.js -w",
     "docs": "typedoc --excludePrivate --exclude \"src/index.ts\" -mode file --out docs src"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ailon/markerjs2"
+  },
+  "keywords": [
+    "annotate",
+    "mark",
+    "highlight",
+    "image",
+    "photo",
+    "graphics",
+    "javascript",
+    "typescript",
+    "comment"
+  ],  
   "devDependencies": {
     "@rollup/plugin-typescript": "^5.0.2",
     "@typescript-eslint/eslint-plugin": "^3.10.1",

@@ -18,6 +18,25 @@ see README.md and LICENSE for details
 ********************************** */`;
 
 export default [{
+  input: ['./src/index.ts'],
+  output: {
+    dir: './dts/'
+  },
+  plugins: [
+    del({ targets: ['dts/*', 'dist/*']}),
+    typescript({ 
+      declaration: true, 
+      outDir: './dts/', 
+      rootDir: './src/', 
+      exclude: ['./test/**/*', './dts/**/*', './dist/**/*'] 
+    }),
+    svgo()
+  ]
+}, {
+  input: "./dts/index.d.ts",
+  output: [{ file: "./dist/markerjs2.d.ts", format: "es" }],
+  plugins: [dts()],
+}, {
   input: ['src/index.ts'],
   output: [
     {
@@ -35,7 +54,6 @@ export default [{
     }
   ],
   plugins: [
-    del({ targets: 'dist/*' }),
     generatePackageJson({  
       baseContents: {
         scripts: {},
@@ -49,26 +67,9 @@ export default [{
     copy({
       targets: [{
         src: 'README.md', dest: 'dist'
-      }]
+      },{
+        src: 'LICENSE', dest: 'dist'
+      },]
     })
   ]
-}, {
-  input: ['./src/index.ts'],
-  output: {
-    dir: './dts/'
-  },
-  plugins: [
-    del({ targets: 'dts/*' }),
-    typescript({ 
-      declaration: true, 
-      outDir: './dts/', 
-      rootDir: './src/', 
-      exclude: ['./test/**/*', './dts/**/*', './dist/**/*'] 
-    }),
-    svgo()
-  ]
-}, {
-  input: "./dts/index.d.ts",
-  output: [{ file: "./dist/markerjs2.d.ts", format: "es" }],
-  plugins: [dts()],
 }];
