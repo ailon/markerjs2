@@ -201,6 +201,13 @@ export class TextMarker extends RectangularBoxMarkerBase {
     textEditor.addEventListener('pointerup', (ev) => {
       ev.stopPropagation();
     });
+    textEditor.addEventListener('input', (ev) => {
+      let fontSize = Number.parseFloat(textEditor.style.fontSize);
+      while(textEditor.clientWidth >= Number.parseInt(textEditor.style.maxWidth) && fontSize > 0.9) {
+        fontSize -= 0.1;
+        textEditor.style.fontSize = `${Math.max(fontSize, 0.9)}em`;
+      }
+    })
 
     textEditDiv.addEventListener('pointerup', () => {
       this.textEditDivClicked(textEditor.innerText);
