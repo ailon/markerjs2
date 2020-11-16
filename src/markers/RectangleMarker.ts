@@ -52,6 +52,11 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
 
   protected resize(point: IPoint): void {
     super.resize(point);
+    this.setSize();
+  }
+
+  protected setSize(): void {
+    super.setSize();
     SvgHelper.setAttributes(this.visual, [
       ['width', this.width.toString()],
       ['height', this.height.toString()],
@@ -60,6 +65,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
 
   public pointerUp(point: IPoint): void {
     super.pointerUp(point);
+    this.setSize();
   }
 
   protected setStrokeColor(color: string): void {

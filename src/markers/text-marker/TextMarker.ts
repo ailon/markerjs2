@@ -30,12 +30,15 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.color = settings.defaultStrokeColor;
     this.fontFamily = settings.defaultFontFamily;
 
+    this.defaultSize = {x: 100, y: 30};
+
     this.setColor = this.setColor.bind(this);
     this.setFont = this.setFont.bind(this);
     this.renderText = this.renderText.bind(this);
     this.sizeText = this.sizeText.bind(this);
     this.textEditDivClicked = this.textEditDivClicked.bind(this);
     this.showTextEditor = this.showTextEditor.bind(this);
+    this.setSize = this.setSize.bind(this);
 
     this.colorPanel = new ColorPickerPanel(
       'Color',
@@ -155,6 +158,12 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   protected resize(point: IPoint): void {
     super.resize(point);
+    this.setSize();
+    this.sizeText();
+  }
+
+  protected setSize(): void {
+    super.setSize();
     SvgHelper.setAttributes(this.visual, [
       ['width', this.width.toString()],
       ['height', this.height.toString()],
@@ -163,14 +172,15 @@ export class TextMarker extends RectangularBoxMarkerBase {
       ['width', this.width.toString()],
       ['height', this.height.toString()],
     ]);
-    this.sizeText();
   }
 
   public pointerUp(point: IPoint): void {
-    if (this._state === 'creating') {
+    const inState = this.state;
+    super.pointerUp(point);
+    this.setSize();
+    if (inState === 'creating') {
       this.showTextEditor();
     }
-    super.pointerUp(point);
   }
 
   private showTextEditor() {
@@ -202,7 +212,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     textEditor.addEventListener('pointerup', (ev) => {
       ev.stopPropagation();
     });
-    textEditor.addEventListener('input', (ev) => {
+    textEditor.addEventListener('input', () => {
       let fontSize = Number.parseFloat(textEditor.style.fontSize);
       while(textEditor.clientWidth >= Number.parseInt(textEditor.style.maxWidth) && fontSize > 0.9) {
         fontSize -= 0.1;

@@ -12,6 +12,8 @@ export class LinearMarkerBase extends MarkerBase {
   protected x2 = 0;
   protected y2 = 0;
 
+  protected defaultLength = 50;
+
   protected manipulationStartX = 0;
   protected manipulationStartY = 0;
 
@@ -86,7 +88,13 @@ export class LinearMarkerBase extends MarkerBase {
 
   public pointerUp(point: IPoint): void {
     super.pointerUp(point);
-    this.manipulate(point);
+    if (this.state === 'creating' && Math.abs(this.x1 - this.x2) < 10 && Math.abs(this.y1 - this.y2) < 10) {
+      this.x2 = this.x1 + this.defaultLength;
+      this.adjustVisual();
+      this.adjustControlBox()
+    } else {
+      this.manipulate(point);
+    }
     this._state = 'select';
     if (this.onMarkerCreated) {
       this.onMarkerCreated(this);

@@ -13,6 +13,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   protected width = 0;
   protected height = 0;
 
+  protected defaultSize: IPoint = {x: 50, y: 20};
+
   protected manipulationStartLeft: number;
   protected manipulationStartTop: number;
   protected manipulationStartWidth: number;
@@ -116,7 +118,12 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
   public pointerUp(point: IPoint): void {
     super.pointerUp(point);
-    this.manipulate(point);
+    if (this.state === 'creating' && this.width < 10 && this.height < 10) {
+      this.width = this.defaultSize.x;
+      this.height = this.defaultSize.y;
+    } else {
+      this.manipulate(point);
+    }
     this._state = 'select';
     if (this.onMarkerCreated) {
       this.onMarkerCreated(this);
@@ -203,6 +210,10 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       this.height = -newHeight;
     }
 
+    this.setSize();
+  }
+
+  protected setSize(): void {
     this.moveVisual({x: this.left, y: this.top});
     this.adjustControlBox();
   }
