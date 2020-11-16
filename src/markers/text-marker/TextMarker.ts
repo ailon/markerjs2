@@ -14,6 +14,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   protected color = 'transparent';
   protected fontFamily: string;
+  protected padding = 5;
 
   private colorPanel: ColorPickerPanel;
   private fontFamilyPanel: FontFamilyPanel;
@@ -119,8 +120,8 @@ export class TextMarker extends RectangularBoxMarkerBase {
     const textSize = this.textElement.getBBox();
     let scale = 1.0;
     if (textSize.width > 0 && textSize.height > 0) {
-        const xScale = this.width * 1.0 / textSize.width;
-        const yScale = this.height * 1.0 / textSize.height;
+        const xScale = (this.width * 1.0 - this.width * this.padding * 2 / 100) / textSize.width;
+        const yScale = (this.height * 1.0 - this.height * this.padding * 2 / 100) / textSize.height;
         scale = Math.min(xScale, yScale);
     }
     return scale;
