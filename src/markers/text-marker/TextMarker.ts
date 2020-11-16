@@ -77,7 +77,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
       this.textElement = SvgHelper.createText([
         ['fill', this.color],
-        ['font-family', this.fontFamily]
+        ['font-family', this.fontFamily],
+        ['x', '0'],
+        ['y', '0']
       ]);
       this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // translate transorm
       this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transorm
@@ -136,8 +138,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
   }
 
   private sizeText() {
+    const textBBox = this.textElement.getBBox();
     const scale = this.getTextScale();
     const position = this.getTextPosition(scale);
+    position.y -= textBBox.y * scale; // workaround adjustment for text not being placed at y=0
 
     this.textElement.transform.baseVal.getItem(0).setTranslate(position.x, position.y);
     this.textElement.transform.baseVal.getItem(1).setScale(scale, scale);
