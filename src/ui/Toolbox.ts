@@ -48,7 +48,7 @@ export class Toolbox {
 
     this.toolboxButtonStyleClass = Style.addClass(new StyleClass('toolbox_button', `
       display: inline-block;
-      cursor: default;
+      width: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
       height: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
       padding: ${buttonPadding}px;
     `));
@@ -65,6 +65,17 @@ export class Toolbox {
     `
       )
     );
+
+    Style.addRule(
+      new StyleRule(
+        `.${this.toolboxButtonStyleClass.name} svg`,
+        `
+      fill: ${Style.settings.toolbarColor};
+      height: ${Style.settings.toolbarHeight / 2}px;
+    `
+      )
+    );
+
   }
 
   constructor(markerjsContainer: HTMLDivElement) {
@@ -99,9 +110,8 @@ export class Toolbox {
       this.panels.forEach(panel => {
         const panelBtnDiv = document.createElement('div');
         panelBtnDiv.className = this.toolboxButtonStyleClass.name;
-        const panelHeader = document.createElement('span')
-        panelHeader.innerText = panel.title;
-        panelBtnDiv.appendChild(panelHeader);
+        panelBtnDiv.innerHTML = panel.icon;
+        panelBtnDiv.title = panel.title;
         panelBtnDiv.addEventListener('click', () => {
           this.showPanel(panel);
         })

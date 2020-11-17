@@ -1,5 +1,6 @@
 import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
+import Icon from './opacity-panel-icon.svg';
 
 export type OpacityChangeHandler = (newOpacity: number) => void;
 
@@ -11,8 +12,8 @@ export class OpacityPanel extends ToolboxPanel {
 
   public onOpacityChanged?: OpacityChangeHandler;
 
-  constructor(title: string, opacities: number[], currentOpacity?: number) {
-    super(title);
+  constructor(title: string, opacities: number[], currentOpacity?: number, icon?: string) {
+    super(title, icon ? icon : Icon);
     this.opacities = opacities;
     this.currentOpacity = currentOpacity;
 

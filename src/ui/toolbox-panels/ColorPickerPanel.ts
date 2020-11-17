@@ -1,5 +1,6 @@
 import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
+import Icon from './color-picker-panel-icon.svg';
 
 export type ColorChangeHandler = (newColor: string) => void;
 
@@ -11,8 +12,8 @@ export class ColorPickerPanel extends ToolboxPanel {
 
   public onColorChanged?: ColorChangeHandler;
 
-  constructor(title: string, colors: string[], currentColor?: string) {
-    super(title);
+  constructor(title: string, colors: string[], currentColor?: string, icon?: string) {
+    super(title, icon ? icon : Icon);
     this.colors = colors;
     this.currentColor = currentColor;
 

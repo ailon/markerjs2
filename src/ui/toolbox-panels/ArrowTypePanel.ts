@@ -1,5 +1,6 @@
 import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
+import Icon from './arrow-type-panel-icon.svg';
 
 export type ArrowType = 'both' | 'start' | 'end' | 'none';
 export type ArrowTypeChangeHandler = (newType: ArrowType) => void;
@@ -11,8 +12,8 @@ export class ArrowTypePanel extends ToolboxPanel {
 
   public onArrowTypeChanged?: ArrowTypeChangeHandler;
 
-  constructor(title: string, currentType?: ArrowType) {
-    super(title);
+  constructor(title: string, currentType?: ArrowType, icon?: string) {
+    super(title, icon ? icon : Icon);
     this.currentType = currentType;
 
     this.setCurrentType = this.setCurrentType.bind(this);

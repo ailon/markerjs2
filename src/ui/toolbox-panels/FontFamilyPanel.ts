@@ -1,5 +1,6 @@
 import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
+import Icon from './font-family-panel-icon.svg';
 
 export type FontChangeHandler = (newFont: string) => void;
 
@@ -11,8 +12,8 @@ export class FontFamilyPanel extends ToolboxPanel {
 
   public onFontChanged?: FontChangeHandler;
 
-  constructor(title: string, fonts: string[], currentFont?: string) {
-    super(title);
+  constructor(title: string, fonts: string[], currentFont?: string, icon?: string) {
+    super(title, icon ? icon : Icon);
     this.fonts = fonts;
     this.currentFont = currentFont;
 

@@ -1,5 +1,6 @@
 import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
+import Icon from './line-width-panel-icon.svg';
 
 export type WidthChangeHandler = (newWidth: number) => void;
 
@@ -11,8 +12,8 @@ export class LineWidthPanel extends ToolboxPanel {
 
   public onWidthChanged?: WidthChangeHandler;
 
-  constructor(title: string, widths: number[], currentWidth?: number) {
-    super(title);
+  constructor(title: string, widths: number[], currentWidth?: number, icon?: string) {
+    super(title, icon ? icon : Icon);
     this.widths = widths;
     this.currentWidth = currentWidth;
 
