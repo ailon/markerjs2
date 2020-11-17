@@ -336,7 +336,7 @@ export class MarkerArea {
         this.coverDiv.style.top = `${coverTop}px`;
         this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
-        this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
+        //this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
         this.coverDiv.style.zIndex = '1000';
         // flex causes the ui to stretch when toolbox has wider nowrap panels
         //this.coverDiv.style.display = 'flex';
@@ -389,7 +389,7 @@ export class MarkerArea {
     this.editingTarget = document.createElement('img');
     this.editorCanvas.appendChild(this.editingTarget);
 
-    this.toolbox = new Toolbox(this.uiDiv);
+    this.toolbox = new Toolbox(this.uiDiv, this.settings.displayMode);
     this.toolbox.show();
   }
 
