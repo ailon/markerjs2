@@ -2,12 +2,13 @@ export type ColorSet = string[];
 export type DisplayMode = 'inline' | 'popup';
 
 export class Settings {
+  public defaultColor = 'red';
   public defaultFillColor = 'red';
-  public defaultStrokeColor = 'red';
+  public defaultStrokeColor = 'white';
+  public defaultHighlightColor = 'yellow';
   public defaultStrokeWidth = 3;
   public defaultHighlightOpacity = 0.5;
   public defaultFontFamily = 'Helvetica, Arial, sans-serif';
-  public defaultHighlightColor = 'yellow';
 
   public defaultColorSet: ColorSet = [
     'red', 'green', 'blue', 'yellow', 'white', 'black', 'magenta', 'cyan'

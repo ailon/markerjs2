@@ -26,7 +26,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
-    this.color = settings.defaultStrokeColor;
+    this.color = settings.defaultColor;
 
     this.setColor = this.setColor.bind(this);
     this.addCanvas = this.addCanvas.bind(this);
@@ -34,7 +34,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     this.colorPanel = new ColorPickerPanel(
       'Color',
       settings.defaultColorSet,
-      settings.defaultStrokeColor
+      settings.defaultColor
     );
     this.colorPanel.onColorChanged = this.setColor;
   }

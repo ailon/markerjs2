@@ -7,7 +7,6 @@ import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { FontFamilyPanel } from '../../ui/toolbox-panels/FontFamilyPanel';
 
-
 export class TextMarker extends RectangularBoxMarkerBase {
   public static title = 'Text marker';
   public static icon = Icon;
@@ -16,18 +15,18 @@ export class TextMarker extends RectangularBoxMarkerBase {
   protected fontFamily: string;
   protected padding = 5;
 
-  private colorPanel: ColorPickerPanel;
-  private fontFamilyPanel: FontFamilyPanel;
+  protected colorPanel: ColorPickerPanel;
+  protected fontFamilyPanel: FontFamilyPanel;
 
   private readonly DEFAULT_TEXT = "your text here";
   private text: string = this.DEFAULT_TEXT;
-  private textElement: SVGTextElement;
-  private bgRectangle: SVGRectElement;
+  protected textElement: SVGTextElement;
+  protected bgRectangle: SVGRectElement;
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
-    this.color = settings.defaultStrokeColor;
+    this.color = settings.defaultColor;
     this.fontFamily = settings.defaultFontFamily;
 
     this.defaultSize = {x: 100, y: 30};
@@ -43,7 +42,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.colorPanel = new ColorPickerPanel(
       'Color',
       settings.defaultColorSet,
-      settings.defaultStrokeColor
+      settings.defaultColor
     );
     this.colorPanel.onColorChanged = this.setColor;
 
@@ -255,6 +254,15 @@ export class TextMarker extends RectangularBoxMarkerBase {
     SvgHelper.setAttributes(this.textElement, [['font-family', font]]);
     this.fontFamily = font;
     this.renderText();
+  }
+
+  protected hideVisual(): void {
+    this.textElement.style.display = 'none';
+    this.hideControlBox();
+  }
+  protected showVisual(): void {
+    this.textElement.style.display = '';
+    this.showControlBox();
   }
 
   public get toolboxPanels(): ToolboxPanel[] {

@@ -395,12 +395,10 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     grip.transform.baseVal.replaceItem(translate, 0);
   }
 
-  protected hideVisual(): void {
-    this.visual.style.display = 'none';
+  protected hideControlBox(): void {
     this.controlBox.style.display = 'none';
   }
-  protected showVisual(): void {
-    this.visual.style.display = '';
+  protected showControlBox(): void {
     this.controlBox.style.display = '';
   }
 }

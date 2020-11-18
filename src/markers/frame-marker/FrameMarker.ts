@@ -17,13 +17,13 @@ export class FrameMarker extends RectangleMarker {
 
     this._name = 'frame';
 
-    this.strokeColor = settings.defaultStrokeColor;
+    this.strokeColor = settings.defaultColor;
     this.strokeWidth = settings.defaultStrokeWidth;
 
     this.strokePanel = new ColorPickerPanel(
       'Line color',
       settings.defaultColorSet,
-      settings.defaultStrokeColor
+      settings.defaultColor
     );
     this.strokePanel.onColorChanged = this.setStrokeColor;
     this.strokeWidthPanel = new LineWidthPanel(

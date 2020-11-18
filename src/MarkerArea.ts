@@ -15,6 +15,7 @@ import { FreehandMarker } from './markers/freehand-marker/FreehandMarker';
 import { ArrowMarker } from './markers/arrow-marker/ArrowMarker';
 // import { CoverMarker } from './markers/cover-marker/CoverMarker';
 import { HighlightMarker } from './markers/highlight-marker/HighlightMarker';
+import { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -55,6 +56,7 @@ export class MarkerArea {
     LineMarker,
     ArrowMarker,
     TextMarker,
+    CalloutMarker,
     FreehandMarker,
   ];
 

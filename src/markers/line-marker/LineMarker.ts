@@ -26,13 +26,13 @@ export class LineMarker extends LinearMarkerBase {
     this.setStrokeColor = this.setStrokeColor.bind(this);
     this.setStrokeWidth = this.setStrokeWidth.bind(this);
 
-    this.strokeColor = settings.defaultStrokeColor;
+    this.strokeColor = settings.defaultColor;
     this.strokeWidth = settings.defaultStrokeWidth;
 
     this.strokePanel = new ColorPickerPanel(
       'Line color',
       settings.defaultColorSet,
-      settings.defaultStrokeColor
+      settings.defaultColor
     );
     this.strokePanel.onColorChanged = this.setStrokeColor;
     this.strokePanel.onColorChanged = this.setStrokeColor;
