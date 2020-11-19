@@ -37,7 +37,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
   protected visual: SVGGraphicsElement;
 
-  private controlBox: SVGGElement;
+  protected controlBox: SVGGElement;
   private readonly CB_DISTANCE: number = 10;
   private controlRect: SVGRectElement;
   private rotatorGripLine: SVGLineElement;
