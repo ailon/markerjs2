@@ -1,6 +1,6 @@
 {
   "name": "markerjs2",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "description": "JavaScript image annotation",
   "main": "markerjs2.js",
   "module": "markerjs2.esm.js",
@@ -27,7 +27,7 @@
     "javascript",
     "typescript",
     "comment"
-  ],  
+  ],
   "devDependencies": {
     "@rollup/plugin-typescript": "^5.0.2",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
