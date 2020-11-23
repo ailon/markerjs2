@@ -23,13 +23,18 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   private drawing = false;
 
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.color = settings.defaultColor;
 
     this.setColor = this.setColor.bind(this);
     this.addCanvas = this.addCanvas.bind(this);
+    this.finishCreation = this.finishCreation.bind(this);
 
     this.colorPanel = new ColorPickerPanel(
       'Color',
@@ -40,7 +45,11 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
   }
 
   public ownsTarget(el: EventTarget): boolean {
-    if (super.ownsTarget(el) || el === this.visual || el === this.drawingImage) {
+    if (
+      super.ownsTarget(el) ||
+      el === this.visual ||
+      el === this.drawingImage
+    ) {
       return true;
     } else {
       return false;
@@ -119,70 +128,91 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   public select(): void {
     if (this.state === 'creating') {
-      const imgData = this.canvasContext.getImageData(
-        0,
-        0,
-        this.canvasElement.width,
-        this.canvasElement.height
-      );
+      this.finishCreation();
+    }
+    super.select();
+  }
 
-      let [startX, startY, endX, endY] = [
-        this.canvasElement.width + 1,
-        this.canvasElement.height + 1,
-        -1,
-        -1,
-      ];
-      let containsData = false;
-      for(let row = 0; row < this.canvasElement.height; row++) {
-        for (let col = 0; col < this.canvasElement.width; col++) {
-          const pixAlpha = imgData.data[row * this.canvasElement.width * 4 + col * 4 + 3];
-          if (pixAlpha > 0) {
-            containsData = true;
-            if (row < startY) {
-              startY = row;
-            }
-            if (col < startX) {
-              startX = col;
-            }
-            if (row > endY) {
-              endY = row;
-            }
-            if (col > endX) {
-              endX = col;
-            }
+  public deselect(): void {
+    if (this.state === 'creating') {
+      this.finishCreation();
+    }
+    super.deselect();
+  }
+
+  private finishCreation() {
+    const imgData = this.canvasContext.getImageData(
+      0,
+      0,
+      this.canvasElement.width,
+      this.canvasElement.height
+    );
+
+    let [startX, startY, endX, endY] = [
+      this.canvasElement.width + 1,
+      this.canvasElement.height + 1,
+      -1,
+      -1,
+    ];
+    let containsData = false;
+    for (let row = 0; row < this.canvasElement.height; row++) {
+      for (let col = 0; col < this.canvasElement.width; col++) {
+        const pixAlpha =
+          imgData.data[row * this.canvasElement.width * 4 + col * 4 + 3];
+        if (pixAlpha > 0) {
+          containsData = true;
+          if (row < startY) {
+            startY = row;
+          }
+          if (col < startX) {
+            startX = col;
+          }
+          if (row > endY) {
+            endY = row;
+          }
+          if (col > endX) {
+            endX = col;
           }
         }
       }
-
-      if (containsData) {
-        this.left = startX;
-        this.top = startY;
-        this.width = endX - startX;
-        this.height = endY - startY;
-
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = this.width;
-        tmpCanvas.height = this.height;
-        const tmpCtx = tmpCanvas.getContext('2d');
-        tmpCtx.putImageData(this.canvasContext.getImageData(startX, startY, endX - startX, endY - startY), 0, 0);
-
-        const drawingImgUrl = tmpCanvas.toDataURL('image/png');
-
-        SvgHelper.setAttributes(this.drawingImage, [
-          ['width', this.width.toString()],
-          ['height', this.height.toString()],
-        ]);
-        SvgHelper.setAttributes(this.drawingImage, [['href', drawingImgUrl]]);
-        this.moveVisual({x: this.left, y: this.top});
-
-        this._state = 'select';
-        if (this.onMarkerCreated) {
-          this.onMarkerCreated(this);
-        }
-      }
-      this.overlayContainer.innerHTML = '';
     }
-    super.select();
+
+    if (containsData) {
+      this.left = startX;
+      this.top = startY;
+      this.width = endX - startX;
+      this.height = endY - startY;
+
+      const tmpCanvas = document.createElement('canvas');
+      tmpCanvas.width = this.width;
+      tmpCanvas.height = this.height;
+      const tmpCtx = tmpCanvas.getContext('2d');
+      tmpCtx.putImageData(
+        this.canvasContext.getImageData(
+          startX,
+          startY,
+          endX - startX,
+          endY - startY
+        ),
+        0,
+        0
+      );
+
+      const drawingImgUrl = tmpCanvas.toDataURL('image/png');
+
+      SvgHelper.setAttributes(this.drawingImage, [
+        ['width', this.width.toString()],
+        ['height', this.height.toString()],
+      ]);
+      SvgHelper.setAttributes(this.drawingImage, [['href', drawingImgUrl]]);
+      this.moveVisual({ x: this.left, y: this.top });
+
+      this._state = 'select';
+      if (this.onMarkerCreated) {
+        this.onMarkerCreated(this);
+      }
+    }
+    this.overlayContainer.innerHTML = '';
   }
 
   protected setColor(color: string): void {
