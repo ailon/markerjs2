@@ -87,6 +87,7 @@ export class LinearMarkerBase extends MarkerBase {
   }
 
   public pointerUp(point: IPoint): void {
+    const inState = this.state;
     super.pointerUp(point);
     if (this.state === 'creating' && Math.abs(this.x1 - this.x2) < 10 && Math.abs(this.y1 - this.y2) < 10) {
       this.x2 = this.x1 + this.defaultLength;
@@ -96,7 +97,7 @@ export class LinearMarkerBase extends MarkerBase {
       this.manipulate(point);
     }
     this._state = 'select';
-    if (this.onMarkerCreated) {
+    if (inState === 'creating' && this.onMarkerCreated) {
       this.onMarkerCreated(this);
     }
   }

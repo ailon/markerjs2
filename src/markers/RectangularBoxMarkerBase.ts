@@ -117,6 +117,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   }
 
   public pointerUp(point: IPoint): void {
+    const inState = this.state;
     super.pointerUp(point);
     if (this.state === 'creating' && this.width < 10 && this.height < 10) {
       this.width = this.defaultSize.x;
@@ -125,7 +126,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       this.manipulate(point);
     }
     this._state = 'select';
-    if (this.onMarkerCreated) {
+    if (inState === 'creating' && this.onMarkerCreated) {
       this.onMarkerCreated(this);
     }
   }
