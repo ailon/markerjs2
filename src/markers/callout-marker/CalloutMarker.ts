@@ -126,6 +126,7 @@ export class CalloutMarker extends TextMarker {
 
   protected setBgColor(color: string): void {
     SvgHelper.setAttributes(this.bgRectangle, [['fill', color]]);
+    SvgHelper.setAttributes(this.tip, [['fill', color]]);
     this.bgColor = color;
   }
 
