@@ -7,6 +7,7 @@ export class Settings {
   public defaultStrokeColor = 'white';
   public defaultHighlightColor = 'yellow';
   public defaultStrokeWidth = 3;
+  public defaultStrokeDasharray = '';
   public defaultHighlightOpacity = 0.5;
   public defaultFontFamily = 'Helvetica, Arial, sans-serif';
 
@@ -15,6 +16,8 @@ export class Settings {
   ];
 
   public defaultStrokeWidths = [1, 2, 3, 5, 10];
+
+  public defaultStrokeDasharrays = ['', '3', '12 3', '9 6 3 6'];
 
   public defaultOpacitySteps = [0.1, 0.25, 0.5, 0.75, 1];
 

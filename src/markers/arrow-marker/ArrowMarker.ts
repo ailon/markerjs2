@@ -100,6 +100,6 @@ export class ArrowMarker extends LineMarker {
   }
 
   public get toolboxPanels(): ToolboxPanel[] {
-    return [this.strokePanel, this.strokeWidthPanel, this.arrowTypePanel];
+    return [this.strokePanel, this.strokeWidthPanel, this.strokeStylePanel, this.arrowTypePanel];
   }
 }

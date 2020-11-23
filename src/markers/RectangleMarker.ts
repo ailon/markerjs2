@@ -9,6 +9,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
   protected fillColor = 'transparent';
   protected strokeColor = 'transparent';
   protected strokeWidth = 0;
+  protected strokeDasharray = '';
   protected opacity = 1;
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
@@ -17,6 +18,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     this.setStrokeColor = this.setStrokeColor.bind(this);
     this.setFillColor = this.setFillColor.bind(this);
     this.setStrokeWidth = this.setStrokeWidth.bind(this);
+    this.setStrokeDasharray = this.setStrokeDasharray.bind(this);
   }
 
   public ownsTarget(el: EventTarget): boolean {
@@ -34,6 +36,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
         ['fill', this.fillColor],
         ['stroke', this.strokeColor],
         ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-dasharray', this.strokeDasharray],
         ['opacity', this.opacity.toString()]
       ]);
       const translate = SvgHelper.createTransform();
@@ -84,6 +87,12 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     this.strokeWidth = width;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke-width', this.strokeWidth.toString()]]);
+    }
+  }
+  protected setStrokeDasharray(dashes: string): void {
+    this.strokeDasharray = dashes;
+    if (this.visual) {
+      SvgHelper.setAttributes(this.visual, [['stroke-dasharray', this.strokeDasharray]]);
     }
   }
 }
