@@ -5,8 +5,11 @@ import { Settings } from '../../core/Settings';
 import { RectangleMarker } from '../RectangleMarker';
 import { LineWidthPanel } from '../../ui/toolbox-panels/LineWidthPanel';
 import { LineStylePanel } from '../../ui/toolbox-panels/LineStylePanel';
+import { RectangleMarkerState } from '../RectangleMarkerState';
 
 export class FrameMarker extends RectangleMarker {
+  public static typeName = 'FrameMarker';
+  
   public static title = 'Frame marker';
   public static icon = Icon;
 
@@ -16,8 +19,6 @@ export class FrameMarker extends RectangleMarker {
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
-
-    this._name = 'frame';
 
     this.strokeColor = settings.defaultColor;
     this.strokeWidth = settings.defaultStrokeWidth;
@@ -47,5 +48,11 @@ export class FrameMarker extends RectangleMarker {
 
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.strokePanel, this.strokeWidthPanel, this.strokeStylePanel];
+  }
+
+  public getState(): RectangleMarkerState {
+    const result = super.getState();
+    result.typeName = FrameMarker.typeName;
+    return result;
   }
 }

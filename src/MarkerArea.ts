@@ -16,6 +16,7 @@ import { ArrowMarker } from './markers/arrow-marker/ArrowMarker';
 // import { CoverMarker } from './markers/cover-marker/CoverMarker';
 import { HighlightMarker } from './markers/highlight-marker/HighlightMarker';
 import { CalloutMarker } from './markers/callout-marker/CalloutMarker';
+import { MarkerAreaState } from './MarkerAreaState';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -24,7 +25,7 @@ export interface IPoint {
   y: number
 }
 
-export type RenderEventHandler = (dataURL: string) => void;
+export type RenderEventHandler = (dataURL: string, state?: MarkerAreaState) => void;
 export type CloseEventHandler = () => void;
 
 export class MarkerArea {
@@ -49,7 +50,7 @@ export class MarkerArea {
 
   private logoUI: HTMLElement;
 
-  private toolbarMarkers: typeof MarkerBase[] = [
+  private availableMarkerTypes: typeof MarkerBase[] = [
     FrameMarker,
     //CoverMarker,
     HighlightMarker,
@@ -92,6 +93,7 @@ export class MarkerArea {
 
     this.toolbarButtonClicked = this.toolbarButtonClicked.bind(this);
     this.createNewMarker = this.createNewMarker.bind(this);
+    this.addNewMarker = this.addNewMarker.bind(this);
     this.markerCreated = this.markerCreated.bind(this);
     this.setCurrentMarker = this.setCurrentMarker.bind(this);
     this.onPointerDown = this.onPointerDown.bind(this);
@@ -153,7 +155,7 @@ export class MarkerArea {
   }
 
   public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
-    this.toolbarMarkers.push(...markers);
+    this.availableMarkerTypes.push(...markers);
   }
 
   public addRenderEventListener(listener: RenderEventHandler): void {
@@ -366,7 +368,7 @@ export class MarkerArea {
     this.uiDiv.style.backgroundColor = '#ffffff';
     this.coverDiv.appendChild(this.uiDiv);
 
-    this.toolbar = new Toolbar(this.uiDiv, this.toolbarMarkers);
+    this.toolbar = new Toolbar(this.uiDiv, this.availableMarkerTypes);
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
     this.toolbar.show();
 
@@ -440,23 +442,45 @@ export class MarkerArea {
 
   private async renderClicked() {
     const result = await this.render();
-    this.renderEventListeners.forEach((listener) => listener(result));
+    const state = this.getState();
+    this.renderEventListeners.forEach((listener) => listener(result, state));
     this.close();
   }
 
-  private createNewMarker(markerType: typeof MarkerBase) {
-    this.setCurrentMarker();
+  public getState(): MarkerAreaState {
+    const result: MarkerAreaState = { markers: [] };
+    this.markers.forEach(marker => result.markers.push(marker.getState()));
+    return result;
+  }
+
+  public restoreState(state: MarkerAreaState): void {
+    this.markers.splice(0);
+    state.markers.forEach(markerState => {
+      const markerType = this.availableMarkerTypes.find(mType => mType.typeName === markerState.typeName);
+      if (markerType !== undefined) {
+        const marker = this.addNewMarker(markerType);
+        marker.restoreState(markerState);
+        this.markers.push(marker);
+      }
+    })
+  }
+
+  private addNewMarker(markerType: typeof MarkerBase): MarkerBase {
     const g = SvgHelper.createGroup();
     this.markerImage.appendChild(g);
 
-    this.currentMarker = new markerType(
+    return new markerType(
       g,
       this.overlayContainer,
       this.settings
     );
+  }
+
+  private createNewMarker(markerType: typeof MarkerBase) {
+    this.setCurrentMarker();
+    this.currentMarker = this.addNewMarker(markerType);
     this.currentMarker.onMarkerCreated = this.markerCreated;
     this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
-    console.log(this.currentMarker.name);
   }
 
   private markerCreated(marker: MarkerBase) {

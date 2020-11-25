@@ -2,6 +2,8 @@ import { IPoint } from '../MarkerArea';
 import { SvgHelper } from '../core/SvgHelper';
 import { RectangularBoxMarkerBase } from './RectangularBoxMarkerBase';
 import { Settings } from '../core/Settings';
+import { RectangleMarkerState } from './RectangleMarkerState';
+import { MarkerBaseState } from '../core/MarkerBaseState';
 
 export abstract class RectangleMarker extends RectangularBoxMarkerBase {
   public static title = 'Rectangle marker';
@@ -19,6 +21,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     this.setFillColor = this.setFillColor.bind(this);
     this.setStrokeWidth = this.setStrokeWidth.bind(this);
     this.setStrokeDasharray = this.setStrokeDasharray.bind(this);
+    this.createVisual = this.createVisual.bind(this);
   }
 
   public ownsTarget(el: EventTarget): boolean {
@@ -29,22 +32,26 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  protected createVisual(): void {
+    this.visual = SvgHelper.createRect(1, 1, [
+      ['fill', this.fillColor],
+      ['stroke', this.strokeColor],
+      ['stroke-width', this.strokeWidth.toString()],
+      ['stroke-dasharray', this.strokeDasharray],
+      ['opacity', this.opacity.toString()]
+    ]);
+    const translate = SvgHelper.createTransform();
+    this.visual.transform.baseVal.appendItem(translate);
+    this.addMarkerVisualToContainer(this.visual);
+  }
+
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
     if (this.state === 'new') {
-      this.visual = SvgHelper.createRect(1, 1, [
-        ['fill', this.fillColor],
-        ['stroke', this.strokeColor],
-        ['stroke-width', this.strokeWidth.toString()],
-        ['stroke-dasharray', this.strokeDasharray],
-        ['opacity', this.opacity.toString()]
-      ]);
-      const translate = SvgHelper.createTransform();
-      this.visual.transform.baseVal.appendItem(translate);
+      this.createVisual();
 
       this.moveVisual(point);
 
-      this.addMarkerVisualToContainer(this.visual);
       this._state = 'creating';
     }
   }
@@ -94,5 +101,30 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke-dasharray', this.strokeDasharray]]);
     }
+  }
+
+  public getState(): RectangleMarkerState {
+    const result: RectangleMarkerState = Object.assign({
+      fillColor: this.fillColor,
+      strokeColor: this.strokeColor,
+      strokeWidth: this.strokeWidth,
+      strokeDasharray: this.strokeDasharray,
+      opacity: this.opacity
+    }, super.getState());
+
+    return result;
+  }
+
+  public restoreState(state: MarkerBaseState): void {
+    const rectState = state as RectangleMarkerState;
+    this.fillColor = rectState.fillColor;
+    this.strokeColor = rectState.strokeColor;
+    this.strokeWidth = rectState.strokeWidth;
+    this.strokeDasharray = rectState.strokeDasharray;
+    this.opacity = rectState.opacity;
+
+    this.createVisual();
+    super.restoreState(state);
+    this.setSize();
   }
 }

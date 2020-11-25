@@ -5,6 +5,7 @@ import { Settings } from '../../core/Settings';
 import { CoverMarker } from '../cover-marker/CoverMarker';
 import { OpacityPanel } from '../../ui/toolbox-panels/OpacityPanel';
 import { SvgHelper } from '../../core/SvgHelper';
+import { RectangleMarkerState } from '../RectangleMarkerState';
 
 export class HighlightMarker extends CoverMarker {
   public static title = 'Highlight marker';
@@ -14,8 +15,6 @@ export class HighlightMarker extends CoverMarker {
 
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
-
-    this._name = 'highlight';
 
     this.setOpacity = this.setOpacity.bind(this);
 
@@ -47,5 +46,11 @@ export class HighlightMarker extends CoverMarker {
 
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.fillPanel, this.opacityPanel];
+  }
+
+  public getState(): RectangleMarkerState {
+    const result = super.getState();
+    result.typeName = HighlightMarker.typeName;
+    return result;
   }
 }

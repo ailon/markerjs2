@@ -1,10 +1,13 @@
 import { IPoint } from '../MarkerArea';
 import { ToolboxPanel } from '../ui/ToolboxPanel';
+import { MarkerBaseState } from './MarkerBaseState';
 import { Settings } from './Settings';
 
 export type MarkerState = 'new' | 'creating' | 'select' | 'move' | 'resize' | 'rotate';
 
 export class MarkerBase {
+  public static typeName = 'MarkerBase';
+
   protected _container: SVGGElement;
   public get container(): SVGGElement {
     return this._container;
@@ -17,11 +20,6 @@ export class MarkerBase {
   public get state(): MarkerState {
     return this._state;
   }
-  protected _name = 'base';
-  public get name(): string {
-    return this._name;
-  }
-
   protected globalSettings: Settings;
 
   public get toolboxPanels(): ToolboxPanel[] {
@@ -81,5 +79,16 @@ export class MarkerBase {
     } else {
       this.container.appendChild(element);
     }
+  }
+
+  public getState(): MarkerBaseState {
+    return { 
+      typeName: MarkerBase.typeName, 
+      state: this.state 
+    };
+  }
+
+  public restoreState(state: MarkerBaseState): void {
+    this._state = state.state;
   }
 }

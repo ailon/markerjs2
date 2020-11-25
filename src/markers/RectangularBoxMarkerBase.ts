@@ -6,6 +6,8 @@ import { SvgHelper } from '../core/SvgHelper';
 import { RectangularBoxMarkerGrips } from './RectangularBoxMarkerGrips';
 import { ResizeGrip } from './ResizeGrip';
 import { Settings } from '../core/Settings';
+import { RectangularBoxMarkerBaseState } from './RectangularBoxMarkerBaseState';
+import { MarkerBaseState } from '../core/MarkerBaseState';
 
 export class RectangularBoxMarkerBase extends MarkerBase {
   protected left = 0;
@@ -222,15 +224,19 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   private rotate(point: IPoint) {
     // avoid glitch when crossing the 0 rotation point
     if (Math.abs(point.x - this.centerX) > 0.1) {
-      const rotate = this.container.transform.baseVal.getItem(0);
       const sign = Math.sign(point.x - this.centerX);
       this.rotationAngle =
         (Math.atan((point.y - this.centerY) / (point.x - this.centerX)) * 180) /
           Math.PI +
         90 * sign;
-      rotate.setRotate(this.rotationAngle, this.centerX, this.centerY);
-      this.container.transform.baseVal.replaceItem(rotate, 0);
+      this.applyRotation();
     }
+  }
+
+  private applyRotation() {
+    const rotate = this.container.transform.baseVal.getItem(0);
+    rotate.setRotate(this.rotationAngle, this.centerX, this.centerY);
+    this.container.transform.baseVal.replaceItem(rotate, 0);
   }
 
   protected rotatePoint(point: IPoint): IPoint {
@@ -401,5 +407,30 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   }
   protected showControlBox(): void {
     this.controlBox.style.display = '';
+  }
+
+  public getState(): RectangularBoxMarkerBaseState {
+    const result: RectangularBoxMarkerBaseState = Object.assign({
+      left: this.left,
+      top: this.top,
+      width: this.width,
+      height: this.height,
+      rotationAngle: this.rotationAngle
+    },
+    super.getState());
+
+    return result;
+  }
+
+  public restoreState(state: MarkerBaseState): void {
+    super.restoreState(state);
+    const rbmState = state as RectangularBoxMarkerBaseState;
+    this.left = rbmState.left;
+    this.top = rbmState.top;
+    this.width = rbmState.width;
+    this.height = rbmState.height;
+    this.rotationAngle = rbmState.rotationAngle;
+    this.moveVisual({x: this.left, y: this.top});
+    this.applyRotation();
   }
 }

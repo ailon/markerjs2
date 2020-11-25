@@ -13,8 +13,6 @@ export class CoverMarker extends RectangleMarker {
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
-    this._name = 'cover';
-
     this.fillColor = settings.defaultFillColor;
     this.strokeWidth = 0;
 
