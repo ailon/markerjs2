@@ -6,8 +6,12 @@ import Icon from './text-marker-icon.svg';
 import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { FontFamilyPanel } from '../../ui/toolbox-panels/FontFamilyPanel';
+import { TextMarkerState } from './TextMarkerState';
+import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 export class TextMarker extends RectangularBoxMarkerBase {
+  public static typeName = 'TextMarker';
+
   public static title = 'Text marker';
   public static icon = Icon;
 
@@ -68,34 +72,37 @@ export class TextMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  protected createVisual(): void {
+    this.visual = SvgHelper.createGroup();
+
+    this.bgRectangle = SvgHelper.createRect(1, 1, [
+      ['fill', 'transparent']
+    ]);
+    this.visual.appendChild(this.bgRectangle);
+
+    this.textElement = SvgHelper.createText([
+      ['fill', this.color],
+      ['font-family', this.fontFamily],
+      ['x', '0'],
+      ['y', '0']
+    ]);
+    this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // translate transorm
+    this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transorm
+
+    this.visual.appendChild(this.textElement);
+
+    const translate = SvgHelper.createTransform();
+    this.visual.transform.baseVal.appendItem(translate);
+
+    this.addMarkerVisualToContainer(this.visual);
+    this.renderText();
+  }
+
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
     if (this.state === 'new') {
-      this.visual = SvgHelper.createGroup();
-
-      this.bgRectangle = SvgHelper.createRect(1, 1, [
-        ['fill', 'transparent']
-      ]);
-      this.visual.appendChild(this.bgRectangle);
-
-      this.textElement = SvgHelper.createText([
-        ['fill', this.color],
-        ['font-family', this.fontFamily],
-        ['x', '0'],
-        ['y', '0']
-      ]);
-      this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // translate transorm
-      this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transorm
-
-      this.visual.appendChild(this.textElement);
-
-      const translate = SvgHelper.createTransform();
-      this.visual.transform.baseVal.appendItem(translate);
-
+      this.createVisual();
       this.moveVisual(point);
-
-      this.addMarkerVisualToContainer(this.visual);
-      this.renderText();
       this._state = 'creating';
     }
   }
@@ -268,4 +275,29 @@ export class TextMarker extends RectangularBoxMarkerBase {
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.colorPanel, this.fontFamilyPanel];
   }
+
+  public getState(): TextMarkerState {
+    const result: TextMarkerState = Object.assign({
+      color: this.color,
+      fontFamily: this.fontFamily,
+      padding: this.padding,
+      text: this.text
+    }, super.getState());
+    result.typeName = TextMarker.typeName;
+
+    return result;
+  }
+
+  public restoreState(state: MarkerBaseState): void {
+    const textState = state as TextMarkerState;
+    this.color = textState.color;
+    this.fontFamily = textState.fontFamily;
+    this.padding = textState.padding;
+    this.text = textState.text;
+
+    this.createVisual();
+    super.restoreState(state);
+    this.setSize();
+  }
+
 }
