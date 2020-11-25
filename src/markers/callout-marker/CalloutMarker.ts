@@ -9,9 +9,13 @@ import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { FontFamilyPanel } from '../../ui/toolbox-panels/FontFamilyPanel';
 import { TextMarker } from '../text-marker/TextMarker';
 import { ResizeGrip } from '../ResizeGrip';
+import { CalloutMarkerState } from './CalloutMarkerState';
+import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 export class CalloutMarker extends TextMarker {
-  public static title = 'Text marker';
+  public static typeName = 'CalloutMarker';
+
+  public static title = 'Callout marker';
   public static icon = Icon;
 
   private bgColor = 'transparent';
@@ -78,21 +82,25 @@ export class CalloutMarker extends TextMarker {
     );
   }
 
+  private createTip() {
+    SvgHelper.setAttributes(this.bgRectangle, [
+      ['fill', this.bgColor],
+      ['rx', '10px'],
+    ]);
+
+    this.tip = SvgHelper.createPolygon(this.getTipPoints(), [
+      ['fill', this.bgColor],
+    ]);
+    this.visual.appendChild(this.tip);
+  }
+
   public pointerDown(point: IPoint, target?: EventTarget): void {
     if (this.state === 'new') {
       super.pointerDown(point, target);
     }
 
     if (this.state === 'creating') {
-      SvgHelper.setAttributes(this.bgRectangle, [
-        ['fill', this.bgColor],
-        ['rx', '10px'],
-      ]);
-
-      this.tip = SvgHelper.createPolygon(this.getTipPoints(), [
-        ['fill', this.bgColor],
-      ]);
-      this.visual.appendChild(this.tip);
+      this.createTip();
     } else if (this.tipGrip.ownsTarget(target)) {
       this.manipulationStartLeft = this.left;
       this.manipulationStartTop = this.top;
@@ -216,4 +224,26 @@ export class CalloutMarker extends TextMarker {
     this.positionTip();
     super.select();
   }
+
+  public getState(): CalloutMarkerState {
+    const result: CalloutMarkerState = Object.assign({
+      bgColor: this.bgColor,
+      tipPosition: this.tipPosition
+    }, super.getState());
+    result.typeName = CalloutMarker.typeName;
+
+    return result;
+  }
+
+  public restoreState(state: MarkerBaseState): void {
+    const calloutState = state as CalloutMarkerState;
+    this.bgColor = calloutState.bgColor;
+    this.tipPosition = calloutState.tipPosition;
+
+    super.restoreState(state);
+    this.createTip();
+    this.setTipPoints();
+  }
+
+
 }
