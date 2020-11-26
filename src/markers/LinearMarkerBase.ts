@@ -5,6 +5,8 @@ import { SvgHelper } from '../core/SvgHelper';
 
 import { ResizeGrip } from './ResizeGrip';
 import { Settings } from '../core/Settings';
+import { LinearMarkerBaseState } from './LinearMarkerBaseState';
+import { MarkerBaseState } from '../core/MarkerBaseState';
 
 export class LinearMarkerBase extends MarkerBase {
   protected x1 = 0;
@@ -186,5 +188,25 @@ export class LinearMarkerBase extends MarkerBase {
     const translate = grip.transform.baseVal.getItem(0);
     translate.setTranslate(x, y);
     grip.transform.baseVal.replaceItem(translate, 0);
+  }
+
+  public getState(): LinearMarkerBaseState {
+    const result: LinearMarkerBaseState = Object.assign({
+      x1: this.x1,
+      y1: this.y1,
+      x2: this.x2,
+      y2: this.y2
+    }, super.getState());
+
+    return result;
+  }
+
+  public restoreState(state: MarkerBaseState): void {
+    super.restoreState(state);
+    const lmbState = state as LinearMarkerBaseState;
+    this.x1 = lmbState.x1;
+    this.y1 = lmbState.y1;
+    this.x2 = lmbState.x2;
+    this.y2 = lmbState.y2;
   }
 }

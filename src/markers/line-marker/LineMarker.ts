@@ -7,8 +7,12 @@ import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { LineWidthPanel } from '../../ui/toolbox-panels/LineWidthPanel';
 import { LineStylePanel } from '../../ui/toolbox-panels/LineStylePanel';
+import { LineMarkerState } from './LineMarkerState';
+import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 export class LineMarker extends LinearMarkerBase {
+  public static typeName = 'LineMarker';
+  
   public static title = 'Line marker';
   public static icon = Icon;
 
@@ -69,35 +73,40 @@ export class LineMarker extends LinearMarkerBase {
     }
   }
 
+  private createVisual() {
+    this.visual = SvgHelper.createGroup();
+    this.selectorLine = SvgHelper.createLine(
+      this.x1,
+      this.y1,
+      this.x2,
+      this.y2,
+      [
+        ['stroke', 'transparent'],
+        ['stroke-width', (this.strokeWidth + 10).toString()],
+      ]
+    );
+    this.visibleLine = SvgHelper.createLine(
+      this.x1,
+      this.y1,
+      this.x2,
+      this.y2,
+      [
+        ['stroke', this.strokeColor],
+        ['stroke-width', this.strokeWidth.toString()],
+      ]
+    );
+    this.visual.appendChild(this.selectorLine);
+    this.visual.appendChild(this.visibleLine);
+
+    this.addMarkerVisualToContainer(this.visual);
+  }
+
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
     if (this.state === 'new') {
-      this.visual = SvgHelper.createGroup();
-      this.selectorLine = SvgHelper.createLine(
-        this.x1,
-        this.y1,
-        this.x2,
-        this.y2,
-        [
-          ['stroke', 'transparent'],
-          ['stroke-width', (this.strokeWidth + 10).toString()],
-        ]
-      );
-      this.visibleLine = SvgHelper.createLine(
-        this.x1,
-        this.y1,
-        this.x2,
-        this.y2,
-        [
-          ['stroke', this.strokeColor],
-          ['stroke-width', this.strokeWidth.toString()],
-        ]
-      );
-      this.visual.appendChild(this.selectorLine);
-      this.visual.appendChild(this.visibleLine);
+      this.createVisual();
       this.adjustVisual();
 
-      this.addMarkerVisualToContainer(this.visual);
       this._state = 'creating';
     }
   }
@@ -134,5 +143,28 @@ export class LineMarker extends LinearMarkerBase {
 
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.strokePanel, this.strokeWidthPanel, this.strokeStylePanel];
+  }
+
+  public getState(): LineMarkerState {
+    const result: LineMarkerState = Object.assign({
+      strokeColor: this.strokeColor,
+      strokeWidth: this.strokeWidth,
+      strokeDasharray: this.strokeDasharray
+    }, super.getState());
+    result.typeName = LineMarker.typeName;
+
+    return result;
+  }
+
+  public restoreState(state: MarkerBaseState): void {
+    super.restoreState(state);
+
+    const lmState = state as LineMarkerState;
+    this.strokeColor = lmState.strokeColor;
+    this.strokeWidth = lmState.strokeWidth;
+    this.strokeDasharray = lmState.strokeDasharray;
+
+    this.createVisual();
+    this.adjustVisual();
   }
 }

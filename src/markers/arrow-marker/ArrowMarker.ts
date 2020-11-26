@@ -5,8 +5,12 @@ import Icon from './arrow-marker-icon.svg';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { LineMarker } from '../line-marker/LineMarker';
 import { ArrowType, ArrowTypePanel } from '../../ui/toolbox-panels/ArrowTypePanel';
+import { ArrowMarkerState } from './ArrowMarkerState';
+import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 export class ArrowMarker extends LineMarker {
+  public static typeName = 'ArrowMarker';
+
   public static title = 'Arrow marker';
   public static icon = Icon;
 
@@ -50,16 +54,20 @@ export class ArrowMarker extends LineMarker {
       offsetX + width / 2},${offsetY + height / 2}`;
   }
 
+  private createTips() {
+    this.arrow1 = SvgHelper.createPolygon(this.getArrowPoints(this.x1, this.y1), [['fill', this.strokeColor]]);
+    this.arrow1.transform.baseVal.appendItem(SvgHelper.createTransform());
+    this.visual.appendChild(this.arrow1);
+
+    this.arrow2 = SvgHelper.createPolygon(this.getArrowPoints(this.x2, this.y2), [['fill', this.strokeColor]]);
+    this.arrow2.transform.baseVal.appendItem(SvgHelper.createTransform());
+    this.visual.appendChild(this.arrow2);
+  }
+
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
     if (this.state === 'creating') {
-      this.arrow1 = SvgHelper.createPolygon(this.getArrowPoints(this.x1, this.y1), [['fill', this.strokeColor]]);
-      this.arrow1.transform.baseVal.appendItem(SvgHelper.createTransform());
-      this.visual.appendChild(this.arrow1);
-
-      this.arrow2 = SvgHelper.createPolygon(this.getArrowPoints(this.x2, this.y2), [['fill', this.strokeColor]]);
-      this.arrow2.transform.baseVal.appendItem(SvgHelper.createTransform());
-      this.visual.appendChild(this.arrow2);
+      this.createTips();
     }
   }
 
@@ -102,4 +110,24 @@ export class ArrowMarker extends LineMarker {
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.strokePanel, this.strokeWidthPanel, this.strokeStylePanel, this.arrowTypePanel];
   }
+
+  public getState(): ArrowMarkerState {
+    const result: ArrowMarkerState = Object.assign({
+      arrowType: this.arrowType
+    }, super.getState());
+    result.typeName = ArrowMarker.typeName;
+
+    return result;
+  }
+
+  public restoreState(state: MarkerBaseState): void {
+    super.restoreState(state);
+
+    const amState = state as ArrowMarkerState;
+    this.arrowType = amState.arrowType;
+
+    this.createTips();
+    this.adjustVisual();
+  }
+
 }
