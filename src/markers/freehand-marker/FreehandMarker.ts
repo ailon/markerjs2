@@ -5,9 +5,13 @@ import { Settings } from '../../core/Settings';
 import Icon from './freehand-marker-icon.svg';
 import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
+import { FreehandMarkerState } from './FreehandMarkerState';
+import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 
 export class FreehandMarker extends RectangularBoxMarkerBase {
+  public static typeName = 'FreehandMarker';
+
   public static title = 'Freehand marker';
   public static icon = Icon;
 
@@ -20,6 +24,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
   private canvasContext: CanvasRenderingContext2D;
 
   private drawingImage: SVGImageElement;
+  private drawingImgUrl: string;
 
   private drawing = false;
 
@@ -56,17 +61,21 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  private createVisual() {
+    this.visual = SvgHelper.createGroup();
+    this.drawingImage = SvgHelper.createImage();
+    this.visual.appendChild(this.drawingImage);
+
+    const translate = SvgHelper.createTransform();
+    this.visual.transform.baseVal.appendItem(translate);
+    this.addMarkerVisualToContainer(this.visual);
+  }
+
   public pointerDown(point: IPoint, target?: EventTarget): void {
     if (this.state === 'new') {
       this.addCanvas();
 
-      this.visual = SvgHelper.createGroup();
-      this.drawingImage = SvgHelper.createImage();
-      this.visual.appendChild(this.drawingImage);
-
-      const translate = SvgHelper.createTransform();
-      this.visual.transform.baseVal.appendItem(translate);
-      this.addMarkerVisualToContainer(this.visual);
+      this.createVisual();
 
       this._state = 'creating';
     }
@@ -198,14 +207,8 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
         0
       );
 
-      const drawingImgUrl = tmpCanvas.toDataURL('image/png');
-
-      SvgHelper.setAttributes(this.drawingImage, [
-        ['width', this.width.toString()],
-        ['height', this.height.toString()],
-      ]);
-      SvgHelper.setAttributes(this.drawingImage, [['href', drawingImgUrl]]);
-      this.moveVisual({ x: this.left, y: this.top });
+      this.drawingImgUrl = tmpCanvas.toDataURL('image/png');
+      this.setDrawingImage();
 
       this._state = 'select';
       if (this.onMarkerCreated) {
@@ -213,6 +216,15 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
       }
     }
     this.overlayContainer.innerHTML = '';
+  }
+
+  private setDrawingImage() {
+    SvgHelper.setAttributes(this.drawingImage, [
+      ['width', this.width.toString()],
+      ['height', this.height.toString()],
+    ]);
+    SvgHelper.setAttributes(this.drawingImage, [['href', this.drawingImgUrl]]);
+    this.moveVisual({ x: this.left, y: this.top });
   }
 
   protected setColor(color: string): void {
@@ -225,5 +237,21 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     } else {
       return [];
     }
+  }
+
+  public getState(): FreehandMarkerState {
+    const result: FreehandMarkerState = Object.assign({
+      drawingImgUrl: this.drawingImgUrl
+    }, super.getState());
+    result.typeName = FreehandMarker.typeName;
+
+    return result;
+  }
+
+  public restoreState(state: MarkerBaseState): void {
+    this.createVisual();
+    super.restoreState(state);
+    this.drawingImgUrl = (state as FreehandMarkerState).drawingImgUrl;
+    this.setDrawingImage();
   }
 }
