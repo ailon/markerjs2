@@ -17,6 +17,7 @@ import { ArrowMarker } from './markers/arrow-marker/ArrowMarker';
 import { HighlightMarker } from './markers/highlight-marker/HighlightMarker';
 import { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 import { MarkerAreaState } from './MarkerAreaState';
+import { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -54,6 +55,7 @@ export class MarkerArea {
     FrameMarker,
     //CoverMarker,
     HighlightMarker,
+    EllipseMarker,
     // LineMarker,
     ArrowMarker,
     TextMarker,
