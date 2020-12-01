@@ -9,11 +9,11 @@ import { Toolbox } from './ui/Toolbox';
 import { FrameMarker } from './markers/frame-marker/FrameMarker';
 import { Settings } from './core/Settings';
 import { Style } from './core/Style';
-// import { LineMarker } from './markers/line-marker/LineMarker';
+import { LineMarker } from './markers/line-marker/LineMarker';
 import { TextMarker } from './markers/text-marker/TextMarker';
 import { FreehandMarker } from './markers/freehand-marker/FreehandMarker';
 import { ArrowMarker } from './markers/arrow-marker/ArrowMarker';
-// import { CoverMarker } from './markers/cover-marker/CoverMarker';
+import { CoverMarker } from './markers/cover-marker/CoverMarker';
 import { HighlightMarker } from './markers/highlight-marker/HighlightMarker';
 import { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 import { MarkerAreaState } from './MarkerAreaState';
@@ -53,10 +53,10 @@ export class MarkerArea {
 
   private availableMarkerTypes: typeof MarkerBase[] = [
     FrameMarker,
-    //CoverMarker,
+    CoverMarker,
     HighlightMarker,
     EllipseMarker,
-    // LineMarker,
+    LineMarker,
     ArrowMarker,
     TextMarker,
     CalloutMarker,
