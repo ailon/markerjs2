@@ -8,7 +8,7 @@ import { MarkerBaseState } from '../../core/MarkerBaseState';
 import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { LineWidthPanel } from '../../ui/toolbox-panels/LineWidthPanel';
 import { LineStylePanel } from '../../ui/toolbox-panels/LineStylePanel';
-import { ToolboxPanel } from '../../../dts/ui/ToolboxPanel';
+import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import FillColorIcon from '../../ui/toolbox-panels/fill-color-icon.svg';
 import { OpacityPanel } from '../../ui/toolbox-panels/OpacityPanel';
 
