@@ -1,4 +1,4 @@
-import { MarkerArea } from '../../src';
+import { Activator, MarkerArea } from '../../src';
 import { DisplayMode } from '../../src/core/Settings';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
 
@@ -11,6 +11,7 @@ export class Experiments {
 
   constructor() {
     this.renderResult = this.renderResult.bind(this);
+    //Activator.addKey('1234');
   }
 
   public openMarkerArea(target: HTMLImageElement): void {
