@@ -295,6 +295,7 @@ export class MarkerArea {
     this.editorCanvas.appendChild(this.logoUI);
 
     this.logoUI.style.position = 'absolute';
+    this.logoUI.style.pointerEvents = 'all';
     this.positionLogo();
   }
 
