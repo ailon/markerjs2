@@ -28,6 +28,7 @@ export class ColorPickerPanel extends ToolboxPanel {
     this.colors.forEach((color) => {
       const colorBoxContainer = document.createElement('div');
       colorBoxContainer.style.display = 'inline-block';
+      colorBoxContainer.style.boxSizing = 'content-box';
       colorBoxContainer.style.width = `${buttonHeight - 2}px`;
       colorBoxContainer.style.height = `${buttonHeight - 2}px`;
       colorBoxContainer.style.padding = '1px';

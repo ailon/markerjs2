@@ -30,6 +30,7 @@ export class Toolbox {
       color: ${Style.settings.toolboxColor};
       font-family: sans-serif;
       ${this.displayMode === 'popup' ? 'height:' + Style.settings.toolbarHeight * 2.5 + 'px;' : ''}
+      box-sizing: content-box;
     `
       )
     );
@@ -39,6 +40,7 @@ export class Toolbox {
       display: flex;
       cursor: default;
       background-color: ${Style.settings.toolbarBackgroundColor};
+      box-sizing: content-box;
     `));
     this.toolboxPanelRowStyleClass = Style.addClass(new StyleClass('toolbox_panel_row', `
       display: flex;
@@ -48,6 +50,7 @@ export class Toolbox {
       background-color: ${Style.settings.toolbarBackgroundHoverColor};
       height: ${Style.settings.toolbarHeight * 1.5}px;
       ${this.displayMode === 'inline' ? 'width: 100%;' : ''}
+      box-sizing: content-box;
     `));
 
     this.toolboxButtonStyleClass = Style.addClass(new StyleClass('toolbox_button', `
@@ -55,6 +58,7 @@ export class Toolbox {
       width: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
       height: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
       padding: ${buttonPadding}px;
+      box-sizing: content-box;
     `));
 
     this.toolboxActiveButtonStyleClass = Style.addClass(new StyleClass('toolbox_active_button', `

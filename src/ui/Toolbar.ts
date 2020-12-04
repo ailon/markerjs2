@@ -176,6 +176,7 @@ export class Toolbar {
       height: ${Style.settings.toolbarHeight}px;
       background-color: ${Style.settings.toolbarBackgroundColor};
       box-shadow: 0px 3px rgba(33, 33, 33, 0.1);
+      box-sizing: content-box;
     `
       )
     );
@@ -185,6 +186,7 @@ export class Toolbar {
         'toolbar-block',
         `
         display: inline-block;
+        box-sizing: content-box;
     `
       )
     );
@@ -198,6 +200,7 @@ export class Toolbar {
         top: ${Style.settings.toolbarHeight}px;
         max-width: ${Style.settings.toolbarHeight * 2}px;
         z-index: 10;
+        box-sizing: content-box;
       `
       )
     );
@@ -208,6 +211,7 @@ export class Toolbar {
       width: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
       height: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
       padding: ${buttonPadding}px;
+      box-sizing: content-box;
     `))
 
     this.toolbarActiveButtonStyleClass = Style.addClass(new StyleClass('toolbar_active_button', `
