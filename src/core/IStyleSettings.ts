@@ -6,4 +6,8 @@ export interface IStyleSettings {
   toolboxBackgroundColor?: string;
   toolboxColor?: string;
   toolboxAccentColor?: string;
+  toolbarStyleColorsClassName?: string,
+  toolbarOverflowBlockStyleColorsClassName?: string,
+  toolbarButtonStyleColorsClassName?: string,
+  toolbarActiveButtonStyleColorsClassName?: string,  
 }

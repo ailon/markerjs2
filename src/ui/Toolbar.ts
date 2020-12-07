@@ -6,6 +6,7 @@ import DeleteIcon from './toolbar-core-icons/delete.svg';
 import CheckIcon from './toolbar-core-icons/check.svg';
 import CloseIcon from './toolbar-core-icons/close.svg';
 import OverflowIcon from './toolbar-core-icons/overflow.svg';
+import { IStyleSettings } from '../core/IStyleSettings';
 
 export type ToolbarButtonType = 'action' | 'marker';
 
@@ -23,20 +24,27 @@ export class Toolbar {
 
   private markerjsContainer: HTMLDivElement;
   private uiContainer: HTMLDivElement;
+
   private toolbarStyleClass: StyleClass;
+  private toolbarStyleColorsClass: StyleClass;
   private toolbarBlockStyleClass: StyleClass;
   private toolbarOverflowBlockStyleClass: StyleClass;
+  private toolbarOverflowBlockStyleColorsClass: StyleClass;
   private toolbarButtonStyleClass: StyleClass;
-  private toolbarActiveButtonStyleClass: StyleClass;
+  private toolbarButtonStyleColorsClass: StyleClass;
+  private toolbarActiveButtonStyleColorsClass: StyleClass;
 
   private markerButtonBlock: HTMLDivElement
   private markerButtonOverflowBlock: HTMLDivElement
 
   private buttonClickListeners: ToolbarButtonClickHandler[] = [];
 
-  constructor(markerjsContainer: HTMLDivElement, markerItems: typeof MarkerBase[]) {
+  private uiStyleSettings: IStyleSettings;
+
+  constructor(markerjsContainer: HTMLDivElement, markerItems: typeof MarkerBase[], uiStyleSettings: IStyleSettings) {
     this.markerjsContainer = markerjsContainer;
     this.markerItems = markerItems;
+    this.uiStyleSettings = uiStyleSettings;
     this.addStyles();
 
     this.adjustLayout = this.adjustLayout.bind(this);
@@ -45,7 +53,9 @@ export class Toolbar {
 
   public show(): void {
     this.uiContainer = document.createElement('div');
-    this.uiContainer.className = this.toolbarStyleClass.name;
+    this.uiContainer.className = `${this.toolbarStyleClass.name} ${
+      this.uiStyleSettings.toolbarStyleColorsClassName ? 
+      this.uiStyleSettings.toolbarStyleColorsClassName : this.toolbarStyleColorsClass.name}`;
 
     const actionButtonBlock = document.createElement('div');
     actionButtonBlock.className = this.toolbarBlockStyleClass.name;
@@ -62,14 +72,18 @@ export class Toolbar {
     this.uiContainer.appendChild(this.markerButtonBlock);
 
     this.markerButtonOverflowBlock = document.createElement('div');
-    this.markerButtonOverflowBlock.className = this.toolbarOverflowBlockStyleClass.name;
+    this.markerButtonOverflowBlock.className = `${this.toolbarOverflowBlockStyleClass.name} ${
+      this.uiStyleSettings.toolbarOverflowBlockStyleColorsClassName ? 
+      this.uiStyleSettings.toolbarOverflowBlockStyleColorsClassName : this.toolbarOverflowBlockStyleColorsClass.name}`;
     this.markerButtonOverflowBlock.style.display = 'none';
     this.uiContainer.appendChild(this.markerButtonOverflowBlock);
 
     if (this.markerItems) {
       this.markerItems.forEach((mi) => {
         const buttonContainer = document.createElement('div');
-        buttonContainer.className = this.toolbarButtonStyleClass.name;
+        buttonContainer.className = `${this.toolbarButtonStyleClass.name} ${
+          this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+          this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
         buttonContainer.innerHTML = mi.icon;
         buttonContainer.addEventListener('click', () => {
           this.markerToolbarButtonClicked(buttonContainer, mi);
@@ -79,7 +93,9 @@ export class Toolbar {
         this.markerButtons.push(buttonContainer);
       });
       this.overflowButton = document.createElement('div');
-      this.overflowButton.className = this.toolbarButtonStyleClass.name;
+      this.overflowButton.className = `${this.toolbarButtonStyleClass.name} ${
+        this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+        this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
       this.overflowButton.innerHTML = OverflowIcon;
       this.overflowButton.addEventListener('click', this.overflowButtonClicked)
       this.markerButtonBlock.appendChild(this.overflowButton);
@@ -148,14 +164,17 @@ export class Toolbar {
   private resetButtonStyles() {
     this.buttons.forEach(button => {
       button.className = button.className
-        .replace(this.toolbarActiveButtonStyleClass.name, '')
+        .replace(this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName ? 
+          this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName : this.toolbarActiveButtonStyleColorsClass.name, '')
         .trim();
     });
   }
 
   private addActionButton(container: HTMLDivElement, icon: string, value: string) {
     const actionButton = document.createElement('div');
-    actionButton.className = this.toolbarButtonStyleClass.name;
+    actionButton.className = `${this.toolbarButtonStyleClass.name} ${
+      this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+      this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
     actionButton.innerHTML = icon;
     actionButton.addEventListener('click', () => {
       this.actionToolbarButtonClicked(actionButton, value);
@@ -173,10 +192,18 @@ export class Toolbar {
       display: flex;
       flex-direction: row;
       justify-content: space-between;      
-      height: ${Style.settings.toolbarHeight}px;
-      background-color: ${Style.settings.toolbarBackgroundColor};
-      box-shadow: 0px 3px rgba(33, 33, 33, 0.1);
+      height: ${this.uiStyleSettings.toolbarHeight}px;
       box-sizing: content-box;
+    `
+      )
+    );
+
+    this.toolbarStyleColorsClass = Style.addClass(
+      new StyleClass(
+        'toolbar_colors',
+        `
+      background-color: ${this.uiStyleSettings.toolbarBackgroundColor};
+      box-shadow: 0px 3px rgba(33, 33, 33, 0.1);
     `
       )
     );
@@ -196,43 +223,52 @@ export class Toolbar {
         'toolbar-overflow-block',
         `
         position: absolute;
-        background-color: ${Style.settings.toolbarBackgroundColor};
-        top: ${Style.settings.toolbarHeight}px;
-        max-width: ${Style.settings.toolbarHeight * 2}px;
+        top: ${this.uiStyleSettings.toolbarHeight}px;
+        max-width: ${this.uiStyleSettings.toolbarHeight * 2}px;
         z-index: 10;
         box-sizing: content-box;
       `
       )
     );
+    this.toolbarOverflowBlockStyleColorsClass = Style.addClass(
+      new StyleClass(
+        'toolbar-overflow-block_colors',
+        `
+        background-color: ${this.uiStyleSettings.toolbarBackgroundColor};
+      `
+      )
+    );
 
-    const buttonPadding = Style.settings.toolbarHeight / 4;
+    const buttonPadding = this.uiStyleSettings.toolbarHeight / 4;
     this.toolbarButtonStyleClass = Style.addClass(new StyleClass('toolbar_button', `
       display: inline-block;
-      width: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
-      height: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
+      width: ${this.uiStyleSettings.toolbarHeight - buttonPadding * 2}px;
+      height: ${this.uiStyleSettings.toolbarHeight - buttonPadding * 2}px;
       padding: ${buttonPadding}px;
       box-sizing: content-box;
-    `))
+    `));
+    this.toolbarButtonStyleColorsClass = Style.addClass(new StyleClass('toolbar_button_colors', `
+      fill: ${this.uiStyleSettings.toolbarColor};
+    `));
 
-    this.toolbarActiveButtonStyleClass = Style.addClass(new StyleClass('toolbar_active_button', `
-      background-color: ${Style.settings.toolbarBackgroundHoverColor}
+    this.toolbarActiveButtonStyleColorsClass = Style.addClass(new StyleClass('toolbar_active_button', `
+      background-color: ${this.uiStyleSettings.toolbarBackgroundHoverColor}
     `));
 
     Style.addRule(
       new StyleRule(
         `.${this.toolbarButtonStyleClass.name} svg`,
         `
-      fill: ${Style.settings.toolbarColor};
-      height: ${Style.settings.toolbarHeight / 2}px;
+      height: ${this.uiStyleSettings.toolbarHeight / 2}px;
     `
       )
     );
 
     Style.addRule(
       new StyleRule(
-        `.${this.toolbarButtonStyleClass.name}:hover`,
+        `.${this.toolbarButtonStyleColorsClass.name}:hover`,
         `
-        background-color: ${Style.settings.toolbarBackgroundHoverColor}
+        background-color: ${this.uiStyleSettings.toolbarBackgroundHoverColor}
     `
       )
     );
@@ -260,6 +296,7 @@ export class Toolbar {
 
   private setActiveButton(button: HTMLDivElement) {
     this.resetButtonStyles();
-    button.className += ' ' + this.toolbarActiveButtonStyleClass.name;
+    button.className += ` ${this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName ? 
+      this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName : this.toolbarActiveButtonStyleColorsClass.name}`;
   }
 }

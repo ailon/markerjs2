@@ -18,6 +18,7 @@ import { HighlightMarker } from './markers/highlight-marker/HighlightMarker';
 import { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 import { MarkerAreaState } from './MarkerAreaState';
 import { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
+import { IStyleSettings } from './core/IStyleSettings';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -82,6 +83,7 @@ export class MarkerArea {
   private closeEventListeners: CloseEventHandler[] = [];
 
   public settings: Settings = new Settings();
+  public uiStyleSettings: IStyleSettings = Style.settings;
 
   constructor(target: HTMLImageElement) {
     this.target = target;
@@ -371,7 +373,7 @@ export class MarkerArea {
     this.uiDiv.style.backgroundColor = '#ffffff';
     this.coverDiv.appendChild(this.uiDiv);
 
-    this.toolbar = new Toolbar(this.uiDiv, this.availableMarkerTypes);
+    this.toolbar = new Toolbar(this.uiDiv, this.availableMarkerTypes, this.uiStyleSettings);
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
     this.toolbar.show();
 

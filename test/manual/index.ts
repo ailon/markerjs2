@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Activator, MarkerArea } from '../../src';
 import { DisplayMode } from '../../src/core/Settings';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
@@ -18,6 +19,12 @@ export class Experiments {
     this.markerArea1 = new MarkerArea(target);
     this.markerArea1.addRenderEventListener(this.renderResult);
     this.markerArea1.settings.displayMode = this.displayMode;
+
+    this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
+    this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';
+    this.markerArea1.uiStyleSettings.toolbarActiveButtonStyleColorsClassName = 'toolbar-active-button';
+    this.markerArea1.uiStyleSettings.toolbarHeight = 40;
+
     this.markerArea1.show();
     if (this.currentState) {
       this.markerArea1.restoreState(this.currentState);
