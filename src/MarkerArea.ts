@@ -398,7 +398,7 @@ export class MarkerArea {
     this.editingTarget = document.createElement('img');
     this.editorCanvas.appendChild(this.editingTarget);
 
-    this.toolbox = new Toolbox(this.uiDiv, this.settings.displayMode);
+    this.toolbox = new Toolbox(this.uiDiv, this.settings.displayMode, this.uiStyleSettings);
     this.toolbox.show();
   }
 

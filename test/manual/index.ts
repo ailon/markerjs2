@@ -20,10 +20,16 @@ export class Experiments {
     this.markerArea1.addRenderEventListener(this.renderResult);
     this.markerArea1.settings.displayMode = this.displayMode;
 
+    this.markerArea1.uiStyleSettings.toolbarHeight = 40;
+
     this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
     this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';
     this.markerArea1.uiStyleSettings.toolbarActiveButtonStyleColorsClassName = 'toolbar-active-button';
-    this.markerArea1.uiStyleSettings.toolbarHeight = 40;
+
+    this.markerArea1.uiStyleSettings.toolboxButtonRowStyleColorsClassName = 'toolbox';
+    this.markerArea1.uiStyleSettings.toolboxButtonStyleColorsClassName = 'toolbox-button';
+    this.markerArea1.uiStyleSettings.toolboxActiveButtonStyleColorsClassName = 'toolbox-active-button';
+    this.markerArea1.uiStyleSettings.toolboxPanelRowStyleColorsClassName = 'toolbox-panel-row';
 
     this.markerArea1.show();
     if (this.currentState) {

@@ -1,6 +1,7 @@
 import { ToolboxPanel } from './ToolboxPanel';
 import { Style, StyleClass, StyleRule } from './../core/Style';
 import { DisplayMode } from '../core/Settings';
+import { IStyleSettings } from '../core/IStyleSettings';
 
 export class Toolbox {
   private panels: ToolboxPanel[] = [];
@@ -14,10 +15,16 @@ export class Toolbox {
   private panelRow: HTMLDivElement;
 
   private toolboxStyleClass: StyleClass;
+  private toolboxStyleColorsClass: StyleClass;
   private toolboxButtonStyleClass: StyleClass;
-  private toolboxActiveButtonStyleClass: StyleClass;
+  private toolboxButtonStyleColorsClass: StyleClass;
+  private toolboxActiveButtonStyleColorsClass: StyleClass;
   private toolboxButtonRowStyleClass: StyleClass;
+  private toolboxButtonRowStyleColorsClass: StyleClass;
   private toolboxPanelRowStyleClass: StyleClass;
+  private toolboxPanelRowStyleColorsClass: StyleClass;
+
+  private uiStyleSettings: IStyleSettings;
   
   private addStyles() {
     this.toolboxStyleClass = Style.addClass(
@@ -27,30 +34,42 @@ export class Toolbox {
       width: 100%;
       display: flex;
       flex-direction: column;
-      color: ${Style.settings.toolboxColor};
       font-family: sans-serif;
       ${this.displayMode === 'popup' ? 'height:' + Style.settings.toolbarHeight * 2.5 + 'px;' : ''}
       box-sizing: content-box;
     `
       )
     );
+    this.toolboxStyleColorsClass = Style.addClass(
+      new StyleClass(
+        'toolbox_colors',
+        `
+      color: ${Style.settings.toolboxColor};
+    `
+      )
+    );
     
     const buttonPadding = Style.settings.toolbarHeight / 4;
-    this.toolboxButtonRowStyleClass = Style.addClass(new StyleClass('toolbox_button_row', `
+    this.toolboxButtonRowStyleClass = Style.addClass(new StyleClass('toolbox-button-row', `
       display: flex;
       cursor: default;
-      background-color: ${Style.settings.toolbarBackgroundColor};
       box-sizing: content-box;
     `));
-    this.toolboxPanelRowStyleClass = Style.addClass(new StyleClass('toolbox_panel_row', `
+    this.toolboxButtonRowStyleColorsClass = Style.addClass(new StyleClass('toolbox-button-row_colors', `
+      background-color: ${Style.settings.toolbarBackgroundColor};
+    `));
+
+    this.toolboxPanelRowStyleClass = Style.addClass(new StyleClass('toolbox-panel-row', `
       display: flex;
       ${this.displayMode === 'inline' ? 'position: absolute;' : '' }
       ${this.displayMode === 'inline' ? 'bottom: ' + Style.settings.toolbarHeight + 'px;' : '' }
       cursor: default;
-      background-color: ${Style.settings.toolbarBackgroundHoverColor};
       height: ${Style.settings.toolbarHeight * 1.5}px;
       ${this.displayMode === 'inline' ? 'width: 100%;' : ''}
       box-sizing: content-box;
+    `));
+    this.toolboxPanelRowStyleColorsClass = Style.addClass(new StyleClass('toolbox-panel-row_colors', `
+      background-color: ${Style.settings.toolbarBackgroundHoverColor};
     `));
 
     this.toolboxButtonStyleClass = Style.addClass(new StyleClass('toolbox_button', `
@@ -60,14 +79,17 @@ export class Toolbox {
       padding: ${buttonPadding}px;
       box-sizing: content-box;
     `));
+    this.toolboxButtonStyleColorsClass = Style.addClass(new StyleClass('toolbox-button_colors', `
+      fill: ${Style.settings.toolbarColor};
+    `));
 
-    this.toolboxActiveButtonStyleClass = Style.addClass(new StyleClass('toolbox_active_button', `
+    this.toolboxActiveButtonStyleColorsClass = Style.addClass(new StyleClass('toolbox-active-button_colors', `
       background-color: ${Style.settings.toolbarBackgroundHoverColor}
     `));
 
     Style.addRule(
       new StyleRule(
-        `.${this.toolboxButtonStyleClass.name}:hover`,
+        `.${this.toolboxButtonStyleColorsClass.name}:hover`,
         `
         background-color: ${Style.settings.toolbarBackgroundHoverColor}
     `
@@ -78,7 +100,6 @@ export class Toolbox {
       new StyleRule(
         `.${this.toolboxButtonStyleClass.name} svg`,
         `
-      fill: ${Style.settings.toolbarColor};
       height: ${Style.settings.toolbarHeight / 2}px;
     `
       )
@@ -86,9 +107,10 @@ export class Toolbox {
 
   }
 
-  constructor(markerjsContainer: HTMLDivElement, displayMode: DisplayMode) {
+  constructor(markerjsContainer: HTMLDivElement, displayMode: DisplayMode, uiStyleSettings: IStyleSettings) {
     this.markerjsContainer = markerjsContainer;
     this.displayMode = displayMode;
+    this.uiStyleSettings = uiStyleSettings;
 
     this.panelButtonClick = this.panelButtonClick.bind(this);
 
@@ -97,7 +119,8 @@ export class Toolbox {
 
   public show(): void {
     this.uiContainer = document.createElement('div');
-    this.uiContainer.className = this.toolboxStyleClass.name;
+    this.uiContainer.className = `${this.toolboxStyleClass.name} ${
+      this.uiStyleSettings.toolboxStyleColorsClassName ?? this.toolboxStyleColorsClass.name}`;
 
     this.markerjsContainer.appendChild(this.uiContainer);
   }
@@ -108,17 +131,20 @@ export class Toolbox {
       this.uiContainer.innerHTML = '';
 
       this.panelRow = document.createElement('div');
-      this.panelRow.className = this.toolboxPanelRowStyleClass.name;
+      this.panelRow.className = `${this.toolboxPanelRowStyleClass.name} ${
+        this.uiStyleSettings.toolboxPanelRowStyleColorsClassName ?? this.toolboxPanelRowStyleColorsClass.name}`;
       this.uiContainer.appendChild(this.panelRow);
       this.buttonRow = document.createElement('div');
-      this.buttonRow.className = this.toolboxButtonRowStyleClass.name;
+      this.buttonRow.className = `${this.toolboxButtonRowStyleClass.name} ${
+        this.uiStyleSettings.toolboxButtonRowStyleColorsClassName ?? this.toolboxButtonRowStyleColorsClass.name} `;
       this.uiContainer.appendChild(this.buttonRow);
 
       this.panelButtons.splice(0);
 
       this.panels.forEach(panel => {
         const panelBtnDiv = document.createElement('div');
-        panelBtnDiv.className = this.toolboxButtonStyleClass.name;
+        panelBtnDiv.className = `${this.toolboxButtonStyleClass.name} ${
+          this.uiStyleSettings.toolboxButtonStyleColorsClassName ?? this.toolboxButtonStyleColorsClass.name}`;
         panelBtnDiv.innerHTML = panel.icon;
         panelBtnDiv.title = panel.title;
         panelBtnDiv.addEventListener('click', () => {
@@ -160,10 +186,10 @@ export class Toolbox {
       }
     }
     this.panelButtons.forEach((pb, index) => {
-      pb.className =
-        index === panelIndex
-          ? `${this.toolboxButtonStyleClass.name} ${this.toolboxActiveButtonStyleClass.name}`
-          : this.toolboxButtonStyleClass.name;
+      pb.className = `${this.toolboxButtonStyleClass.name} ` +
+        (index === panelIndex
+          ? `${this.uiStyleSettings.toolboxActiveButtonStyleColorsClassName ?? this.toolboxActiveButtonStyleColorsClass.name}`
+          :  `${this.uiStyleSettings.toolboxButtonStyleColorsClassName ?? this.toolboxButtonStyleColorsClass.name}`);
     });
   }
 

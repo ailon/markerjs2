@@ -10,4 +10,9 @@ export interface IStyleSettings {
   toolbarOverflowBlockStyleColorsClassName?: string,
   toolbarButtonStyleColorsClassName?: string,
   toolbarActiveButtonStyleColorsClassName?: string,  
+  toolboxStyleColorsClassName?: string,
+  toolboxButtonStyleColorsClassName?: string,
+  toolboxActiveButtonStyleColorsClassName?: string,
+  toolboxButtonRowStyleColorsClassName?: string,
+  toolboxPanelRowStyleColorsClassName?: string
 }
