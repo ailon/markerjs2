@@ -41,6 +41,8 @@ export class Toolbar {
 
   private uiStyleSettings: IStyleSettings;
 
+  private currentMarker?: MarkerBase;
+
   constructor(markerjsContainer: HTMLDivElement, markerItems: typeof MarkerBase[], uiStyleSettings: IStyleSettings) {
     this.markerjsContainer = markerjsContainer;
     this.markerItems = markerItems;
@@ -49,6 +51,7 @@ export class Toolbar {
 
     this.adjustLayout = this.adjustLayout.bind(this);
     this.overflowButtonClicked = this.overflowButtonClicked.bind(this);
+    this.setCurrentMarker = this.setCurrentMarker.bind(this);
   }
 
   public show(): void {
@@ -111,6 +114,8 @@ export class Toolbar {
 
     this.markerjsContainer.appendChild(this.uiContainer);
     this.setSelectMode();
+
+    this.setCurrentMarker();
 
     this.adjustLayout();
     // setTimeout(this.adjustLayout, 10);
@@ -286,18 +291,29 @@ export class Toolbar {
   }
 
   private actionToolbarButtonClicked(button: HTMLDivElement, action: string) {
-    this.setActiveButton(button);
     if (this.buttonClickListeners && this.buttonClickListeners.length > 0) {
       this.buttonClickListeners.forEach((listener) =>
         listener('action', action)
       );
     }
     this.markerButtonOverflowBlock.style.display = 'none';
+    this.setActiveButton(this.buttons[0]);
   }
 
   private setActiveButton(button: HTMLDivElement) {
     this.resetButtonStyles();
     button.className += ` ${this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName ? 
       this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName : this.toolbarActiveButtonStyleColorsClass.name}`;
+  }
+
+  public setCurrentMarker(marker?: MarkerBase): void {
+    this.currentMarker = marker;
+    if (this.currentMarker === undefined) {
+      this.buttons[1].style.fillOpacity = '0.4';
+      this.buttons[1].style.pointerEvents = 'none';
+    } else {
+      this.buttons[1].style.fillOpacity = '1';
+      this.buttons[1].style.pointerEvents = 'all';
+    }
   }
 }

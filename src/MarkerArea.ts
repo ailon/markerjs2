@@ -545,11 +545,13 @@ export class MarkerArea {
   private setCurrentMarker(marker?: MarkerBase) {
     if (this.currentMarker !== undefined) {
       this.currentMarker.deselect();
+      this.toolbar.setCurrentMarker();
       this.toolbox.setPanelButtons([]);
     }
     this.currentMarker = marker;
     if (this.currentMarker !== undefined) {
       this.currentMarker.select();
+      this.toolbar.setCurrentMarker(this.currentMarker);
       this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
     }
   }
