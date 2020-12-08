@@ -35,7 +35,7 @@ export class Toolbox {
       display: flex;
       flex-direction: column;
       font-family: sans-serif;
-      ${this.displayMode === 'popup' ? 'height:' + Style.settings.toolbarHeight * 2.5 + 'px;' : ''}
+      ${this.displayMode === 'popup' ? 'height:' + this.uiStyleSettings.toolbarHeight * 2.5 + 'px;' : ''}
       box-sizing: content-box;
     `
       )
@@ -44,54 +44,55 @@ export class Toolbox {
       new StyleClass(
         'toolbox_colors',
         `
-      color: ${Style.settings.toolboxColor};
+      color: ${this.uiStyleSettings.toolboxColor};
     `
       )
     );
     
-    const buttonPadding = Style.settings.toolbarHeight / 4;
+    const buttonPadding = this.uiStyleSettings.toolbarHeight / 4;
     this.toolboxButtonRowStyleClass = Style.addClass(new StyleClass('toolbox-button-row', `
       display: flex;
       cursor: default;
       box-sizing: content-box;
     `));
     this.toolboxButtonRowStyleColorsClass = Style.addClass(new StyleClass('toolbox-button-row_colors', `
-      background-color: ${Style.settings.toolbarBackgroundColor};
+      background-color: ${this.uiStyleSettings.toolbarBackgroundColor};
     `));
 
     this.toolboxPanelRowStyleClass = Style.addClass(new StyleClass('toolbox-panel-row', `
       display: flex;
       ${this.displayMode === 'inline' ? 'position: absolute;' : '' }
-      ${this.displayMode === 'inline' ? 'bottom: ' + Style.settings.toolbarHeight + 'px;' : '' }
+      ${this.displayMode === 'inline' ? 'bottom: ' + this.uiStyleSettings.toolbarHeight + 'px;' : '' }
       cursor: default;
-      height: ${Style.settings.toolbarHeight * 1.5}px;
+      height: ${this.uiStyleSettings.toolbarHeight * 1.5}px;
       ${this.displayMode === 'inline' ? 'width: 100%;' : ''}
       box-sizing: content-box;
     `));
     this.toolboxPanelRowStyleColorsClass = Style.addClass(new StyleClass('toolbox-panel-row_colors', `
-      background-color: ${Style.settings.toolbarBackgroundHoverColor};
+      background-color: ${this.uiStyleSettings.toolbarBackgroundHoverColor};
     `));
 
     this.toolboxButtonStyleClass = Style.addClass(new StyleClass('toolbox_button', `
       display: inline-block;
-      width: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
-      height: ${Style.settings.toolbarHeight - buttonPadding * 2}px;
+      width: ${this.uiStyleSettings.toolbarHeight - buttonPadding * 2}px;
+      height: ${this.uiStyleSettings.toolbarHeight - buttonPadding * 2}px;
       padding: ${buttonPadding}px;
       box-sizing: content-box;
     `));
     this.toolboxButtonStyleColorsClass = Style.addClass(new StyleClass('toolbox-button_colors', `
-      fill: ${Style.settings.toolbarColor};
+      fill: ${this.uiStyleSettings.toolbarColor};
     `));
 
     this.toolboxActiveButtonStyleColorsClass = Style.addClass(new StyleClass('toolbox-active-button_colors', `
-      background-color: ${Style.settings.toolbarBackgroundHoverColor}
+      background-color: ${this.uiStyleSettings.toolbarBackgroundHoverColor};
+      fill: ${this.uiStyleSettings.toolbarColor};
     `));
 
     Style.addRule(
       new StyleRule(
         `.${this.toolboxButtonStyleColorsClass.name}:hover`,
         `
-        background-color: ${Style.settings.toolbarBackgroundHoverColor}
+        background-color: ${this.uiStyleSettings.toolbarBackgroundHoverColor}
     `
       )
     );
@@ -100,7 +101,7 @@ export class Toolbox {
       new StyleRule(
         `.${this.toolboxButtonStyleClass.name} svg`,
         `
-      height: ${Style.settings.toolbarHeight / 2}px;
+      height: ${this.uiStyleSettings.toolbarHeight / 2}px;
     `
       )
     );
@@ -171,7 +172,7 @@ export class Toolbox {
       panelIndex = this.panels.indexOf(panel);
       this.panelRow.innerHTML = '';
       const panelUI = panel.getUi();
-      panelUI.style.margin = `${Style.settings.toolbarHeight / 4}px`;
+      panelUI.style.margin = `${this.uiStyleSettings.toolbarHeight / 4}px`;
       this.panelRow.appendChild(panelUI);
       this.panelRow.style.display = 'flex';
       this.panelRow.style.visibility = 'visible';
