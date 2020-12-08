@@ -31,6 +31,8 @@ export class Experiments {
     this.markerArea1.uiStyleSettings.toolboxActiveButtonStyleColorsClassName = 'toolbox-active-button';
     this.markerArea1.uiStyleSettings.toolboxPanelRowStyleColorsClassName = 'toolbox-panel-row';
 
+    this.markerArea1.availableMarkerTypes = ['CalloutMarker', ...this.markerArea1.BASIC_MARKER_TYPES];
+
     this.markerArea1.show();
     if (this.currentState) {
       this.markerArea1.restoreState(this.currentState);

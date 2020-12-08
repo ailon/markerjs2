@@ -112,7 +112,8 @@ export class Toolbar {
     this.markerjsContainer.appendChild(this.uiContainer);
     this.setSelectMode();
 
-    setTimeout(this.adjustLayout, 200);
+    this.adjustLayout();
+    // setTimeout(this.adjustLayout, 10);
   }
 
   public addButtonClickListener(listener: ToolbarButtonClickHandler): void {

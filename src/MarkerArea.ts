@@ -22,6 +22,8 @@ import { IStyleSettings } from './core/IStyleSettings';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
+export type MarkerTypeIdentifier = string | typeof MarkerBase;
+
 export interface IPoint {
   x: number,
   y: number
@@ -52,17 +54,61 @@ export class MarkerArea {
 
   private logoUI: HTMLElement;
 
-  private availableMarkerTypes: typeof MarkerBase[] = [
-    FrameMarker,
-    CoverMarker,
-    HighlightMarker,
-    EllipseMarker,
-    LineMarker,
-    ArrowMarker,
-    TextMarker,
-    CalloutMarker,
-    FreehandMarker,
-  ];
+  public get ALL_MARKER_TYPES(): typeof MarkerBase[] { 
+    return [
+      FrameMarker,
+      FreehandMarker,
+      ArrowMarker,
+      TextMarker,
+      EllipseMarker,
+      HighlightMarker,
+      CalloutMarker,
+      CoverMarker,
+      LineMarker
+    ];
+  }
+
+  public get DEFAULT_MARKER_TYPES(): typeof MarkerBase[] { 
+    return [
+      FrameMarker,
+      FreehandMarker,
+      ArrowMarker,
+      TextMarker,
+      EllipseMarker,
+      HighlightMarker,
+      CalloutMarker
+    ];
+  }
+
+  public get BASIC_MARKER_TYPES(): typeof MarkerBase[] { 
+    return [
+      FrameMarker,
+      FreehandMarker,
+      ArrowMarker,
+      TextMarker,
+      HighlightMarker
+    ];
+  }
+
+  private _availableMarkerTypes: typeof MarkerBase[] = this.DEFAULT_MARKER_TYPES;
+
+  public get availableMarkerTypes(): MarkerTypeIdentifier[] {
+    return this._availableMarkerTypes;
+  }
+
+  public set availableMarkerTypes(value: MarkerTypeIdentifier[]) {
+    this._availableMarkerTypes.splice(0);
+    value.forEach(mt => {
+      if (typeof mt === 'string') {
+        const typeType = this.ALL_MARKER_TYPES.find(allT => allT.typeName === mt);
+        if (typeType !== undefined) {
+          this._availableMarkerTypes.push(typeType);
+        }
+      } else {
+        this._availableMarkerTypes.push(mt);
+      }
+    });
+  }
 
   private toolbar: Toolbar;
   private toolbox: Toolbox;
@@ -159,7 +205,7 @@ export class MarkerArea {
   }
 
   public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
-    this.availableMarkerTypes.push(...markers);
+    this._availableMarkerTypes.push(...markers);
   }
 
   public addRenderEventListener(listener: RenderEventHandler): void {
@@ -373,7 +419,7 @@ export class MarkerArea {
     this.uiDiv.style.backgroundColor = '#ffffff';
     this.coverDiv.appendChild(this.uiDiv);
 
-    this.toolbar = new Toolbar(this.uiDiv, this.availableMarkerTypes, this.uiStyleSettings);
+    this.toolbar = new Toolbar(this.uiDiv, this._availableMarkerTypes, this.uiStyleSettings);
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
     this.toolbar.show();
 
@@ -461,7 +507,7 @@ export class MarkerArea {
   public restoreState(state: MarkerAreaState): void {
     this.markers.splice(0);
     state.markers.forEach(markerState => {
-      const markerType = this.availableMarkerTypes.find(mType => mType.typeName === markerState.typeName);
+      const markerType = this._availableMarkerTypes.find(mType => mType.typeName === markerState.typeName);
       if (markerType !== undefined) {
         const marker = this.addNewMarker(markerType);
         marker.restoreState(markerState);
