@@ -200,6 +200,9 @@ export class Toolbar {
       justify-content: space-between;      
       height: ${this.uiStyleSettings.toolbarHeight}px;
       box-sizing: content-box;
+      border-top-left-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;
+      border-top-right-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;
+      overflow: hidden;
     `
       )
     );

@@ -37,6 +37,9 @@ export class Toolbox {
       font-family: sans-serif;
       ${this.displayMode === 'popup' ? 'height:' + this.uiStyleSettings.toolbarHeight * 2.5 + 'px;' : ''}
       box-sizing: content-box;
+      border-bottom-left-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;
+      border-bottom-right-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;
+      overflow: hidden;
     `
       )
     );
