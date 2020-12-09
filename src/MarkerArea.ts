@@ -533,12 +533,14 @@ export class MarkerArea {
     this.setCurrentMarker();
     this.currentMarker = this.addNewMarker(markerType);
     this.currentMarker.onMarkerCreated = this.markerCreated;
+    this.markerImage.style.cursor = 'crosshair';
     this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
   }
 
   private markerCreated(marker: MarkerBase) {
     console.log('created');
     this.mode = 'select';
+    this.markerImage.style.cursor = 'default';
     this.toolbar.setSelectMode();
     this.markers.push(marker);
     this.setCurrentMarker(marker);

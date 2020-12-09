@@ -46,10 +46,10 @@ export class MarkerBase {
   }
 
   public select(): void {
-    console.log('todo: marker.select();')
+    this.container.style.cursor = 'move';
   }
   public deselect(): void {
-    console.log('todo: marker.deselect();')
+    this.container.style.cursor = 'default';
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
