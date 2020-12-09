@@ -42,7 +42,7 @@ export class Experiments {
 
   private renderResult(dataUrl: string, state: MarkerAreaState) {
     (document.getElementById('resultImage1') as HTMLImageElement).src = dataUrl;
-    this.currentState = state;
+    this.currentState = JSON.parse(JSON.stringify(state));
   }
 
   public async render(resultTarget: HTMLImageElement): Promise<void> {
