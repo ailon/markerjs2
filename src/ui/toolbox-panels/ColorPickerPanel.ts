@@ -41,7 +41,6 @@ export class ColorPickerPanel extends ToolboxPanel {
         color === this.currentColor ? Style.settings.toolboxAccentColor : 'transparent';
 
       colorBoxContainer.addEventListener('click', () => {
-        console.log('color!');
         this.setCurrentColor(color, colorBoxContainer);
       })
       panelDiv.appendChild(colorBoxContainer);

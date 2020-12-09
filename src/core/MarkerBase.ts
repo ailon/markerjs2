@@ -52,23 +52,17 @@ export class MarkerBase {
     this.container.style.cursor = 'default';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public pointerDown(point: IPoint, target?: EventTarget):void {
-    console.log(point.x, point.y);
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  public pointerDown(point: IPoint, target?: EventTarget):void {}
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   public dblClick(point: IPoint, target?: EventTarget):void {}
-  /* eslint-enable @typescript-eslint/no-unused-vars */
 
-  public manipulate(point: IPoint):void {
-    console.log(point.x, point.y);
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  public manipulate(point: IPoint):void {}
 
-  public pointerUp(point: IPoint):void {
-    console.log(point.x, point.y);
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  public pointerUp(point: IPoint):void {}
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   public dispose(): void {}

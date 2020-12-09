@@ -538,7 +538,6 @@ export class MarkerArea {
   }
 
   private markerCreated(marker: MarkerBase) {
-    console.log('created');
     this.mode = 'select';
     this.markerImage.style.cursor = 'default';
     this.toolbar.setSelectMode();
@@ -561,7 +560,6 @@ export class MarkerArea {
   }
 
   private onPointerDown(ev: PointerEvent) {
-    console.log(ev.target);
     if (
       this.currentMarker !== undefined &&
       (this.currentMarker.state === 'new' ||
@@ -571,7 +569,6 @@ export class MarkerArea {
       this.currentMarker.pointerDown(
         this.clientToLocalCoordinates(ev.clientX, ev.clientY)
       );
-      console.log('mouse down' + ev.target);
     } else if (this.mode === 'select') {
       const hitMarker = this.markers.find((m) => m.ownsTarget(ev.target));
       if (hitMarker !== undefined) {
