@@ -56,7 +56,7 @@ export class Toolbar {
 
   public show(): void {
     this.uiContainer = document.createElement('div');
-    this.uiContainer.className = `${this.toolbarStyleClass.name} ${
+    this.uiContainer.className = `${this.toolbarStyleClass.name} ${Style.fadeInAnimationClassName} ${
       this.uiStyleSettings.toolbarStyleColorsClassName ? 
       this.uiStyleSettings.toolbarStyleColorsClassName : this.toolbarStyleColorsClass.name}`;
 
@@ -159,8 +159,11 @@ export class Toolbar {
 
   private overflowButtonClicked() {
     if (this.markerButtonOverflowBlock.style.display !== 'none') {
+      this.markerButtonOverflowBlock.className = this.markerButtonOverflowBlock.className.replace(
+        Style.fadeInAnimationClassName, '');
       this.markerButtonOverflowBlock.style.display = 'none';
     } else {
+      this.markerButtonOverflowBlock.className += ` ${Style.fadeInAnimationClassName}`;
       this.markerButtonOverflowBlock.style.top = `${this.uiContainer.offsetTop + this.overflowButton.offsetHeight}px`;
       this.markerButtonOverflowBlock.style.right = `${this.uiContainer.offsetWidth - this.overflowButton.offsetLeft - this.overflowButton.offsetWidth + this.uiContainer.offsetLeft * 2}px`;
       this.markerButtonOverflowBlock.style.display = 'inline-block';

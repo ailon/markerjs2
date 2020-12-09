@@ -51,7 +51,7 @@ export class Toolbox {
     `
       )
     );
-    
+
     const buttonPadding = this.uiStyleSettings.toolbarHeight / 4;
     this.toolboxButtonRowStyleClass = Style.addClass(new StyleClass('toolbox-button-row', `
       display: flex;
@@ -179,15 +179,21 @@ export class Toolbox {
       this.panelRow.appendChild(panelUI);
       this.panelRow.style.display = 'flex';
       this.panelRow.style.visibility = 'visible';
+      this.panelRow.className = this.panelRow.className.replace(Style.fadeOutAnimationClassName, '');
+      this.panelRow.className += ` ${Style.fadeInAnimationClassName}`;
       this.activePanel = panel;
     } else {
       this.activePanel = undefined;
       // hide panel
-      if (this.displayMode === 'inline') {
-        this.panelRow.style.display = 'none';
-      } else {
-        this.panelRow.style.visibility = 'hidden';
-      }
+      this.panelRow.className = this.panelRow.className.replace(Style.fadeInAnimationClassName, '');
+      this.panelRow.className += ` ${Style.fadeOutAnimationClassName}`;
+      setTimeout(() => {
+        if (this.displayMode === 'inline') {
+          this.panelRow.style.display = 'none';
+        } else {
+          this.panelRow.style.visibility = 'hidden';
+        }
+      }, 200);
     }
     this.panelButtons.forEach((pb, index) => {
       pb.className = `${this.toolboxButtonStyleClass.name} ` +

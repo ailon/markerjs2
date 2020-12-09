@@ -17,6 +17,13 @@ export class Style {
     toolboxAccentColor: '#3080c3'
   }
 
+  public static get fadeInAnimationClassName(): string {
+    return `${Style.CLASS_PREFIX}fade_in`;
+  }
+  public static get fadeOutAnimationClassName(): string {
+    return `${Style.CLASS_PREFIX}fade_out`;
+  }
+
   public static addClass(styleClass: StyleClass): StyleClass {
     if (Style.styleSheet === undefined) {
       Style.addStyleSheet();
@@ -40,6 +47,32 @@ export class Style {
 
     // add global rules
     Style.addRule(new StyleRule(`.${Style.CLASS_PREFIX} h3`, 'font-family: sans-serif'));
+
+    Style.addRule(new StyleRule(`@keyframes ${Style.CLASS_PREFIX}_fade_in_animation_frames`, `
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+    `));
+    Style.addRule(new StyleRule(`@keyframes ${Style.CLASS_PREFIX}_fade_out_animation_frames`, `
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+    `));
+
+    Style.addClass(new StyleClass('fade_in', `
+      animation-duration: 0.3s;
+      animation-name: ${Style.CLASS_PREFIX}_fade_in_animation_frames;
+    `));
+    Style.addClass(new StyleClass('fade_out', `
+      animation-duration: 0.3s;
+      animation-name: ${Style.CLASS_PREFIX}_fade_out_animation_frames;
+    `));
   }
 }
 
