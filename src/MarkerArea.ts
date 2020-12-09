@@ -19,6 +19,7 @@ import { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 import { MarkerAreaState } from './MarkerAreaState';
 import { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
 import { IStyleSettings } from './core/IStyleSettings';
+import { MeasurementMarker } from './markers/measurement-marker/MeasurementMarker';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
@@ -63,6 +64,7 @@ export class MarkerArea {
       EllipseMarker,
       HighlightMarker,
       CalloutMarker,
+      MeasurementMarker,
       CoverMarker,
       LineMarker
     ];
