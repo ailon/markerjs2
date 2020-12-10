@@ -1,4 +1,4 @@
-# marker.js 2 &mdash; Let your users annotate and mark images
+# marker.js 2 &mdash; Add image annotation to your web apps
 
 marker.js 2 is a JavaScript browser library to enable image annotation in your web applications. Add marker.js 2 to your web app and instantly enable users to annotate and mark up images. You can save, share or otherwise process the results.
 
