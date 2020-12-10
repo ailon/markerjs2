@@ -2,18 +2,25 @@ export type ColorSet = string[];
 export type DisplayMode = 'inline' | 'popup';
 
 export class Settings {
-  public defaultColor = 'red';
-  public defaultFillColor = 'red';
-  public defaultStrokeColor = 'white';
-  public defaultHighlightColor = 'yellow';
+  public defaultColorSet: ColorSet = [
+    '#EF4444', // red
+    '#10B981', // green
+    '#2563EB', // blue
+    '#FFFF00', // yellow
+    '#7C3AED', // purple
+    '#F472B6', // pink
+    '#000000', // black
+    '#FFFFFF' //white
+  ];
+
+  public defaultColor = this.defaultColorSet[0];
+  public defaultFillColor = this.defaultColorSet[0];
+  public defaultStrokeColor = this.defaultColorSet[7];
+  public defaultHighlightColor = this.defaultColorSet[3];
   public defaultStrokeWidth = 3;
   public defaultStrokeDasharray = '';
   public defaultHighlightOpacity = 0.5;
   public defaultFontFamily = 'Helvetica, Arial, sans-serif';
-
-  public defaultColorSet: ColorSet = [
-    'red', 'green', 'blue', 'yellow', 'white', 'black', 'magenta', 'cyan'
-  ];
 
   public defaultStrokeWidths = [1, 2, 3, 5, 10];
 
