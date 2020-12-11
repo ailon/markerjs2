@@ -272,6 +272,7 @@ export class Toolbar {
     `));
 
     this.toolbarActiveButtonStyleColorsClass = Style.addClass(new StyleClass('toolbar_active_button', `
+      fill: ${this.uiStyleSettings.toolbarColor};
       background-color: ${this.uiStyleSettings.toolbarBackgroundHoverColor}
     `));
 
