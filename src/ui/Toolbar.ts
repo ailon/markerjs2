@@ -146,7 +146,7 @@ export class Toolbar {
       this.markerButtonBlock.innerHTML = '';
       this.markerButtonOverflowBlock.innerHTML = '';
       for (let buttonIndex = 0; buttonIndex < this.markerButtons.length; buttonIndex++) {
-        if (buttonIndex < numberToFit) {
+        if (buttonIndex < numberToFit || (buttonIndex === numberToFit && (this.markerButtons.length - 1) === numberToFit)) {
           this.markerButtonBlock.appendChild(this.markerButtons[buttonIndex]);
         } else {
           if (buttonIndex === numberToFit) {
