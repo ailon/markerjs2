@@ -84,9 +84,10 @@ export class Toolbar {
     if (this.markerItems) {
       this.markerItems.forEach((mi) => {
         const buttonContainer = document.createElement('div');
-        buttonContainer.className = `${this.toolbarButtonStyleClass.name} ${
-          this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
-          this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
+        buttonContainer.className = `${this.toolbarButtonStyleClass.name}`;
+        //  ${
+        //   this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+        //   this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
         buttonContainer.innerHTML = mi.icon;
         buttonContainer.addEventListener('click', () => {
           this.markerToolbarButtonClicked(buttonContainer, mi);
@@ -173,17 +174,24 @@ export class Toolbar {
   private resetButtonStyles() {
     this.buttons.forEach(button => {
       button.className = button.className
+        .replace(this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+          this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name, '')
+        .trim();
+      button.className = button.className
         .replace(this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName ? 
           this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName : this.toolbarActiveButtonStyleColorsClass.name, '')
         .trim();
+      button.className += ` ${this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+        this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
     });
   }
 
   private addActionButton(container: HTMLDivElement, icon: string, value: string) {
     const actionButton = document.createElement('div');
-    actionButton.className = `${this.toolbarButtonStyleClass.name} ${
-      this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
-      this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
+    actionButton.className = `${this.toolbarButtonStyleClass.name}`;
+    //  ${
+    //   this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+    //   this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
     actionButton.innerHTML = icon;
     actionButton.addEventListener('click', () => {
       this.actionToolbarButtonClicked(actionButton, value);
@@ -308,6 +316,10 @@ export class Toolbar {
 
   private setActiveButton(button: HTMLDivElement) {
     this.resetButtonStyles();
+    button.className = button.className
+      .replace(this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+        this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name, '')
+      .trim();
     button.className += ` ${this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName ? 
       this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName : this.toolbarActiveButtonStyleColorsClass.name}`;
   }

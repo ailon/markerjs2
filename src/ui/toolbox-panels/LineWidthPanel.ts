@@ -50,6 +50,8 @@ export class LineWidthPanel extends ToolboxPanel {
       const widthBox = document.createElement('div');
       widthBox.style.minHeight = '20px';
       widthBox.style.flexGrow = '2';
+      widthBox.style.display = 'flex';
+      widthBox.style.alignItems = 'center';
 
       const hr = document.createElement('hr');
       hr.style.minWidth = '20px';
