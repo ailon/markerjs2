@@ -39,6 +39,8 @@ export class MarkerArea {
 
   private width: number;
   private height: number;
+  private imageWidth: number;
+  private imageHeight: number;
   private left: number;
   private top: number;
 
@@ -237,9 +239,11 @@ export class MarkerArea {
   }
 
   private setEditingTarget() {
+    this.imageWidth = this.target.clientWidth;
+    this.imageHeight = this.target.clientHeight;
     this.editingTarget.src = this.target.src;
-    this.editingTarget.width = this.target.clientWidth;
-    this.editingTarget.height = this.target.clientHeight;
+    this.editingTarget.width = this.imageWidth;
+    this.editingTarget.height = this.imageHeight;
   }
 
   private setTopLeft() {
@@ -260,23 +264,23 @@ export class MarkerArea {
       'svg'
     );
     this.markerImage.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    this.markerImage.setAttribute('width', this.editingTarget.width.toString());
+    this.markerImage.setAttribute('width', this.imageWidth.toString());
     this.markerImage.setAttribute(
       'height',
-      this.editingTarget.height.toString()
+      this.imageHeight.toString()
     );
     this.markerImage.setAttribute(
       'viewBox',
       '0 0 ' +
-        this.editingTarget.width.toString() +
+        this.imageWidth.toString() +
         ' ' +
-        this.editingTarget.height.toString()
+        this.imageHeight.toString()
     );
     this.markerImage.style.pointerEvents = 'auto';
 
     this.markerImageHolder.style.position = 'absolute';
-    this.markerImageHolder.style.width = `${this.editingTarget.width}px`;
-    this.markerImageHolder.style.height = `${this.editingTarget.height}px`;
+    this.markerImageHolder.style.width = `${this.imageWidth}px`;
+    this.markerImageHolder.style.height = `${this.imageHeight}px`;
     this.markerImageHolder.style.transformOrigin = 'top left';
     this.positionMarkerImage();
 
@@ -293,8 +297,8 @@ export class MarkerArea {
     this.overlayContainer.style.position = 'absolute';
     this.overlayContainer.style.left = '0px';
     this.overlayContainer.style.top = '0px';
-    this.overlayContainer.style.width = `${this.editingTarget.width}px`;
-    this.overlayContainer.style.height = `${this.editingTarget.height}px`;
+    this.overlayContainer.style.width = `${this.imageWidth}px`;
+    this.overlayContainer.style.height = `${this.imageHeight}px`;
     this.overlayContainer.style.display = 'flex';
     this.markerImageHolder.appendChild(this.overlayContainer);
   }
