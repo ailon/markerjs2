@@ -71,6 +71,7 @@ export default [{
       },{
         src: 'LICENSE', dest: 'dist'
       },]
-    })
+    }),
+    del({ targets: ['dts/*']})
   ]
 }];
