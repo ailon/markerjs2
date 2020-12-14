@@ -20,15 +20,11 @@ import { MarkerAreaState } from './MarkerAreaState';
 import { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
 import { IStyleSettings } from './core/IStyleSettings';
 import { MeasurementMarker } from './markers/measurement-marker/MeasurementMarker';
+import { IPoint } from './core/IPoint';
 
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
 export type MarkerTypeIdentifier = string | typeof MarkerBase;
-
-export interface IPoint {
-  x: number,
-  y: number
-}
 
 export type RenderEventHandler = (dataURL: string, state?: MarkerAreaState) => void;
 export type CloseEventHandler = () => void;

@@ -1,4 +1,4 @@
-import { IPoint } from '../../MarkerArea';
+import { IPoint } from '../../core/IPoint';
 import { SvgHelper } from '../../core/SvgHelper';
 import { Settings } from '../../core/Settings';
 import Icon from './measurement-marker-icon.svg';

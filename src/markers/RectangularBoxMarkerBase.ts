@@ -1,6 +1,6 @@
 import { MarkerBase } from '../core/MarkerBase';
 
-import { IPoint } from '../MarkerArea';
+import { IPoint } from '../core/IPoint';
 import { SvgHelper } from '../core/SvgHelper';
 
 import { RectangularBoxMarkerGrips } from './RectangularBoxMarkerGrips';

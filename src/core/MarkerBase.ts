@@ -1,9 +1,7 @@
-import { IPoint } from '../MarkerArea';
+import { IPoint } from './IPoint';
 import { ToolboxPanel } from '../ui/ToolboxPanel';
-import { MarkerBaseState } from './MarkerBaseState';
+import { MarkerBaseState, MarkerState } from './MarkerBaseState';
 import { Settings } from './Settings';
-
-export type MarkerState = 'new' | 'creating' | 'select' | 'move' | 'resize' | 'rotate';
 
 export class MarkerBase {
   public static typeName = 'MarkerBase';
