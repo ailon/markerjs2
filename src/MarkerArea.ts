@@ -235,11 +235,13 @@ export class MarkerArea {
   }
 
   private setEditingTarget() {
-    this.imageWidth = this.target.clientWidth;
-    this.imageHeight = this.target.clientHeight;
+    this.imageWidth = Math.round(this.target.clientWidth);
+    this.imageHeight = Math.round(this.target.clientHeight);
     this.editingTarget.src = this.target.src;
     this.editingTarget.width = this.imageWidth;
     this.editingTarget.height = this.imageHeight;
+    this.editingTarget.style.width = `${this.imageWidth}px`;
+    this.editingTarget.style.height = `${this.imageHeight}px`;
   }
 
   private setTopLeft() {
