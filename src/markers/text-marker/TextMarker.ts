@@ -27,6 +27,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
   protected textElement: SVGTextElement;
   protected bgRectangle: SVGRectElement;
 
+  protected textEditDiv: HTMLDivElement;
+  protected textEditor: HTMLDivElement;
+
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
@@ -192,47 +195,47 @@ export class TextMarker extends RectangularBoxMarkerBase {
   private showTextEditor() {
     this.overlayContainer.innerHTML = '';
 
-    const textEditDiv = document.createElement('div');
+    this.textEditDiv = document.createElement('div');
     // textEditDiv.style.display = 'flex';
-    textEditDiv.style.flexGrow = '2';
+    this.textEditDiv.style.flexGrow = '2';
     //textEditDiv.style.backgroundColor = 'rgb(0,0,0,0.7)';
-    textEditDiv.style.alignItems = 'center';
-    textEditDiv.style.justifyContent = 'center';
-    textEditDiv.style.pointerEvents = 'auto';
-    textEditDiv.style.overflow = 'hidden';
+    this.textEditDiv.style.alignItems = 'center';
+    this.textEditDiv.style.justifyContent = 'center';
+    this.textEditDiv.style.pointerEvents = 'auto';
+    this.textEditDiv.style.overflow = 'hidden';
 
     const textScale = this.getTextScale();
     const textPosition = this.getTextPosition(textScale);
 
-    const textEditor = document.createElement('div');
-    textEditor.style.position = 'absolute';
-    textEditor.style.top = `${this.top + textPosition.y}px`;
-    textEditor.style.left = `${this.left + textPosition.x}px`;
-    textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - this.left - textPosition.x}px`;
-    textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
-    textEditor.style.fontFamily = this.fontFamily;
-    textEditor.style.lineHeight = '1em';
-    textEditor.innerText = this.text;
-    textEditor.contentEditable = 'true';
-    textEditor.style.color = this.color;
-    textEditor.addEventListener('pointerup', (ev) => {
+    this.textEditor = document.createElement('div');
+    this.textEditor.style.position = 'absolute';
+    this.textEditor.style.top = `${this.top + textPosition.y}px`;
+    this.textEditor.style.left = `${this.left + textPosition.x}px`;
+    this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - this.left - textPosition.x}px`;
+    this.textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
+    this.textEditor.style.fontFamily = this.fontFamily;
+    this.textEditor.style.lineHeight = '1em';
+    this.textEditor.innerText = this.text;
+    this.textEditor.contentEditable = 'true';
+    this.textEditor.style.color = this.color;
+    this.textEditor.addEventListener('pointerup', (ev) => {
       ev.stopPropagation();
     });
-    textEditor.addEventListener('input', () => {
-      let fontSize = Number.parseFloat(textEditor.style.fontSize);
-      while(textEditor.clientWidth >= Number.parseInt(textEditor.style.maxWidth) && fontSize > 0.9) {
+    this.textEditor.addEventListener('input', () => {
+      let fontSize = Number.parseFloat(this.textEditor.style.fontSize);
+      while(this.textEditor.clientWidth >= Number.parseInt(this.textEditor.style.maxWidth) && fontSize > 0.9) {
         fontSize -= 0.1;
-        textEditor.style.fontSize = `${Math.max(fontSize, 0.9)}em`;
+        this.textEditor.style.fontSize = `${Math.max(fontSize, 0.9)}em`;
       }
     })
 
-    textEditDiv.addEventListener('pointerup', () => {
-      this.textEditDivClicked(textEditor.innerText);
+    this.textEditDiv.addEventListener('pointerup', () => {
+      this.textEditDivClicked(this.textEditor.innerText);
     })
-    textEditDiv.appendChild(textEditor);
-    this.overlayContainer.appendChild(textEditDiv);
+    this.textEditDiv.appendChild(this.textEditor);
+    this.overlayContainer.appendChild(this.textEditDiv);
 
-    textEditor.focus();
+    this.textEditor.focus();
     document.execCommand('selectAll');
 
     this.hideVisual();
@@ -255,11 +258,17 @@ export class TextMarker extends RectangularBoxMarkerBase {
   protected setColor(color: string): void {
     SvgHelper.setAttributes(this.textElement, [['fill', color]]);
     this.color = color;
+    if (this.textEditor) {
+      this.textEditor.style.color = this.color;
+    }
   }
 
   protected setFont(font: string): void {
     SvgHelper.setAttributes(this.textElement, [['font-family', font]]);
     this.fontFamily = font;
+    if (this.textEditor) {
+      this.textEditor.style.fontFamily = this.fontFamily;
+    }
     this.renderText();
   }
 
