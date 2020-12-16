@@ -503,7 +503,11 @@ export class MarkerArea {
   }
 
   public getState(): MarkerAreaState {
-    const result: MarkerAreaState = { markers: [] };
+    const result: MarkerAreaState = { 
+      width: this.width,
+      height: this.height,
+      markers: [] 
+    };
     this.markers.forEach(marker => result.markers.push(marker.getState()));
     return result;
   }
