@@ -31,7 +31,7 @@ export type CloseEventHandler = () => void;
 
 export class MarkerArea {
   private target: HTMLImageElement;
-  private targetRoot: HTMLElement;
+  public targetRoot: HTMLElement;
 
   private width: number;
   private height: number;
@@ -133,7 +133,7 @@ export class MarkerArea {
 
   constructor(target: HTMLImageElement) {
     this.target = target;
-    this.targetRoot = document.body; // @todo allow setting different roots (see v1)
+    this.targetRoot = document.body;
 
     this.width = target.clientWidth;
     this.height = target.clientHeight;
@@ -412,7 +412,7 @@ export class MarkerArea {
         this.coverDiv.style.display = 'flex';
       }
     }
-    document.body.appendChild(this.coverDiv);
+    this.targetRoot.appendChild(this.coverDiv);
 
     this.uiDiv = document.createElement('div');
     this.uiDiv.style.display = 'flex';
@@ -457,7 +457,7 @@ export class MarkerArea {
       this.restoreOverflow();
     }
     // @todo better cleanup
-    document.body.removeChild(this.coverDiv);
+    this.targetRoot.removeChild(this.coverDiv);
   }
 
   private toolbarButtonClicked(
