@@ -27,3 +27,4 @@ yarn-error.log*
 .vscode/settings.json
 .vscode/launch.json
 /dts
+/docs
