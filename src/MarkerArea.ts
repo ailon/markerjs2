@@ -136,6 +136,11 @@ export class MarkerArea {
     return this._isOpen;
   }
 
+  public renderAtNaturalSize = false;
+  public renderImageType = 'image/png';
+  public renderImageQuality?: number;
+  public renderMarkersOnly = false;
+
   constructor(target: HTMLImageElement) {
     this.target = target;
     this.targetRoot = document.body;
@@ -193,6 +198,10 @@ export class MarkerArea {
   public async render(): Promise<string> {
     this.setCurrentMarker();
     const renderer = new Renderer();
+    renderer.naturalSize = this.renderAtNaturalSize;
+    renderer.imageType = this.renderImageType;
+    renderer.imageQuality = this.renderImageQuality;
+    renderer.markersOnly = this.renderMarkersOnly;
     return await renderer.rasterize(this.target, this.markerImage);
   }
 
