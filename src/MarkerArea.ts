@@ -129,7 +129,7 @@ export class MarkerArea {
   private closeEventListeners: CloseEventHandler[] = [];
 
   public settings: Settings = new Settings();
-  public uiStyleSettings: IStyleSettings = Style.settings;
+  public uiStyleSettings: IStyleSettings;
 
   private _isOpen = false;
   public get isOpen(): boolean {
@@ -142,6 +142,9 @@ export class MarkerArea {
   public renderMarkersOnly = false;
 
   constructor(target: HTMLImageElement) {
+    Style.settings = Style.defaultSettings;
+    this.uiStyleSettings = Style.settings;
+    
     this.target = target;
     this.targetRoot = document.body;
 

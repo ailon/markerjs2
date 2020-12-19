@@ -10,6 +10,8 @@ export class Experiments {
   private displayMode: DisplayMode = 'inline';
   private currentState: MarkerAreaState;
 
+  private oddLaunch = true;
+
   constructor() {
     this.renderResult = this.renderResult.bind(this);
     //Activator.addKey('1234');
@@ -21,6 +23,10 @@ export class Experiments {
     this.markerArea1.settings.displayMode = this.displayMode;
 
     // this.markerArea1.uiStyleSettings.toolbarHeight = 40;
+    if (this.oddLaunch) {
+      this.markerArea1.uiStyleSettings.toolbarColor = 'blue';
+    }
+    this.oddLaunch = !this.oddLaunch;
 
     // this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
     // this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';

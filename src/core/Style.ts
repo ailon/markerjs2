@@ -7,15 +7,19 @@ export class Style {
   private static rules: StyleRule[] = [];
   private static styleSheet?: HTMLStyleElement;
 
-  public static settings: IStyleSettings = {
-    toolbarBackgroundColor: '#111111',
-    toolbarBackgroundHoverColor: '#333333',
-    toolbarColor: '#eeeeee',
-    toolbarHeight: 40,
-    toolboxBackgroundColor: '#2a2a2a',
-    toolboxColor: '#eeeeee',
-    toolboxAccentColor: '#3080c3'
+  public static get defaultSettings(): IStyleSettings {
+    return {
+      toolbarBackgroundColor: '#111111',
+      toolbarBackgroundHoverColor: '#333333',
+      toolbarColor: '#eeeeee',
+      toolbarHeight: 40,
+      toolboxBackgroundColor: '#2a2a2a',
+      toolboxColor: '#eeeeee',
+      toolboxAccentColor: '#3080c3'
+    }
   }
+
+  public static settings: IStyleSettings = Style.defaultSettings;
 
   public static get fadeInAnimationClassName(): string {
     return `${Style.CLASS_PREFIX}fade_in`;
