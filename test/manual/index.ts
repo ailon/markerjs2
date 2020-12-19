@@ -53,4 +53,10 @@ export class Experiments {
   public setDisplayMode(mode: DisplayMode): void {
     this.displayMode = mode;
   }
+
+  public closeMarkerArea(): void {
+    if (this.markerArea1) {
+      this.markerArea1.close();
+    }
+  }
 }

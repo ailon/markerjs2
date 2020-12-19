@@ -131,6 +131,11 @@ export class MarkerArea {
   public settings: Settings = new Settings();
   public uiStyleSettings: IStyleSettings = Style.settings;
 
+  private _isOpen = false;
+  public get isOpen(): boolean {
+    return this._isOpen;
+  }
+
   constructor(target: HTMLImageElement) {
     this.target = target;
     this.targetRoot = document.body;
@@ -169,8 +174,6 @@ export class MarkerArea {
     this.initOverlay();
     this.attachEvents();
 
-    // @todo restore state (see v1)
-
     if (!Activator.isLicensed) {
       // NOTE:
       // before removing this call please consider supporting marker.js
@@ -178,6 +181,8 @@ export class MarkerArea {
       // thank you!
       this.addLogo();
     }
+
+    this._isOpen = true;
   }
 
   public show(): void {
@@ -192,16 +197,19 @@ export class MarkerArea {
   }
 
   public close(): void {
-    // if (this.markerImage) {
-    //   this.targetRoot.removeChild(this.markerImageHolder);
-    // }
-    // if (this.logoUI) {
-    //   this.targetRoot.removeChild(this.logoUI);
-    // }
-    if (this.coverDiv) {
-      this.closeUI();
+    if (this.isOpen) {
+      // if (this.markerImage) {
+      //   this.targetRoot.removeChild(this.markerImageHolder);
+      // }
+      // if (this.logoUI) {
+      //   this.targetRoot.removeChild(this.logoUI);
+      // }
+      if (this.coverDiv) {
+        this.closeUI();
+      }
+      this.closeEventListeners.forEach((listener) => listener());
+      this._isOpen = false;
     }
-    this.closeEventListeners.forEach((listener) => listener());
   }
 
   public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
