@@ -1,9 +1,35 @@
+/**
+ * Renders the original image and markup to a flat raster image.
+ */
 export class Renderer {
+    /**
+     * Whether the image should be rendered at the original (natural) target image size.
+     */
     public naturalSize = false; 
+    /**
+     * Rendered image type (`image/png`, `image/jpeg`, etc.).
+     */
     public imageType = 'image/png';
+    /**
+     * For formats that support it, specifies rendering quality.
+     * 
+     * In the case of `image/jpeg` you can specify a value between 0 and 1 (lowest to highest quality).
+     *
+     * @type {number} - image rendering quality (0..1)
+     */
     public imageQuality?: number;
+    /**
+     * When set to true, only the marker layer without the original image will be rendered.
+     */
     public markersOnly = false;
 
+    /**
+     * Initiates rendering of the result image and returns a promise which when resolved
+     * contains a data URL for the rendered image.
+     * 
+     * @param target - target (underlying original) image
+     * @param markerImage - marker layer
+     */
     public rasterize(
         target: HTMLImageElement, 
         markerImage: SVGSVGElement, 

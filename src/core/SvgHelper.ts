@@ -1,10 +1,21 @@
+/**
+ * Utility class to simplify SVG operations.
+ */
 export class SvgHelper {
+  /**
+   * Creates SVG "defs".
+   */
   public static createDefs(): SVGDefsElement {
     const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
 
     return defs;
   }
 
+  /**
+   * Sets attributes on an arbitrary SVG element
+   * @param el - target SVG element.
+   * @param attributes - set of name-value attribute pairs.
+   */
   public static setAttributes(
     el: SVGElement,
     attributes: Array<[string, string]>
@@ -14,6 +25,12 @@ export class SvgHelper {
     }
   }
 
+  /**
+   * Creates an SVG rectangle with the specified width and height.
+   * @param width 
+   * @param height 
+   * @param attributes - additional attributes.
+   */
   public static createRect(
     width: number | string,
     height: number | string,
@@ -30,6 +47,14 @@ export class SvgHelper {
     return rect;
   }
 
+  /**
+   * Creates an SVG line with specified end-point coordinates.
+   * @param x1 
+   * @param y1 
+   * @param x2 
+   * @param y2 
+   * @param attributes - additional attributes.
+   */
   public static createLine(
     x1: number | string,
     y1: number | string,
@@ -50,6 +75,11 @@ export class SvgHelper {
     return line;
   }
 
+  /**
+   * Creates an SVG polygon with specified points.
+   * @param points - points as string.
+   * @param attributes - additional attributes.
+   */
   public static createPolygon(
     points: string,
     attributes?: Array<[string, string]>
@@ -67,6 +97,11 @@ export class SvgHelper {
     return polygon;
   }
 
+  /**
+   * Creates an SVG circle with the specified radius.
+   * @param radius 
+   * @param attributes - additional attributes.
+   */
   public static createCircle(
     radius: number,
     attributes?: Array<[string, string]>
@@ -86,6 +121,12 @@ export class SvgHelper {
     return circle;
   }
 
+  /**
+   * Creates an SVG ellipse with the specified horizontal and vertical radii.
+   * @param rx 
+   * @param ry 
+   * @param attributes - additional attributes.
+   */
   public static createEllipse(
     rx: number,
     ry: number,
@@ -107,6 +148,10 @@ export class SvgHelper {
     return ellipse;
   }
 
+  /**
+   * Creates an SVG group.
+   * @param attributes - additional attributes.
+   */
   public static createGroup(attributes?: Array<[string, string]>): SVGGElement {
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     if (attributes) {
@@ -115,12 +160,25 @@ export class SvgHelper {
     return g;
   }
 
+  /**
+   * Creates an SVG transform.
+   */
   public static createTransform(): SVGTransform {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
     return svg.createSVGTransform();
   }
 
+  /**
+   * Creates an SVG marker.
+   * @param id 
+   * @param orient 
+   * @param markerWidth 
+   * @param markerHeight 
+   * @param refX 
+   * @param refY 
+   * @param markerElement 
+   */
   public static createMarker(
     id: string,
     orient: string,
@@ -148,6 +206,10 @@ export class SvgHelper {
     return marker;
   }
 
+  /**
+   * Creaes an SVG text element.
+   * @param attributes - additional attributes.
+   */
   public static createText(
     attributes?: Array<[string, string]>
   ): SVGTextElement {
@@ -162,6 +224,11 @@ export class SvgHelper {
     return text;
   }
 
+  /**
+   * Creates an SVG TSpan.
+   * @param text - inner text.
+   * @param attributes - additional attributes.
+   */
   public static createTSpan(
     text: string,
     attributes?: Array<[string, string]>
@@ -179,6 +246,10 @@ export class SvgHelper {
     return tspan;
   }
 
+  /**
+   * Creates an SVG image element.
+   * @param attributes - additional attributes.
+   */
   public static createImage(
     attributes?: Array<[string, string]>
   ): SVGImageElement {
@@ -194,6 +265,11 @@ export class SvgHelper {
     return image;
   }
 
+  /**
+   * Creates an SVG point with the specified coordinates.
+   * @param x 
+   * @param y 
+   */
   public static createPoint(      
     x: number,
     y: number

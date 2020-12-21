@@ -1,3 +1,6 @@
+/**
+ * Represents a simplified version of the SVGMatrix.
+ */
 export interface ITransformMatrix {
   a: number;
   b: number;
@@ -7,6 +10,9 @@ export interface ITransformMatrix {
   f: number;
 }
 
+/**
+ * A utility class to transform between SVGMatrix and its simplified representation.
+ */
 export class TransformMatrix {
   public static toITransformMatrix(matrix: SVGMatrix): ITransformMatrix {
     return {
