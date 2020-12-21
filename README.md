@@ -2,6 +2,8 @@
 
 marker.js 2 is a JavaScript browser library to enable image annotation in your web applications. Add marker.js 2 to your web app and instantly enable users to annotate and mark up images. You can save, share or otherwise process the results.
 
+> For a more detailed "Getting started" and other docs and tutorials, please refer to the [official documentation](https://markerjs.com/docs).
+
 ## Installation
 
 ```
@@ -25,14 +27,29 @@ To add image annotation to your web application follow these 3 easy steps:
 Here's a simple example:
 
 ```js
+// skip this line if you are importing markerjs2 into the global space via the script tag
 import * as markerjs2 from 'markerjs2';
 
+// create an instance of MarkerArea and pass the target image reference as a parameter
 let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
+
+// register an event listener for when user clicks OK/save in the marker.js UI
 markerArea.addRenderEventListener(dataUrl => {
+  // we are setting the markup result to replace our original image on the page
+  // but you can set a different image or upload it to your server
   document.getElementById('myimg').src = dataUrl;
 });
+
+// finally, call the show() method and marker.js UI opens
 markerArea.show();
 ```
+
+## Demos
+Check out [marker.js 2 demos](https://markerjs.com/demos) for various usage examples.
+
+## More docs and tutorials
+For a more detailed "Getting started" and other docs and tutorials, please refer to 
+the [official documentation](https://markerjs.com/docs).
 
 ## Credits
 
