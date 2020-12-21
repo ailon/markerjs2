@@ -22,16 +22,49 @@ import { IStyleSettings } from './core/IStyleSettings';
 import { MeasurementMarker } from './markers/measurement-marker/MeasurementMarker';
 import { IPoint } from './core/IPoint';
 
+/**
+ * @ignore
+ */
 export type MarkerAreaMode = 'select' | 'create' | 'delete';
 
+/**
+ * Identifier for marker type when setting {@linkcode availableMarkerTypes}.
+ * Marker type can be set as either a string or a marker type reference.
+ */
 export type MarkerTypeIdentifier = string | typeof MarkerBase;
 
+/**
+ * Event handler type for {@linkcode MarkerArea} `render` event.
+ */
 export type RenderEventHandler = (dataURL: string, state?: MarkerAreaState) => void;
+/**
+ * Event handler type for {@linkcode MarkerArea} `close` event.
+ */
 export type CloseEventHandler = () => void;
 
+/**
+ * MarkerArea is the main class of marker.js 2. It controls the behavior and appearance of the library.
+ * 
+ * The simplest marker.js 2 usage scenario looks something like this:
+ * 
+ * ```typescript
+ * import * as markerjs2 from 'markerjs2';
+ * // create an instance of MarkerArea and pass the target image reference as a parameter
+ * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
+ * 
+ * // register an event listener for when user clicks OK/save in the marker.js UI
+ * markerArea.addRenderEventListener(dataUrl => {
+ *   // we are setting the markup result to replace our original image on the page
+ *   // but you can set a different image or upload it to your server
+ *   document.getElementById('myimg').src = dataUrl;
+ * });
+ * 
+ * // finally, call the show() method and marker.js UI opens
+ * markerArea.show();
+ * ```
+ */
 export class MarkerArea {
   private target: HTMLImageElement;
-  public targetRoot: HTMLElement;
 
   private width: number;
   private height: number;
@@ -53,6 +86,25 @@ export class MarkerArea {
 
   private logoUI: HTMLElement;
 
+  /**
+   * `targetRoot` is used to set an alternative positioning root for the marker.js UI.
+   * 
+   * This is useful in cases when your target image is positioned, say, inside a div with `position: relative;`
+   * 
+   * ```typescript
+   * // set targetRoot to a specific div instead of document.body
+   * markerArea.targetRoot = document.getElementById('myRootElement');
+   * ```
+   * 
+   * @default document.body
+   */
+  public targetRoot: HTMLElement;
+
+  /**
+   * Returns a list of all built-in marker types for use with {@linkcode availableMarkerTypes}
+   *
+   * @readonly
+   */
   public get ALL_MARKER_TYPES(): typeof MarkerBase[] { 
     return [
       FrameMarker,
@@ -68,6 +120,12 @@ export class MarkerArea {
     ];
   }
 
+  /**
+   * Returns a list of default set of built-in marker types.
+   * Used when {@linkcode availableMarkerTypes} isn't set explicitly.
+   *
+   * @readonly
+   */
   public get DEFAULT_MARKER_TYPES(): typeof MarkerBase[] { 
     return [
       FrameMarker,
@@ -80,6 +138,11 @@ export class MarkerArea {
     ];
   }
 
+  /**
+   * Returns a short list of essential built-in marker types for use with {@linkcode availableMarkerTypes}
+   *
+   * @readonly
+   */
   public get BASIC_MARKER_TYPES(): typeof MarkerBase[] { 
     return [
       FrameMarker,
@@ -92,6 +155,16 @@ export class MarkerArea {
 
   private _availableMarkerTypes: typeof MarkerBase[] = this.DEFAULT_MARKER_TYPES;
 
+  /**
+   * Gets or sets a list of marker types avaiable to the user in the toolbar.
+   * The types can be passed as either type reference or a string type name.
+   * 
+   * ```typescript
+   * this.markerArea1.availableMarkerTypes = ['CalloutMarker', ...this.markerArea1.BASIC_MARKER_TYPES];
+   * ```
+   * 
+   * @default {@linkcode DEFAULT_MARKER_TYPES}
+   */
   public get availableMarkerTypes(): MarkerTypeIdentifier[] {
     return this._availableMarkerTypes;
   }
@@ -132,15 +205,56 @@ export class MarkerArea {
   public uiStyleSettings: IStyleSettings;
 
   private _isOpen = false;
+  /**
+   * Returns `true` when MarkerArea is open and `false` otherwise.
+   *
+   * @readonly
+   */
   public get isOpen(): boolean {
     return this._isOpen;
   }
 
+  /**
+   * When set to true resulting image will be rendered at the natural (original) resolution
+   * of the target image. Otherwise (default), screen dimensions of the image are used.
+   *
+   * @default false (use screen dimensions)
+   */
   public renderAtNaturalSize = false;
+  /**
+   * Type of image for the rendering result. Eg. `image/png` (default) or `image/jpeg`.
+   * 
+   * @default `image/png`
+   */
   public renderImageType = 'image/png';
+  /**
+   * When rendering engine/format supports it (jpeg, for exmample), 
+   * sets the rendering quality for the resulting image.
+   * 
+   * In case of `image/jpeg` the value should be between 0 (worst quality) and 1 (best quality).
+   */
   public renderImageQuality?: number;
+  /**
+   * When set to `true`, will render only the marker layer without the original image.
+   * This could be useful when you want to non-destructively overlay markers on top of the original image.
+   * 
+   * Note that in order for the markers layer to have a transparent background {@linkcode renderImageType}
+   * should be set to a format supporting transparency, such as `image/png`.
+   *
+   * @default false
+   */
   public renderMarkersOnly = false;
 
+  /**
+   * Creates a new MarkerArea for the specified target image.
+   * 
+   * ```typescript
+   * // create an instance of MarkerArea and pass the target image reference as a parameter
+   * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
+   * ```
+   * 
+   * @param target image object to mark up.
+   */
   constructor(target: HTMLImageElement) {
     Style.settings = Style.defaultSettings;
     this.uiStyleSettings = Style.settings;
@@ -193,11 +307,20 @@ export class MarkerArea {
     this._isOpen = true;
   }
 
+  /**
+   * Initializes the MarkerArea and opens the UI.
+   */
   public show(): void {
     this.showUI();
     this.open();
   }
 
+  /**
+   * Renders the annotation result.
+   * 
+   * Normally, you should use {@linkcode addRenderEventListener} method to set a listener for the `render` event
+   * rather than calling this method directly.
+   */
   public async render(): Promise<string> {
     this.setCurrentMarker();
     const renderer = new Renderer();
@@ -208,6 +331,9 @@ export class MarkerArea {
     return await renderer.rasterize(this.target, this.markerImage);
   }
 
+  /**
+   * Closes the MarkerArea UI.
+   */
   public close(): void {
     if (this.isOpen) {
       // if (this.markerImage) {
@@ -224,14 +350,43 @@ export class MarkerArea {
     }
   }
 
+  /**
+   * Adds one or more markers to the toolbar.
+   * 
+   * @param markers - one or more marker types to be added.
+   */
   public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
     this._availableMarkerTypes.push(...markers);
   }
 
+  /**
+   * Add a `render` event listener which is called when user clicks on the OK/save button
+   * in the toolbar.
+   * 
+   * ```typescript
+   * // register an event listener for when user clicks OK/save in the marker.js UI
+   * markerArea.addRenderEventListener(dataUrl => {
+   *   // we are setting the markup result to replace our original image on the page
+   *   // but you can set a different image or upload it to your server
+   *   document.getElementById('myimg').src = dataUrl;
+   * });
+   * ```
+   * 
+   * This is where you place your code to save a resulting image and/or MarkerAreaState.
+   * 
+   * @param listener - a method handling rendering results
+   * 
+   * @see {@link MarkerAreaState}
+   */
   public addRenderEventListener(listener: RenderEventHandler): void {
     this.renderEventListeners.push(listener);
   }
 
+  /**
+   * Remove a `render` event handler.
+   * 
+   * @param listener - previously registered `render` event handler.
+   */
   public removeRenderEventListener(listener: RenderEventHandler): void {
     if (this.renderEventListeners.indexOf(listener) > -1) {
       this.renderEventListeners.splice(
@@ -241,10 +396,21 @@ export class MarkerArea {
     }
   }
 
+  /**
+   * Add a `close` event handler to perform actions in your code after the user
+   * clicks on the close button (without saving).
+   * 
+   * @param listener - close event listener
+   */
   public addCloseEventListener(listener: CloseEventHandler): void {
     this.closeEventListeners.push(listener);
   }
 
+  /**
+   * Remove a `close` event handler.
+   * 
+   * @param listener - previously registered `close` event handler.
+   */
   public removeCloseEventListener(listener: CloseEventHandler): void {
     if (this.closeEventListeners.indexOf(listener) > -1) {
       this.closeEventListeners.splice(
@@ -522,6 +688,10 @@ export class MarkerArea {
     this.close();
   }
 
+  /**
+   * Returns the complete state for the MarkerArea that can be preserved and used
+   * to continue annotation next time.
+   */
   public getState(): MarkerAreaState {
     const result: MarkerAreaState = { 
       width: this.width,
@@ -531,7 +701,21 @@ export class MarkerArea {
     this.markers.forEach(marker => result.markers.push(marker.getState()));
     return result;
   }
-
+  
+  /**
+   * Restores MarkerArea state to continue previous annotation session.
+   * 
+   * **IMPORTANT**: call `restoreState()` __after__ you've opened the MarkerArea with {@linkcode show}.
+   * 
+   * ```typescript
+   * this.markerArea1.show();
+   * if (this.currentState) {
+   *   this.markerArea1.restoreState(this.currentState);
+   * }
+   * ```
+   * 
+   * @param state - previously saved state object.
+   */
   public restoreState(state: MarkerAreaState): void {
     this.markers.splice(0);
     state.markers.forEach(markerState => {
