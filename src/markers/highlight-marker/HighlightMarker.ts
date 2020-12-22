@@ -9,6 +9,12 @@ import { RectangleMarkerState } from '../RectangleMarkerState';
 
 export class HighlightMarker extends CoverMarker {
   /**
+   * String type name of the marker type. 
+   * 
+   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   */
+  public static typeName = 'HighlightMarker';
+  /**
    * Marker type title (display name) used for accessibility and other attributes.
    */
   public static title = 'Highlight marker';

@@ -3,8 +3,16 @@ import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { Settings } from '../../core/Settings';
 import { RectangleMarker } from '../RectangleMarker';
+import { RectangleMarkerState } from '../RectangleMarkerState';
 
 export class CoverMarker extends RectangleMarker {
+  /**
+   * String type name of the marker type. 
+   * 
+   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   */
+  public static typeName = 'CoverMarker';
+
   /**
    * Marker type title (display name) used for accessibility and other attributes.
    */
@@ -45,5 +53,14 @@ export class CoverMarker extends RectangleMarker {
    */
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.fillPanel];
+  }
+
+  /**
+   * Returns current marker state that can be restored in the future.
+   */
+  public getState(): RectangleMarkerState {
+    const result = super.getState();
+    result.typeName = CoverMarker.typeName;
+    return result;
   }
 }
