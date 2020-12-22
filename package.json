@@ -11,7 +11,7 @@
     "lint": "eslint src",
     "build": "yarn lint && rollup --config rollup.config.prod.js",
     "start": "rollup --config rollup.config.dev.js -w",
-    "docs": "typedoc --excludePrivate --exclude \"src/index.ts\" -mode file --out docs src"
+    "docs": "typedoc --excludePrivate --excludeExternals --exclude \"src/index.ts\" -mode file --out docs src --name \"marker.js 2 Class Reference\" --disableSources --readme none"
   },
   "repository": {
     "type": "git",
