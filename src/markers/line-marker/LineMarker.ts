@@ -11,22 +11,64 @@ import { LineMarkerState } from './LineMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 export class LineMarker extends LinearMarkerBase {
+  /**
+   * String type name of the marker type. 
+   * 
+   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   */
   public static typeName = 'LineMarker';
   
+  /**
+   * Marker type title (display name) used for accessibility and other attributes.
+   */
   public static title = 'Line marker';
+  /**
+   * SVG icon markup displayed on toolbar buttons.
+   */
   public static icon = Icon;
 
+  /**
+   * Invisible wider line to make selection easier/possible.
+   */
   protected selectorLine: SVGLineElement;
+  /**
+   * Visible marker line.
+   */
   protected visibleLine: SVGLineElement;
 
+  /**
+   * Line color.
+   */
   protected strokeColor = 'transparent';
+  /**
+   * Line width.
+   */
   protected strokeWidth = 0;
+  /**
+   * Line dash array.
+   */
   protected strokeDasharray = '';
 
+  /**
+   * Color pickar panel for line color.
+   */
   protected strokePanel: ColorPickerPanel;
+  /**
+   * Line width toolbox panel.
+   */
   protected strokeWidthPanel: LineWidthPanel;
+  /**
+   * Line dash array toolbox panel.
+   */
   protected strokeStylePanel: LineStylePanel;
 
+  /**
+   * Creates a new marker.
+   *
+   * @param container - SVG container to hold marker's visual.
+   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
+   * @param settings - settings object containing default markers settings.
+   */
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
@@ -60,6 +102,11 @@ export class LineMarker extends LinearMarkerBase {
     this.strokeStylePanel.onStyleChanged = this.setStrokeDasharray;
   }
 
+  /**
+   * Returns true if passed SVG element belongs to the marker. False otherwise.
+   * 
+   * @param el - target element.
+   */
   public ownsTarget(el: EventTarget): boolean {
     if (
       super.ownsTarget(el) ||
@@ -101,6 +148,12 @@ export class LineMarker extends LinearMarkerBase {
     this.addMarkerVisualToContainer(this.visual);
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) down event.
+   * 
+   * @param point - event coordinates.
+   * @param target - direct event target element.
+   */
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
     if (this.state === 'new') {
@@ -111,6 +164,9 @@ export class LineMarker extends LinearMarkerBase {
     }
   }
 
+  /**
+   * Adjusts visual after manipulation.
+   */
   protected adjustVisual(): void {
     this.selectorLine.setAttribute('x1', this.x1.toString());
     this.selectorLine.setAttribute('y1', this.y1.toString());
@@ -127,24 +183,42 @@ export class LineMarker extends LinearMarkerBase {
     SvgHelper.setAttributes(this.visibleLine, [['stroke-dasharray', this.strokeDasharray.toString()]]);
   }
 
+  /**
+   * Sets line color.
+   * @param color - new color.
+   */
   protected setStrokeColor(color: string): void {
     this.strokeColor = color;
     this.adjustVisual();
   }
+  /**
+   * Sets line width.
+   * @param width - new width.
+   */
   protected setStrokeWidth(width: number): void {
     this.strokeWidth = width
     this.adjustVisual();
   }
 
+  /**
+   * Sets line dash array.
+   * @param dashes - new dash array.
+   */
   protected setStrokeDasharray(dashes: string): void {
     this.strokeDasharray = dashes;
     this.adjustVisual();
   }
 
+  /**
+   * Returns the list of toolbox panels for this marker type.
+   */
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.strokePanel, this.strokeWidthPanel, this.strokeStylePanel];
   }
 
+  /**
+   * Returns current marker state that can be restored in the future.
+   */
   public getState(): LineMarkerState {
     const result: LineMarkerState = Object.assign({
       strokeColor: this.strokeColor,
@@ -156,6 +230,11 @@ export class LineMarker extends LinearMarkerBase {
     return result;
   }
 
+  /**
+   * Restores previously saved marker state.
+   * 
+   * @param state - previously saved state.
+   */
   public restoreState(state: MarkerBaseState): void {
     super.restoreState(state);
 

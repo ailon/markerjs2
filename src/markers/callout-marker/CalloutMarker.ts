@@ -13,12 +13,26 @@ import { CalloutMarkerState } from './CalloutMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 export class CalloutMarker extends TextMarker {
+  /**
+   * String type name of the marker type. 
+   * 
+   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   */
   public static typeName = 'CalloutMarker';
 
+  /**
+   * Marker type title (display name) used for accessibility and other attributes.
+   */
   public static title = 'Callout marker';
+  /**
+   * SVG icon markup displayed on toolbar buttons.
+   */
   public static icon = Icon;
 
   private bgColor = 'transparent';
+  /**
+   * Color picker toolbox panel for the background (fill) color.
+   */
   protected bgColorPanel: ColorPickerPanel;
 
   private tipPosition: IPoint = { x: 0, y: 0 };
@@ -28,6 +42,13 @@ export class CalloutMarker extends TextMarker {
   private tipGrip: ResizeGrip;
   private tipMoving = false;
 
+  /**
+   * Creates a new marker.
+   *
+   * @param container - SVG container to hold marker's visual.
+   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
+   * @param settings - settings object containing default markers settings.
+   */
   constructor(
     container: SVGGElement,
     overlayContainer: HTMLDivElement,
@@ -76,6 +97,11 @@ export class CalloutMarker extends TextMarker {
     this.controlBox.appendChild(this.tipGrip.visual);
   }
 
+  /**
+   * Returns true if passed SVG element belongs to the marker. False otherwise.
+   * 
+   * @param el - target element.
+   */
   public ownsTarget(el: EventTarget): boolean {
     return (
       super.ownsTarget(el) || this.tipGrip.ownsTarget(el) || this.tip === el
@@ -94,6 +120,12 @@ export class CalloutMarker extends TextMarker {
     this.visual.appendChild(this.tip);
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) down event.
+   * 
+   * @param point - event coordinates.
+   * @param target - direct event target element.
+   */
   public pointerDown(point: IPoint, target?: EventTarget): void {
     if (this.state === 'new') {
       super.pointerDown(point, target);
@@ -110,6 +142,11 @@ export class CalloutMarker extends TextMarker {
     }
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) up event.
+   * 
+   * @param point - event coordinates.
+   */
   public pointerUp(point: IPoint): void {
     if (this.tipMoving) {
       this.tipMoving = false;
@@ -119,6 +156,11 @@ export class CalloutMarker extends TextMarker {
     }
   }
 
+  /**
+   * Handles marker manipulation (move, resize, rotate, etc.).
+   * 
+   * @param point - event coordinates.
+   */
   public manipulate(point: IPoint): void {
     if (this.tipMoving) {
       const rotatedPoint = this.unrotatePoint(point);
@@ -132,6 +174,10 @@ export class CalloutMarker extends TextMarker {
     }
   }
 
+  /**
+   * Sets marker's background/fill color.
+   * @param color - new background color.
+   */
   protected setBgColor(color: string): void {
     SvgHelper.setAttributes(this.bgRectangle, [['fill', color]]);
     SvgHelper.setAttributes(this.tip, [['fill', color]]);
@@ -204,6 +250,10 @@ export class CalloutMarker extends TextMarker {
     }
   }
 
+  /**
+   * Resize marker based on current pointer coordinates and context.
+   * @param point 
+   */
   protected resize(point: IPoint): void {
     super.resize(point);
     this.positionTip();
@@ -216,15 +266,24 @@ export class CalloutMarker extends TextMarker {
     this.tipGrip.visual.transform.baseVal.replaceItem(translate, 0);
   }
 
+  /**
+   * Returns the list of toolbox panels for this marker type.
+   */
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.colorPanel, this.bgColorPanel, this.fontFamilyPanel];
   }
 
+  /**
+   * Selects this marker and displays appropriate selected marker UI.
+   */
   public select(): void {
     this.positionTip();
     super.select();
   }
 
+  /**
+   * Returns current marker state that can be restored in the future.
+   */
   public getState(): CalloutMarkerState {
     const result: CalloutMarkerState = Object.assign({
       bgColor: this.bgColor,
@@ -235,6 +294,11 @@ export class CalloutMarker extends TextMarker {
     return result;
   }
 
+  /**
+   * Restores previously saved marker state.
+   * 
+   * @param state - previously saved state.
+   */
   public restoreState(state: MarkerBaseState): void {
     const calloutState = state as CalloutMarkerState;
     this.bgColor = calloutState.bgColor;
@@ -244,6 +308,4 @@ export class CalloutMarker extends TextMarker {
     this.createTip();
     this.setTipPoints();
   }
-
-
 }

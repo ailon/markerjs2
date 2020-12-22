@@ -13,22 +13,55 @@ import FillColorIcon from '../../ui/toolbox-panels/fill-color-icon.svg';
 import { OpacityPanel } from '../../ui/toolbox-panels/OpacityPanel';
 
 export class EllipseMarker extends RectangularBoxMarkerBase {
+  /**
+   * String type name of the marker type. 
+   * 
+   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   */
   public static typeName = 'EllipseMarker';
+  /**
+   * Marker type title (display name) used for accessibility and other attributes.
+   */
   public static title = 'Ellipse marker';
+  /**
+   * SVG icon markup displayed on toolbar buttons.
+   */
   public static icon = Icon;
 
+  /**
+   * Ellipse fill color.
+   */
   protected fillColor = 'transparent';
+  /**
+   * Ellipse border color.
+   */
   protected strokeColor = 'transparent';
+  /**
+   * Ellipse border line width.
+   */
   protected strokeWidth = 0;
+  /**
+   * Ellipse border dash array.
+   */
   protected strokeDasharray = '';
+  /**
+   * Ellipse opacity (0..1).
+   */
   protected opacity = 1;
 
   private strokePanel: ColorPickerPanel;
   private fillPanel: ColorPickerPanel;
   private strokeWidthPanel: LineWidthPanel;
   private strokeStylePanel: LineStylePanel;
-  protected opacityPanel: OpacityPanel;
+  private opacityPanel: OpacityPanel;
 
+  /**
+   * Creates a new marker.
+   *
+   * @param container - SVG container to hold marker's visual.
+   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
+   * @param settings - settings object containing default markers settings.
+   */
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
@@ -80,6 +113,11 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     this.opacityPanel.onOpacityChanged = this.setOpacity;
   }
 
+  /**
+   * Returns true if passed SVG element belongs to the marker. False otherwise.
+   * 
+   * @param el - target element.
+   */
   public ownsTarget(el: EventTarget): boolean {
     if (super.ownsTarget(el) || el === this.visual) {
       return true;
@@ -88,6 +126,9 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  /**
+   * Creates marker visual.
+   */
   protected createVisual(): void {
     this.visual = SvgHelper.createEllipse(this.width / 2, this.height / 2, [
       ['fill', this.fillColor],
@@ -101,6 +142,12 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     this.addMarkerVisualToContainer(this.visual);
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) down event.
+   * 
+   * @param point - event coordinates.
+   * @param target - direct event target element.
+   */
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
     if (this.state === 'new') {
@@ -112,15 +159,27 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  /**
+   * Handles marker manipulation (move, resize, rotate, etc.).
+   * 
+   * @param point - event coordinates.
+   */
   public manipulate(point: IPoint): void {
     super.manipulate(point);
   }
 
+  /**
+   * Resize marker based on current pointer coordinates and context.
+   * @param point 
+   */
   protected resize(point: IPoint): void {
     super.resize(point);
     this.setSize();
   }
 
+  /**
+   * Sets marker's visual size after manipulation.
+   */
   protected setSize(): void {
     super.setSize();
     SvgHelper.setAttributes(this.visual, [
@@ -131,36 +190,60 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     ]);
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) up event.
+   * 
+   * @param point - event coordinates.
+   */
   public pointerUp(point: IPoint): void {
     super.pointerUp(point);
     this.setSize();
   }
 
+  /**
+   * Sets marker's line color.
+   * @param color - new line color.
+   */
   protected setStrokeColor(color: string): void {
     this.strokeColor = color;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke', this.strokeColor]]);
     }
   }
+  /**
+   * Sets marker's fill (background) color.
+   * @param color - new fill color.
+   */
   protected setFillColor(color: string): void {
     this.fillColor = color;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['fill', this.fillColor]]);
     }
   }
+  /**
+   * Sets marker's line width.
+   * @param width - new line width
+   */
   protected setStrokeWidth(width: number): void {
     this.strokeWidth = width;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke-width', this.strokeWidth.toString()]]);
     }
   }
+  /**
+   * Sets marker's border dash array.
+   * @param dashes - new dash array.
+   */
   protected setStrokeDasharray(dashes: string): void {
     this.strokeDasharray = dashes;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke-dasharray', this.strokeDasharray]]);
     }
   }
-
+  /**
+   * Sets marker's opacity.
+   * @param opacity - new opacity value (0..1).
+   */
   protected setOpacity(opacity: number): void {
     this.opacity = opacity;
     if (this.visual) {
@@ -168,10 +251,16 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  /**
+   * Returns the list of toolbox panels for this marker type.
+   */
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.strokePanel, this.fillPanel, this.strokeWidthPanel, this.strokeStylePanel, this.opacityPanel];
   }
 
+  /**
+   * Returns current marker state that can be restored in the future.
+   */
   public getState(): RectangleMarkerState {
     const result: RectangleMarkerState = Object.assign({
       fillColor: this.fillColor,
@@ -185,6 +274,11 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     return result;
   }
 
+  /**
+   * Restores previously saved marker state.
+   * 
+   * @param state - previously saved state.
+   */
   public restoreState(state: MarkerBaseState): void {
     const rectState = state as RectangleMarkerState;
     this.fillColor = rectState.fillColor;

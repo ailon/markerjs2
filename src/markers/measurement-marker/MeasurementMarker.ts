@@ -8,9 +8,20 @@ import { MarkerBaseState } from '../../core/MarkerBaseState';
 import { LineMarkerState } from '../line-marker/LineMarkerState';
 
 export class MeasurementMarker extends LineMarker {
+  /**
+   * String type name of the marker type. 
+   * 
+   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   */
   public static typeName = 'MeasurementMarker';
 
+  /**
+   * Marker type title (display name) used for accessibility and other attributes.
+   */
   public static title = 'Measurement marker';
+  /**
+   * SVG icon markup displayed on toolbar buttons.
+   */
   public static icon = Icon;
 
   private tip1: SVGLineElement;
@@ -20,10 +31,22 @@ export class MeasurementMarker extends LineMarker {
     return 10 + this.strokeWidth * 3;
   }
 
+  /**
+   * Creates a new marker.
+   *
+   * @param container - SVG container to hold marker's visual.
+   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
+   * @param settings - settings object containing default markers settings.
+   */
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
   }
 
+  /**
+   * Returns true if passed SVG element belongs to the marker. False otherwise.
+   * 
+   * @param el - target element.
+   */
   public ownsTarget(el: EventTarget): boolean {
     if (
       super.ownsTarget(el) ||
@@ -61,6 +84,12 @@ export class MeasurementMarker extends LineMarker {
     this.visual.appendChild(this.tip2);
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) down event.
+   * 
+   * @param point - event coordinates.
+   * @param target - direct event target element.
+   */
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
     if (this.state === 'creating') {
@@ -68,6 +97,9 @@ export class MeasurementMarker extends LineMarker {
     }
   }
 
+  /**
+   * Adjusts marker visual after manipulation.
+   */
   protected adjustVisual(): void {
     super.adjustVisual();
 
@@ -105,10 +137,16 @@ export class MeasurementMarker extends LineMarker {
     }
   }
 
+  /**
+   * Returns the list of toolbox panels for this marker type.
+   */
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.strokePanel, this.strokeWidthPanel, this.strokeStylePanel];
   }
 
+  /**
+   * Returns current marker state that can be restored in the future.
+   */
   public getState(): LineMarkerState {
     const result =super.getState();
     result.typeName = MeasurementMarker.typeName;
@@ -116,6 +154,11 @@ export class MeasurementMarker extends LineMarker {
     return result;
   }
 
+  /**
+   * Restores previously saved marker state.
+   * 
+   * @param state - previously saved state.
+   */
   public restoreState(state: MarkerBaseState): void {
     super.restoreState(state);
 

@@ -132,7 +132,6 @@ export class MarkerBase {
    * Handles pointer (mouse, touch, stylus, etc.) up event.
    * 
    * @param point - event coordinates.
-   * @param target - direct event target element.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   public pointerUp(point: IPoint):void {}

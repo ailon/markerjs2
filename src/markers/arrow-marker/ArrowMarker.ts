@@ -8,10 +8,24 @@ import { ArrowType, ArrowTypePanel } from '../../ui/toolbox-panels/ArrowTypePane
 import { ArrowMarkerState } from './ArrowMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
 
+/**
+ * Represents an arrow marker.
+ */
 export class ArrowMarker extends LineMarker {
+  /**
+   * String type name of the marker type. 
+   * 
+   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   */
   public static typeName = 'ArrowMarker';
 
+  /**
+   * Marker type title (display name) used for accessibility and other attributes.
+   */
   public static title = 'Arrow marker';
+  /**
+   * SVG icon markup displayed on toolbar buttons.
+   */
   public static icon = Icon;
 
   private arrow1: SVGPolygonElement;
@@ -22,8 +36,18 @@ export class ArrowMarker extends LineMarker {
   private arrowBaseHeight = 10;
   private arrowBaseWidth = 10;
 
+  /**
+   * Toolbox panel for arrow type selection.
+   */
   protected arrowTypePanel: ArrowTypePanel;
 
+  /**
+   * Creates a new marker.
+   *
+   * @param container - SVG container to hold marker's visual.
+   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
+   * @param settings - settings object containing default markers settings.
+   */
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
@@ -34,6 +58,11 @@ export class ArrowMarker extends LineMarker {
     this.arrowTypePanel.onArrowTypeChanged = this.setArrowType;
   }
 
+  /**
+   * Returns true if passed SVG element belongs to the marker. False otherwise.
+   * 
+   * @param el - target element.
+   */
   public ownsTarget(el: EventTarget): boolean {
     if (
       super.ownsTarget(el) ||
@@ -64,6 +93,12 @@ export class ArrowMarker extends LineMarker {
     this.visual.appendChild(this.arrow2);
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) down event.
+   * 
+   * @param point - event coordinates.
+   * @param target - direct event target element.
+   */
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
     if (this.state === 'creating') {
@@ -71,6 +106,9 @@ export class ArrowMarker extends LineMarker {
     }
   }
 
+  /**
+   * Adjusts marker visual after manipulation.
+   */
   protected adjustVisual(): void {
     super.adjustVisual();
 
@@ -107,10 +145,16 @@ export class ArrowMarker extends LineMarker {
     this.adjustVisual();
   }
 
+  /**
+   * Returns the list of toolbox panels for this marker type.
+   */
   public get toolboxPanels(): ToolboxPanel[] {
     return [this.strokePanel, this.strokeWidthPanel, this.strokeStylePanel, this.arrowTypePanel];
   }
 
+  /**
+   * Returns current marker state that can be restored in the future.
+   */
   public getState(): ArrowMarkerState {
     const result: ArrowMarkerState = Object.assign({
       arrowType: this.arrowType
@@ -120,6 +164,11 @@ export class ArrowMarker extends LineMarker {
     return result;
   }
 
+  /**
+   * Restores previously saved marker state.
+   * 
+   * @param state - previously saved state.
+   */
   public restoreState(state: MarkerBaseState): void {
     super.restoreState(state);
 

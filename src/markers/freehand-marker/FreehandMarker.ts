@@ -10,12 +10,29 @@ import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 
 export class FreehandMarker extends RectangularBoxMarkerBase {
+  /**
+   * String type name of the marker type. 
+   * 
+   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   */
   public static typeName = 'FreehandMarker';
 
+  /**
+   * Marker type title (display name) used for accessibility and other attributes.
+   */
   public static title = 'Freehand marker';
+  /**
+   * SVG icon markup displayed on toolbar buttons.
+   */
   public static icon = Icon;
 
+  /**
+   * Marker color.
+   */
   protected color = 'transparent';
+  /**
+   * Marker's stroke width.
+   */
   protected lineWidth = 3;
 
   private colorPanel: ColorPickerPanel;
@@ -28,6 +45,13 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   private drawing = false;
 
+  /**
+   * Creates a new marker.
+   *
+   * @param container - SVG container to hold marker's visual.
+   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
+   * @param settings - settings object containing default markers settings.
+   */
   constructor(
     container: SVGGElement,
     overlayContainer: HTMLDivElement,
@@ -49,6 +73,11 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     this.colorPanel.onColorChanged = this.setColor;
   }
 
+  /**
+   * Returns true if passed SVG element belongs to the marker. False otherwise.
+   * 
+   * @param el - target element.
+   */
   public ownsTarget(el: EventTarget): boolean {
     if (
       super.ownsTarget(el) ||
@@ -71,6 +100,12 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     this.addMarkerVisualToContainer(this.visual);
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) down event.
+   * 
+   * @param point - event coordinates.
+   * @param target - direct event target element.
+   */
   public pointerDown(point: IPoint, target?: EventTarget): void {
     if (this.state === 'new') {
       this.addCanvas();
@@ -91,6 +126,11 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  /**
+   * Handles marker manipulation (move, resize, rotate, etc.).
+   * 
+   * @param point - event coordinates.
+   */
   public manipulate(point: IPoint): void {
     if (this.state === 'creating') {
       if (this.drawing) {
@@ -102,6 +142,10 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  /**
+   * Resize marker based on current pointer coordinates and context.
+   * @param point 
+   */
   protected resize(point: IPoint): void {
     super.resize(point);
     SvgHelper.setAttributes(this.visual, [
@@ -114,6 +158,11 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     ]);
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) up event.
+   * 
+   * @param point - event coordinates.
+   */
   public pointerUp(point: IPoint): void {
     if (this._state === 'creating') {
       if (this.drawing) {
@@ -135,6 +184,9 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     this.overlayContainer.appendChild(this.canvasElement);
   }
 
+  /**
+   * Selects this marker and displays appropriate selected marker UI.
+   */
   public select(): void {
     if (this.state === 'creating') {
       this.finishCreation();
@@ -142,6 +194,9 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     super.select();
   }
 
+  /**
+   * Deselects this marker and hides selected marker UI.
+   */
   public deselect(): void {
     if (this.state === 'creating') {
       this.finishCreation();
@@ -227,10 +282,17 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     this.moveVisual({ x: this.left, y: this.top });
   }
 
+  /**
+   * Sets marker drawing color.
+   * @param color - new color.
+   */
   protected setColor(color: string): void {
     this.color = color;
   }
 
+  /**
+   * Returns the list of toolbox panels for this marker type.
+   */
   public get toolboxPanels(): ToolboxPanel[] {
     if (this.state === 'new' || this.state === 'creating') {
       return [this.colorPanel];
@@ -239,6 +301,9 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  /**
+   * Returns current marker state that can be restored in the future.
+   */
   public getState(): FreehandMarkerState {
     const result: FreehandMarkerState = Object.assign({
       drawingImgUrl: this.drawingImgUrl
@@ -248,6 +313,11 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     return result;
   }
 
+  /**
+   * Restores previously saved marker state.
+   * 
+   * @param state - previously saved state.
+   */
   public restoreState(state: MarkerBaseState): void {
     this.createVisual();
     super.restoreState(state);
