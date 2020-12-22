@@ -8,22 +8,43 @@ import { Settings } from '../core/Settings';
 import { LinearMarkerBaseState } from './LinearMarkerBaseState';
 import { MarkerBaseState } from '../core/MarkerBaseState';
 
+/**
+ * LinearMarkerBase is a base class for all line-type markers (Line, Arrow, Measurement Tool, etc.).
+ */
 export class LinearMarkerBase extends MarkerBase {
+  /**
+   * x coordinate of the first end-point
+   */
   protected x1 = 0;
+  /**
+   * y coordinate of the first end-point
+   */
   protected y1 = 0;
+  /**
+   * x coordinate of the second end-point
+   */
   protected x2 = 0;
+  /**
+   * y coordinate of the second end-point
+   */
   protected y2 = 0;
 
+  /**
+   * Default line length when marker is created with a simple click (without dragging).
+   */
   protected defaultLength = 50;
 
-  protected manipulationStartX = 0;
-  protected manipulationStartY = 0;
+  private manipulationStartX = 0;
+  private manipulationStartY = 0;
 
-  protected manipulationStartX1 = 0;
-  protected manipulationStartY1 = 0;
-  protected manipulationStartX2 = 0;
-  protected manipulationStartY2 = 0;
+  private manipulationStartX1 = 0;
+  private manipulationStartY1 = 0;
+  private manipulationStartX2 = 0;
+  private manipulationStartY2 = 0;
 
+  /**
+   * Marker's main visual.
+   */
   protected visual: SVGGraphicsElement;
 
   private controlBox: SVGGElement;
@@ -32,14 +53,24 @@ export class LinearMarkerBase extends MarkerBase {
   private grip2: ResizeGrip;
   private activeGrip: ResizeGrip;
 
-  protected markerElement: SVGGElement;
-
+  /**
+   * Creates a LineMarkerBase object.
+   * 
+   * @param container - SVG container to hold marker's visual.
+   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
+   * @param settings - settings object containing default markers settings.
+   */
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
     this.setupControlBox();
   }
 
+  /**
+   * Returns true if passed SVG element belongs to the marker. False otherwise.
+   * 
+   * @param el - target element.
+   */
   public ownsTarget(el: EventTarget): boolean {
     if (super.ownsTarget(el)) {
       return true;
@@ -52,6 +83,13 @@ export class LinearMarkerBase extends MarkerBase {
     }
   }
 
+  
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) down event.
+   * 
+   * @param point - event coordinates.
+   * @param target - direct event target element.
+   */
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
 
@@ -88,6 +126,12 @@ export class LinearMarkerBase extends MarkerBase {
     }
   }
 
+  /**
+   * Handles pointer (mouse, touch, stylus, etc.) up event.
+   * 
+   * @param point - event coordinates.
+   * @param target - direct event target element.
+   */
   public pointerUp(point: IPoint): void {
     const inState = this.state;
     super.pointerUp(point);
@@ -104,9 +148,17 @@ export class LinearMarkerBase extends MarkerBase {
     }
   }
 
+  /**
+   * When implemented adjusts marker visual after manipulation when needed.
+   */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected adjustVisual(): void {}
 
+  /**
+   * Handles marker manipulation (move, resize, rotate, etc.).
+   * 
+   * @param point - event coordinates.
+   */
   public manipulate(point: IPoint): void {
     if (this.state === 'creating') {
       this.resize(point);
@@ -122,6 +174,10 @@ export class LinearMarkerBase extends MarkerBase {
     }
   }
 
+  /**
+   * Resizes the line marker.
+   * @param point - current manipulation coordinates.
+   */
   protected resize(point: IPoint): void {
     switch(this.activeGrip) {
       case this.grip1:
@@ -138,12 +194,18 @@ export class LinearMarkerBase extends MarkerBase {
     this.adjustControlBox();
   }
 
+  /**
+   * Displays marker's controls.
+   */
   public select(): void {
     super.select();
     this.adjustControlBox();
     this.controlBox.style.display = '';
   }
 
+  /**
+   * Hides marker's controls.
+   */
   public deselect(): void {
     super.deselect();
     this.controlBox.style.display = 'none';
@@ -190,6 +252,9 @@ export class LinearMarkerBase extends MarkerBase {
     grip.transform.baseVal.replaceItem(translate, 0);
   }
 
+  /**
+   * Returns marker's state.
+   */
   public getState(): LinearMarkerBaseState {
     const result: LinearMarkerBaseState = Object.assign({
       x1: this.x1,
@@ -201,6 +266,10 @@ export class LinearMarkerBase extends MarkerBase {
     return result;
   }
 
+  /**
+   * Restores marker's state to the previously saved one.
+   * @param state - previously saved state.
+   */
   public restoreState(state: MarkerBaseState): void {
     super.restoreState(state);
     const lmbState = state as LinearMarkerBaseState;
