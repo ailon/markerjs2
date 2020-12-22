@@ -2,16 +2,32 @@ import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './line-style-panel-icon.svg';
 
+/**
+ * Line style change event handler type.
+ */
 export type StyleChangeHandler = (newStyle: string) => void;
 
+/**
+ * Line style (solid, dashed, etc.) toolbox panel.
+ */
 export class LineStylePanel extends ToolboxPanel {
   private styles: string[] = [];
   private currentStyle?: string;
 
   private styleBoxes: HTMLDivElement[] = [];
 
+  /**
+   * Handler for the style change event.
+   */
   public onStyleChanged?: StyleChangeHandler;
 
+  /**
+   * Creates a line style toolbox panel.
+   * @param title - panel title
+   * @param styles - available line styles (dash array).
+   * @param currentStyle - currently selected style.
+   * @param icon - panel button icon (SVG image markup).
+   */
   constructor(title: string, styles: string[], currentStyle?: string, icon?: string) {
     super(title, icon ? icon : Icon);
     this.styles = styles;
@@ -20,6 +36,9 @@ export class LineStylePanel extends ToolboxPanel {
     this.setCurrentStyle = this.setCurrentStyle.bind(this);
   }
 
+  /**
+   * Returns panel UI.
+   */
   public getUi(): HTMLDivElement {
     const panelDiv = document.createElement('div');
     panelDiv.style.display = 'flex';

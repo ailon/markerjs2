@@ -2,16 +2,32 @@ import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './line-width-panel-icon.svg';
 
+/**
+ * Line width change event handler type.
+ */
 export type WidthChangeHandler = (newWidth: number) => void;
 
+/**
+ * Line width toolbox panel.
+ */
 export class LineWidthPanel extends ToolboxPanel {
   private widths: number[] = [];
   private currentWidth?: number;
 
   private widthBoxes: HTMLDivElement[] = [];
 
+  /**
+   * Line width change event handler.
+   */
   public onWidthChanged?: WidthChangeHandler;
 
+  /**
+   * Creates a line width toolbox panel.
+   * @param title - panel title.
+   * @param widths - available widths.
+   * @param currentWidth - currently set width.
+   * @param icon - toolbox panel icon (SVG image markup).
+   */
   constructor(title: string, widths: number[], currentWidth?: number, icon?: string) {
     super(title, icon ? icon : Icon);
     this.widths = widths;
@@ -20,6 +36,9 @@ export class LineWidthPanel extends ToolboxPanel {
     this.setCurrentWidth = this.setCurrentWidth.bind(this);
   }
 
+  /**
+   * Returns panel UI.
+   */
   public getUi(): HTMLDivElement {
     const panelDiv = document.createElement('div');
     panelDiv.style.display = 'flex';

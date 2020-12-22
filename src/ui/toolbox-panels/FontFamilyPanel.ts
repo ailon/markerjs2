@@ -2,16 +2,32 @@ import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './font-family-panel-icon.svg';
 
+/**
+ * Font change event handler type.
+ */
 export type FontChangeHandler = (newFont: string) => void;
 
+/**
+ * Font family selection toolbox panel.
+ */
 export class FontFamilyPanel extends ToolboxPanel {
   private fonts: string[] = [];
   private currentFont?: string;
 
   private fontBoxes: HTMLDivElement[] = [];
 
+  /**
+   * Handler for the font family change event.
+   */
   public onFontChanged?: FontChangeHandler;
 
+  /**
+   * Creates a font family toolbox panel.
+   * @param title - panel title.
+   * @param fonts - available font families.
+   * @param currentFont - currently selected font family.
+   * @param icon - panel button icon (SVG image markup).
+   */
   constructor(title: string, fonts: string[], currentFont?: string, icon?: string) {
     super(title, icon ? icon : Icon);
     this.fonts = fonts;
@@ -20,6 +36,9 @@ export class FontFamilyPanel extends ToolboxPanel {
     this.setCurrentFont = this.setCurrentFont.bind(this);
   }
 
+  /**
+   * Returns panel UI.
+   */
   public getUi(): HTMLDivElement {
     const panelDiv = document.createElement('div');
     // panelDiv.style.display = 'flex';

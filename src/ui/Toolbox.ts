@@ -3,6 +3,9 @@ import { Style, StyleClass, StyleRule } from './../core/Style';
 import { DisplayMode } from '../core/Settings';
 import { IStyleSettings } from '../core/IStyleSettings';
 
+/**
+ * Represents the contextual toolbox for the selected marker type.
+ */
 export class Toolbox {
   private panels: ToolboxPanel[] = [];
   private activePanel: ToolboxPanel;
@@ -111,6 +114,12 @@ export class Toolbox {
 
   }
 
+  /**
+   * Creates the toolbox object
+   * @param markerjsContainer - container for the toolbox in marker.js UI.
+   * @param displayMode - marker.js display mode (`inline` or `popup`).
+   * @param uiStyleSettings - settings for styling the toolbox elements.
+   */
   constructor(markerjsContainer: HTMLDivElement, displayMode: DisplayMode, uiStyleSettings: IStyleSettings) {
     this.markerjsContainer = markerjsContainer;
     this.displayMode = displayMode;
@@ -121,6 +130,9 @@ export class Toolbox {
     this.addStyles();
   }
 
+  /**
+   * Creates and displays the main toolbox UI.
+   */
   public show(): void {
     this.uiContainer = document.createElement('div');
     this.uiContainer.className = `${this.toolboxStyleClass.name} ${
@@ -129,6 +141,10 @@ export class Toolbox {
     this.markerjsContainer.appendChild(this.uiContainer);
   }
 
+  /**
+   * Creaes buttons for the top-level toolbox panel.
+   * @param panels - available panels.
+   */
   public setPanelButtons(panels: ToolboxPanel[]): void {
     this.panels = panels;
     if (this.uiContainer !== undefined) {

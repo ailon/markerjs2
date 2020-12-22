@@ -2,16 +2,32 @@ import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './color-picker-panel-icon.svg';
 
+/**
+ * Handler type for the color change event.
+ */
 export type ColorChangeHandler = (newColor: string) => void;
 
+/**
+ * Color picker panel.
+ */
 export class ColorPickerPanel extends ToolboxPanel {
   private colors: string[] = [];
   private currentColor?: string;
 
   private colorBoxes: HTMLDivElement[] = [];
 
+  /**
+   * Color change event handler.
+   */
   public onColorChanged?: ColorChangeHandler;
 
+  /**
+   * Creates a color picker panel.
+   * @param title - panel title.
+   * @param colors - available colors.
+   * @param currentColor - currently selected color.
+   * @param icon - panel button icon (SVG imager markup).
+   */
   constructor(title: string, colors: string[], currentColor?: string, icon?: string) {
     super(title, icon ? icon : Icon);
     this.colors = colors;
@@ -20,6 +36,9 @@ export class ColorPickerPanel extends ToolboxPanel {
     this.setCurrentColor = this.setCurrentColor.bind(this);
   }
 
+  /**
+   * Returns panel UI.
+   */
   public getUi(): HTMLDivElement {
     const panelDiv = document.createElement('div');
     const buttonPadding = Style.settings.toolbarHeight / 4;

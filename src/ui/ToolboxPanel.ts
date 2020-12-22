@@ -1,9 +1,26 @@
+/**
+ * Base class for all toolbox property panels.
+ */
 export abstract class ToolboxPanel {
+  /**
+   * Panel name/title.
+   */
   public title: string;
+  /**
+   * Panel button icon as an SVG markup.
+   */
   public icon: string;
+  /**
+   * Create panel with supplied title and icon.
+   * @param title - panel name (used for accessibility)
+   * @param icon - panel button icon (SVG image markup)
+   */
   constructor(title: string, icon?: string) {
     this.title = title;
     this.icon = icon;
   }
+  /**
+   * Returns toolbox panel UI.
+   */
   public abstract getUi(): HTMLDivElement;
 }

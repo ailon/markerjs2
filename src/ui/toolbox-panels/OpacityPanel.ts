@@ -2,16 +2,32 @@ import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './opacity-panel-icon.svg';
 
+/**
+ * Opacity chage event handler type.
+ */
 export type OpacityChangeHandler = (newOpacity: number) => void;
 
+/**
+ * Opacity panel.
+ */
 export class OpacityPanel extends ToolboxPanel {
   private opacities: number[] = [];
   private currentOpacity?: number;
 
   private opacityBoxes: HTMLDivElement[] = [];
 
+  /**
+   * Opacity change event handler.
+   */
   public onOpacityChanged?: OpacityChangeHandler;
 
+  /**
+   * Creates an opacity panel.
+   * @param title - panel title.
+   * @param opacities - available opacities.
+   * @param currentOpacity - current opacity.
+   * @param icon - toolbox panel button (SVG image markup).
+   */
   constructor(title: string, opacities: number[], currentOpacity?: number, icon?: string) {
     super(title, icon ? icon : Icon);
     this.opacities = opacities;
@@ -20,6 +36,9 @@ export class OpacityPanel extends ToolboxPanel {
     this.setCurrentOpacity = this.setCurrentOpacity.bind(this);
   }
 
+  /**
+   * Returns panel UI.
+   */
   public getUi(): HTMLDivElement {
     const panelDiv = document.createElement('div');
     panelDiv.style.display = 'flex';

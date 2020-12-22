@@ -2,16 +2,39 @@ import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './arrow-type-panel-icon.svg';
 
+/**
+ * Represents available arrow types.
+ * 
+ * - `both` - arrow tips on both sides.
+ * - `start` - arrow tip on the starting point of line.
+ * - `end` - arrow tip on the ending point of line.
+ * - `none` - no arrow tips.
+ */
 export type ArrowType = 'both' | 'start' | 'end' | 'none';
+/**
+ * Handler for arrow type change event.
+ */
 export type ArrowTypeChangeHandler = (newType: ArrowType) => void;
 
+/**
+ * Arrow type selection panel.
+ */
 export class ArrowTypePanel extends ToolboxPanel {
   private currentType?: ArrowType;
 
   private typeBoxes: HTMLDivElement[] = [];
 
+  /**
+   * Event handler for the arrow type change event.
+   */
   public onArrowTypeChanged?: ArrowTypeChangeHandler;
 
+  /**
+   * Creates an ArrowTypePanel.
+   * @param title - panel title.
+   * @param currentType - currently set arrow type.
+   * @param icon - panel button icon (SVG image markup).
+   */
   constructor(title: string, currentType?: ArrowType, icon?: string) {
     super(title, icon ? icon : Icon);
     this.currentType = currentType;
@@ -19,6 +42,9 @@ export class ArrowTypePanel extends ToolboxPanel {
     this.setCurrentType = this.setCurrentType.bind(this);
   }
 
+  /**
+   * Returns panel UI.
+   */
   public getUi(): HTMLDivElement {
     const panelDiv = document.createElement('div');
     panelDiv.style.display = 'flex';

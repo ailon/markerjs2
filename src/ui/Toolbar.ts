@@ -8,13 +8,24 @@ import CloseIcon from './toolbar-core-icons/close.svg';
 import OverflowIcon from './toolbar-core-icons/overflow.svg';
 import { IStyleSettings } from '../core/IStyleSettings';
 
+/**
+ * Toolbar button type:
+ * - `action` for non-marker buttons like select, delete, etc.
+ * - `marker` for marker type buttons.
+ */
 export type ToolbarButtonType = 'action' | 'marker';
 
+/**
+ * Click handler type for toolbar button click events.
+ */
 export type ToolbarButtonClickHandler = (
   buttonType: ToolbarButtonType,
   value?: typeof MarkerBase | string
 ) => void;
 
+/**
+ * Toolbar represents the main toolbar of the marker.js 2 interface.
+ */
 export class Toolbar {
   private markerItems: typeof MarkerBase[];
 
@@ -43,6 +54,12 @@ export class Toolbar {
 
   private currentMarker?: MarkerBase;
 
+  /**
+   * Creates the main marker.js toolbar.
+   * @param markerjsContainer - container for the toolbar in the marker.js UI.
+   * @param markerItems - available marker types.
+   * @param uiStyleSettings - settings for styling the tooblar ui.
+   */
   constructor(markerjsContainer: HTMLDivElement, markerItems: typeof MarkerBase[], uiStyleSettings: IStyleSettings) {
     this.markerjsContainer = markerjsContainer;
     this.markerItems = markerItems;
@@ -54,6 +71,9 @@ export class Toolbar {
     this.setCurrentMarker = this.setCurrentMarker.bind(this);
   }
 
+  /**
+   * Creates and displays the toolbar UI.
+   */
   public show(): void {
     this.uiContainer = document.createElement('div');
     this.uiContainer.className = `${this.toolbarStyleClass.name} ${Style.fadeInAnimationClassName} ${
@@ -122,10 +142,18 @@ export class Toolbar {
     // setTimeout(this.adjustLayout, 10);
   }
 
+  /**
+   * Add a listener to the toolbar button click event.
+   * @param listener 
+   */
   public addButtonClickListener(listener: ToolbarButtonClickHandler): void {
     this.buttonClickListeners.push(listener);
   }
 
+  /**
+   * Remove a listener for the toolbar button click event.
+   * @param listener 
+   */
   public removeButtonClickListener(listener: ToolbarButtonClickHandler): void {
     if (this.buttonClickListeners.indexOf(listener) > -1) {
       this.buttonClickListeners.splice(
@@ -135,11 +163,17 @@ export class Toolbar {
     }
   }
 
+  /**
+   * Switch toolbar to the `select` mode.
+   */
   public setSelectMode(): void {
     this.resetButtonStyles();
     this.setActiveButton(this.buttons[0]);
   }
 
+  /**
+   * Adjusts toolbar layout.
+   */
   public adjustLayout(): void {
     if (this.markerButtons && this.markerButtons.length > 0) {
       const numberToFit = Math.floor(this.markerButtonBlock.clientWidth / this.overflowButton.clientWidth) - 1;
@@ -325,6 +359,10 @@ export class Toolbar {
       this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName : this.toolbarActiveButtonStyleColorsClass.name}`;
   }
 
+  /**
+   * Sets current marker and enables/disables the delete button accordingly.
+   * @param marker 
+   */
   public setCurrentMarker(marker?: MarkerBase): void {
     this.currentMarker = marker;
     if (this.currentMarker === undefined) {
