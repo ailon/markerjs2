@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-rc.6] - 2020-12-29
+### Fixed
+- opening popup editor after inline and vice versa caused styling issues.
+- unnecessary rounded corners in popup mode.
+
 ## [2.0.0-rc.5] - 2020-12-22
 ### Added
 - doc comments for better intellisense experience and class reference.
@@ -98,6 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release.
 
+[2.0.0-rc.6]: https://github.com/ailon/markerjs2/releases/tag/v2.0.0-rc.6
 [2.0.0-rc.5]: https://github.com/ailon/markerjs2/releases/tag/v2.0.0-rc.5
 [2.0.0-rc.4]: https://github.com/ailon/markerjs2/releases/tag/v2.0.0-rc.4
 [2.0.0-rc.3]: https://github.com/ailon/markerjs2/releases/tag/v2.0.0-rc.3
