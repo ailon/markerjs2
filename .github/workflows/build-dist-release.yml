@@ -27,9 +27,7 @@ jobs:
         run: |
           yarn install
           yarn build
-          echo markerjs2-${{ github.event.release.tag_name }}
-          zip --junk-paths markerjs2-${{ github.event.release.tag_name }} ./dist/*
-          ls
+          zip --junk-paths markerjs2-${{ github.event.release.tag_name }}.zip ./dist/*
       - name: Upload Release Asset
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1
