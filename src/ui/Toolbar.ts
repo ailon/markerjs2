@@ -7,7 +7,7 @@ import CheckIcon from './toolbar-core-icons/check.svg';
 import CloseIcon from './toolbar-core-icons/close.svg';
 import OverflowIcon from './toolbar-core-icons/overflow.svg';
 import { IStyleSettings } from '../core/IStyleSettings';
-import { DisplayMode } from '../../dist/markerjs2';
+import { DisplayMode } from '../core/Settings';
 
 /**
  * Toolbar button type:
