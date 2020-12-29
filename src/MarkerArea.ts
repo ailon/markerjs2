@@ -265,6 +265,8 @@ export class MarkerArea {
     this.width = target.clientWidth;
     this.height = target.clientHeight;
 
+    Style.removeStyleSheet();
+
     this.open = this.open.bind(this);
     this.setTopLeft = this.setTopLeft.bind(this);
 

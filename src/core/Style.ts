@@ -104,6 +104,13 @@ export class Style {
       animation-name: ${Style.CLASS_PREFIX}_fade_out_animation_frames;
     `));
   }
+
+  public static removeStyleSheet(): void {
+    if (Style.styleSheet) {
+      document.head.removeChild(Style.styleSheet);
+      Style.styleSheet = undefined;
+    }
+  }
 }
 
 /**
