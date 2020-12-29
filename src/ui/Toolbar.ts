@@ -7,6 +7,7 @@ import CheckIcon from './toolbar-core-icons/check.svg';
 import CloseIcon from './toolbar-core-icons/close.svg';
 import OverflowIcon from './toolbar-core-icons/overflow.svg';
 import { IStyleSettings } from '../core/IStyleSettings';
+import { DisplayMode } from '../../dist/markerjs2';
 
 /**
  * Toolbar button type:
@@ -34,6 +35,7 @@ export class Toolbar {
   private overflowButton: HTMLDivElement;
 
   private markerjsContainer: HTMLDivElement;
+  private displayMode: DisplayMode;
   private uiContainer: HTMLDivElement;
 
   private toolbarStyleClass: StyleClass;
@@ -57,11 +59,18 @@ export class Toolbar {
   /**
    * Creates the main marker.js toolbar.
    * @param markerjsContainer - container for the toolbar in the marker.js UI.
+   * @param displayMode - marker.js display mode (`inline` or `popup`).
    * @param markerItems - available marker types.
    * @param uiStyleSettings - settings for styling the tooblar ui.
    */
-  constructor(markerjsContainer: HTMLDivElement, markerItems: typeof MarkerBase[], uiStyleSettings: IStyleSettings) {
+  constructor(
+    markerjsContainer: HTMLDivElement, 
+    displayMode: DisplayMode, 
+    markerItems: typeof MarkerBase[], 
+    uiStyleSettings: IStyleSettings
+  ) {
     this.markerjsContainer = markerjsContainer;
+    this.displayMode = displayMode;
     this.markerItems = markerItems;
     this.uiStyleSettings = uiStyleSettings;
     this.addStyles();
@@ -245,8 +254,8 @@ export class Toolbar {
       justify-content: space-between;      
       height: ${this.uiStyleSettings.toolbarHeight}px;
       box-sizing: content-box;
-      border-top-left-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;
-      border-top-right-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;
+      ${this.displayMode === 'inline' ? `border-top-left-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;` : ''}
+      ${this.displayMode === 'inline' ? `border-top-right-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;` : ''}
       overflow: hidden;
     `
       )

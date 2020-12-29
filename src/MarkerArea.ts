@@ -611,7 +611,7 @@ export class MarkerArea {
     this.uiDiv.style.backgroundColor = '#ffffff';
     this.coverDiv.appendChild(this.uiDiv);
 
-    this.toolbar = new Toolbar(this.uiDiv, this._availableMarkerTypes, this.uiStyleSettings);
+    this.toolbar = new Toolbar(this.uiDiv, this.settings.displayMode, this._availableMarkerTypes, this.uiStyleSettings);
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
     this.toolbar.show();
 
