@@ -68,6 +68,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     this.strokeColor = settings.defaultColor;
     this.strokeWidth = settings.defaultStrokeWidth;
     this.strokeDasharray = settings.defaultStrokeDasharray;
+    this.fillColor = settings.defaultFillColor;
 
     this.setStrokeColor = this.setStrokeColor.bind(this);
     this.setFillColor = this.setFillColor.bind(this);
@@ -78,14 +79,14 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
 
     this.strokePanel = new ColorPickerPanel(
       'Line color',
-      settings.defaultColorSet,
+      [...settings.defaultColorSet, 'transparent'],
       settings.defaultColor
     );
     this.strokePanel.onColorChanged = this.setStrokeColor;
 
     this.fillPanel = new ColorPickerPanel(
       'Fill color',
-      settings.defaultColorSet,
+      [...settings.defaultColorSet, 'transparent'],
       this.fillColor,
       FillColorIcon
     );
