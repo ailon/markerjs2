@@ -185,7 +185,7 @@ export class Toolbar {
    */
   public adjustLayout(): void {
     if (this.markerButtons && this.markerButtons.length > 0) {
-      const numberToFit = Math.floor(this.markerButtonBlock.clientWidth / this.overflowButton.clientWidth) - 1;
+      const numberToFit = Math.floor(this.markerButtonBlock.clientWidth / this.uiStyleSettings.toolbarHeight) - 1;
       this.markerButtonBlock.innerHTML = '';
       this.markerButtonOverflowBlock.innerHTML = '';
       for (let buttonIndex = 0; buttonIndex < this.markerButtons.length; buttonIndex++) {

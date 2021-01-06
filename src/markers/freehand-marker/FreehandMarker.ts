@@ -324,4 +324,17 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     this.drawingImgUrl = (state as FreehandMarkerState).drawingImgUrl;
     this.setDrawingImage();
   }
+
+  /**
+   * Scales marker. Used after the image resize.
+   * 
+   * @param scaleX - horizontal scale
+   * @param scaleY - vertical scale
+   */
+  public scale(scaleX: number, scaleY: number): void {
+    super.scale(scaleX, scaleY);
+
+    this.setDrawingImage();
+  }
+
 }

@@ -23,10 +23,10 @@ export class Experiments {
     this.markerArea1.settings.displayMode = this.displayMode;
 
     // this.markerArea1.uiStyleSettings.toolbarHeight = 40;
-    if (this.oddLaunch) {
-      this.markerArea1.uiStyleSettings.toolbarColor = 'blue';
-    }
-    this.oddLaunch = !this.oddLaunch;
+    // if (this.oddLaunch) {
+    //   this.markerArea1.uiStyleSettings.toolbarColor = 'blue';
+    // }
+    // this.oddLaunch = !this.oddLaunch;
 
     // this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
     // this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';

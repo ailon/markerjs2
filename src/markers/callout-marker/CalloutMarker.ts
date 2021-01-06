@@ -308,4 +308,18 @@ export class CalloutMarker extends TextMarker {
     this.createTip();
     this.setTipPoints();
   }
+
+  /**
+   * Scales marker. Used after the image resize.
+   * 
+   * @param scaleX - horizontal scale
+   * @param scaleY - vertical scale
+   */
+  public scale(scaleX: number, scaleY: number): void {
+    super.scale(scaleX, scaleY);
+
+    this.tipPosition = {x: this.tipPosition.x * scaleX, y: this.tipPosition.y * scaleY};
+
+    this.positionTip();
+  }
 }

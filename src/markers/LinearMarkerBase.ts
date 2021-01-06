@@ -278,4 +278,22 @@ export class LinearMarkerBase extends MarkerBase {
     this.x2 = lmbState.x2;
     this.y2 = lmbState.y2;
   }
+
+  /**
+   * Scales marker. Used after the image resize.
+   * 
+   * @param scaleX - horizontal scale
+   * @param scaleY - vertical scale
+   */
+  public scale(scaleX: number, scaleY: number): void {
+    super.scale(scaleX, scaleY);
+
+    this.x1 = this.x1 * scaleX;
+    this.y1 = this.y1 * scaleY;
+    this.x2 = this.x2 * scaleX;
+    this.y2 = this.y2 * scaleY;
+
+    this.adjustVisual();
+    this.adjustControlBox();
+  }
 }

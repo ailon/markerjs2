@@ -65,6 +65,7 @@ export type CloseEventHandler = () => void;
  */
 export class MarkerArea {
   private target: HTMLImageElement;
+  private targetObserver: ResizeObserver;
 
   private width: number;
   private height: number;
@@ -292,6 +293,7 @@ export class MarkerArea {
   }
 
   private open(): void {
+    this.setupResizeObserver();
     this.setEditingTarget();
     this.setTopLeft();
     this.initMarkerCanvas();
@@ -420,6 +422,62 @@ export class MarkerArea {
         1
       );
     }
+  }
+
+  private setupResizeObserver() {
+    this.targetObserver = new ResizeObserver(() => {
+      // console.log(entries.length);
+      // entries.forEach(entry => console.log(entry.contentRect));
+      // console.log(this.target.clientWidth);
+      // console.log(this.target.clientHeight);
+      this.resize(this.target.clientWidth, this.target.clientHeight);
+    });
+    this.targetObserver.observe(this.target);
+  }
+
+  private resize(newWidth: number, newHeight: number) {
+    const scaleX = newWidth / this.imageWidth;
+    const scaleY = newHeight / this.imageHeight;
+
+    this.imageWidth = Math.round(newWidth);
+    this.imageHeight = Math.round(newHeight);
+    this.editingTarget.src = this.target.src;
+    this.editingTarget.width = this.imageWidth;
+    this.editingTarget.height = this.imageHeight;
+    this.editingTarget.style.width = `${this.imageWidth}px`;
+    this.editingTarget.style.height = `${this.imageHeight}px`;
+
+    this.markerImage.setAttribute('width', this.imageWidth.toString());
+    this.markerImage.setAttribute(
+      'height',
+      this.imageHeight.toString()
+    );
+    this.markerImage.setAttribute(
+      'viewBox',
+      '0 0 ' +
+        this.imageWidth.toString() +
+        ' ' +
+        this.imageHeight.toString()
+    );
+
+    this.markerImageHolder.style.width = `${this.imageWidth}px`;
+    this.markerImageHolder.style.height = `${this.imageHeight}px`;
+
+    this.overlayContainer.style.width = `${this.imageWidth}px`;
+    this.overlayContainer.style.height = `${this.imageHeight}px`;
+
+    this.coverDiv.style.width = `${this.imageWidth.toString()}px`;
+
+    if (this.toolbar !== undefined) {
+      this.toolbar.adjustLayout();
+    }
+
+    this.scaleMarkers(scaleX, scaleY);
+  }
+
+  private scaleMarkers(scaleX: number, scaleY: number) {
+    this.setCurrentMarker();
+    this.markers.forEach(marker => marker.scale(scaleX, scaleY));
   }
 
   private setEditingTarget() {

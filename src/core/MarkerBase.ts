@@ -168,4 +168,13 @@ export class MarkerBase {
   public restoreState(state: MarkerBaseState): void {
     this._state = state.state;
   }
+
+  /**
+   * Scales marker. Used after the image resize.
+   * 
+   * @param scaleX - horizontal scale
+   * @param scaleY - vertical scale
+   */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  public scale(scaleX: number, scaleY: number): void {}
 }

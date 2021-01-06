@@ -567,4 +567,25 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     // this.moveVisual({x: this.left, y: this.top});
     // this.applyRotation();
   }
+
+  /**
+   * Scales marker. Used after the image resize.
+   * 
+   * @param scaleX - horizontal scale
+   * @param scaleY - vertical scale
+   */
+  public scale(scaleX: number, scaleY: number): void {
+    super.scale(scaleX, scaleY);
+
+    const rPoint = this.rotatePoint({x: this.left, y: this.top});
+    const point = this.unrotatePoint({x: rPoint.x * scaleX, y: rPoint.y * scaleY});
+
+    this.left = point.x;
+    this.top = point.y;
+    this.width = this.width * scaleX;
+    this.height = this.height * scaleY;
+
+    this.adjustControlBox();
+  }
+
 }
