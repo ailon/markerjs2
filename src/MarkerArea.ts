@@ -340,14 +340,11 @@ export class MarkerArea {
    */
   public close(): void {
     if (this.isOpen) {
-      // if (this.markerImage) {
-      //   this.targetRoot.removeChild(this.markerImageHolder);
-      // }
-      // if (this.logoUI) {
-      //   this.targetRoot.removeChild(this.logoUI);
-      // }
       if (this.coverDiv) {
         this.closeUI();
+      }
+      if (this.targetObserver) {
+        this.targetObserver.unobserve(this.target);
       }
       this.closeEventListeners.forEach((listener) => listener());
       this._isOpen = false;
