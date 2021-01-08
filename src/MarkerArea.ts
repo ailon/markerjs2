@@ -466,6 +466,8 @@ export class MarkerArea {
         this.toolbar.adjustLayout();
       }
 
+      this.positionLogo();
+
       this.scaleMarkers(scaleX, scaleY);
     }
   }
