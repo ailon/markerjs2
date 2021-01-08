@@ -751,8 +751,8 @@ export class MarkerArea {
    */
   public getState(): MarkerAreaState {
     const result: MarkerAreaState = { 
-      width: this.width,
-      height: this.height,
+      width: this.imageWidth,
+      height: this.imageHeight,
       markers: [] 
     };
     this.markers.forEach(marker => result.markers.push(marker.getState()));
