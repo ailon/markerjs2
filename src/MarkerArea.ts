@@ -786,6 +786,11 @@ export class MarkerArea {
         this.markers.push(marker);
       }
     })
+    if (
+      state.width && state.height 
+      && (state.width !== this.imageWidth || state.height !== this.imageHeight)) {
+        this.scaleMarkers(this.imageWidth / state.width, this.imageHeight / state.height);
+    }
   }
 
   private addNewMarker(markerType: typeof MarkerBase): MarkerBase {
