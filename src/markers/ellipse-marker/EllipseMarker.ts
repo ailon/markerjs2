@@ -292,4 +292,16 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     super.restoreState(state);
     this.setSize();
   }
+
+  /**
+   * Scales marker. Used after the image resize.
+   * 
+   * @param scaleX - horizontal scale
+   * @param scaleY - vertical scale
+   */
+  public scale(scaleX: number, scaleY: number): void {
+    super.scale(scaleX, scaleY);
+
+    this.setSize();
+  }
 }
