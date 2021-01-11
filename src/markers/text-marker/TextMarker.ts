@@ -281,11 +281,24 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
     const textScale = this.getTextScale();
     const textPosition = this.getTextPosition(textScale);
+    const rPosition = this.rotatePoint({
+      x: this.left + this.width / 2, 
+      y: this.top + this.height / 2
+    });
+    const textSize = this.textElement.getBBox();
+    const rWH = {
+      x: textSize.width * textScale,
+      y: textSize.height * textScale
+    };
+    rPosition.x -= rWH.x / 2;
+    rPosition.y -= rWH.y / 2;
 
     this.textEditor = document.createElement('div');
     this.textEditor.style.position = 'absolute';
-    this.textEditor.style.top = `${this.top + textPosition.y}px`;
-    this.textEditor.style.left = `${this.left + textPosition.x}px`;
+    // this.textEditor.style.top = `${this.top + textPosition.y}px`;
+    // this.textEditor.style.left = `${this.left + textPosition.x}px`;
+    this.textEditor.style.top = `${rPosition.y}px`;
+    this.textEditor.style.left = `${rPosition.x}px`;
     this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - this.left - textPosition.x}px`;
     this.textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
     this.textEditor.style.fontFamily = this.fontFamily;
