@@ -280,7 +280,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textEditDiv.style.overflow = 'hidden';
 
     const textScale = this.getTextScale();
-    const textPosition = this.getTextPosition(textScale);
+    // const textPosition = this.getTextPosition(textScale);
     const rPosition = this.rotatePoint({
       x: this.left + this.width / 2, 
       y: this.top + this.height / 2
@@ -299,7 +299,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     // this.textEditor.style.left = `${this.left + textPosition.x}px`;
     this.textEditor.style.top = `${rPosition.y}px`;
     this.textEditor.style.left = `${rPosition.x}px`;
-    this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - this.left - textPosition.x}px`;
+    this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - rPosition.x}px`;
     this.textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
     this.textEditor.style.fontFamily = this.fontFamily;
     this.textEditor.style.lineHeight = '1em';
