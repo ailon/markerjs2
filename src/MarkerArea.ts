@@ -668,7 +668,7 @@ export class MarkerArea {
         this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
         this.coverDiv.style.zIndex = '1000';
         this.coverDiv.style.display = 'flex';
-        this.coverDiv.style.overflow = 'auto';
+        // this.coverDiv.style.overflow = 'auto';
       }
     }
     this.targetRoot.appendChild(this.coverDiv);
