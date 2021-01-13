@@ -249,6 +249,7 @@ export class Toolbar {
         'toolbar',
         `
       width: 100%;
+      flex-shrink: 0;
       display: flex;
       flex-direction: row;
       justify-content: space-between;      

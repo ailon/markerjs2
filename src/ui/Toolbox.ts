@@ -35,6 +35,7 @@ export class Toolbox {
         'toolbox',
         `
       width: 100%;
+      flex-shrink: 0;
       display: flex;
       flex-direction: column;
       font-family: sans-serif;

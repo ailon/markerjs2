@@ -653,6 +653,7 @@ export class MarkerArea {
         this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
         this.coverDiv.style.zIndex = '1000';
         this.coverDiv.style.display = 'flex';
+        this.coverDiv.style.overflow = 'auto';
       }
     }
     this.targetRoot.appendChild(this.coverDiv);
@@ -674,11 +675,13 @@ export class MarkerArea {
     this.contentDiv.style.display = 'flex';
     this.contentDiv.style.flexDirection = 'row';
     this.contentDiv.style.flexGrow = '2';
+    this.contentDiv.style.flexShrink = '1';
     this.contentDiv.style.backgroundColor = this.uiStyleSettings.canvasBackgroundColor;
     this.uiDiv.appendChild(this.contentDiv);
 
     this.editorCanvas = document.createElement('div');
     this.editorCanvas.style.flexGrow = '2';
+    this.editorCanvas.style.flexShrink = '1';
     this.editorCanvas.style.position = 'relative';
     this.editorCanvas.style.overflow = 'hidden';
     this.editorCanvas.style.display = 'flex';
