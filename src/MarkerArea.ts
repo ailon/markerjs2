@@ -639,7 +639,7 @@ export class MarkerArea {
         this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
         //this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
-        this.coverDiv.style.zIndex = '1000';
+        this.coverDiv.style.zIndex = '5';
         // flex causes the ui to stretch when toolbox has wider nowrap panels
         //this.coverDiv.style.display = 'flex';
         break;
