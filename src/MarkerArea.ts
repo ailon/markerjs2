@@ -662,7 +662,7 @@ export class MarkerArea {
     this.uiDiv.style.display = 'flex';
     this.uiDiv.style.flexDirection = 'column';
     this.uiDiv.style.flexGrow = '2';
-    this.uiDiv.style.margin = this.settings.displayMode === 'popup' ? '30px' : '0px';
+    this.uiDiv.style.margin = this.settings.displayMode === 'popup' ? `${this.settings.popupMargin}px` : '0px';
     this.uiDiv.style.border = '0px';
     //this.uiDiv.style.backgroundColor = '#ffffff';
     this.coverDiv.appendChild(this.uiDiv);
