@@ -21,7 +21,7 @@ export class Experiments {
     this.markerArea1 = new MarkerArea(target);
     this.markerArea1.addRenderEventListener(this.renderResult);
     this.markerArea1.settings.displayMode = this.displayMode;
-    this.markerArea1.settings.popupMargin = 0;
+    this.markerArea1.settings.popupMargin = 10;
 
     // this.markerArea1.uiStyleSettings.toolbarHeight = 40;
     // if (this.oddLaunch) {

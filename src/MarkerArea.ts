@@ -44,21 +44,21 @@ export type CloseEventHandler = () => void;
 
 /**
  * MarkerArea is the main class of marker.js 2. It controls the behavior and appearance of the library.
- * 
+ *
  * The simplest marker.js 2 usage scenario looks something like this:
- * 
+ *
  * ```typescript
  * import * as markerjs2 from 'markerjs2';
  * // create an instance of MarkerArea and pass the target image reference as a parameter
  * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
- * 
+ *
  * // register an event listener for when user clicks OK/save in the marker.js UI
  * markerArea.addRenderEventListener(dataUrl => {
  *   // we are setting the markup result to replace our original image on the page
  *   // but you can set a different image or upload it to your server
  *   document.getElementById('myimg').src = dataUrl;
  * });
- * 
+ *
  * // finally, call the show() method and marker.js UI opens
  * markerArea.show();
  * ```
@@ -89,14 +89,14 @@ export class MarkerArea {
 
   /**
    * `targetRoot` is used to set an alternative positioning root for the marker.js UI.
-   * 
+   *
    * This is useful in cases when your target image is positioned, say, inside a div with `position: relative;`
-   * 
+   *
    * ```typescript
    * // set targetRoot to a specific div instead of document.body
    * markerArea.targetRoot = document.getElementById('myRootElement');
    * ```
-   * 
+   *
    * @default document.body
    */
   public targetRoot: HTMLElement;
@@ -106,7 +106,7 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get ALL_MARKER_TYPES(): typeof MarkerBase[] { 
+  public get ALL_MARKER_TYPES(): typeof MarkerBase[] {
     return [
       FrameMarker,
       FreehandMarker,
@@ -127,7 +127,7 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get DEFAULT_MARKER_TYPES(): typeof MarkerBase[] { 
+  public get DEFAULT_MARKER_TYPES(): typeof MarkerBase[] {
     return [
       FrameMarker,
       FreehandMarker,
@@ -144,7 +144,7 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get BASIC_MARKER_TYPES(): typeof MarkerBase[] { 
+  public get BASIC_MARKER_TYPES(): typeof MarkerBase[] {
     return [
       FrameMarker,
       FreehandMarker,
@@ -159,11 +159,11 @@ export class MarkerArea {
   /**
    * Gets or sets a list of marker types avaiable to the user in the toolbar.
    * The types can be passed as either type reference or a string type name.
-   * 
+   *
    * ```typescript
    * this.markerArea1.availableMarkerTypes = ['CalloutMarker', ...this.markerArea1.BASIC_MARKER_TYPES];
    * ```
-   * 
+   *
    * @default {@linkcode DEFAULT_MARKER_TYPES}
    */
   public get availableMarkerTypes(): MarkerTypeIdentifier[] {
@@ -224,21 +224,21 @@ export class MarkerArea {
   public renderAtNaturalSize = false;
   /**
    * Type of image for the rendering result. Eg. `image/png` (default) or `image/jpeg`.
-   * 
+   *
    * @default `image/png`
    */
   public renderImageType = 'image/png';
   /**
-   * When rendering engine/format supports it (jpeg, for exmample), 
+   * When rendering engine/format supports it (jpeg, for exmample),
    * sets the rendering quality for the resulting image.
-   * 
+   *
    * In case of `image/jpeg` the value should be between 0 (worst quality) and 1 (best quality).
    */
   public renderImageQuality?: number;
   /**
    * When set to `true`, will render only the marker layer without the original image.
    * This could be useful when you want to non-destructively overlay markers on top of the original image.
-   * 
+   *
    * Note that in order for the markers layer to have a transparent background {@linkcode renderImageType}
    * should be set to a format supporting transparency, such as `image/png`.
    *
@@ -248,18 +248,18 @@ export class MarkerArea {
 
   /**
    * Creates a new MarkerArea for the specified target image.
-   * 
+   *
    * ```typescript
    * // create an instance of MarkerArea and pass the target image reference as a parameter
    * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
    * ```
-   * 
+   *
    * @param target image object to mark up.
    */
   constructor(target: HTMLImageElement) {
     Style.settings = Style.defaultSettings;
     this.uiStyleSettings = Style.settings;
-    
+
     this.target = target;
     this.targetRoot = document.body;
 
@@ -321,7 +321,7 @@ export class MarkerArea {
 
   /**
    * Renders the annotation result.
-   * 
+   *
    * Normally, you should use {@linkcode addRenderEventListener} method to set a listener for the `render` event
    * rather than calling this method directly.
    */
@@ -353,7 +353,7 @@ export class MarkerArea {
 
   /**
    * Adds one or more markers to the toolbar.
-   * 
+   *
    * @param markers - one or more marker types to be added.
    */
   public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
@@ -363,7 +363,7 @@ export class MarkerArea {
   /**
    * Add a `render` event listener which is called when user clicks on the OK/save button
    * in the toolbar.
-   * 
+   *
    * ```typescript
    * // register an event listener for when user clicks OK/save in the marker.js UI
    * markerArea.addRenderEventListener(dataUrl => {
@@ -372,11 +372,11 @@ export class MarkerArea {
    *   document.getElementById('myimg').src = dataUrl;
    * });
    * ```
-   * 
+   *
    * This is where you place your code to save a resulting image and/or MarkerAreaState.
-   * 
+   *
    * @param listener - a method handling rendering results
-   * 
+   *
    * @see {@link MarkerAreaState}
    */
   public addRenderEventListener(listener: RenderEventHandler): void {
@@ -385,7 +385,7 @@ export class MarkerArea {
 
   /**
    * Remove a `render` event handler.
-   * 
+   *
    * @param listener - previously registered `render` event handler.
    */
   public removeRenderEventListener(listener: RenderEventHandler): void {
@@ -400,7 +400,7 @@ export class MarkerArea {
   /**
    * Add a `close` event handler to perform actions in your code after the user
    * clicks on the close button (without saving).
-   * 
+   *
    * @param listener - close event listener
    */
   public addCloseEventListener(listener: CloseEventHandler): void {
@@ -409,7 +409,7 @@ export class MarkerArea {
 
   /**
    * Remove a `close` event handler.
-   * 
+   *
    * @param listener - previously registered `close` event handler.
    */
   public removeCloseEventListener(listener: CloseEventHandler): void {
@@ -422,54 +422,69 @@ export class MarkerArea {
   }
 
   private setupResizeObserver() {
-    this.targetObserver = new ResizeObserver(() => {
-      this.resize(this.target.clientWidth, this.target.clientHeight);
-    });
-    this.targetObserver.observe(this.target);
+    if (this.settings.displayMode === 'inline') {
+      this.targetObserver = new ResizeObserver(() => {
+        this.resize(this.target.clientWidth, this.target.clientHeight);
+      });
+      this.targetObserver.observe(this.target);
+    } else if (this.settings.displayMode === 'popup') {
+      this.targetObserver = new ResizeObserver(() => {
+        const ratio = 1.0 * this.target.clientWidth / this.target.clientHeight;
+        const newWidth = this.editorCanvas.clientWidth / ratio > this.editorCanvas.clientHeight ?
+          this.editorCanvas.clientHeight * ratio : this.editorCanvas.clientWidth;
+        const newHeight = newWidth < this.editorCanvas.clientWidth ?
+          this.editorCanvas.clientHeight : this.editorCanvas.clientWidth / ratio;
+        this.resize(newWidth, newHeight);
+      });
+      this.targetObserver.observe(this.editorCanvas);
+    }
   }
 
   private resize(newWidth: number, newHeight: number) {
-    if (this.settings.displayMode !== 'popup') {
-      const scaleX = newWidth / this.imageWidth;
-      const scaleY = newHeight / this.imageHeight;
+    const scaleX = newWidth / this.imageWidth;
+    const scaleY = newHeight / this.imageHeight;
 
-      this.imageWidth = Math.round(newWidth);
-      this.imageHeight = Math.round(newHeight);
-      this.editingTarget.src = this.target.src;
-      this.editingTarget.width = this.imageWidth;
-      this.editingTarget.height = this.imageHeight;
-      this.editingTarget.style.width = `${this.imageWidth}px`;
-      this.editingTarget.style.height = `${this.imageHeight}px`;
+    this.imageWidth = Math.round(newWidth);
+    this.imageHeight = Math.round(newHeight);
+    this.editingTarget.src = this.target.src;
+    this.editingTarget.width = this.imageWidth;
+    this.editingTarget.height = this.imageHeight;
+    this.editingTarget.style.width = `${this.imageWidth}px`;
+    this.editingTarget.style.height = `${this.imageHeight}px`;
 
-      this.markerImage.setAttribute('width', this.imageWidth.toString());
-      this.markerImage.setAttribute(
-        'height',
+    this.markerImage.setAttribute('width', this.imageWidth.toString());
+    this.markerImage.setAttribute(
+      'height',
+      this.imageHeight.toString()
+    );
+    this.markerImage.setAttribute(
+      'viewBox',
+      '0 0 ' +
+        this.imageWidth.toString() +
+        ' ' +
         this.imageHeight.toString()
-      );
-      this.markerImage.setAttribute(
-        'viewBox',
-        '0 0 ' +
-          this.imageWidth.toString() +
-          ' ' +
-          this.imageHeight.toString()
-      );
+    );
 
-      this.markerImageHolder.style.width = `${this.imageWidth}px`;
-      this.markerImageHolder.style.height = `${this.imageHeight}px`;
+    this.markerImageHolder.style.width = `${this.imageWidth}px`;
+    this.markerImageHolder.style.height = `${this.imageHeight}px`;
 
-      this.overlayContainer.style.width = `${this.imageWidth}px`;
-      this.overlayContainer.style.height = `${this.imageHeight}px`;
+    this.overlayContainer.style.width = `${this.imageWidth}px`;
+    this.overlayContainer.style.height = `${this.imageHeight}px`;
 
+    if (this.settings.displayMode !== 'popup') {
       this.coverDiv.style.width = `${this.imageWidth.toString()}px`;
-
-      if (this.toolbar !== undefined) {
-        this.toolbar.adjustLayout();
-      }
-
-      this.positionLogo();
-
-      this.scaleMarkers(scaleX, scaleY);
+    } else {
+      this.setTopLeft();
+      this.positionMarkerImage();
     }
+
+    if (this.toolbar !== undefined) {
+      this.toolbar.adjustLayout();
+    }
+
+    this.positionLogo();
+
+    this.scaleMarkers(scaleX, scaleY);
   }
 
   private scaleMarkers(scaleX: number, scaleY: number) {
@@ -664,6 +679,7 @@ export class MarkerArea {
     this.uiDiv.style.flexGrow = '2';
     this.uiDiv.style.margin = this.settings.displayMode === 'popup' ? `${this.settings.popupMargin}px` : '0px';
     this.uiDiv.style.border = '0px';
+    // this.uiDiv.style.overflow = 'hidden';
     //this.uiDiv.style.backgroundColor = '#ffffff';
     this.coverDiv.appendChild(this.uiDiv);
 
@@ -677,6 +693,11 @@ export class MarkerArea {
     this.contentDiv.style.flexGrow = '2';
     this.contentDiv.style.flexShrink = '1';
     this.contentDiv.style.backgroundColor = this.uiStyleSettings.canvasBackgroundColor;
+    if (this.settings.displayMode === 'popup') {
+      this.contentDiv.style.maxHeight = `calc(100vh - ${
+        this.settings.popupMargin * 2 + this.uiStyleSettings.toolbarHeight * 2.5}px)`;
+      this.contentDiv.style.maxWidth = `calc(100vw - ${this.settings.popupMargin * 2}px)`;
+    }
     this.uiDiv.appendChild(this.contentDiv);
 
     this.editorCanvas = document.createElement('div');
@@ -754,27 +775,27 @@ export class MarkerArea {
    * to continue annotation next time.
    */
   public getState(): MarkerAreaState {
-    const result: MarkerAreaState = { 
+    const result: MarkerAreaState = {
       width: this.imageWidth,
       height: this.imageHeight,
-      markers: [] 
+      markers: []
     };
     this.markers.forEach(marker => result.markers.push(marker.getState()));
     return result;
   }
-  
+
   /**
    * Restores MarkerArea state to continue previous annotation session.
-   * 
+   *
    * **IMPORTANT**: call `restoreState()` __after__ you've opened the MarkerArea with {@linkcode show}.
-   * 
+   *
    * ```typescript
    * this.markerArea1.show();
    * if (this.currentState) {
    *   this.markerArea1.restoreState(this.currentState);
    * }
    * ```
-   * 
+   *
    * @param state - previously saved state object.
    */
   public restoreState(state: MarkerAreaState): void {
@@ -788,7 +809,7 @@ export class MarkerArea {
       }
     })
     if (
-      state.width && state.height 
+      state.width && state.height
       && (state.width !== this.imageWidth || state.height !== this.imageHeight)) {
         this.scaleMarkers(this.imageWidth / state.width, this.imageHeight / state.height);
     }
