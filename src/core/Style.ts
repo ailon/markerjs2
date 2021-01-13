@@ -18,6 +18,7 @@ export class Style {
    */
   public static get defaultSettings(): IStyleSettings {
     return {
+      canvasBackgroundColor: '#ffffff',
       toolbarBackgroundColor: '#111111',
       toolbarBackgroundHoverColor: '#333333',
       toolbarColor: '#eeeeee',

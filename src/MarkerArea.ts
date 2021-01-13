@@ -663,7 +663,7 @@ export class MarkerArea {
     this.uiDiv.style.flexGrow = '2';
     this.uiDiv.style.margin = this.settings.displayMode === 'popup' ? '30px' : '0px';
     this.uiDiv.style.border = '0px';
-    this.uiDiv.style.backgroundColor = '#ffffff';
+    //this.uiDiv.style.backgroundColor = '#ffffff';
     this.coverDiv.appendChild(this.uiDiv);
 
     this.toolbar = new Toolbar(this.uiDiv, this.settings.displayMode, this._availableMarkerTypes, this.uiStyleSettings);
@@ -674,6 +674,7 @@ export class MarkerArea {
     this.contentDiv.style.display = 'flex';
     this.contentDiv.style.flexDirection = 'row';
     this.contentDiv.style.flexGrow = '2';
+    this.contentDiv.style.backgroundColor = this.uiStyleSettings.canvasBackgroundColor;
     this.uiDiv.appendChild(this.contentDiv);
 
     this.editorCanvas = document.createElement('div');

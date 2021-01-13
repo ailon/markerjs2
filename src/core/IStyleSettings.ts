@@ -3,6 +3,10 @@
  */
 export interface IStyleSettings {
   /**
+   * Background color for the editor canvas when in popup mode.
+   */
+  canvasBackgroundColor?: string;
+  /**
    * Background color of the toolbar block.
    */
   toolbarBackgroundColor?: string;
