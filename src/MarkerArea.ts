@@ -73,6 +73,7 @@ export class MarkerArea {
   private imageHeight: number;
   private left: number;
   private top: number;
+  private windowHeight: number;
 
   private markerImage: SVGSVGElement;
   private markerImageHolder: HTMLDivElement;
@@ -290,6 +291,7 @@ export class MarkerArea {
     this.removeRenderEventListener = this.removeRenderEventListener.bind(this);
     this.clientToLocalCoordinates = this.clientToLocalCoordinates.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
+    this.setWindowHeight = this.setWindowHeight.bind(this);
   }
 
   private open(): void {
@@ -345,6 +347,9 @@ export class MarkerArea {
       }
       if (this.targetObserver) {
         this.targetObserver.unobserve(this.target);
+      }
+      if (this.settings.displayMode === 'popup') {
+        window.removeEventListener('resize', this.setWindowHeight);
       }
       this.closeEventListeners.forEach((listener) => listener());
       this._isOpen = false;
@@ -437,7 +442,12 @@ export class MarkerArea {
         this.resize(newWidth, newHeight);
       });
       this.targetObserver.observe(this.editorCanvas);
+      window.addEventListener('resize', this.setWindowHeight);
     }
+  }
+
+  private setWindowHeight() {
+    this.windowHeight = window.innerHeight;
   }
 
   private resize(newWidth: number, newHeight: number) {
@@ -664,7 +674,7 @@ export class MarkerArea {
         this.coverDiv.style.top = '0px';
         this.coverDiv.style.left = '0px';
         this.coverDiv.style.width = '100vw';
-        this.coverDiv.style.height = '100vh';
+        this.coverDiv.style.height = `${window.innerHeight}px`;
         this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
         this.coverDiv.style.zIndex = '1000';
         this.coverDiv.style.display = 'flex';
@@ -694,8 +704,10 @@ export class MarkerArea {
     this.contentDiv.style.flexShrink = '1';
     this.contentDiv.style.backgroundColor = this.uiStyleSettings.canvasBackgroundColor;
     if (this.settings.displayMode === 'popup') {
-      this.contentDiv.style.maxHeight = `calc(100vh - ${
-        this.settings.popupMargin * 2 + this.uiStyleSettings.toolbarHeight * 2.5}px)`;
+      this.contentDiv.style.maxHeight = `${this.windowHeight -
+        this.settings.popupMargin * 2 - this.uiStyleSettings.toolbarHeight * 3.5}px`;
+      // this.contentDiv.style.maxHeight = `calc(100vh - ${
+      //   this.settings.popupMargin * 2 + this.uiStyleSettings.toolbarHeight * 3.5}px)`;
       this.contentDiv.style.maxWidth = `calc(100vw - ${this.settings.popupMargin * 2}px)`;
     }
     this.uiDiv.appendChild(this.contentDiv);
@@ -940,7 +952,9 @@ export class MarkerArea {
         this.coverDiv.style.top = '0px';
         this.coverDiv.style.left = '0px';
         this.coverDiv.style.width = '100vw';
-        this.coverDiv.style.height = '100vh';
+        this.coverDiv.style.height = `${this.windowHeight}px`;
+        this.contentDiv.style.maxHeight = `${this.windowHeight -
+          this.settings.popupMargin * 2 - this.uiStyleSettings.toolbarHeight * 3.5}px`;
       }
     }
     this.positionMarkerImage();
