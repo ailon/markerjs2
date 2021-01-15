@@ -66,7 +66,7 @@ export class Renderer {
             canvas.height = markerImageCopy.height.baseVal.value;
     
             const data = markerImageCopy.outerHTML;
-    
+
             const ctx = canvas.getContext("2d");
             if (this.markersOnly !== true) { 
                 ctx.drawImage(target, 0, 0, canvas.width, canvas.height);

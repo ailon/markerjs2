@@ -329,11 +329,17 @@ export class MarkerArea {
    */
   public async render(): Promise<string> {
     this.setCurrentMarker();
+    
     const renderer = new Renderer();
     renderer.naturalSize = this.renderAtNaturalSize;
     renderer.imageType = this.renderImageType;
     renderer.imageQuality = this.renderImageQuality;
     renderer.markersOnly = this.renderMarkersOnly;
+
+    // workaround for an issue in Safari where FreeHand marker 
+    // is not rendered on the first try for some reason
+    await renderer.rasterize(this.target, this.markerImage);
+
     return await renderer.rasterize(this.target, this.markerImage);
   }
 
