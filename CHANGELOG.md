@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2021-01-15
+### Added
+- responsiveness in `popup` mode. Target image is now scaled to fit the whole available space for more convenient editing.
+- `popupMargin` setting to control margin between UI and window border in popup mode.
+- `canvasBackgroundColor` setting to control editing canvas in popup mode
+
+### Changed
+- z-index in inline mode to a more modest value for easier integration in various layouts
+
+### Fixed
+- white toolbar/toolbox corners in inline mode.
+- in popup mode when content didn't fit into window toolbars were cut.
+- popup sizing issues in Safari.
+- when resizing marker area was switchted to select mode but toolbar wasn't.
+- momentary flicker when rendering with `renderAtNaturalSize`.
+- free-hand markers weren't rendered in Safari on the first try.
+
 ## [2.1.1] - 2021-01-11
 ### Fixed
 - text editor was placed incorrectly after rotation and movement.
@@ -124,6 +141,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release.
 
+[2.2.0]: https://github.com/ailon/markerjs2/releases/tag/v2.1.0
 [2.1.1]: https://github.com/ailon/markerjs2/releases/tag/v2.1.1
 [2.1.0]: https://github.com/ailon/markerjs2/releases/tag/v2.1.0
 [2.0.0]: https://github.com/ailon/markerjs2/releases/tag/v2.0.0
