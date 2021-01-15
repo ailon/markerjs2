@@ -499,6 +499,7 @@ export class MarkerArea {
 
   private scaleMarkers(scaleX: number, scaleY: number) {
     this.setCurrentMarker();
+    this.toolbar.setSelectMode();
     this.markers.forEach(marker => marker.scale(scaleX, scaleY));
   }
 
