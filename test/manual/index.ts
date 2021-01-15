@@ -41,7 +41,7 @@ export class Experiments {
     // this.markerArea1.availableMarkerTypes = ['CalloutMarker', ...this.markerArea1.BASIC_MARKER_TYPES];
     this.markerArea1.availableMarkerTypes = this.markerArea1.ALL_MARKER_TYPES;
 
-    // this.markerArea1.renderAtNaturalSize = true;
+    this.markerArea1.renderAtNaturalSize = true;
     // this.markerArea1.renderImageType = 'image/jpeg';
     // this.markerArea1.renderImageQuality = 0.2;
     // this.markerArea1.renderMarkersOnly = true;

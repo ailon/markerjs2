@@ -37,16 +37,35 @@ export class Renderer {
         return new Promise<string>((resolve) => {
             const canvas = document.createElement("canvas");
 
+            const markerImageCopy = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'svg'
+            );
+            markerImageCopy.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            markerImageCopy.setAttribute('width', markerImage.width.baseVal.valueAsString);
+            markerImageCopy.setAttribute(
+              'height',
+              markerImage.height.baseVal.valueAsString
+            );
+            markerImageCopy.setAttribute(
+              'viewBox',
+              '0 0 ' +
+                markerImage.viewBox.baseVal.width.toString() +
+                ' ' +
+                markerImage.viewBox.baseVal.height.toString()
+            );            
+            markerImageCopy.innerHTML = markerImage.innerHTML;
+
             if (this.naturalSize === true) {
                 // scale to full image size
-                markerImage.width.baseVal.value = target.naturalWidth;
-                markerImage.height.baseVal.value = target.naturalHeight;
+                markerImageCopy.width.baseVal.value = target.naturalWidth;
+                markerImageCopy.height.baseVal.value = target.naturalHeight;
             }
     
-            canvas.width = markerImage.width.baseVal.value;
-            canvas.height = markerImage.height.baseVal.value;
+            canvas.width = markerImageCopy.width.baseVal.value;
+            canvas.height = markerImageCopy.height.baseVal.value;
     
-            const data = markerImage.outerHTML;
+            const data = markerImageCopy.outerHTML;
     
             const ctx = canvas.getContext("2d");
             if (this.markersOnly !== true) { 
