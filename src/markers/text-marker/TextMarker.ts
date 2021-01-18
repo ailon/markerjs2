@@ -138,6 +138,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textElement = SvgHelper.createText([
       ['fill', this.color],
       ['font-family', this.fontFamily],
+      ['font-size', '16px'],
       ['x', '0'],
       ['y', '0']
     ]);
@@ -300,7 +301,8 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textEditor.style.top = `${rPosition.y}px`;
     this.textEditor.style.left = `${rPosition.x}px`;
     this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - rPosition.x}px`;
-    this.textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
+    // this.textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
+    this.textEditor.style.fontSize = `${Math.max(16 * textScale, 12)}px`;
     this.textEditor.style.fontFamily = this.fontFamily;
     this.textEditor.style.lineHeight = '1em';
     this.textEditor.innerText = this.text;
