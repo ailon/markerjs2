@@ -151,8 +151,10 @@ export class CalloutMarker extends TextMarker {
     if (this.tipMoving) {
       this.tipMoving = false;
     } else {
-      this.setTipPoints();
+      const isCreating = this.state === 'creating';
       super.pointerUp(point);
+      this.setTipPoints(isCreating);
+      this.positionTip();
     }
   }
 
@@ -185,16 +187,16 @@ export class CalloutMarker extends TextMarker {
   }
 
   private getTipPoints(): string {
-    this.setTipPoints();
+    this.setTipPoints(this.state === 'creating');
     return `${this.tipBase1Position.x},${this.tipBase1Position.y
       } ${this.tipBase2Position.x},${this.tipBase2Position.y
       } ${this.tipPosition.x},${this.tipPosition.y}`;
   }
 
-  private setTipPoints() {
+  private setTipPoints(isCreating = false) {
     let offset = Math.min(this.height / 2, 15);
     let baseWidth = this.height / 5;
-    if (this.state === 'creating') {
+    if (isCreating) {
       this.tipPosition = { x: offset + baseWidth / 2, y: this.height + 20 };
     }
 
