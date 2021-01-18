@@ -248,6 +248,19 @@ export class MarkerArea {
   public renderMarkersOnly = false;
 
   /**
+   * When set and {@linkcode renderAtNaturalSize} is `false` sets the width of the rendered image.
+   * 
+   * Both `renderWidth` and `renderHeight` have to be set for this to take effect.
+   */
+  public renderWidth?: number;
+  /**
+   * When set and {@linkcode renderAtNaturalSize} is `false` sets the height of the rendered image.
+   * 
+   * Both `renderWidth` and `renderHeight` have to be set for this to take effect.
+   */
+  public renderHeight?: number;
+
+  /**
    * Creates a new MarkerArea for the specified target image.
    *
    * ```typescript
@@ -335,6 +348,8 @@ export class MarkerArea {
     renderer.imageType = this.renderImageType;
     renderer.imageQuality = this.renderImageQuality;
     renderer.markersOnly = this.renderMarkersOnly;
+    renderer.width = this.renderWidth;
+    renderer.height = this.renderHeight;
 
     // workaround for an issue in Safari where FreeHand marker 
     // is not rendered on the first try for some reason

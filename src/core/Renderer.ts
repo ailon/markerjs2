@@ -24,6 +24,20 @@ export class Renderer {
     public markersOnly = false;
 
     /**
+     * When set and {@linkcode naturalSize} is `false` sets the width of the rendered image.
+     * 
+     * Both `width` and `height` have to be set for this to take effect.
+     */
+    public width?: number;
+    /**
+     * When set and {@linkcode naturalSize} is `false` sets the height of the rendered image.
+     * 
+     * Both `width` and `height` have to be set for this to take effect.
+     */
+    public height?: number;
+
+
+    /**
      * Initiates rendering of the result image and returns a promise which when resolved
      * contains a data URL for the rendered image.
      * 
@@ -60,6 +74,10 @@ export class Renderer {
                 // scale to full image size
                 markerImageCopy.width.baseVal.value = target.naturalWidth;
                 markerImageCopy.height.baseVal.value = target.naturalHeight;
+            } else if (this.width !== undefined && this.height !== undefined) {
+                // scale to specific dimensions
+                markerImageCopy.width.baseVal.value = this.width;
+                markerImageCopy.height.baseVal.value = this.height;
             }
     
             canvas.width = markerImageCopy.width.baseVal.value;
