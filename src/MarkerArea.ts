@@ -21,6 +21,7 @@ import { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
 import { IStyleSettings } from './core/IStyleSettings';
 import { MeasurementMarker } from './markers/measurement-marker/MeasurementMarker';
 import { IPoint } from './core/IPoint';
+import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 
 /**
  * @ignore
@@ -113,6 +114,7 @@ export class MarkerArea {
       FreehandMarker,
       ArrowMarker,
       TextMarker,
+      EllipseFrameMarker,
       EllipseMarker,
       HighlightMarker,
       CalloutMarker,
