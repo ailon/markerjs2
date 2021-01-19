@@ -67,6 +67,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected textEditor: HTMLDivElement;
 
+  private isMoved = false;
+  private pointerDownPoint: IPoint;
+  private pointerDownTimestamp: number;
+
   /**
    * Creates a new marker.
    *
@@ -162,6 +166,11 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
+
+    this.isMoved = false;
+    this.pointerDownPoint = point;
+    this.pointerDownTimestamp = Date.now();
+
     if (this.state === 'new') {
       this.createVisual();
       this.moveVisual(point);
@@ -227,6 +236,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   public manipulate(point: IPoint): void {
     super.manipulate(point);
+    if (this.pointerDownPoint !== undefined) {
+      this.isMoved = Math.abs(point.x - this.pointerDownPoint.x) > 5 || 
+        Math.abs(point.y - this.pointerDownPoint.y) > 5;
+    }
   }
 
   /**
@@ -235,6 +248,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected resize(point: IPoint): void {
     super.resize(point);
+    this.isMoved = true;
     this.setSize();
     this.sizeText();
   }
@@ -263,9 +277,11 @@ export class TextMarker extends RectangularBoxMarkerBase {
     const inState = this.state;
     super.pointerUp(point);
     this.setSize();
-    if (inState === 'creating') {
+    if (inState === 'creating' || 
+      (!this.isMoved && (Date.now() - this.pointerDownTimestamp) > 500)) {
       this.showTextEditor();
     }
+    this.pointerDownPoint = undefined;
   }
 
   private showTextEditor() {
@@ -325,10 +341,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textEditDiv.appendChild(this.textEditor);
     this.overlayContainer.appendChild(this.textEditDiv);
 
+    this.hideVisual();
+
     this.textEditor.focus();
     document.execCommand('selectAll');
-
-    this.hideVisual();
   }
 
   private textEditDivClicked(text: string) {
