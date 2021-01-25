@@ -34,6 +34,7 @@ export { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 export { CalloutMarkerState } from './markers/callout-marker/CalloutMarkerState';
 export { CoverMarker } from './markers/cover-marker/CoverMarker';
 export { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
+export { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 export { FrameMarker } from './markers/frame-marker/FrameMarker';
 export { FreehandMarker } from './markers/freehand-marker/FreehandMarker';
 export { FreehandMarkerState } from './markers/freehand-marker/FreehandMarkerState';
