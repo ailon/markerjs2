@@ -9,6 +9,29 @@
     document.addEventListener("DOMContentLoaded", function () {
       experiments = new markerjs2.Experiments();
     });    
+
+    class ComponentImage extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({mode: 'open'})
+      }
+      connectedCallback() {
+        const img = document.createElement('img');
+        img.src = 'images/landscape.jpg';
+        img.style.maxWidth = '50%';
+        img.className = 'img';
+        img.addEventListener('click', () => this.showMarkerArea(img));
+        this.shadowRoot.appendChild(img);
+      }
+      showMarkerArea(target) {
+        const markerArea = new markerjs2.MarkerArea(target);
+        markerArea.targetRoot = this.shadowRoot;
+        markerjs2.Style.styleSheetRoot = this.shadowRoot;
+        markerArea.show();
+      }
+    }
+
+    customElements.define('component-image', ComponentImage);
   </script>
   <style>
     * {
@@ -55,7 +78,7 @@
 </head>
 <body>
   <div style="display: flex; flex-direction: column; align-items: center;">
-    <img src="images/portrait.jpg" style="max-width: 50%;" id="testImage1" onclick="experiments.openMarkerArea(document.getElementById('testImage1'))" />
+    <img src="images/portrait.jpg" class="img" style="max-width: 50%;" id="testImage1" onclick="experiments.openMarkerArea(document.getElementById('testImage1'))" />
     <br />
     <select onchange="experiments.setDisplayMode(this.value)">
       <option value="inline">inline</option>
@@ -66,6 +89,8 @@
     <img id="resultImage1" onclick="experiments.openMarkerArea(this)"/>
 
     <button onclick="experiments.closeMarkerArea()">close</button>
+
+    <!-- <component-image></component-image> -->
   </div>
 </body>
 </html>
