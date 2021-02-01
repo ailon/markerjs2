@@ -33,7 +33,7 @@ export class Style {
    * you can't use marker.js 2 in both main and Shadow DOM
    * on the same page.
    */
-  public static styleSheetRoot: HTMLElement = document.head;
+  public static styleSheetRoot: HTMLElement;
 
   /**
    * Returns default UI styles.
@@ -96,7 +96,7 @@ export class Style {
 
   private static addStyleSheet() {
     Style.styleSheet = document.createElement('style');
-    Style.styleSheetRoot.appendChild(Style.styleSheet);
+    (Style.styleSheetRoot ?? document.head).appendChild(Style.styleSheet);
 
     // add global rules
     Style.addRule(new StyleRule(`.${Style.CLASS_PREFIX} h3`, 'font-family: sans-serif'));
@@ -130,7 +130,7 @@ export class Style {
 
   public static removeStyleSheet(): void {
     if (Style.styleSheet) {
-      Style.styleSheetRoot.removeChild(Style.styleSheet);
+      (Style.styleSheetRoot ?? document.head).removeChild(Style.styleSheet);
       Style.styleSheet = undefined;
     }
   }
