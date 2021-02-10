@@ -92,10 +92,18 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     return this.top + this.height / 2;
   }
 
+  private _visual: SVGGraphicsElement;
   /**
    * Container for the marker's visual.
    */
-  protected visual: SVGGraphicsElement;
+  protected get visual(): SVGGraphicsElement {
+    return this._visual;
+  }
+  protected set visual(value: SVGGraphicsElement) {
+    this._visual = value;
+    const translate = SvgHelper.createTransform();
+    this._visual.transform.baseVal.appendItem(translate);
+  }
 
   /**
    * Container for the marker's editing controls.

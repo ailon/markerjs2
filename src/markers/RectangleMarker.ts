@@ -78,8 +78,6 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
       ['stroke-dasharray', this.strokeDasharray],
       ['opacity', this.opacity.toString()]
     ]);
-    const translate = SvgHelper.createTransform();
-    this.visual.transform.baseVal.appendItem(translate);
     this.addMarkerVisualToContainer(this.visual);
   }
 

@@ -151,9 +151,6 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
     this.visual.appendChild(this.textElement);
 
-    const translate = SvgHelper.createTransform();
-    this.visual.transform.baseVal.appendItem(translate);
-
     this.addMarkerVisualToContainer(this.visual);
     this.renderText();
   }
