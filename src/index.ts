@@ -7,6 +7,7 @@ export { Style, StyleClass } from './core/Style';
 export { Settings, ColorSet, DisplayMode } from './core/Settings';
 export { IStyleSettings } from './core/IStyleSettings';
 export { ITransformMatrix, TransformMatrix } from './core/TransformMatrix';
+export { IPoint } from './core/IPoint';
 
 export { ToolboxPanel } from './ui/ToolboxPanel';
 export { ArrowType, ArrowTypeChangeHandler, ArrowTypePanel } from './ui/toolbox-panels/ArrowTypePanel';
