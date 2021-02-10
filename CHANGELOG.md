@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.3] - 2021-02-10
+### Fixed
+- `IPoint` wasn't exported.
+
+### Changed
+- internal refactoring of `RectangularBoxMarkerBase` and its descendants.
+
 ## [2.3.2] - 2021-02-01
 ### Fixed
 - server-side builds failed due to static `Style.styleSheetRoot` defaulting to document.head
@@ -166,6 +173,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release.
 
+[2.3.3]: https://github.com/ailon/markerjs2/releases/tag/v2.3.3
 [2.3.2]: https://github.com/ailon/markerjs2/releases/tag/v2.3.2
 [2.3.1]: https://github.com/ailon/markerjs2/releases/tag/v2.3.1
 [2.3.0]: https://github.com/ailon/markerjs2/releases/tag/v2.3.0
