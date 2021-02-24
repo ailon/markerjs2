@@ -168,6 +168,9 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
       if (this.drawing) {
         this.canvasContext.closePath();
         this.drawing = false;
+        if (this.globalSettings.newFreehandMarkerOnPointerUp) {
+          this.finishCreation();
+        }
       }
     } else {
       super.pointerUp(point);

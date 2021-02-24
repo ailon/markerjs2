@@ -307,6 +307,7 @@ export class MarkerArea {
     this.clientToLocalCoordinates = this.clientToLocalCoordinates.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
     this.setWindowHeight = this.setWindowHeight.bind(this);
+    this.removeMarker = this.removeMarker.bind(this);
   }
 
   private open(): void {
@@ -766,6 +767,14 @@ export class MarkerArea {
     this.targetRoot.removeChild(this.coverDiv);
   }
 
+  private removeMarker(marker: MarkerBase) {
+    this.markerImage.removeChild(marker.container);
+    if (this.markers.indexOf(marker) > -1) {
+      this.markers.splice(this.markers.indexOf(marker), 1);
+    }
+    marker.dispose();
+}
+
   private toolbarButtonClicked(
     buttonType: ToolbarButtonType,
     value?: typeof MarkerBase | string
@@ -777,15 +786,21 @@ export class MarkerArea {
         case 'select': {
           this.mode = 'select';
           if (this.currentMarker !== undefined) {
-            this.currentMarker.select();
+            if (this.currentMarker.state !== 'new') {
+              this.currentMarker.select();
+            } else {
+              this.removeMarker(this.currentMarker);
+              this.setCurrentMarker();
+              this.markerImage.style.cursor = 'default';
+            }
           }
           break;
         }
         case 'delete': {
           if (this.currentMarker !== undefined) {
-            this.currentMarker.dispose();
-            this.markerImage.removeChild(this.currentMarker.container);
-            this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+            this.removeMarker(this.currentMarker);
+            this.setCurrentMarker();
+            this.markerImage.style.cursor = 'default';
           }
           break;
         }
@@ -875,9 +890,14 @@ export class MarkerArea {
   private markerCreated(marker: MarkerBase) {
     this.mode = 'select';
     this.markerImage.style.cursor = 'default';
-    this.toolbar.setSelectMode();
     this.markers.push(marker);
     this.setCurrentMarker(marker);
+    if (marker instanceof FreehandMarker && this.settings.newFreehandMarkerOnPointerUp) {
+      this.markers.push(marker);
+      this.createNewMarker(FreehandMarker);
+    } else {
+      this.toolbar.setSelectMode();
+    }
   }
 
   private setCurrentMarker(marker?: MarkerBase) {
