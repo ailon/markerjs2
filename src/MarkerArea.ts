@@ -296,6 +296,7 @@ export class MarkerArea {
     this.onDblClick = this.onDblClick.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
     this.overrideOverflow = this.overrideOverflow.bind(this);
     this.restoreOverflow = this.restoreOverflow.bind(this);
     this.close = this.close.bind(this);
@@ -604,7 +605,8 @@ export class MarkerArea {
     this.markerImage.addEventListener('dblclick', this.onDblClick);
     window.addEventListener('pointermove', this.onPointerMove);
     window.addEventListener('pointerup', this.onPointerUp);
-    window.addEventListener('resize', this.onWindowResize)
+    window.addEventListener('resize', this.onWindowResize);
+    window.addEventListener('keyup', this.onKeyUp);
   }
 
   /**
@@ -972,6 +974,15 @@ export class MarkerArea {
     }
     this.isDragging = false;
   }
+
+  private onKeyUp(ev: KeyboardEvent) {
+    if (this.currentMarker !== undefined && (ev.key === 'Delete' || ev.key === 'Backspace')) {
+      this.removeMarker(this.currentMarker);
+      this.setCurrentMarker();
+      this.markerImage.style.cursor = 'default';
+    }
+  }
+
 
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
