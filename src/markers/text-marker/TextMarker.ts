@@ -331,6 +331,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
         this.textEditor.style.fontSize = `${Math.max(fontSize, 0.9)}em`;
       }
     })
+    this.textEditor.addEventListener('keyup', (ev) => {
+      ev.cancelBubble = true;
+    });
 
     this.textEditDiv.addEventListener('pointerup', () => {
       this.textEditDivClicked(this.textEditor.innerText);
