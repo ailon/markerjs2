@@ -282,6 +282,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
   }
 
   private showTextEditor() {
+    this._state = 'edit';
     this.overlayContainer.innerHTML = '';
 
     this.textEditDiv = document.createElement('div');
@@ -355,6 +356,16 @@ export class TextMarker extends RectangularBoxMarkerBase {
   }
 
   /**
+   * Deselects this marker, renders text (if necessary), and hides selected marker UI.
+   */
+  public deselect(): void {
+    if (this.state === 'edit') {
+      this.textEditDivClicked(this.textEditor.innerText);
+    }
+    super.deselect();
+  }
+  
+  /**
    * Opens text editor on double-click.
    * @param point 
    * @param target 
@@ -401,6 +412,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
    * Shows marker visual.
    */
   protected showVisual(): void {
+    if (this.state === 'edit') {
+      this._state = 'select';
+    }
     this.textElement.style.display = '';
     this.showControlBox();
   }
