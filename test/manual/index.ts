@@ -28,6 +28,11 @@ export class Experiments {
     // }
     // this.oddLaunch = !this.oddLaunch;
 
+    this.markerArea1.uiStyleSettings.selectButtonColor = 'lightblue';
+    this.markerArea1.uiStyleSettings.deleteButtonColor = 'red';
+    this.markerArea1.uiStyleSettings.okButtonColor = 'green';
+    this.markerArea1.uiStyleSettings.closeButtonColor = 'yellow';
+    
     // this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
     // this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';
     // this.markerArea1.uiStyleSettings.toolbarActiveButtonStyleColorsClassName = 'toolbar-active-button';

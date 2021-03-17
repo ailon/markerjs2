@@ -31,6 +31,22 @@ export interface IStyleSettings {
    */
   toolboxAccentColor?: string;
   /**
+   * Custom icon color for the select (pointer) toolbar button
+   */
+  selectButtonColor?: string;
+  /**
+   * Custom icon color for the delete toolbar button
+   */
+  deleteButtonColor?: string;
+  /**
+   * Custom icon color for the OK (render) toolbar button
+   */
+  okButtonColor?: string;
+  /**
+   * Custom icon color for the close (cancel) toolbar button
+   */
+  closeButtonColor?: string;
+  /**
    * CSS class name defining the visual style of the toolbar block.
    * 
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.

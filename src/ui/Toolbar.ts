@@ -239,6 +239,21 @@ export class Toolbar {
     actionButton.addEventListener('click', () => {
       this.actionToolbarButtonClicked(actionButton, value);
     });
+    switch(value) {
+      case 'select':
+        actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
+        break;
+      case 'delete':
+        actionButton.style.fill = this.uiStyleSettings.deleteButtonColor;
+        break;
+      case 'render':
+        actionButton.style.fill = this.uiStyleSettings.okButtonColor;
+        break;
+      case 'close':
+        actionButton.style.fill = this.uiStyleSettings.closeButtonColor;
+        break;
+    }
+
     container.appendChild(actionButton);
     this.buttons.push(actionButton);
   }
