@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2021-03-17
+### Added
+- UI-less APIs. Create and delete markers from code, hide toolbar and/or toolbox.
+- support for customizing icon color in action buttons 
+(see IStyleSettings.selectButtonColor, deleteButtonColor, okButtonColor, closeButtonColor)
+
+### Changed
+- touch behavior to pass multi-touch events to the browser (this way pinch-zoom 
+of the whole page (and other events) are handled by the browser as expected).
+
 ## [2.4.1] - 2021-03-05
 ### Fixed
 - hitting delete/backspace while editing text deleted text/callout markers
@@ -183,6 +193,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release.
 
+[2.5.0]: https://github.com/ailon/markerjs2/releases/tag/v2.5.0
 [2.4.1]: https://github.com/ailon/markerjs2/releases/tag/v2.4.1
 [2.4.0]: https://github.com/ailon/markerjs2/releases/tag/v2.4.0
 [2.3.3]: https://github.com/ailon/markerjs2/releases/tag/v2.3.3
