@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Activator, MarkerArea } from '../../src';
+import { Activator, FrameMarker, MarkerArea } from '../../src';
 import { DisplayMode } from '../../src/core/Settings';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
 
@@ -75,4 +75,36 @@ export class Experiments {
       this.markerArea1.close();
     }
   }
+
+  public addFrameMarker(): void {
+    if (this.markerArea1) {
+      this.markerArea1.createNewMarker(FrameMarker);
+    }
+  }
+  public deleteCurrentMarker(): void {
+    if (this.markerArea1) {
+      this.markerArea1.deleteSelectedMarker();
+    }
+  }
+  public renderAndClose(): void {
+    if (this.markerArea1) {
+      this.markerArea1.startRenderAndClose();
+    }
+  }
+
+  public openNoUI(target: HTMLImageElement): void {
+    this.markerArea1 = new MarkerArea(target);
+    this.markerArea1.addRenderEventListener(this.renderResult);
+    this.markerArea1.settings.displayMode = this.displayMode;
+
+    // this.markerArea1.uiStyleSettings.toolbarHeight = 0;
+    this.markerArea1.uiStyleSettings.hideToolbar = true;
+    this.markerArea1.uiStyleSettings.hideToolbox = true;
+
+    this.markerArea1.show();
+    if (this.currentState) {
+      this.markerArea1.restoreState(this.currentState);
+    }
+  }
+
 }

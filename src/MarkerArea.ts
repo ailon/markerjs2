@@ -292,6 +292,7 @@ export class MarkerArea {
     this.removeRenderEventListener = this.removeRenderEventListener.bind(this);
     this.clientToLocalCoordinates = this.clientToLocalCoordinates.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
+    this.deleteSelectedMarker = this.deleteSelectedMarker.bind(this);
   }
 
   private open(): void {
@@ -427,10 +428,12 @@ export class MarkerArea {
   }
 
   private setupResizeObserver() {
-    this.targetObserver = new ResizeObserver(() => {
-      this.resize(this.target.clientWidth, this.target.clientHeight);
-    });
-    this.targetObserver.observe(this.target);
+    if (this.settings.displayMode === 'inline') {
+      this.targetObserver = new ResizeObserver(() => {
+        this.resize(this.target.clientWidth, this.target.clientHeight);
+      });
+      this.targetObserver.observe(this.target);
+    }
   }
 
   private resize(newWidth: number, newHeight: number) {
@@ -678,7 +681,7 @@ export class MarkerArea {
 
     this.toolbar = new Toolbar(this.uiDiv, this.settings.displayMode, this._availableMarkerTypes, this.uiStyleSettings);
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
-    this.toolbar.show();
+    this.toolbar.show(this.uiStyleSettings.hideToolbar ? 'hidden' : 'visible');
 
     this.contentDiv = document.createElement('div');
     this.contentDiv.style.display = 'flex';
@@ -702,7 +705,7 @@ export class MarkerArea {
     this.editorCanvas.appendChild(this.editingTarget);
 
     this.toolbox = new Toolbox(this.uiDiv, this.settings.displayMode, this.uiStyleSettings);
-    this.toolbox.show();
+    this.toolbox.show(this.uiStyleSettings.hideToolbox ? 'hidden' : 'visible');
   }
 
   private closeUI() {
@@ -729,11 +732,7 @@ export class MarkerArea {
           break;
         }
         case 'delete': {
-          if (this.currentMarker !== undefined) {
-            this.currentMarker.dispose();
-            this.markerImage.removeChild(this.currentMarker.container);
-            this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
-          }
+          this.deleteSelectedMarker();
           break;
         }
         case 'close': {
@@ -741,14 +740,30 @@ export class MarkerArea {
           break;
         }
         case 'render': {
-          this.renderClicked();
+          this.startRenderAndClose();
           break;
         }
       }
     }
   }
 
-  private async renderClicked() {
+  /**
+   * Removes currently selected marker.
+   */
+  public deleteSelectedMarker(): void {
+    if (this.currentMarker !== undefined) {
+      this.currentMarker.dispose();
+      this.markerImage.removeChild(this.currentMarker.container);
+      this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+    }
+  }
+
+  /**
+   * Initiates markup rendering.
+   * 
+   * Get results by adding a render event listener via {@linkcode addRenderEventListener}.
+   */
+  public async startRenderAndClose(): Promise<void> {
     const result = await this.render();
     const state = this.getState();
     this.renderEventListeners.forEach((listener) => listener(result, state));
@@ -806,7 +821,21 @@ export class MarkerArea {
     );
   }
 
-  private createNewMarker(markerType: typeof MarkerBase) {
+  /**
+   * Initiate new marker creation.
+   * 
+   * marker.js switches to marker creation mode for the marker type specified
+   * and users can draw a new marker like they would by pressing a corresponding
+   * toolbar button.
+   * 
+   * This example initiates creation of a `FrameMarker`:
+   * ```typescript
+   * this.markerArea1.createNewMarker(FrameMarker);
+   * ```
+   * 
+   * @param markerType 
+   */
+  public createNewMarker(markerType: typeof MarkerBase): void {
     this.setCurrentMarker();
     this.currentMarker = this.addNewMarker(markerType);
     this.currentMarker.onMarkerCreated = this.markerCreated;

@@ -133,8 +133,9 @@ export class Toolbox {
   /**
    * Creates and displays the main toolbox UI.
    */
-  public show(): void {
+  public show(visiblity: string): void {
     this.uiContainer = document.createElement('div');
+    this.uiContainer.style.visibility = visiblity;
     this.uiContainer.className = `${this.toolboxStyleClass.name} ${
       this.uiStyleSettings.toolboxStyleColorsClassName ?? this.toolboxStyleColorsClass.name}`;
 

@@ -83,8 +83,9 @@ export class Toolbar {
   /**
    * Creates and displays the toolbar UI.
    */
-  public show(): void {
+  public show(visiblity: string): void {
     this.uiContainer = document.createElement('div');
+    this.uiContainer.style.visibility = visiblity;
     this.uiContainer.className = `${this.toolbarStyleClass.name} ${Style.fadeInAnimationClassName} ${
       this.uiStyleSettings.toolbarStyleColorsClassName ? 
       this.uiStyleSettings.toolbarStyleColorsClassName : this.toolbarStyleColorsClass.name}`;

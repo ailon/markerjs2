@@ -19,6 +19,14 @@ export interface IStyleSettings {
    */
   toolbarHeight?: number;
   /**
+   * If set to true, the toolbar is hidden.
+   */
+  hideToolbar?: boolean;
+  /**
+   * If set to true, the toolbox is hidden.
+   */
+  hideToolbox?: boolean;
+  /**
    * Background color of the toolbox (property panel) block.
    */
   toolboxBackgroundColor?: string;

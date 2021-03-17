@@ -62,6 +62,13 @@
     <img id="resultImage1" onclick="experiments.openMarkerArea(this)"/>
 
     <button onclick="experiments.closeMarkerArea()">close</button>
+
+    <div style="margin-top: 30px;">
+      <button onclick="experiments.openNoUI(document.getElementById('testImage1'))">open UIless</button>
+      <button onclick="experiments.addFrameMarker()">add frame</button>
+      <button onclick="experiments.deleteCurrentMarker()">delete current marker</button>
+      <button onclick="experiments.renderAndClose()">render</button>
+    </div>
   </div>
 </body>
 </html>
