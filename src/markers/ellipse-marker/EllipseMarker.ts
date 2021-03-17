@@ -49,11 +49,11 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
    */
   protected opacity = 1;
 
-  private strokePanel: ColorPickerPanel;
-  private fillPanel: ColorPickerPanel;
-  private strokeWidthPanel: LineWidthPanel;
-  private strokeStylePanel: LineStylePanel;
-  private opacityPanel: OpacityPanel;
+  protected strokePanel: ColorPickerPanel;
+  protected fillPanel: ColorPickerPanel;
+  protected strokeWidthPanel: LineWidthPanel;
+  protected strokeStylePanel: LineStylePanel;
+  protected opacityPanel: OpacityPanel;
 
   /**
    * Creates a new marker.
@@ -138,8 +138,6 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
       ['stroke-dasharray', this.strokeDasharray],
       ['opacity', this.opacity.toString()]
     ]);
-    const translate = SvgHelper.createTransform();
-    this.visual.transform.baseVal.appendItem(translate);
     this.addMarkerVisualToContainer(this.visual);
   }
 
@@ -290,6 +288,18 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
 
     this.createVisual();
     super.restoreState(state);
+    this.setSize();
+  }
+
+  /**
+   * Scales marker. Used after the image resize.
+   * 
+   * @param scaleX - horizontal scale
+   * @param scaleY - vertical scale
+   */
+  public scale(scaleX: number, scaleY: number): void {
+    super.scale(scaleX, scaleY);
+
     this.setSize();
   }
 }

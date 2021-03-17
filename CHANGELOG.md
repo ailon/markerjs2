@@ -4,6 +4,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.1] - 2021-03-05
+### Fixed
+- hitting delete/backspace while editing text deleted text/callout markers
+- text markers were not rendered when toolbar was clicked while editing text
+
+## [2.4.0] - 2021-02-24
+### Added
+- `newFreehandMarkerOnPointerUp` setting to create a new free-hand marker one every pointer up event.
+- deleting markers with Delete or Backspace keys on a keyboard.
+
+## [2.3.3] - 2021-02-10
+### Fixed
+- `IPoint` wasn't exported.
+
+### Changed
+- internal refactoring of `RectangularBoxMarkerBase` and its descendants.
+
+## [2.3.2] - 2021-02-01
+### Fixed
+- server-side builds failed due to static `Style.styleSheetRoot` defaulting to document.head
+
+## [2.3.1] - 2021-01-25
+### Added
+- `Style.styleSheetRoot` property to support Shadow DOM scenarios. Defaults to document.head.
+
+### Fixed
+- fix EllipseFrameMarker wasn't exported.
+
+## [2.3.0] - 2021-01-19
+### Added
+- EllipseFrameMarker - unfilled ellipse.
+- renderWidth/Height to set specific rendering dimensions.
+- text editing on long-press (TextMarker, CalloutMarker).
+
+### Changed
+- ellipse marker icon to a filled one for consistency.
+
+### Fixed
+- font-size setting on parent elements (eg. body) was affecting UI and renders.
+- default-size callout marker was created with wrongly positioned tip.
+- text wasn't editable on iOS devices (use long-press to edit).
+
+## [2.2.0] - 2021-01-15
+### Added
+- responsiveness in `popup` mode. Target image is now scaled to fit the whole available space for more convenient editing.
+- `popupMargin` setting to control margin between UI and window border in popup mode.
+- `canvasBackgroundColor` setting to control editing canvas in popup mode
+
+### Changed
+- z-index in inline mode to a more modest value for easier integration in various layouts
+
+### Fixed
+- white toolbar/toolbox corners in inline mode.
+- in popup mode when content didn't fit into window toolbars were cut.
+- popup sizing issues in Safari.
+- when resizing marker area was switchted to select mode but toolbar wasn't.
+- momentary flicker when rendering with `renderAtNaturalSize`.
+- free-hand markers weren't rendered in Safari on the first try.
+
+## [2.1.1] - 2021-01-11
+### Fixed
+- text editor was placed incorrectly after rotation and movement.
+- fix longer single words caused text editor to go outside bounds
+
+## [2.1.0] - 2021-01-08
+### Added
+- responsiveness while editing the markers and underlying image size changes.
+- scaling of markers when opening previously saved markup of differing dimensions.
+
 ## [2.0.0] - 2021-01-05
 ### Changed
 - promoted RC7 to final 2.0
@@ -114,6 +183,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release.
 
+[2.4.1]: https://github.com/ailon/markerjs2/releases/tag/v2.4.1
+[2.4.0]: https://github.com/ailon/markerjs2/releases/tag/v2.4.0
+[2.3.3]: https://github.com/ailon/markerjs2/releases/tag/v2.3.3
+[2.3.2]: https://github.com/ailon/markerjs2/releases/tag/v2.3.2
+[2.3.1]: https://github.com/ailon/markerjs2/releases/tag/v2.3.1
+[2.3.0]: https://github.com/ailon/markerjs2/releases/tag/v2.3.0
+[2.2.0]: https://github.com/ailon/markerjs2/releases/tag/v2.2.0
+[2.1.1]: https://github.com/ailon/markerjs2/releases/tag/v2.1.1
+[2.1.0]: https://github.com/ailon/markerjs2/releases/tag/v2.1.0
 [2.0.0]: https://github.com/ailon/markerjs2/releases/tag/v2.0.0
 [2.0.0-rc.7]: https://github.com/ailon/markerjs2/releases/tag/v2.0.0-rc.7
 [2.0.0-rc.6]: https://github.com/ailon/markerjs2/releases/tag/v2.0.0-rc.6

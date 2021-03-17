@@ -1,7 +1,7 @@
 /**
  * Represents marker's state (status) in time.
  */
-export type MarkerState = 'new' | 'creating' | 'select' | 'move' | 'resize' | 'rotate';
+export type MarkerState = 'new' | 'creating' | 'select' | 'move' | 'resize' | 'rotate' | 'edit';
 
 /**
  * Represents marker's state used to save and restore state continue annotation in the future.

@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Activator, FrameMarker, MarkerArea } from '../../src';
+import { Activator, FrameMarker, MarkerArea, Style } from '../../src';
 import { DisplayMode } from '../../src/core/Settings';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
 
@@ -19,8 +19,12 @@ export class Experiments {
 
   public openMarkerArea(target: HTMLImageElement): void {
     this.markerArea1 = new MarkerArea(target);
+    Style.styleSheetRoot = document.head;
     this.markerArea1.addRenderEventListener(this.renderResult);
     this.markerArea1.settings.displayMode = this.displayMode;
+    this.markerArea1.settings.popupMargin = 10;
+    
+    // this.markerArea1.settings.newFreehandMarkerOnPointerUp = true;
 
     // this.markerArea1.uiStyleSettings.toolbarHeight = 40;
     // if (this.oddLaunch) {
@@ -45,7 +49,9 @@ export class Experiments {
     // this.markerArea1.availableMarkerTypes = ['CalloutMarker', ...this.markerArea1.BASIC_MARKER_TYPES];
     this.markerArea1.availableMarkerTypes = this.markerArea1.ALL_MARKER_TYPES;
 
-    // this.markerArea1.renderAtNaturalSize = true;
+    this.markerArea1.renderWidth = 1000;
+    this.markerArea1.renderHeight = 400;
+    this.markerArea1.renderAtNaturalSize = true;
     // this.markerArea1.renderImageType = 'image/jpeg';
     // this.markerArea1.renderImageQuality = 0.2;
     // this.markerArea1.renderMarkersOnly = true;

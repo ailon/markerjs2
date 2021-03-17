@@ -7,6 +7,7 @@ export { Style, StyleClass } from './core/Style';
 export { Settings, ColorSet, DisplayMode } from './core/Settings';
 export { IStyleSettings } from './core/IStyleSettings';
 export { ITransformMatrix, TransformMatrix } from './core/TransformMatrix';
+export { IPoint } from './core/IPoint';
 
 export { ToolboxPanel } from './ui/ToolboxPanel';
 export { ArrowType, ArrowTypeChangeHandler, ArrowTypePanel } from './ui/toolbox-panels/ArrowTypePanel';
@@ -34,6 +35,7 @@ export { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 export { CalloutMarkerState } from './markers/callout-marker/CalloutMarkerState';
 export { CoverMarker } from './markers/cover-marker/CoverMarker';
 export { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
+export { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 export { FrameMarker } from './markers/frame-marker/FrameMarker';
 export { FreehandMarker } from './markers/freehand-marker/FreehandMarker';
 export { FreehandMarkerState } from './markers/freehand-marker/FreehandMarkerState';

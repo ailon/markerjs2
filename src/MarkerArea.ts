@@ -21,6 +21,7 @@ import { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
 import { IStyleSettings } from './core/IStyleSettings';
 import { MeasurementMarker } from './markers/measurement-marker/MeasurementMarker';
 import { IPoint } from './core/IPoint';
+import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 
 /**
  * @ignore
@@ -44,21 +45,21 @@ export type CloseEventHandler = () => void;
 
 /**
  * MarkerArea is the main class of marker.js 2. It controls the behavior and appearance of the library.
- * 
+ *
  * The simplest marker.js 2 usage scenario looks something like this:
- * 
+ *
  * ```typescript
  * import * as markerjs2 from 'markerjs2';
  * // create an instance of MarkerArea and pass the target image reference as a parameter
  * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
- * 
+ *
  * // register an event listener for when user clicks OK/save in the marker.js UI
  * markerArea.addRenderEventListener(dataUrl => {
  *   // we are setting the markup result to replace our original image on the page
  *   // but you can set a different image or upload it to your server
  *   document.getElementById('myimg').src = dataUrl;
  * });
- * 
+ *
  * // finally, call the show() method and marker.js UI opens
  * markerArea.show();
  * ```
@@ -73,6 +74,7 @@ export class MarkerArea {
   private imageHeight: number;
   private left: number;
   private top: number;
+  private windowHeight: number;
 
   private markerImage: SVGSVGElement;
   private markerImageHolder: HTMLDivElement;
@@ -91,14 +93,14 @@ export class MarkerArea {
 
   /**
    * `targetRoot` is used to set an alternative positioning root for the marker.js UI.
-   * 
+   *
    * This is useful in cases when your target image is positioned, say, inside a div with `position: relative;`
-   * 
+   *
    * ```typescript
    * // set targetRoot to a specific div instead of document.body
    * markerArea.targetRoot = document.getElementById('myRootElement');
    * ```
-   * 
+   *
    * @default document.body
    */
   public targetRoot: HTMLElement;
@@ -108,12 +110,13 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get ALL_MARKER_TYPES(): typeof MarkerBase[] { 
+  public get ALL_MARKER_TYPES(): typeof MarkerBase[] {
     return [
       FrameMarker,
       FreehandMarker,
       ArrowMarker,
       TextMarker,
+      EllipseFrameMarker,
       EllipseMarker,
       HighlightMarker,
       CalloutMarker,
@@ -129,7 +132,7 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get DEFAULT_MARKER_TYPES(): typeof MarkerBase[] { 
+  public get DEFAULT_MARKER_TYPES(): typeof MarkerBase[] {
     return [
       FrameMarker,
       FreehandMarker,
@@ -146,7 +149,7 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get BASIC_MARKER_TYPES(): typeof MarkerBase[] { 
+  public get BASIC_MARKER_TYPES(): typeof MarkerBase[] {
     return [
       FrameMarker,
       FreehandMarker,
@@ -161,11 +164,11 @@ export class MarkerArea {
   /**
    * Gets or sets a list of marker types avaiable to the user in the toolbar.
    * The types can be passed as either type reference or a string type name.
-   * 
+   *
    * ```typescript
    * this.markerArea1.availableMarkerTypes = ['CalloutMarker', ...this.markerArea1.BASIC_MARKER_TYPES];
    * ```
-   * 
+   *
    * @default {@linkcode DEFAULT_MARKER_TYPES}
    */
   public get availableMarkerTypes(): MarkerTypeIdentifier[] {
@@ -226,21 +229,21 @@ export class MarkerArea {
   public renderAtNaturalSize = false;
   /**
    * Type of image for the rendering result. Eg. `image/png` (default) or `image/jpeg`.
-   * 
+   *
    * @default `image/png`
    */
   public renderImageType = 'image/png';
   /**
-   * When rendering engine/format supports it (jpeg, for exmample), 
+   * When rendering engine/format supports it (jpeg, for exmample),
    * sets the rendering quality for the resulting image.
-   * 
+   *
    * In case of `image/jpeg` the value should be between 0 (worst quality) and 1 (best quality).
    */
   public renderImageQuality?: number;
   /**
    * When set to `true`, will render only the marker layer without the original image.
    * This could be useful when you want to non-destructively overlay markers on top of the original image.
-   * 
+   *
    * Note that in order for the markers layer to have a transparent background {@linkcode renderImageType}
    * should be set to a format supporting transparency, such as `image/png`.
    *
@@ -249,19 +252,32 @@ export class MarkerArea {
   public renderMarkersOnly = false;
 
   /**
-   * Creates a new MarkerArea for the specified target image.
+   * When set and {@linkcode renderAtNaturalSize} is `false` sets the width of the rendered image.
    * 
+   * Both `renderWidth` and `renderHeight` have to be set for this to take effect.
+   */
+  public renderWidth?: number;
+  /**
+   * When set and {@linkcode renderAtNaturalSize} is `false` sets the height of the rendered image.
+   * 
+   * Both `renderWidth` and `renderHeight` have to be set for this to take effect.
+   */
+  public renderHeight?: number;
+
+  /**
+   * Creates a new MarkerArea for the specified target image.
+   *
    * ```typescript
    * // create an instance of MarkerArea and pass the target image reference as a parameter
    * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
    * ```
-   * 
+   *
    * @param target image object to mark up.
    */
   constructor(target: HTMLImageElement) {
     Style.settings = Style.defaultSettings;
     this.uiStyleSettings = Style.settings;
-    
+
     this.target = target;
     this.targetRoot = document.body;
 
@@ -282,6 +298,7 @@ export class MarkerArea {
     this.onDblClick = this.onDblClick.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
     this.overrideOverflow = this.overrideOverflow.bind(this);
     this.restoreOverflow = this.restoreOverflow.bind(this);
     this.close = this.close.bind(this);
@@ -293,6 +310,8 @@ export class MarkerArea {
     this.clientToLocalCoordinates = this.clientToLocalCoordinates.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
     this.deleteSelectedMarker = this.deleteSelectedMarker.bind(this);
+    this.setWindowHeight = this.setWindowHeight.bind(this);
+    this.removeMarker = this.removeMarker.bind(this);
   }
 
   private open(): void {
@@ -324,17 +343,25 @@ export class MarkerArea {
 
   /**
    * Renders the annotation result.
-   * 
+   *
    * Normally, you should use {@linkcode addRenderEventListener} method to set a listener for the `render` event
    * rather than calling this method directly.
    */
   public async render(): Promise<string> {
     this.setCurrentMarker();
+    
     const renderer = new Renderer();
     renderer.naturalSize = this.renderAtNaturalSize;
     renderer.imageType = this.renderImageType;
     renderer.imageQuality = this.renderImageQuality;
     renderer.markersOnly = this.renderMarkersOnly;
+    renderer.width = this.renderWidth;
+    renderer.height = this.renderHeight;
+
+    // workaround for an issue in Safari where FreeHand marker 
+    // is not rendered on the first try for some reason
+    await renderer.rasterize(this.target, this.markerImage);
+
     return await renderer.rasterize(this.target, this.markerImage);
   }
 
@@ -343,14 +370,14 @@ export class MarkerArea {
    */
   public close(): void {
     if (this.isOpen) {
-      // if (this.markerImage) {
-      //   this.targetRoot.removeChild(this.markerImageHolder);
-      // }
-      // if (this.logoUI) {
-      //   this.targetRoot.removeChild(this.logoUI);
-      // }
       if (this.coverDiv) {
         this.closeUI();
+      }
+      if (this.targetObserver) {
+        this.targetObserver.unobserve(this.target);
+      }
+      if (this.settings.displayMode === 'popup') {
+        window.removeEventListener('resize', this.setWindowHeight);
       }
       this.closeEventListeners.forEach((listener) => listener());
       this._isOpen = false;
@@ -359,7 +386,7 @@ export class MarkerArea {
 
   /**
    * Adds one or more markers to the toolbar.
-   * 
+   *
    * @param markers - one or more marker types to be added.
    */
   public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
@@ -369,7 +396,7 @@ export class MarkerArea {
   /**
    * Add a `render` event listener which is called when user clicks on the OK/save button
    * in the toolbar.
-   * 
+   *
    * ```typescript
    * // register an event listener for when user clicks OK/save in the marker.js UI
    * markerArea.addRenderEventListener(dataUrl => {
@@ -378,11 +405,11 @@ export class MarkerArea {
    *   document.getElementById('myimg').src = dataUrl;
    * });
    * ```
-   * 
+   *
    * This is where you place your code to save a resulting image and/or MarkerAreaState.
-   * 
+   *
    * @param listener - a method handling rendering results
-   * 
+   *
    * @see {@link MarkerAreaState}
    */
   public addRenderEventListener(listener: RenderEventHandler): void {
@@ -391,7 +418,7 @@ export class MarkerArea {
 
   /**
    * Remove a `render` event handler.
-   * 
+   *
    * @param listener - previously registered `render` event handler.
    */
   public removeRenderEventListener(listener: RenderEventHandler): void {
@@ -406,7 +433,7 @@ export class MarkerArea {
   /**
    * Add a `close` event handler to perform actions in your code after the user
    * clicks on the close button (without saving).
-   * 
+   *
    * @param listener - close event listener
    */
   public addCloseEventListener(listener: CloseEventHandler): void {
@@ -415,7 +442,7 @@ export class MarkerArea {
 
   /**
    * Remove a `close` event handler.
-   * 
+   *
    * @param listener - previously registered `close` event handler.
    */
   public removeCloseEventListener(listener: CloseEventHandler): void {
@@ -433,7 +460,22 @@ export class MarkerArea {
         this.resize(this.target.clientWidth, this.target.clientHeight);
       });
       this.targetObserver.observe(this.target);
+    } else if (this.settings.displayMode === 'popup') {
+      this.targetObserver = new ResizeObserver(() => {
+        const ratio = 1.0 * this.target.clientWidth / this.target.clientHeight;
+        const newWidth = this.editorCanvas.clientWidth / ratio > this.editorCanvas.clientHeight ?
+          this.editorCanvas.clientHeight * ratio : this.editorCanvas.clientWidth;
+        const newHeight = newWidth < this.editorCanvas.clientWidth ?
+          this.editorCanvas.clientHeight : this.editorCanvas.clientWidth / ratio;
+        this.resize(newWidth, newHeight);
+      });
+      this.targetObserver.observe(this.editorCanvas);
+      window.addEventListener('resize', this.setWindowHeight);
     }
+  }
+
+  private setWindowHeight() {
+    this.windowHeight = window.innerHeight;
   }
 
   private resize(newWidth: number, newHeight: number) {
@@ -467,17 +509,25 @@ export class MarkerArea {
     this.overlayContainer.style.width = `${this.imageWidth}px`;
     this.overlayContainer.style.height = `${this.imageHeight}px`;
 
-    this.coverDiv.style.width = `${this.imageWidth.toString()}px`;
+    if (this.settings.displayMode !== 'popup') {
+      this.coverDiv.style.width = `${this.imageWidth.toString()}px`;
+    } else {
+      this.setTopLeft();
+      this.positionMarkerImage();
+    }
 
     if (this.toolbar !== undefined) {
       this.toolbar.adjustLayout();
     }
+
+    this.positionLogo();
 
     this.scaleMarkers(scaleX, scaleY);
   }
 
   private scaleMarkers(scaleX: number, scaleY: number) {
     this.setCurrentMarker();
+    this.toolbar.setSelectMode();
     this.markers.forEach(marker => marker.scale(scaleX, scaleY));
   }
 
@@ -568,6 +618,8 @@ export class MarkerArea {
     });
     window.addEventListener('pointerleave', this.onPointerUp);
     window.addEventListener('resize', this.onWindowResize)
+    window.addEventListener('resize', this.onWindowResize);
+    window.addEventListener('keyup', this.onKeyUp);
   }
 
   /**
@@ -641,6 +693,8 @@ export class MarkerArea {
 
     this.coverDiv = document.createElement('div');
     this.coverDiv.className = Style.CLASS_PREFIX;
+    // hardcode font size so nothing inside is affected by higher up settings
+    this.coverDiv.style.fontSize = '16px';
     switch(this.settings.displayMode) {
       case 'inline': {
         this.coverDiv.style.position = 'absolute';
@@ -652,7 +706,7 @@ export class MarkerArea {
         this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
         //this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
-        this.coverDiv.style.zIndex = '1000';
+        this.coverDiv.style.zIndex = '5';
         // flex causes the ui to stretch when toolbox has wider nowrap panels
         //this.coverDiv.style.display = 'flex';
         break;
@@ -662,10 +716,11 @@ export class MarkerArea {
         this.coverDiv.style.top = '0px';
         this.coverDiv.style.left = '0px';
         this.coverDiv.style.width = '100vw';
-        this.coverDiv.style.height = '100vh';
+        this.coverDiv.style.height = `${window.innerHeight}px`;
         this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
         this.coverDiv.style.zIndex = '1000';
         this.coverDiv.style.display = 'flex';
+        // this.coverDiv.style.overflow = 'auto';
       }
     }
     this.targetRoot.appendChild(this.coverDiv);
@@ -674,9 +729,10 @@ export class MarkerArea {
     this.uiDiv.style.display = 'flex';
     this.uiDiv.style.flexDirection = 'column';
     this.uiDiv.style.flexGrow = '2';
-    this.uiDiv.style.margin = this.settings.displayMode === 'popup' ? '30px' : '0px';
+    this.uiDiv.style.margin = this.settings.displayMode === 'popup' ? `${this.settings.popupMargin}px` : '0px';
     this.uiDiv.style.border = '0px';
-    this.uiDiv.style.backgroundColor = '#ffffff';
+    // this.uiDiv.style.overflow = 'hidden';
+    //this.uiDiv.style.backgroundColor = '#ffffff';
     this.coverDiv.appendChild(this.uiDiv);
 
     this.toolbar = new Toolbar(this.uiDiv, this.settings.displayMode, this._availableMarkerTypes, this.uiStyleSettings);
@@ -687,10 +743,20 @@ export class MarkerArea {
     this.contentDiv.style.display = 'flex';
     this.contentDiv.style.flexDirection = 'row';
     this.contentDiv.style.flexGrow = '2';
+    this.contentDiv.style.flexShrink = '1';
+    this.contentDiv.style.backgroundColor = this.uiStyleSettings.canvasBackgroundColor;
+    if (this.settings.displayMode === 'popup') {
+      this.contentDiv.style.maxHeight = `${this.windowHeight -
+        this.settings.popupMargin * 2 - this.uiStyleSettings.toolbarHeight * 3.5}px`;
+      // this.contentDiv.style.maxHeight = `calc(100vh - ${
+      //   this.settings.popupMargin * 2 + this.uiStyleSettings.toolbarHeight * 3.5}px)`;
+      this.contentDiv.style.maxWidth = `calc(100vw - ${this.settings.popupMargin * 2}px)`;
+    }
     this.uiDiv.appendChild(this.contentDiv);
 
     this.editorCanvas = document.createElement('div');
     this.editorCanvas.style.flexGrow = '2';
+    this.editorCanvas.style.flexShrink = '1';
     this.editorCanvas.style.position = 'relative';
     this.editorCanvas.style.overflow = 'hidden';
     this.editorCanvas.style.display = 'flex';
@@ -716,6 +782,14 @@ export class MarkerArea {
     this.targetRoot.removeChild(this.coverDiv);
   }
 
+  private removeMarker(marker: MarkerBase) {
+    this.markerImage.removeChild(marker.container);
+    if (this.markers.indexOf(marker) > -1) {
+      this.markers.splice(this.markers.indexOf(marker), 1);
+    }
+    marker.dispose();
+}
+
   private toolbarButtonClicked(
     buttonType: ToolbarButtonType,
     value?: typeof MarkerBase | string
@@ -727,7 +801,13 @@ export class MarkerArea {
         case 'select': {
           this.mode = 'select';
           if (this.currentMarker !== undefined) {
-            this.currentMarker.select();
+            if (this.currentMarker.state !== 'new') {
+              this.currentMarker.select();
+            } else {
+              this.removeMarker(this.currentMarker);
+              this.setCurrentMarker();
+              this.markerImage.style.cursor = 'default';
+            }
           }
           break;
         }
@@ -775,27 +855,27 @@ export class MarkerArea {
    * to continue annotation next time.
    */
   public getState(): MarkerAreaState {
-    const result: MarkerAreaState = { 
-      width: this.width,
-      height: this.height,
-      markers: [] 
+    const result: MarkerAreaState = {
+      width: this.imageWidth,
+      height: this.imageHeight,
+      markers: []
     };
     this.markers.forEach(marker => result.markers.push(marker.getState()));
     return result;
   }
-  
+
   /**
    * Restores MarkerArea state to continue previous annotation session.
-   * 
+   *
    * **IMPORTANT**: call `restoreState()` __after__ you've opened the MarkerArea with {@linkcode show}.
-   * 
+   *
    * ```typescript
    * this.markerArea1.show();
    * if (this.currentState) {
    *   this.markerArea1.restoreState(this.currentState);
    * }
    * ```
-   * 
+   *
    * @param state - previously saved state object.
    */
   public restoreState(state: MarkerAreaState): void {
@@ -808,6 +888,11 @@ export class MarkerArea {
         this.markers.push(marker);
       }
     })
+    if (
+      state.width && state.height
+      && (state.width !== this.imageWidth || state.height !== this.imageHeight)) {
+        this.scaleMarkers(this.imageWidth / state.width, this.imageHeight / state.height);
+    }
   }
 
   private addNewMarker(markerType: typeof MarkerBase): MarkerBase {
@@ -846,9 +931,14 @@ export class MarkerArea {
   private markerCreated(marker: MarkerBase) {
     this.mode = 'select';
     this.markerImage.style.cursor = 'default';
-    this.toolbar.setSelectMode();
     this.markers.push(marker);
     this.setCurrentMarker(marker);
+    if (marker instanceof FreehandMarker && this.settings.newFreehandMarkerOnPointerUp) {
+      this.markers.push(marker);
+      this.createNewMarker(FreehandMarker);
+    } else {
+      this.toolbar.setSelectMode();
+    }
   }
 
   private setCurrentMarker(marker?: MarkerBase) {
@@ -934,6 +1024,15 @@ export class MarkerArea {
     this.isDragging = false;
   }
 
+  private onKeyUp(ev: KeyboardEvent) {
+    if (this.currentMarker !== undefined && (ev.key === 'Delete' || ev.key === 'Backspace')) {
+      this.removeMarker(this.currentMarker);
+      this.setCurrentMarker();
+      this.markerImage.style.cursor = 'default';
+    }
+  }
+
+
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
     return { x: x - clientRect.x, y: y - clientRect.y };
@@ -959,7 +1058,9 @@ export class MarkerArea {
         this.coverDiv.style.top = '0px';
         this.coverDiv.style.left = '0px';
         this.coverDiv.style.width = '100vw';
-        this.coverDiv.style.height = '100vh';
+        this.coverDiv.style.height = `${this.windowHeight}px`;
+        this.contentDiv.style.maxHeight = `${this.windowHeight -
+          this.settings.popupMargin * 2 - this.uiStyleSettings.toolbarHeight * 3.5}px`;
       }
     }
     this.positionMarkerImage();

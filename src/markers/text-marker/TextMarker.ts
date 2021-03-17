@@ -67,6 +67,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected textEditor: HTMLDivElement;
 
+  private isMoved = false;
+  private pointerDownPoint: IPoint;
+  private pointerDownTimestamp: number;
+
   /**
    * Creates a new marker.
    *
@@ -138,6 +142,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textElement = SvgHelper.createText([
       ['fill', this.color],
       ['font-family', this.fontFamily],
+      ['font-size', '16px'],
       ['x', '0'],
       ['y', '0']
     ]);
@@ -145,9 +150,6 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transorm
 
     this.visual.appendChild(this.textElement);
-
-    const translate = SvgHelper.createTransform();
-    this.visual.transform.baseVal.appendItem(translate);
 
     this.addMarkerVisualToContainer(this.visual);
     this.renderText();
@@ -161,6 +163,11 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
+
+    this.isMoved = false;
+    this.pointerDownPoint = point;
+    this.pointerDownTimestamp = Date.now();
+
     if (this.state === 'new') {
       this.createVisual();
       this.moveVisual(point);
@@ -226,6 +233,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   public manipulate(point: IPoint): void {
     super.manipulate(point);
+    if (this.pointerDownPoint !== undefined) {
+      this.isMoved = Math.abs(point.x - this.pointerDownPoint.x) > 5 || 
+        Math.abs(point.y - this.pointerDownPoint.y) > 5;
+    }
   }
 
   /**
@@ -234,6 +245,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected resize(point: IPoint): void {
     super.resize(point);
+    this.isMoved = true;
     this.setSize();
     this.sizeText();
   }
@@ -262,12 +274,15 @@ export class TextMarker extends RectangularBoxMarkerBase {
     const inState = this.state;
     super.pointerUp(point);
     this.setSize();
-    if (inState === 'creating') {
+    if (inState === 'creating' || 
+      (!this.isMoved && (Date.now() - this.pointerDownTimestamp) > 500)) {
       this.showTextEditor();
     }
+    this.pointerDownPoint = undefined;
   }
 
   private showTextEditor() {
+    this._state = 'edit';
     this.overlayContainer.innerHTML = '';
 
     this.textEditDiv = document.createElement('div');
@@ -280,14 +295,28 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textEditDiv.style.overflow = 'hidden';
 
     const textScale = this.getTextScale();
-    const textPosition = this.getTextPosition(textScale);
+    // const textPosition = this.getTextPosition(textScale);
+    const rPosition = this.rotatePoint({
+      x: this.left + this.width / 2, 
+      y: this.top + this.height / 2
+    });
+    const textSize = this.textElement.getBBox();
+    const rWH = {
+      x: textSize.width * textScale,
+      y: textSize.height * textScale
+    };
+    rPosition.x -= rWH.x / 2;
+    rPosition.y -= rWH.y / 2;
 
     this.textEditor = document.createElement('div');
     this.textEditor.style.position = 'absolute';
-    this.textEditor.style.top = `${this.top + textPosition.y}px`;
-    this.textEditor.style.left = `${this.left + textPosition.x}px`;
-    this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - this.left - textPosition.x}px`;
-    this.textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
+    // this.textEditor.style.top = `${this.top + textPosition.y}px`;
+    // this.textEditor.style.left = `${this.left + textPosition.x}px`;
+    this.textEditor.style.top = `${rPosition.y}px`;
+    this.textEditor.style.left = `${rPosition.x}px`;
+    this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - rPosition.x}px`;
+    // this.textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
+    this.textEditor.style.fontSize = `${Math.max(16 * textScale, 12)}px`;
     this.textEditor.style.fontFamily = this.fontFamily;
     this.textEditor.style.lineHeight = '1em';
     this.textEditor.innerText = this.text;
@@ -303,6 +332,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
         this.textEditor.style.fontSize = `${Math.max(fontSize, 0.9)}em`;
       }
     })
+    this.textEditor.addEventListener('keyup', (ev) => {
+      ev.cancelBubble = true;
+    });
 
     this.textEditDiv.addEventListener('pointerup', () => {
       this.textEditDivClicked(this.textEditor.innerText);
@@ -310,10 +342,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textEditDiv.appendChild(this.textEditor);
     this.overlayContainer.appendChild(this.textEditDiv);
 
+    this.hideVisual();
+
     this.textEditor.focus();
     document.execCommand('selectAll');
-
-    this.hideVisual();
   }
 
   private textEditDivClicked(text: string) {
@@ -323,6 +355,16 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.showVisual();
   }
 
+  /**
+   * Deselects this marker, renders text (if necessary), and hides selected marker UI.
+   */
+  public deselect(): void {
+    if (this.state === 'edit') {
+      this.textEditDivClicked(this.textEditor.innerText);
+    }
+    super.deselect();
+  }
+  
   /**
    * Opens text editor on double-click.
    * @param point 
@@ -370,6 +412,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
    * Shows marker visual.
    */
   protected showVisual(): void {
+    if (this.state === 'edit') {
+      this._state = 'select';
+    }
     this.textElement.style.display = '';
     this.showControlBox();
   }
