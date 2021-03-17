@@ -618,7 +618,6 @@ export class MarkerArea {
     });
     window.addEventListener('pointerleave', this.onPointerUp);
     window.addEventListener('resize', this.onWindowResize)
-    window.addEventListener('resize', this.onWindowResize);
     window.addEventListener('keyup', this.onKeyUp);
   }
 
