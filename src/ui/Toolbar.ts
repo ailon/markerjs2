@@ -6,6 +6,8 @@ import DeleteIcon from './toolbar-core-icons/delete.svg';
 import CheckIcon from './toolbar-core-icons/check.svg';
 import CloseIcon from './toolbar-core-icons/close.svg';
 import OverflowIcon from './toolbar-core-icons/overflow.svg';
+import UndoIcon from './toolbar-core-icons/undo.svg';
+import RedoIcon from './toolbar-core-icons/redo.svg';
 import { IStyleSettings } from '../core/IStyleSettings';
 import { DisplayMode } from '../core/Settings';
 
@@ -97,6 +99,8 @@ export class Toolbar {
 
     this.addActionButton(actionButtonBlock, CursorIcon, 'select');
     this.addActionButton(actionButtonBlock, DeleteIcon, 'delete');
+    this.addActionButton(actionButtonBlock, UndoIcon, 'undo');
+    this.addActionButton(actionButtonBlock, RedoIcon, 'redo');
 
     this.markerButtonBlock = document.createElement('div');
     this.markerButtonBlock.className = this.toolbarBlockStyleClass.name;
@@ -247,7 +251,13 @@ export class Toolbar {
       case 'delete':
         actionButton.style.fill = this.uiStyleSettings.deleteButtonColor;
         break;
-      case 'render':
+      case 'undo':
+          actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
+          break;
+      case 'redo':
+          actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
+          break;
+        case 'render':
         actionButton.style.fill = this.uiStyleSettings.okButtonColor;
         break;
       case 'close':
