@@ -820,7 +820,7 @@ export class MarkerArea {
         this.setCurrentMarker();
         this.markerImage.style.cursor = 'default';
       }
-      this.undoRedoManager.addUndoStep(this.getState());
+      this.addUndoStep();
     }
   }
 
@@ -842,7 +842,7 @@ export class MarkerArea {
         }
         case 'undo': {
           this.switchToSelectMode();
-          this.undoRedoManager.addUndoStep(this.getState());
+          this.addUndoStep();
           this.undo();
           break;
         }
@@ -871,13 +871,19 @@ export class MarkerArea {
       this.currentMarker.dispose();
       this.markerImage.removeChild(this.currentMarker.container);
       this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
-      this.undoRedoManager.addUndoStep(this.getState());
+      this.addUndoStep();
     }
   }
 
   private selectLastMarker() {
     if (this.markers.length > 0) {
       this.setCurrentMarker(this.markers[this.markers.length - 1]);
+    }
+  }
+
+  private addUndoStep() {
+    if (this.currentMarker === undefined || this.currentMarker.state !== 'edit') {
+      this.undoRedoManager.addUndoStep(this.getState());
     }
   }
 
@@ -1013,7 +1019,7 @@ export class MarkerArea {
     } else {
       this.toolbar.setSelectMode();
     }
-    this.undoRedoManager.addUndoStep(this.getState());
+    this.addUndoStep();
   }
 
   private setCurrentMarker(marker?: MarkerBase) {
@@ -1097,7 +1103,7 @@ export class MarkerArea {
       }
     }
     this.isDragging = false;
-    this.undoRedoManager.addUndoStep(this.getState());
+    this.addUndoStep();
   }
 
   private onKeyUp(ev: KeyboardEvent) {
@@ -1108,7 +1114,7 @@ export class MarkerArea {
       this.removeMarker(this.currentMarker);
       this.setCurrentMarker();
       this.markerImage.style.cursor = 'default';
-      this.undoRedoManager.addUndoStep(this.getState());
+      this.addUndoStep();
     }
   }
 
