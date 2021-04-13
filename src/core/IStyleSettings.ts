@@ -31,6 +31,14 @@ export interface IStyleSettings {
    */
   hideToolbox?: boolean;
   /**
+   * Is undo button visible?
+   */
+  undoButtonVisible?: boolean;
+  /**
+   * Is redo button visible?
+   */
+  redoButtonVisible?: boolean;
+  /**
    * Background color of the toolbox (property panel) block.
    */
   toolboxBackgroundColor?: string;

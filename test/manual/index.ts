@@ -37,6 +37,9 @@ export class Experiments {
     this.markerArea1.uiStyleSettings.okButtonColor = 'green';
     this.markerArea1.uiStyleSettings.closeButtonColor = 'yellow';
     
+    // this.markerArea1.uiStyleSettings.undoButtonVisible = false;
+    // this.markerArea1.uiStyleSettings.redoButtonVisible = true;
+
     // this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
     // this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';
     // this.markerArea1.uiStyleSettings.toolbarActiveButtonStyleColorsClassName = 'toolbar-active-button';

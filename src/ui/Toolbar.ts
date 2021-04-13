@@ -99,8 +99,12 @@ export class Toolbar {
 
     this.addActionButton(actionButtonBlock, CursorIcon, 'select');
     this.addActionButton(actionButtonBlock, DeleteIcon, 'delete');
-    this.addActionButton(actionButtonBlock, UndoIcon, 'undo');
-    this.addActionButton(actionButtonBlock, RedoIcon, 'redo');
+    if (this.uiStyleSettings.undoButtonVisible) {
+      this.addActionButton(actionButtonBlock, UndoIcon, 'undo');
+    }
+    if (this.uiStyleSettings.redoButtonVisible) {
+      this.addActionButton(actionButtonBlock, RedoIcon, 'redo');
+    }
 
     this.markerButtonBlock = document.createElement('div');
     this.markerButtonBlock.className = this.toolbarBlockStyleClass.name;
