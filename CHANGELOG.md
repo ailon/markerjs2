@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.1] - 2021-04-13
+### Fixed
+- exception during undo of text markers
+- redo stack was broken when clicking undo on an empty area
+
 ## [2.6.0] - 2021-04-13
 ### Added
 - undo/redo functionality (redo button is hidden by default).
@@ -197,6 +202,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.6.1]: https://github.com/ailon/markerjs2/releases/tag/v2.6.1
 [2.6.0]: https://github.com/ailon/markerjs2/releases/tag/v2.6.0
 [2.5.0]: https://github.com/ailon/markerjs2/releases/tag/v2.5.0
 [2.4.1]: https://github.com/ailon/markerjs2/releases/tag/v2.4.1
