@@ -820,6 +820,7 @@ export class MarkerArea {
         this.setCurrentMarker();
         this.markerImage.style.cursor = 'default';
       }
+      this.undoRedoManager.addUndoStep(this.getState());
     }
   }
 
@@ -870,6 +871,7 @@ export class MarkerArea {
       this.currentMarker.dispose();
       this.markerImage.removeChild(this.currentMarker.container);
       this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+      this.undoRedoManager.addUndoStep(this.getState());
     }
   }
 
@@ -1011,6 +1013,7 @@ export class MarkerArea {
     } else {
       this.toolbar.setSelectMode();
     }
+    this.undoRedoManager.addUndoStep(this.getState());
   }
 
   private setCurrentMarker(marker?: MarkerBase) {
@@ -1105,6 +1108,7 @@ export class MarkerArea {
       this.removeMarker(this.currentMarker);
       this.setCurrentMarker();
       this.markerImage.style.cursor = 'default';
+      this.undoRedoManager.addUndoStep(this.getState());
     }
   }
 
