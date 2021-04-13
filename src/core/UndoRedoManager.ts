@@ -43,11 +43,13 @@ export class UndoRedoManager<T> {
    * @returns 
    */
   public undo(): T | undefined {
-    const lastStep = this.undoStack.pop();
-    if (lastStep !== undefined) {
-      this.redoStack.push(lastStep);
+    if (this.undoStack.length > 1) {
+      const lastStep = this.undoStack.pop();
+      if (lastStep !== undefined) {
+        this.redoStack.push(lastStep);
+      }
+      return this.undoStack.length > 0 ? this.undoStack[this.undoStack.length - 1] : undefined;
     }
-    return this.undoStack.length > 0 ? this.undoStack[this.undoStack.length - 1] : undefined;
   }
 
   /**
