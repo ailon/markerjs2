@@ -348,6 +348,7 @@ export class MarkerArea {
    * Initializes the MarkerArea and opens the UI.
    */
   public show(): void {
+    this.setWindowHeight();
     this.showUI();
     this.open();
   }
