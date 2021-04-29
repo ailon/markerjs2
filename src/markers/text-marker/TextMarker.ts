@@ -93,6 +93,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textEditDivClicked = this.textEditDivClicked.bind(this);
     this.showTextEditor = this.showTextEditor.bind(this);
     this.setSize = this.setSize.bind(this);
+    this.positionTextEditor = this.positionTextEditor.bind(this);
 
     this.colorPanel = new ColorPickerPanel(
       'Color',
@@ -294,34 +295,14 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textEditDiv.style.pointerEvents = 'auto';
     this.textEditDiv.style.overflow = 'hidden';
 
-    const textScale = this.getTextScale();
-    // const textPosition = this.getTextPosition(textScale);
-    const rPosition = this.rotatePoint({
-      x: this.left + this.width / 2, 
-      y: this.top + this.height / 2
-    });
-    const textSize = this.textElement.getBBox();
-    const rWH = {
-      x: textSize.width * textScale,
-      y: textSize.height * textScale
-    };
-    rPosition.x -= rWH.x / 2;
-    rPosition.y -= rWH.y / 2;
-
     this.textEditor = document.createElement('div');
     this.textEditor.style.position = 'absolute';
-    // this.textEditor.style.top = `${this.top + textPosition.y}px`;
-    // this.textEditor.style.left = `${this.left + textPosition.x}px`;
-    this.textEditor.style.top = `${rPosition.y}px`;
-    this.textEditor.style.left = `${rPosition.x}px`;
-    this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - rPosition.x}px`;
-    // this.textEditor.style.fontSize = `${Math.max(textScale, 0.9)}em`;
-    this.textEditor.style.fontSize = `${Math.max(16 * textScale, 12)}px`;
     this.textEditor.style.fontFamily = this.fontFamily;
     this.textEditor.style.lineHeight = '1em';
     this.textEditor.innerText = this.text;
     this.textEditor.contentEditable = 'true';
     this.textEditor.style.color = this.color;
+    this.positionTextEditor();
     this.textEditor.addEventListener('pointerup', (ev) => {
       ev.stopPropagation();
     });
@@ -346,6 +327,31 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
     this.textEditor.focus();
     document.execCommand('selectAll');
+  }
+
+  private positionTextEditor() {
+    if (this.state === 'edit') {
+      this.textElement.style.display = '';
+      const textScale = this.getTextScale();
+      // const textPosition = this.getTextPosition(textScale);
+      const rPosition = this.rotatePoint({
+        x: this.left + this.width / 2, 
+        y: this.top + this.height / 2
+      });
+      const textSize = this.textElement.getBBox();
+      const rWH = {
+        x: textSize.width * textScale,
+        y: textSize.height * textScale
+      };
+      rPosition.x -= rWH.x / 2;
+      rPosition.y -= rWH.y / 2;
+
+      this.textEditor.style.top = `${rPosition.y}px`;
+      this.textEditor.style.left = `${rPosition.x}px`;
+      this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - rPosition.x}px`;
+      this.textEditor.style.fontSize = `${Math.max(16 * textScale, 12)}px`;
+      this.textElement.style.display = 'none';
+    }
   }
 
   private textEditDivClicked(text: string) {
@@ -469,5 +475,6 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
     this.setSize();
     this.sizeText();
+    this.positionTextEditor();
   }
 }
