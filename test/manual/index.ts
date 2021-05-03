@@ -23,6 +23,8 @@ export class Experiments {
     this.markerArea1.addRenderEventListener(this.renderResult);
     this.markerArea1.settings.displayMode = this.displayMode;
     this.markerArea1.settings.popupMargin = 10;
+
+    this.markerArea1.settings.defaultColorsFollowCurrentColors = true;
     
     // this.markerArea1.settings.newFreehandMarkerOnPointerUp = true;
 

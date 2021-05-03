@@ -184,6 +184,7 @@ export class CalloutMarker extends TextMarker {
     SvgHelper.setAttributes(this.bgRectangle, [['fill', color]]);
     SvgHelper.setAttributes(this.tip, [['fill', color]]);
     this.bgColor = color;
+    this.fillColorChanged(color);
   }
 
   private getTipPoints(): string {

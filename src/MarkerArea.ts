@@ -323,6 +323,8 @@ export class MarkerArea {
     this.deleteSelectedMarker = this.deleteSelectedMarker.bind(this);
     this.setWindowHeight = this.setWindowHeight.bind(this);
     this.removeMarker = this.removeMarker.bind(this);
+    this.colorChanged = this.colorChanged.bind(this);
+    this.fillColorChanged = this.fillColorChanged.bind(this);
   }
 
   private open(): void {
@@ -1004,6 +1006,8 @@ export class MarkerArea {
     this.setCurrentMarker();
     this.currentMarker = this.addNewMarker(markerType);
     this.currentMarker.onMarkerCreated = this.markerCreated;
+    this.currentMarker.onColorChanged = this.colorChanged;
+    this.currentMarker.onFillColorChanged = this.fillColorChanged;
     this.markerImage.style.cursor = 'crosshair';
     this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
   }
@@ -1023,6 +1027,18 @@ export class MarkerArea {
       this.toolbar.setSelectMode();
     }
     this.addUndoStep();
+  }
+
+  private colorChanged(color: string): void {
+    if (this.settings.defaultColorsFollowCurrentColors) {
+      this.settings.defaultColor = color;
+      this.settings.defaultStrokeColor = color;
+    }
+  }
+  private fillColorChanged(color: string): void {
+    if (this.settings.defaultColorsFollowCurrentColors) {
+      this.settings.defaultFillColor = color;
+    }
   }
 
   private setCurrentMarker(marker?: MarkerBase) {

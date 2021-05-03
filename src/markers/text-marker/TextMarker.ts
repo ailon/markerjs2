@@ -392,6 +392,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     if (this.textEditor) {
       this.textEditor.style.color = this.color;
     }
+    this.colorChanged(color);
   }
 
   /**

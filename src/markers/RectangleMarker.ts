@@ -147,6 +147,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke', this.strokeColor]]);
     }
+    this.colorChanged(color);
   }
   /**
    * Sets rectangle's fill color.

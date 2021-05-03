@@ -100,4 +100,10 @@ export class Settings {
    * Create a new Freehand marker for every stroke.
    */
   public newFreehandMarkerOnPointerUp = false;
+
+  /**
+   * If set to true, when colors on a marker are changed 
+   * it changes the default color for other markers as well.
+   */
+  public defaultColorsFollowCurrentColors = false;
 }

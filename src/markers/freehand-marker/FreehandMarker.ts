@@ -291,6 +291,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
    */
   protected setColor(color: string): void {
     this.color = color;
+    this.colorChanged(color);
   }
 
   /**
