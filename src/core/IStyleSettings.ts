@@ -32,10 +32,14 @@ export interface IStyleSettings {
   hideToolbox?: boolean;
   /**
    * Is undo button visible?
+   * 
+   * @since 2.6.0
    */
   undoButtonVisible?: boolean;
   /**
    * Is redo button visible?
+   * 
+   * @since 2.6.0
    */
   redoButtonVisible?: boolean;
   /**

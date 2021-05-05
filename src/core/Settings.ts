@@ -104,6 +104,8 @@ export class Settings {
   /**
    * If set to true, when colors on a marker are changed 
    * it changes the default color for other markers as well.
+   * 
+   * @since 2.7.0
    */
   public defaultColorsFollowCurrentColors = false;
 }

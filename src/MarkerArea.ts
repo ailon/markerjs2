@@ -894,6 +894,8 @@ export class MarkerArea {
 
   /**
    * Undo last action.
+   * 
+   * @since 2.6.0
    */
   public undo(): void {
     const stepData = this.undoRedoManager.undo();
@@ -905,6 +907,8 @@ export class MarkerArea {
 
   /**
    * Redo previously undone action.
+   * 
+   * @since 2.6.0
    */
   public redo(): void {
     const stepData = this.undoRedoManager.redo();
