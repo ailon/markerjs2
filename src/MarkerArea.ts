@@ -470,25 +470,29 @@ export class MarkerArea {
 
   private setupResizeObserver() {
     if (this.settings.displayMode === 'inline') {
-      this.targetObserver = new ResizeObserver(() => {
-        this.resize(this.target.clientWidth, this.target.clientHeight);
-      });
-      this.targetObserver.observe(this.target);
+      if (window.ResizeObserver) {
+        this.targetObserver = new ResizeObserver(() => {
+          this.resize(this.target.clientWidth, this.target.clientHeight);
+        });
+        this.targetObserver.observe(this.target);
+      }
     } else if (this.settings.displayMode === 'popup') {
-      this.targetObserver = new ResizeObserver(() => {
-        const ratio =
-          (1.0 * this.target.clientWidth) / this.target.clientHeight;
-        const newWidth =
-          this.editorCanvas.clientWidth / ratio > this.editorCanvas.clientHeight
-            ? this.editorCanvas.clientHeight * ratio
-            : this.editorCanvas.clientWidth;
-        const newHeight =
-          newWidth < this.editorCanvas.clientWidth
-            ? this.editorCanvas.clientHeight
-            : this.editorCanvas.clientWidth / ratio;
-        this.resize(newWidth, newHeight);
-      });
-      this.targetObserver.observe(this.editorCanvas);
+      if (window.ResizeObserver) {
+        this.targetObserver = new ResizeObserver(() => {
+          const ratio =
+            (1.0 * this.target.clientWidth) / this.target.clientHeight;
+          const newWidth =
+            this.editorCanvas.clientWidth / ratio > this.editorCanvas.clientHeight
+              ? this.editorCanvas.clientHeight * ratio
+              : this.editorCanvas.clientWidth;
+          const newHeight =
+            newWidth < this.editorCanvas.clientWidth
+              ? this.editorCanvas.clientHeight
+              : this.editorCanvas.clientWidth / ratio;
+          this.resize(newWidth, newHeight);
+        });
+        this.targetObserver.observe(this.editorCanvas);
+      }
       window.addEventListener('resize', this.setWindowHeight);
     }
   }
