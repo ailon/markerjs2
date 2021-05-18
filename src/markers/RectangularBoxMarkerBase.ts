@@ -229,9 +229,10 @@ export class RectangularBoxMarkerBase extends MarkerBase {
    * @param point - coordinates of the new top-left corner of the visual.
    */
   protected moveVisual(point: IPoint): void {
-    const translate = this.visual.transform.baseVal.getItem(0);
-    translate.setTranslate(point.x, point.y);
-    this.visual.transform.baseVal.replaceItem(translate, 0);
+    this.visual.style.transform = `translate(${point.x}px, ${point.y}px)`;
+    // const translate = this.visual.transform.baseVal.getItem(0);
+    // translate.setTranslate(point.x, point.y);
+    // this.visual.transform.baseVal.replaceItem(translate, 0);
   }
 
   /**

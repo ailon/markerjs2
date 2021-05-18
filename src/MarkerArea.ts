@@ -1147,7 +1147,7 @@ export class MarkerArea {
 
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
-    return { x: x - clientRect.x, y: y - clientRect.y };
+    return { x: x - clientRect.left, y: y - clientRect.top };
   }
 
   private onWindowResize() {

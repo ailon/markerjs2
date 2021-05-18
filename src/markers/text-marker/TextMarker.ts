@@ -222,8 +222,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
     const position = this.getTextPosition(scale);
     position.y -= textBBox.y * scale; // workaround adjustment for text not being placed at y=0
 
-    this.textElement.transform.baseVal.getItem(0).setTranslate(position.x, position.y);
-    this.textElement.transform.baseVal.getItem(1).setScale(scale, scale);
+    this.textElement.style.transform = `translate(${position.x}px, ${position.y}px) scale(${scale}, ${scale})`;
+
+    // this.textElement.transform.baseVal.getItem(0).setTranslate(position.x, position.y);
+    // this.textElement.transform.baseVal.getItem(1).setScale(scale, scale);
   }
 
 

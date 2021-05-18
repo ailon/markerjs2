@@ -103,22 +103,22 @@ export class Style {
     // add global rules
     Style.addRule(new StyleRule(`.${Style.CLASS_PREFIX} h3`, 'font-family: sans-serif'));
 
-    Style.addRule(new StyleRule(`@keyframes ${Style.CLASS_PREFIX}_fade_in_animation_frames`, `
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-    `));
-    Style.addRule(new StyleRule(`@keyframes ${Style.CLASS_PREFIX}_fade_out_animation_frames`, `
-        from {
-          opacity: 1;
-        }
-        to {
-          opacity: 0;
-        }
-    `));
+    // Style.addRule(new StyleRule(`@keyframes ${Style.CLASS_PREFIX}_fade_in_animation_frames`, `
+    //     from {
+    //       opacity: 0;
+    //     }
+    //     to {
+    //       opacity: 1;
+    //     }
+    // `));
+    // Style.addRule(new StyleRule(`@keyframes ${Style.CLASS_PREFIX}_fade_out_animation_frames`, `
+    //     from {
+    //       opacity: 1;
+    //     }
+    //     to {
+    //       opacity: 0;
+    //     }
+    // `));
 
     Style.addClass(new StyleClass('fade_in', `
       animation-duration: 0.3s;
