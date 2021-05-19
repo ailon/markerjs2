@@ -325,6 +325,7 @@ export class MarkerArea {
     this.removeMarker = this.removeMarker.bind(this);
     this.colorChanged = this.colorChanged.bind(this);
     this.fillColorChanged = this.fillColorChanged.bind(this);
+    this.onPopupTargetResize = this.onPopupTargetResize.bind(this);
   }
 
   private open(): void {
@@ -334,6 +335,9 @@ export class MarkerArea {
     this.initMarkerCanvas();
     this.initOverlay();
     this.attachEvents();
+    if (this.settings.displayMode === 'popup') {
+      this.onPopupTargetResize();
+    }
 
     if (!Activator.isLicensed) {
       // NOTE:
@@ -478,23 +482,26 @@ export class MarkerArea {
       }
     } else if (this.settings.displayMode === 'popup') {
       if (window.ResizeObserver) {
-        this.targetObserver = new ResizeObserver(() => {
-          const ratio =
-            (1.0 * this.target.clientWidth) / this.target.clientHeight;
-          const newWidth =
-            this.editorCanvas.clientWidth / ratio > this.editorCanvas.clientHeight
-              ? this.editorCanvas.clientHeight * ratio
-              : this.editorCanvas.clientWidth;
-          const newHeight =
-            newWidth < this.editorCanvas.clientWidth
-              ? this.editorCanvas.clientHeight
-              : this.editorCanvas.clientWidth / ratio;
-          this.resize(newWidth, newHeight);
-        });
+        this.targetObserver = new ResizeObserver(() =>
+          this.onPopupTargetResize()
+        );
         this.targetObserver.observe(this.editorCanvas);
       }
       window.addEventListener('resize', this.setWindowHeight);
     }
+  }
+
+  private onPopupTargetResize() {
+    const ratio = (1.0 * this.target.clientWidth) / this.target.clientHeight;
+    const newWidth =
+      this.editorCanvas.clientWidth / ratio > this.editorCanvas.clientHeight
+        ? this.editorCanvas.clientHeight * ratio
+        : this.editorCanvas.clientWidth;
+    const newHeight =
+      newWidth < this.editorCanvas.clientWidth
+        ? this.editorCanvas.clientHeight
+        : this.editorCanvas.clientWidth / ratio;
+    this.resize(newWidth, newHeight);
   }
 
   private setWindowHeight() {
@@ -891,14 +898,17 @@ export class MarkerArea {
   }
 
   private addUndoStep() {
-    if (this.currentMarker === undefined || this.currentMarker.state !== 'edit') {
+    if (
+      this.currentMarker === undefined ||
+      this.currentMarker.state !== 'edit'
+    ) {
       this.undoRedoManager.addUndoStep(this.getState());
     }
   }
 
   /**
    * Undo last action.
-   * 
+   *
    * @since 2.6.0
    */
   public undo(): void {
@@ -911,7 +921,7 @@ export class MarkerArea {
 
   /**
    * Redo previously undone action.
-   * 
+   *
    * @since 2.6.0
    */
   public redo(): void {
