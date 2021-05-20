@@ -17,18 +17,18 @@ export class Style {
    * For cases when you need to add the stylesheet to anything
    * other than document.head (default), set this property
    * befor calling `MarkerArea.show()`.
-   * 
+   *
    * Example: here we set the rendering/placement root (targetRoot)
    * to the `shadowRoot` of a web componet and set `styleSheetRoot`
    * to the same value as well.
-   * 
+   *
    * ```javascript
    * const markerArea = new markerjs2.MarkerArea(target);
    * markerArea.targetRoot = this.shadowRoot;
    * markerjs2.Style.styleSheetRoot = this.shadowRoot;
    * markerArea.show();
    * ```
-   * 
+   *
    * Known issue/limitation:
    * you can't use marker.js 2 in both main and Shadow DOM
    * on the same page.
@@ -49,8 +49,8 @@ export class Style {
       toolboxColor: '#eeeeee',
       toolboxAccentColor: '#3080c3',
       undoButtonVisible: true,
-      redoButtonVisible: false
-    }
+      redoButtonVisible: false,
+    };
   }
 
   /**
@@ -93,7 +93,11 @@ export class Style {
       Style.addStyleSheet();
     }
     Style.rules.push(styleRule);
-    Style.styleSheet.sheet.addRule(styleRule.selector, styleRule.style);
+    // Style.styleSheet.sheet.addRule(styleRule.selector, styleRule.style); // crashes in Edge
+    Style.styleSheet.sheet.insertRule(
+      `${styleRule.selector} {${styleRule.style}}`,
+      Style.styleSheet.sheet.rules.length
+    );
   }
 
   private static addStyleSheet() {
@@ -101,33 +105,55 @@ export class Style {
     (Style.styleSheetRoot ?? document.head).appendChild(Style.styleSheet);
 
     // add global rules
-    Style.addRule(new StyleRule(`.${Style.CLASS_PREFIX} h3`, 'font-family: sans-serif'));
+    Style.addRule(
+      new StyleRule(`.${Style.CLASS_PREFIX} h3`, 'font-family: sans-serif')
+    );
 
-    // Style.addRule(new StyleRule(`@keyframes ${Style.CLASS_PREFIX}_fade_in_animation_frames`, `
-    //     from {
-    //       opacity: 0;
-    //     }
-    //     to {
-    //       opacity: 1;
-    //     }
-    // `));
-    // Style.addRule(new StyleRule(`@keyframes ${Style.CLASS_PREFIX}_fade_out_animation_frames`, `
-    //     from {
-    //       opacity: 1;
-    //     }
-    //     to {
-    //       opacity: 0;
-    //     }
-    // `));
+    Style.addRule(
+      new StyleRule(
+        `@keyframes ${Style.CLASS_PREFIX}_fade_in_animation_frames`,
+        `
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+    `
+      )
+    );
+    Style.addRule(
+      new StyleRule(
+        `@keyframes ${Style.CLASS_PREFIX}_fade_out_animation_frames`,
+        `
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+    `
+      )
+    );
 
-    Style.addClass(new StyleClass('fade_in', `
+    Style.addClass(
+      new StyleClass(
+        'fade_in',
+        `
       animation-duration: 0.3s;
       animation-name: ${Style.CLASS_PREFIX}_fade_in_animation_frames;
-    `));
-    Style.addClass(new StyleClass('fade_out', `
+    `
+      )
+    );
+    Style.addClass(
+      new StyleClass(
+        'fade_out',
+        `
       animation-duration: 0.3s;
       animation-name: ${Style.CLASS_PREFIX}_fade_out_animation_frames;
-    `));
+    `
+      )
+    );
   }
 
   public static removeStyleSheet(): void {
@@ -157,7 +183,7 @@ export class StyleRule {
    */
   constructor(selector: string, style: string) {
     this.selector = selector;
-    this.style = style; 
+    this.style = style;
   }
 }
 
@@ -169,7 +195,7 @@ export class StyleClass {
    * CSS style rules for the class.
    */
   public style: string;
-  
+
   private _localName: string;
   /**
    * Returns fully qualified CSS class name.
@@ -185,6 +211,6 @@ export class StyleClass {
    */
   constructor(name: string, style: string) {
     this._localName = name;
-    this.style = style; 
+    this.style = style;
   }
 }
