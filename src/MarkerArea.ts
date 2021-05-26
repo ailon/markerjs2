@@ -714,6 +714,7 @@ export class MarkerArea {
     this.coverDiv.className = Style.CLASS_PREFIX;
     // hardcode font size so nothing inside is affected by higher up settings
     this.coverDiv.style.fontSize = '16px';
+    this.coverDiv.style.userSelect = 'none';
     switch (this.settings.displayMode) {
       case 'inline': {
         this.coverDiv.style.position = 'absolute';
