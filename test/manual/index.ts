@@ -26,6 +26,8 @@ export class Experiments {
 
     this.markerArea1.settings.defaultColorsFollowCurrentColors = true;
     
+    // this.markerArea1.settings.defaultStrokeWidth = 10;
+
     // this.markerArea1.settings.newFreehandMarkerOnPointerUp = true;
 
     // this.markerArea1.uiStyleSettings.toolbarHeight = 40;

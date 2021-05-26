@@ -7,6 +7,7 @@ import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { FreehandMarkerState } from './FreehandMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
+import { LineWidthPanel } from '../../ui/toolbox-panels/LineWidthPanel';
 
 
 export class FreehandMarker extends RectangularBoxMarkerBase {
@@ -36,6 +37,8 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
   protected lineWidth = 3;
 
   private colorPanel: ColorPickerPanel;
+  private lineWidthPanel: LineWidthPanel;
+
 
   private canvasElement: HTMLCanvasElement;
   private canvasContext: CanvasRenderingContext2D;
@@ -60,10 +63,12 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     super(container, overlayContainer, settings);
 
     this.color = settings.defaultColor;
+    this.lineWidth = settings.defaultStrokeWidth;
 
     this.setColor = this.setColor.bind(this);
     this.addCanvas = this.addCanvas.bind(this);
     this.finishCreation = this.finishCreation.bind(this);
+    this.setLineWidth = this.setLineWidth.bind(this);
 
     this.colorPanel = new ColorPickerPanel(
       'Color',
@@ -71,6 +76,14 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
       settings.defaultColor
     );
     this.colorPanel.onColorChanged = this.setColor;
+
+    this.lineWidthPanel = new LineWidthPanel(
+      'Line width',
+      settings.defaultStrokeWidths,
+      settings.defaultStrokeWidth
+    );
+    this.lineWidthPanel.onWidthChanged = this.setLineWidth;
+
   }
 
   /**
@@ -295,11 +308,20 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
   }
 
   /**
+   * Sets line width.
+   * @param width - new line width
+   */
+   protected setLineWidth(width: number): void {
+    this.lineWidth = width;
+  }
+
+
+  /**
    * Returns the list of toolbox panels for this marker type.
    */
   public get toolboxPanels(): ToolboxPanel[] {
     if (this.state === 'new' || this.state === 'creating') {
-      return [this.colorPanel];
+      return [this.colorPanel, this.lineWidthPanel];
     } else {
       return [];
     }
