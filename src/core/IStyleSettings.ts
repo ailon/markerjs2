@@ -3,6 +3,10 @@
  */
 export interface IStyleSettings {
   /**
+   * Background color for the editor canvas when in popup mode.
+   */
+  canvasBackgroundColor?: string;
+  /**
    * Background color of the toolbar block.
    */
   toolbarBackgroundColor?: string;
@@ -19,6 +23,26 @@ export interface IStyleSettings {
    */
   toolbarHeight?: number;
   /**
+   * If set to true, the toolbar is hidden.
+   */
+  hideToolbar?: boolean;
+  /**
+   * If set to true, the toolbox is hidden.
+   */
+  hideToolbox?: boolean;
+  /**
+   * Is undo button visible?
+   * 
+   * @since 2.6.0
+   */
+  undoButtonVisible?: boolean;
+  /**
+   * Is redo button visible?
+   * 
+   * @since 2.6.0
+   */
+  redoButtonVisible?: boolean;
+  /**
    * Background color of the toolbox (property panel) block.
    */
   toolboxBackgroundColor?: string;
@@ -30,6 +54,22 @@ export interface IStyleSettings {
    * Accent color for selected toolbox objects.
    */
   toolboxAccentColor?: string;
+  /**
+   * Custom icon color for the select (pointer) toolbar button
+   */
+  selectButtonColor?: string;
+  /**
+   * Custom icon color for the delete toolbar button
+   */
+  deleteButtonColor?: string;
+  /**
+   * Custom icon color for the OK (render) toolbar button
+   */
+  okButtonColor?: string;
+  /**
+   * Custom icon color for the close (cancel) toolbar button
+   */
+  closeButtonColor?: string;
   /**
    * CSS class name defining the visual style of the toolbar block.
    * 

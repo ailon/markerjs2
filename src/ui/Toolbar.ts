@@ -6,6 +6,8 @@ import DeleteIcon from './toolbar-core-icons/delete.svg';
 import CheckIcon from './toolbar-core-icons/check.svg';
 import CloseIcon from './toolbar-core-icons/close.svg';
 import OverflowIcon from './toolbar-core-icons/overflow.svg';
+import UndoIcon from './toolbar-core-icons/undo.svg';
+import RedoIcon from './toolbar-core-icons/redo.svg';
 import { IStyleSettings } from '../core/IStyleSettings';
 import { DisplayMode } from '../core/Settings';
 
@@ -83,8 +85,9 @@ export class Toolbar {
   /**
    * Creates and displays the toolbar UI.
    */
-  public show(): void {
+  public show(visiblity: string): void {
     this.uiContainer = document.createElement('div');
+    this.uiContainer.style.visibility = visiblity;
     this.uiContainer.className = `${this.toolbarStyleClass.name} ${Style.fadeInAnimationClassName} ${
       this.uiStyleSettings.toolbarStyleColorsClassName ? 
       this.uiStyleSettings.toolbarStyleColorsClassName : this.toolbarStyleColorsClass.name}`;
@@ -96,6 +99,12 @@ export class Toolbar {
 
     this.addActionButton(actionButtonBlock, CursorIcon, 'select');
     this.addActionButton(actionButtonBlock, DeleteIcon, 'delete');
+    if (this.uiStyleSettings.undoButtonVisible) {
+      this.addActionButton(actionButtonBlock, UndoIcon, 'undo');
+    }
+    if (this.uiStyleSettings.redoButtonVisible) {
+      this.addActionButton(actionButtonBlock, RedoIcon, 'redo');
+    }
 
     this.markerButtonBlock = document.createElement('div');
     this.markerButtonBlock.className = this.toolbarBlockStyleClass.name;
@@ -239,6 +248,27 @@ export class Toolbar {
     actionButton.addEventListener('click', () => {
       this.actionToolbarButtonClicked(actionButton, value);
     });
+    switch(value) {
+      case 'select':
+        actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
+        break;
+      case 'delete':
+        actionButton.style.fill = this.uiStyleSettings.deleteButtonColor;
+        break;
+      case 'undo':
+          actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
+          break;
+      case 'redo':
+          actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
+          break;
+        case 'render':
+        actionButton.style.fill = this.uiStyleSettings.okButtonColor;
+        break;
+      case 'close':
+        actionButton.style.fill = this.uiStyleSettings.closeButtonColor;
+        break;
+    }
+
     container.appendChild(actionButton);
     this.buttons.push(actionButton);
   }
@@ -249,6 +279,7 @@ export class Toolbar {
         'toolbar',
         `
       width: 100%;
+      flex-shrink: 0;
       display: flex;
       flex-direction: row;
       justify-content: space-between;      

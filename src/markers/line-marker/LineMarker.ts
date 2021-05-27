@@ -190,6 +190,7 @@ export class LineMarker extends LinearMarkerBase {
   protected setStrokeColor(color: string): void {
     this.strokeColor = color;
     this.adjustVisual();
+    this.colorChanged(color);
   }
   /**
    * Sets line width.

@@ -89,5 +89,23 @@ export class Settings {
     'Courier, "Courier New", monospace',
     'cursive',
     'fantasy'
-  ]
+  ];
+
+  /**
+   * Margin in pixels between marker.js popup UI and window borders.
+   */
+  public popupMargin = 30;
+
+  /**
+   * Create a new Freehand marker for every stroke.
+   */
+  public newFreehandMarkerOnPointerUp = false;
+
+  /**
+   * If set to true, when colors on a marker are changed 
+   * it changes the default color for other markers as well.
+   * 
+   * @since 2.7.0
+   */
+  public defaultColorsFollowCurrentColors = false;
 }

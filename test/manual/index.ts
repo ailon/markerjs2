@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Activator, MarkerArea } from '../../src';
+import { Activator, FrameMarker, MarkerArea, Style } from '../../src';
 import { DisplayMode } from '../../src/core/Settings';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
 
@@ -19,14 +19,30 @@ export class Experiments {
 
   public openMarkerArea(target: HTMLImageElement): void {
     this.markerArea1 = new MarkerArea(target);
+    Style.styleSheetRoot = document.head;
     this.markerArea1.addRenderEventListener(this.renderResult);
     this.markerArea1.settings.displayMode = this.displayMode;
+    this.markerArea1.settings.popupMargin = 10;
+
+    this.markerArea1.settings.defaultColorsFollowCurrentColors = true;
+    
+    // this.markerArea1.settings.defaultStrokeWidth = 10;
+
+    this.markerArea1.settings.newFreehandMarkerOnPointerUp = true;
 
     // this.markerArea1.uiStyleSettings.toolbarHeight = 40;
     // if (this.oddLaunch) {
     //   this.markerArea1.uiStyleSettings.toolbarColor = 'blue';
     // }
     // this.oddLaunch = !this.oddLaunch;
+
+    this.markerArea1.uiStyleSettings.selectButtonColor = 'lightblue';
+    this.markerArea1.uiStyleSettings.deleteButtonColor = 'red';
+    this.markerArea1.uiStyleSettings.okButtonColor = 'green';
+    this.markerArea1.uiStyleSettings.closeButtonColor = 'yellow';
+    
+    // this.markerArea1.uiStyleSettings.undoButtonVisible = false;
+    this.markerArea1.uiStyleSettings.redoButtonVisible = true;
 
     // this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
     // this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';
@@ -40,6 +56,8 @@ export class Experiments {
     // this.markerArea1.availableMarkerTypes = ['CalloutMarker', ...this.markerArea1.BASIC_MARKER_TYPES];
     this.markerArea1.availableMarkerTypes = this.markerArea1.ALL_MARKER_TYPES;
 
+    // this.markerArea1.renderWidth = 1000;
+    // this.markerArea1.renderHeight = 400;
     // this.markerArea1.renderAtNaturalSize = true;
     // this.markerArea1.renderImageType = 'image/jpeg';
     // this.markerArea1.renderImageQuality = 0.2;
@@ -70,4 +88,36 @@ export class Experiments {
       this.markerArea1.close();
     }
   }
+
+  public addFrameMarker(): void {
+    if (this.markerArea1) {
+      this.markerArea1.createNewMarker(FrameMarker);
+    }
+  }
+  public deleteCurrentMarker(): void {
+    if (this.markerArea1) {
+      this.markerArea1.deleteSelectedMarker();
+    }
+  }
+  public renderAndClose(): void {
+    if (this.markerArea1) {
+      this.markerArea1.startRenderAndClose();
+    }
+  }
+
+  public openNoUI(target: HTMLImageElement): void {
+    this.markerArea1 = new MarkerArea(target);
+    this.markerArea1.addRenderEventListener(this.renderResult);
+    this.markerArea1.settings.displayMode = this.displayMode;
+
+    // this.markerArea1.uiStyleSettings.toolbarHeight = 0;
+    this.markerArea1.uiStyleSettings.hideToolbar = true;
+    this.markerArea1.uiStyleSettings.hideToolbox = true;
+
+    this.markerArea1.show();
+    if (this.currentState) {
+      this.markerArea1.restoreState(this.currentState);
+    }
+  }
+
 }

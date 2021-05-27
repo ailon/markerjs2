@@ -35,11 +35,13 @@ export class Toolbox {
         'toolbox',
         `
       width: 100%;
+      flex-shrink: 0;
       display: flex;
       flex-direction: column;
       font-family: sans-serif;
       ${this.displayMode === 'popup' ? 'height:' + this.uiStyleSettings.toolbarHeight * 2.5 + 'px;' : ''}
       box-sizing: content-box;
+      ${this.displayMode === 'popup' ? `background-color: ${this.uiStyleSettings.canvasBackgroundColor};` : ''}
       ${this.displayMode === 'inline' ? `border-bottom-left-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;` : ''}
       ${this.displayMode === 'inline' ? `border-bottom-right-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;` : ''}
       overflow: hidden;
@@ -133,8 +135,9 @@ export class Toolbox {
   /**
    * Creates and displays the main toolbox UI.
    */
-  public show(): void {
+  public show(visiblity: string): void {
     this.uiContainer = document.createElement('div');
+    this.uiContainer.style.visibility = visiblity;
     this.uiContainer.className = `${this.toolboxStyleClass.name} ${
       this.uiStyleSettings.toolboxStyleColorsClassName ?? this.toolboxStyleColorsClass.name}`;
 

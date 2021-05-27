@@ -11,7 +11,7 @@ export type ColorChangeHandler = (newColor: string) => void;
  * Color picker panel.
  */
 export class ColorPickerPanel extends ToolboxPanel {
-  private colors: string[] = [];
+  public colors: string[] = [];
   private currentColor?: string;
   private addTransparent = false;
 
@@ -89,7 +89,7 @@ export class ColorPickerPanel extends ToolboxPanel {
     colorBoxContainer.appendChild(colorBox);
 
     return colorBoxContainer;
-}
+  }
 
   private setCurrentColor(color: string, target: HTMLDivElement) {
     this.currentColor = color;

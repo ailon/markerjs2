@@ -92,10 +92,18 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     return this.top + this.height / 2;
   }
 
+  private _visual: SVGGraphicsElement;
   /**
    * Container for the marker's visual.
    */
-  protected visual: SVGGraphicsElement;
+  protected get visual(): SVGGraphicsElement {
+    return this._visual;
+  }
+  protected set visual(value: SVGGraphicsElement) {
+    this._visual = value;
+    const translate = SvgHelper.createTransform();
+    this._visual.transform.baseVal.appendItem(translate);
+  }
 
   /**
    * Container for the marker's editing controls.
@@ -221,9 +229,10 @@ export class RectangularBoxMarkerBase extends MarkerBase {
    * @param point - coordinates of the new top-left corner of the visual.
    */
   protected moveVisual(point: IPoint): void {
-    const translate = this.visual.transform.baseVal.getItem(0);
-    translate.setTranslate(point.x, point.y);
-    this.visual.transform.baseVal.replaceItem(translate, 0);
+    this.visual.style.transform = `translate(${point.x}px, ${point.y}px)`;
+    // const translate = this.visual.transform.baseVal.getItem(0);
+    // translate.setTranslate(point.x, point.y);
+    // this.visual.transform.baseVal.replaceItem(translate, 0);
   }
 
   /**

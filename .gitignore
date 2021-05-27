@@ -28,3 +28,4 @@ yarn-error.log*
 .vscode/launch.json
 /dts
 /docs
+debug.log
