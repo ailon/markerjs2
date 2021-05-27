@@ -1040,7 +1040,6 @@ export class MarkerArea {
       marker instanceof FreehandMarker &&
       this.settings.newFreehandMarkerOnPointerUp
     ) {
-      this.markers.push(marker);
       this.createNewMarker(FreehandMarker);
     } else {
       this.toolbar.setSelectMode();
