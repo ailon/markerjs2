@@ -1121,7 +1121,10 @@ export class MarkerArea {
   private onPointerMove(ev: PointerEvent) {
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
       if (this.currentMarker !== undefined || this.isDragging) {
-        ev.preventDefault();
+        // don't swallow the event when editing text markers
+        if (this.currentMarker === undefined || this.currentMarker.state !== 'edit') {
+          ev.preventDefault();
+        }
         this.currentMarker.manipulate(
           this.clientToLocalCoordinates(ev.clientX, ev.clientY)
         );
