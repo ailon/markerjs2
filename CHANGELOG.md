@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.2] - 2021-06-01
+### Fixed
+- it's impossible to select text with a mouse in TextMarker
+
 ## [2.8.1] - 2021-05-26
 ### Fixed
 - Freehand markers were added twice in newFreehandMarkerOnPointerUp mode
@@ -227,6 +231,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.8.2]: https://github.com/ailon/markerjs2/releases/tag/v2.8.2
 [2.8.1]: https://github.com/ailon/markerjs2/releases/tag/v2.8.1
 [2.8.0]: https://github.com/ailon/markerjs2/releases/tag/v2.8.0
 [2.7.1]: https://github.com/ailon/markerjs2/releases/tag/v2.7.1
