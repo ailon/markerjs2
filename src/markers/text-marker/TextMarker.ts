@@ -389,7 +389,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
    * @param color - new text color.
    */
   protected setColor(color: string): void {
-    SvgHelper.setAttributes(this.textElement, [['fill', color]]);
+    if(this.textElement) {
+      SvgHelper.setAttributes(this.textElement, [['fill', color]]);
+    }
     this.color = color;
     if (this.textEditor) {
       this.textEditor.style.color = this.color;

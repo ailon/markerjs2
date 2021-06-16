@@ -168,19 +168,20 @@ export class LineMarker extends LinearMarkerBase {
    * Adjusts visual after manipulation.
    */
   protected adjustVisual(): void {
-    this.selectorLine.setAttribute('x1', this.x1.toString());
-    this.selectorLine.setAttribute('y1', this.y1.toString());
-    this.selectorLine.setAttribute('x2', this.x2.toString());
-    this.selectorLine.setAttribute('y2', this.y2.toString());
-
-    this.visibleLine.setAttribute('x1', this.x1.toString());
-    this.visibleLine.setAttribute('y1', this.y1.toString());
-    this.visibleLine.setAttribute('x2', this.x2.toString());
-    this.visibleLine.setAttribute('y2', this.y2.toString());
-
-    SvgHelper.setAttributes(this.visibleLine, [['stroke', this.strokeColor]]);
-    SvgHelper.setAttributes(this.visibleLine, [['stroke-width', this.strokeWidth.toString()]]);
-    SvgHelper.setAttributes(this.visibleLine, [['stroke-dasharray', this.strokeDasharray.toString()]]);
+    if(this.selectorLine) {
+      this.selectorLine.setAttribute('x1', this.x1.toString());
+      this.selectorLine.setAttribute('y1', this.y1.toString());
+      this.selectorLine.setAttribute('x2', this.x2.toString());
+      this.selectorLine.setAttribute('y2', this.y2.toString());
+  
+      this.visibleLine.setAttribute('x1', this.x1.toString());
+      this.visibleLine.setAttribute('y1', this.y1.toString());
+      this.visibleLine.setAttribute('x2', this.x2.toString());
+      this.visibleLine.setAttribute('y2', this.y2.toString());
+      SvgHelper.setAttributes(this.visibleLine, [['stroke', this.strokeColor]]);
+      SvgHelper.setAttributes(this.visibleLine, [['stroke-width', this.strokeWidth.toString()]]);
+      SvgHelper.setAttributes(this.visibleLine, [['stroke-dasharray', this.strokeDasharray.toString()]]);
+    }
   }
 
   /**
