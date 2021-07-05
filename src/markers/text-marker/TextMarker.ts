@@ -11,8 +11,8 @@ import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 export class TextMarker extends RectangularBoxMarkerBase {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'TextMarker';
@@ -48,7 +48,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected fontFamilyPanel: FontFamilyPanel;
 
-  private readonly DEFAULT_TEXT = "your text here";
+  private readonly DEFAULT_TEXT = 'your text here';
   private text: string = this.DEFAULT_TEXT;
   /**
    * Visual text element.
@@ -78,13 +78,17 @@ export class TextMarker extends RectangularBoxMarkerBase {
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.color = settings.defaultColor;
     this.fontFamily = settings.defaultFontFamily;
 
-    this.defaultSize = {x: 100, y: 30};
+    this.defaultSize = { x: 100, y: 30 };
 
     this.setColor = this.setColor.bind(this);
     this.setFont = this.setFont.bind(this);
@@ -112,19 +116,24 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
-    if (super.ownsTarget(el) || el === this.visual || el === this.textElement || el === this.bgRectangle) {
+    if (
+      super.ownsTarget(el) ||
+      el === this.visual ||
+      el === this.textElement ||
+      el === this.bgRectangle
+    ) {
       return true;
     } else {
       let found = false;
-      this.textElement.childNodes.forEach(span => {
+      this.textElement.childNodes.forEach((span) => {
         if (span === el) {
           found = true;
         }
-      })
+      });
       return found;
     }
   }
@@ -135,9 +144,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
   protected createVisual(): void {
     this.visual = SvgHelper.createGroup();
 
-    this.bgRectangle = SvgHelper.createRect(1, 1, [
-      ['fill', 'transparent']
-    ]);
+    this.bgRectangle = SvgHelper.createRect(1, 1, [['fill', 'transparent']]);
     this.visual.appendChild(this.bgRectangle);
 
     this.textElement = SvgHelper.createText([
@@ -145,7 +152,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
       ['font-family', this.fontFamily],
       ['font-size', '16px'],
       ['x', '0'],
-      ['y', '0']
+      ['y', '0'],
     ]);
     this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // translate transorm
     this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transorm
@@ -158,7 +165,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -177,18 +184,22 @@ export class TextMarker extends RectangularBoxMarkerBase {
   }
 
   private renderText() {
-    const LINE_SIZE = "1.2em";
+    const LINE_SIZE = '1.2em';
 
     while (this.textElement.lastChild) {
-        this.textElement.removeChild(this.textElement.lastChild);
+      this.textElement.removeChild(this.textElement.lastChild);
     }
 
     const lines = this.text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
-    lines.forEach(line => {
-        if (line.trim() === "") {
-            line = " "; // workaround for swallowed empty lines
-        }
-        this.textElement.appendChild(SvgHelper.createTSpan(line, [["x", "0"], ["dy", LINE_SIZE]]));
+    lines.forEach((line) => {
+      this.textElement.appendChild(
+        SvgHelper.createTSpan(
+          // workaround for swallowed empty lines
+          line.trim() === '' ? ' ' : line.trim(), [
+          ['x', '0'],
+          ['dy', LINE_SIZE],
+        ])
+      );
     });
 
     setTimeout(this.sizeText, 10);
@@ -198,9 +209,13 @@ export class TextMarker extends RectangularBoxMarkerBase {
     const textSize = this.textElement.getBBox();
     let scale = 1.0;
     if (textSize.width > 0 && textSize.height > 0) {
-        const xScale = (this.width * 1.0 - this.width * this.padding * 2 / 100) / textSize.width;
-        const yScale = (this.height * 1.0 - this.height * this.padding * 2 / 100) / textSize.height;
-        scale = Math.min(xScale, yScale);
+      const xScale =
+        (this.width * 1.0 - (this.width * this.padding * 2) / 100) /
+        textSize.width;
+      const yScale =
+        (this.height * 1.0 - (this.height * this.padding * 2) / 100) /
+        textSize.height;
+      scale = Math.min(xScale, yScale);
     }
     return scale;
   }
@@ -211,9 +226,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
     let y = 0;
     if (textSize.width > 0 && textSize.height > 0) {
       x = (this.width - textSize.width * scale) / 2;
-      y = this.height / 2 - textSize.height * scale / 2;
+      y = this.height / 2 - (textSize.height * scale) / 2;
     }
-    return {x: x, y: y};
+    return { x: x, y: y };
   }
 
   private sizeText() {
@@ -226,28 +241,30 @@ export class TextMarker extends RectangularBoxMarkerBase {
       // workaround for legacy Edge as transforms don't work otherwise but this way it doesn't work in Safari
       this.textElement.style.transform = `translate(${position.x}px, ${position.y}px) scale(${scale}, ${scale})`;
     } else {
-      this.textElement.transform.baseVal.getItem(0).setTranslate(position.x, position.y);
+      this.textElement.transform.baseVal
+        .getItem(0)
+        .setTranslate(position.x, position.y);
       this.textElement.transform.baseVal.getItem(1).setScale(scale, scale);
     }
   }
 
-
   /**
    * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
+   *
    * @param point - event coordinates.
    */
   public manipulate(point: IPoint): void {
     super.manipulate(point);
     if (this.pointerDownPoint !== undefined) {
-      this.isMoved = Math.abs(point.x - this.pointerDownPoint.x) > 5 || 
+      this.isMoved =
+        Math.abs(point.x - this.pointerDownPoint.x) > 5 ||
         Math.abs(point.y - this.pointerDownPoint.y) > 5;
     }
   }
 
   /**
    * Resize marker based on current pointer coordinates and context.
-   * @param point 
+   * @param point
    */
   protected resize(point: IPoint): void {
     super.resize(point);
@@ -273,15 +290,17 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
-   * 
+   *
    * @param point - event coordinates.
    */
   public pointerUp(point: IPoint): void {
     const inState = this.state;
     super.pointerUp(point);
     this.setSize();
-    if (inState === 'creating' || 
-      (!this.isMoved && (Date.now() - this.pointerDownTimestamp) > 500)) {
+    if (
+      inState === 'creating' ||
+      (!this.isMoved && Date.now() - this.pointerDownTimestamp > 500)
+    ) {
       this.showTextEditor();
     }
     this.pointerDownPoint = undefined;
@@ -313,18 +332,22 @@ export class TextMarker extends RectangularBoxMarkerBase {
     });
     this.textEditor.addEventListener('input', () => {
       let fontSize = Number.parseFloat(this.textEditor.style.fontSize);
-      while(this.textEditor.clientWidth >= Number.parseInt(this.textEditor.style.maxWidth) && fontSize > 0.9) {
+      while (
+        this.textEditor.clientWidth >=
+          Number.parseInt(this.textEditor.style.maxWidth) &&
+        fontSize > 0.9
+      ) {
         fontSize -= 0.1;
         this.textEditor.style.fontSize = `${Math.max(fontSize, 0.9)}em`;
       }
-    })
+    });
     this.textEditor.addEventListener('keyup', (ev) => {
       ev.cancelBubble = true;
     });
 
     this.textEditDiv.addEventListener('pointerup', () => {
       this.textEditDivClicked(this.textEditor.innerText);
-    })
+    });
     this.textEditDiv.appendChild(this.textEditor);
     this.overlayContainer.appendChild(this.textEditDiv);
 
@@ -340,27 +363,29 @@ export class TextMarker extends RectangularBoxMarkerBase {
       const textScale = this.getTextScale();
       // const textPosition = this.getTextPosition(textScale);
       const rPosition = this.rotatePoint({
-        x: this.left + this.width / 2, 
-        y: this.top + this.height / 2
+        x: this.left + this.width / 2,
+        y: this.top + this.height / 2,
       });
       const textSize = this.textElement.getBBox();
       const rWH = {
         x: textSize.width * textScale,
-        y: textSize.height * textScale
+        y: textSize.height * textScale,
       };
       rPosition.x -= rWH.x / 2;
       rPosition.y -= rWH.y / 2;
 
       this.textEditor.style.top = `${rPosition.y}px`;
       this.textEditor.style.left = `${rPosition.x}px`;
-      this.textEditor.style.maxWidth = `${this.overlayContainer.offsetWidth - rPosition.x}px`;
+      this.textEditor.style.maxWidth = `${
+        this.overlayContainer.offsetWidth - rPosition.x
+      }px`;
       this.textEditor.style.fontSize = `${Math.max(16 * textScale, 12)}px`;
       this.textElement.style.display = 'none';
     }
   }
 
   private textEditDivClicked(text: string) {
-    this.text = text;
+    this.text = text.trim();
     this.overlayContainer.innerHTML = '';
     this.renderText();
     this.showVisual();
@@ -375,13 +400,13 @@ export class TextMarker extends RectangularBoxMarkerBase {
     }
     super.deselect();
   }
-  
+
   /**
    * Opens text editor on double-click.
-   * @param point 
-   * @param target 
+   * @param point
+   * @param target
    */
-  public dblClick(point: IPoint, target?: EventTarget):void {
+  public dblClick(point: IPoint, target?: EventTarget): void {
     super.dblClick(point, target);
 
     this.showTextEditor();
@@ -442,12 +467,15 @@ export class TextMarker extends RectangularBoxMarkerBase {
    * Returns current marker state that can be restored in the future.
    */
   public getState(): TextMarkerState {
-    const result: TextMarkerState = Object.assign({
-      color: this.color,
-      fontFamily: this.fontFamily,
-      padding: this.padding,
-      text: this.text
-    }, super.getState());
+    const result: TextMarkerState = Object.assign(
+      {
+        color: this.color,
+        fontFamily: this.fontFamily,
+        padding: this.padding,
+        text: this.text,
+      },
+      super.getState()
+    );
     result.typeName = TextMarker.typeName;
 
     return result;
@@ -455,7 +483,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {
@@ -472,7 +500,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   /**
    * Scales marker. Used after the image resize.
-   * 
+   *
    * @param scaleX - horizontal scale
    * @param scaleY - vertical scale
    */
