@@ -120,4 +120,17 @@ export class Experiments {
     }
   }
 
+  public getState(): void {
+    if (this.markerArea1) {
+      this.currentState = this.markerArea1.getState();
+      console.log(this.currentState);
+    }
+  }
+
+  public restoreState(): void {
+    if (this.markerArea1 && this.currentState) {
+      this.markerArea1.restoreState(this.currentState);
+    }
+  }
+
 }

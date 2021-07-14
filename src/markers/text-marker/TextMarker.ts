@@ -359,28 +359,32 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
   private positionTextEditor() {
     if (this.state === 'edit') {
-      this.textElement.style.display = '';
-      const textScale = this.getTextScale();
-      // const textPosition = this.getTextPosition(textScale);
-      const rPosition = this.rotatePoint({
-        x: this.left + this.width / 2,
-        y: this.top + this.height / 2,
-      });
-      const textSize = this.textElement.getBBox();
-      const rWH = {
-        x: textSize.width * textScale,
-        y: textSize.height * textScale,
-      };
-      rPosition.x -= rWH.x / 2;
-      rPosition.y -= rWH.y / 2;
+      if (this.textEditor === undefined) {
+        this.showTextEditor();
+      } else {
+        this.textElement.style.display = '';
+        const textScale = this.getTextScale();
+        // const textPosition = this.getTextPosition(textScale);
+        const rPosition = this.rotatePoint({
+          x: this.left + this.width / 2,
+          y: this.top + this.height / 2,
+        });
+        const textSize = this.textElement.getBBox();
+        const rWH = {
+          x: textSize.width * textScale,
+          y: textSize.height * textScale,
+        };
+        rPosition.x -= rWH.x / 2;
+        rPosition.y -= rWH.y / 2;
 
-      this.textEditor.style.top = `${rPosition.y}px`;
-      this.textEditor.style.left = `${rPosition.x}px`;
-      this.textEditor.style.maxWidth = `${
-        this.overlayContainer.offsetWidth - rPosition.x
-      }px`;
-      this.textEditor.style.fontSize = `${Math.max(16 * textScale, 12)}px`;
-      this.textElement.style.display = 'none';
+        this.textEditor.style.top = `${rPosition.y}px`;
+        this.textEditor.style.left = `${rPosition.x}px`;
+        this.textEditor.style.maxWidth = `${
+          this.overlayContainer.offsetWidth - rPosition.x
+        }px`;
+        this.textEditor.style.fontSize = `${Math.max(16 * textScale, 12)}px`;
+        this.textElement.style.display = 'none';
+      }
     }
   }
 
