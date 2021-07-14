@@ -122,7 +122,7 @@ export class Experiments {
 
   public getState(): void {
     if (this.markerArea1) {
-      this.currentState = this.markerArea1.getState();
+      this.currentState = this.markerArea1.getState(true);
       console.log(this.currentState);
     }
   }

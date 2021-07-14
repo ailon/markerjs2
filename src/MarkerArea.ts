@@ -948,8 +948,13 @@ export class MarkerArea {
   /**
    * Returns the complete state for the MarkerArea that can be preserved and used
    * to continue annotation next time.
+   * 
+   * @param deselectCurrentMarker - when `true` is passed, currently selected marker will be deselected before getting the state.
    */
-  public getState(): MarkerAreaState {
+  public getState(deselectCurrentMarker?: boolean): MarkerAreaState {
+    if (deselectCurrentMarker === true) {
+      this.setCurrentMarker();
+    }
     const result: MarkerAreaState = {
       width: this.imageWidth,
       height: this.imageHeight,
