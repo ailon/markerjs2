@@ -1059,7 +1059,12 @@ export class MarkerArea {
     }
   }
 
-  private setCurrentMarker(marker?: MarkerBase) {
+  /**
+   * Sets the currently selected marker or deselects it if no parameter passed.
+   *
+   * @param marker marker to select. Deselects current marker if undefined.
+   */
+  public setCurrentMarker(marker?: MarkerBase): void {
     if (this.currentMarker !== undefined) {
       this.currentMarker.deselect();
       this.toolbar.setCurrentMarker();
