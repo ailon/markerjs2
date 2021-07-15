@@ -43,6 +43,8 @@ export class ColorPickerPanel extends ToolboxPanel {
    */
   public getUi(): HTMLDivElement {
     const panelDiv = document.createElement('div');
+    panelDiv.style.overflow = 'hidden';
+    panelDiv.style.whiteSpace = 'nowrap';
     this.colors.forEach((color) => {
       const colorBoxContainer = this.getColorBox(color);
       panelDiv.appendChild(colorBoxContainer);
