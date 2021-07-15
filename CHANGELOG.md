@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - 2021-07-15
+### Added
+- optional `deselectCurrentMarker` parameter to `getState()` - when true deselects current marker before getting the state.
+
+### Changed
+- `setCurrentMarker()` to public so markers can be [de]selected programatically
+
+### Fixed
+- Uncaught TypeError exception when restoring TextMarker in edit state
+- color picker wrapping on smaller UI sizes
+
 ## [2.8.4] - 2021-07-05
 ### Fixed
 - couldn't render image when text marker text ended in space 
@@ -240,6 +251,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.9.0]: https://github.com/ailon/markerjs2/releases/tag/v2.9.0
 [2.8.4]: https://github.com/ailon/markerjs2/releases/tag/v2.8.4
 [2.8.3]: https://github.com/ailon/markerjs2/releases/tag/v2.8.3
 [2.8.2]: https://github.com/ailon/markerjs2/releases/tag/v2.8.2
