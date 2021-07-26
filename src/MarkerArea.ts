@@ -326,6 +326,8 @@ export class MarkerArea {
     this.colorChanged = this.colorChanged.bind(this);
     this.fillColorChanged = this.fillColorChanged.bind(this);
     this.onPopupTargetResize = this.onPopupTargetResize.bind(this);
+    this.showNotesEditor = this.showNotesEditor.bind(this);
+    this.hideNotesEditor = this.hideNotesEditor.bind(this);
   }
 
   private open(): void {
@@ -829,6 +831,7 @@ export class MarkerArea {
 
   private switchToSelectMode() {
     this.mode = 'select';
+    this.hideNotesEditor();
     if (this.currentMarker !== undefined) {
       if (this.currentMarker.state !== 'new') {
         this.currentMarker.select();
@@ -868,11 +871,21 @@ export class MarkerArea {
           this.redo();
           break;
         }
+        case 'notes': {
+          if (this.notesArea === undefined) {
+            this.switchToSelectMode();
+            this.showNotesEditor();
+          } else {
+            this.switchToSelectMode();
+          }
+          break;
+        }
         case 'close': {
           this.close();
           break;
         }
         case 'render': {
+          this.switchToSelectMode();
           this.startRenderAndClose();
           break;
         }
@@ -889,6 +902,34 @@ export class MarkerArea {
       this.markerImage.removeChild(this.currentMarker.container);
       this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
       this.addUndoStep();
+    }
+  }
+
+  private notesArea?: HTMLTextAreaElement;
+  private showNotesEditor() {
+    if (this.currentMarker !== undefined) {
+      //this.currentMarker.notes = 'temp notes for testing';
+      this.overlayContainer.innerHTML = '';
+      this.notesArea = document.createElement('textarea');
+      this.notesArea.className = this.uiStyleSettings.notesAreaStyleClassName;
+      this.notesArea.style.pointerEvents = 'auto';
+      this.notesArea.style.alignSelf = 'stretch';
+      this.notesArea.style.width = '100%';
+      this.notesArea.style.margin = `${
+        this.uiStyleSettings.toolbarHeight / 4
+      }px`;
+      this.notesArea.value = this.currentMarker.notes ?? '';
+      this.overlayContainer.appendChild(this.notesArea);
+    }
+  }
+  private hideNotesEditor() {
+    if (this.notesArea !== undefined) {
+      if (this.currentMarker !== undefined) {
+        this.currentMarker.notes =
+          this.notesArea.value.trim() !== '' ? this.notesArea.value : undefined;
+      }
+      this.overlayContainer.removeChild(this.notesArea);
+      this.notesArea = undefined;
     }
   }
 
@@ -948,7 +989,7 @@ export class MarkerArea {
   /**
    * Returns the complete state for the MarkerArea that can be preserved and used
    * to continue annotation next time.
-   * 
+   *
    * @param deselectCurrentMarker - when `true` is passed, currently selected marker will be deselected before getting the state.
    */
   public getState(deselectCurrentMarker?: boolean): MarkerAreaState {
@@ -1132,7 +1173,10 @@ export class MarkerArea {
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
       if (this.currentMarker !== undefined || this.isDragging) {
         // don't swallow the event when editing text markers
-        if (this.currentMarker === undefined || this.currentMarker.state !== 'edit') {
+        if (
+          this.currentMarker === undefined ||
+          this.currentMarker.state !== 'edit'
+        ) {
           ev.preventDefault();
         }
         this.currentMarker.manipulate(
@@ -1159,6 +1203,7 @@ export class MarkerArea {
   private onKeyUp(ev: KeyboardEvent) {
     if (
       this.currentMarker !== undefined &&
+      this.notesArea === undefined &&
       (ev.key === 'Delete' || ev.key === 'Backspace')
     ) {
       this.removeMarker(this.currentMarker);

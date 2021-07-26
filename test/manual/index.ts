@@ -43,6 +43,7 @@ export class Experiments {
     
     // this.markerArea1.uiStyleSettings.undoButtonVisible = false;
     this.markerArea1.uiStyleSettings.redoButtonVisible = true;
+    this.markerArea1.uiStyleSettings.notesButtonVisible = true;
 
     // this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
     // this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';
@@ -52,6 +53,8 @@ export class Experiments {
     // this.markerArea1.uiStyleSettings.toolboxButtonStyleColorsClassName = 'toolbox-button';
     // this.markerArea1.uiStyleSettings.toolboxActiveButtonStyleColorsClassName = 'toolbox-active-button';
     // this.markerArea1.uiStyleSettings.toolboxPanelRowStyleColorsClassName = 'toolbox-panel-row';
+
+    // this.markerArea1.uiStyleSettings.notesAreaStyleClassName = 'notes-area';
 
     // this.markerArea1.availableMarkerTypes = ['CalloutMarker', ...this.markerArea1.BASIC_MARKER_TYPES];
     this.markerArea1.availableMarkerTypes = this.markerArea1.ALL_MARKER_TYPES;
@@ -72,6 +75,7 @@ export class Experiments {
   private renderResult(dataUrl: string, state: MarkerAreaState) {
     (document.getElementById('resultImage1') as HTMLImageElement).src = dataUrl;
     this.currentState = JSON.parse(JSON.stringify(state));
+    console.log(this.currentState);
   }
 
   public async render(resultTarget: HTMLImageElement): Promise<void> {

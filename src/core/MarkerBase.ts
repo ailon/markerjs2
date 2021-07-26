@@ -44,6 +44,11 @@ export class MarkerBase {
   protected globalSettings: Settings;
 
   /**
+   * Additional information about the marker
+   */
+  public notes?: string;
+
+  /**
    * Returns the list of toolbox panels for this marker type.
    */
   public get toolboxPanels(): ToolboxPanel[] {
@@ -165,7 +170,8 @@ export class MarkerBase {
   public getState(): MarkerBaseState {
     return { 
       typeName: MarkerBase.typeName, 
-      state: this.state 
+      state: this.state,
+      notes: this.notes
     };
   }
 
@@ -176,6 +182,7 @@ export class MarkerBase {
    */
   public restoreState(state: MarkerBaseState): void {
     this._state = state.state;
+    this.notes = state.notes;
   }
 
   /**

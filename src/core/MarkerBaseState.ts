@@ -15,4 +15,8 @@ export interface MarkerBaseState {
    * Current editing state/status.
    */
   state: MarkerState;
+  /**
+   * Additional information about the marker.
+   */
+  notes?: string;
 }

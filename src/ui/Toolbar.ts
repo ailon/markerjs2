@@ -8,6 +8,7 @@ import CloseIcon from './toolbar-core-icons/close.svg';
 import OverflowIcon from './toolbar-core-icons/overflow.svg';
 import UndoIcon from './toolbar-core-icons/undo.svg';
 import RedoIcon from './toolbar-core-icons/redo.svg';
+import NotesIcon from './toolbar-core-icons/notes.svg';
 import { IStyleSettings } from '../core/IStyleSettings';
 import { DisplayMode } from '../core/Settings';
 
@@ -49,8 +50,8 @@ export class Toolbar {
   private toolbarButtonStyleColorsClass: StyleClass;
   private toolbarActiveButtonStyleColorsClass: StyleClass;
 
-  private markerButtonBlock: HTMLDivElement
-  private markerButtonOverflowBlock: HTMLDivElement
+  private markerButtonBlock: HTMLDivElement;
+  private markerButtonOverflowBlock: HTMLDivElement;
 
   private buttonClickListeners: ToolbarButtonClickHandler[] = [];
 
@@ -66,9 +67,9 @@ export class Toolbar {
    * @param uiStyleSettings - settings for styling the tooblar ui.
    */
   constructor(
-    markerjsContainer: HTMLDivElement, 
-    displayMode: DisplayMode, 
-    markerItems: typeof MarkerBase[], 
+    markerjsContainer: HTMLDivElement,
+    displayMode: DisplayMode,
+    markerItems: typeof MarkerBase[],
     uiStyleSettings: IStyleSettings
   ) {
     this.markerjsContainer = markerjsContainer;
@@ -88,9 +89,13 @@ export class Toolbar {
   public show(visiblity: string): void {
     this.uiContainer = document.createElement('div');
     this.uiContainer.style.visibility = visiblity;
-    this.uiContainer.className = `${this.toolbarStyleClass.name} ${Style.fadeInAnimationClassName} ${
-      this.uiStyleSettings.toolbarStyleColorsClassName ? 
-      this.uiStyleSettings.toolbarStyleColorsClassName : this.toolbarStyleColorsClass.name}`;
+    this.uiContainer.className = `${this.toolbarStyleClass.name} ${
+      Style.fadeInAnimationClassName
+    } ${
+      this.uiStyleSettings.toolbarStyleColorsClassName
+        ? this.uiStyleSettings.toolbarStyleColorsClassName
+        : this.toolbarStyleColorsClass.name
+    }`;
 
     const actionButtonBlock = document.createElement('div');
     actionButtonBlock.className = this.toolbarBlockStyleClass.name;
@@ -105,6 +110,9 @@ export class Toolbar {
     if (this.uiStyleSettings.redoButtonVisible) {
       this.addActionButton(actionButtonBlock, RedoIcon, 'redo');
     }
+    if (this.uiStyleSettings.notesButtonVisible) {
+      this.addActionButton(actionButtonBlock, NotesIcon, 'notes');
+    }
 
     this.markerButtonBlock = document.createElement('div');
     this.markerButtonBlock.className = this.toolbarBlockStyleClass.name;
@@ -113,9 +121,13 @@ export class Toolbar {
     this.uiContainer.appendChild(this.markerButtonBlock);
 
     this.markerButtonOverflowBlock = document.createElement('div');
-    this.markerButtonOverflowBlock.className = `${this.toolbarOverflowBlockStyleClass.name} ${
-      this.uiStyleSettings.toolbarOverflowBlockStyleColorsClassName ? 
-      this.uiStyleSettings.toolbarOverflowBlockStyleColorsClassName : this.toolbarOverflowBlockStyleColorsClass.name}`;
+    this.markerButtonOverflowBlock.className = `${
+      this.toolbarOverflowBlockStyleClass.name
+    } ${
+      this.uiStyleSettings.toolbarOverflowBlockStyleColorsClassName
+        ? this.uiStyleSettings.toolbarOverflowBlockStyleColorsClassName
+        : this.toolbarOverflowBlockStyleColorsClass.name
+    }`;
     this.markerButtonOverflowBlock.style.display = 'none';
     this.uiContainer.appendChild(this.markerButtonOverflowBlock);
 
@@ -124,7 +136,7 @@ export class Toolbar {
         const buttonContainer = document.createElement('div');
         buttonContainer.className = `${this.toolbarButtonStyleClass.name}`;
         //  ${
-        //   this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+        //   this.uiStyleSettings.toolbarButtonStyleColorsClassName ?
         //   this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
         buttonContainer.innerHTML = mi.icon;
         buttonContainer.addEventListener('click', () => {
@@ -136,12 +148,14 @@ export class Toolbar {
       });
       this.overflowButton = document.createElement('div');
       this.overflowButton.className = `${this.toolbarButtonStyleClass.name} ${
-        this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
-        this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
+        this.uiStyleSettings.toolbarButtonStyleColorsClassName
+          ? this.uiStyleSettings.toolbarButtonStyleColorsClassName
+          : this.toolbarButtonStyleColorsClass.name
+      }`;
       this.overflowButton.innerHTML = OverflowIcon;
-      this.overflowButton.addEventListener('click', this.overflowButtonClicked)
+      this.overflowButton.addEventListener('click', this.overflowButtonClicked);
       this.markerButtonBlock.appendChild(this.overflowButton);
-  }
+    }
 
     const resultButtonBlock = document.createElement('div');
     resultButtonBlock.className = this.toolbarBlockStyleClass.name;
@@ -162,7 +176,7 @@ export class Toolbar {
 
   /**
    * Add a listener to the toolbar button click event.
-   * @param listener 
+   * @param listener
    */
   public addButtonClickListener(listener: ToolbarButtonClickHandler): void {
     this.buttonClickListeners.push(listener);
@@ -170,7 +184,7 @@ export class Toolbar {
 
   /**
    * Remove a listener for the toolbar button click event.
-   * @param listener 
+   * @param listener
    */
   public removeButtonClickListener(listener: ToolbarButtonClickHandler): void {
     if (this.buttonClickListeners.indexOf(listener) > -1) {
@@ -194,17 +208,31 @@ export class Toolbar {
    */
   public adjustLayout(): void {
     if (this.markerButtons && this.markerButtons.length > 0) {
-      const numberToFit = Math.floor(this.markerButtonBlock.clientWidth / this.uiStyleSettings.toolbarHeight) - 1;
+      const numberToFit =
+        Math.floor(
+          this.markerButtonBlock.clientWidth /
+            this.uiStyleSettings.toolbarHeight
+        ) - 1;
       this.markerButtonBlock.innerHTML = '';
       this.markerButtonOverflowBlock.innerHTML = '';
-      for (let buttonIndex = 0; buttonIndex < this.markerButtons.length; buttonIndex++) {
-        if (buttonIndex < numberToFit || (buttonIndex === numberToFit && (this.markerButtons.length - 1) === numberToFit)) {
+      for (
+        let buttonIndex = 0;
+        buttonIndex < this.markerButtons.length;
+        buttonIndex++
+      ) {
+        if (
+          buttonIndex < numberToFit ||
+          (buttonIndex === numberToFit &&
+            this.markerButtons.length - 1 === numberToFit)
+        ) {
           this.markerButtonBlock.appendChild(this.markerButtons[buttonIndex]);
         } else {
           if (buttonIndex === numberToFit) {
             this.markerButtonBlock.appendChild(this.overflowButton);
           }
-          this.markerButtonOverflowBlock.appendChild(this.markerButtons[buttonIndex]);
+          this.markerButtonOverflowBlock.appendChild(
+            this.markerButtons[buttonIndex]
+          );
         }
       }
     }
@@ -213,42 +241,67 @@ export class Toolbar {
   private overflowButtonClicked() {
     if (this.markerButtonOverflowBlock.style.display !== 'none') {
       this.markerButtonOverflowBlock.className = this.markerButtonOverflowBlock.className.replace(
-        Style.fadeInAnimationClassName, '');
+        Style.fadeInAnimationClassName,
+        ''
+      );
       this.markerButtonOverflowBlock.style.display = 'none';
     } else {
       this.markerButtonOverflowBlock.className += ` ${Style.fadeInAnimationClassName}`;
-      this.markerButtonOverflowBlock.style.top = `${this.uiContainer.offsetTop + this.overflowButton.offsetHeight}px`;
-      this.markerButtonOverflowBlock.style.right = `${this.uiContainer.offsetWidth - this.overflowButton.offsetLeft - this.overflowButton.offsetWidth + this.uiContainer.offsetLeft * 2}px`;
+      this.markerButtonOverflowBlock.style.top = `${
+        this.uiContainer.offsetTop + this.overflowButton.offsetHeight
+      }px`;
+      this.markerButtonOverflowBlock.style.right = `${
+        this.uiContainer.offsetWidth -
+        this.overflowButton.offsetLeft -
+        this.overflowButton.offsetWidth +
+        this.uiContainer.offsetLeft * 2
+      }px`;
       this.markerButtonOverflowBlock.style.display = 'inline-block';
     }
   }
 
   private resetButtonStyles() {
-    this.buttons.forEach(button => {
+    this.buttons.forEach((button) => {
       button.className = button.className
-        .replace(this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
-          this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name, '')
+        .replace(
+          this.uiStyleSettings.toolbarButtonStyleColorsClassName
+            ? this.uiStyleSettings.toolbarButtonStyleColorsClassName
+            : this.toolbarButtonStyleColorsClass.name,
+          ''
+        )
         .trim();
       button.className = button.className
-        .replace(this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName ? 
-          this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName : this.toolbarActiveButtonStyleColorsClass.name, '')
+        .replace(
+          this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName
+            ? this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName
+            : this.toolbarActiveButtonStyleColorsClass.name,
+          ''
+        )
         .trim();
-      button.className += ` ${this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
-        this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
+      button.className += ` ${
+        this.uiStyleSettings.toolbarButtonStyleColorsClassName
+          ? this.uiStyleSettings.toolbarButtonStyleColorsClassName
+          : this.toolbarButtonStyleColorsClass.name
+      }`;
     });
   }
 
-  private addActionButton(container: HTMLDivElement, icon: string, value: string) {
+  private addActionButton(
+    container: HTMLDivElement,
+    icon: string,
+    value: string
+  ) {
     const actionButton = document.createElement('div');
     actionButton.className = `${this.toolbarButtonStyleClass.name}`;
     //  ${
-    //   this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
+    //   this.uiStyleSettings.toolbarButtonStyleColorsClassName ?
     //   this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
     actionButton.innerHTML = icon;
+    actionButton.setAttribute('data-action', value);
     actionButton.addEventListener('click', () => {
       this.actionToolbarButtonClicked(actionButton, value);
     });
-    switch(value) {
+    switch (value) {
       case 'select':
         actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
         break;
@@ -256,12 +309,12 @@ export class Toolbar {
         actionButton.style.fill = this.uiStyleSettings.deleteButtonColor;
         break;
       case 'undo':
-          actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
-          break;
+        actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
+        break;
       case 'redo':
-          actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
-          break;
-        case 'render':
+        actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
+        break;
+      case 'render':
         actionButton.style.fill = this.uiStyleSettings.okButtonColor;
         break;
       case 'close':
@@ -285,8 +338,20 @@ export class Toolbar {
       justify-content: space-between;      
       height: ${this.uiStyleSettings.toolbarHeight}px;
       box-sizing: content-box;
-      ${this.displayMode === 'inline' ? `border-top-left-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;` : ''}
-      ${this.displayMode === 'inline' ? `border-top-right-radius: ${Math.round(this.uiStyleSettings.toolbarHeight/10)}px;` : ''}
+      ${
+        this.displayMode === 'inline'
+          ? `border-top-left-radius: ${Math.round(
+              this.uiStyleSettings.toolbarHeight / 10
+            )}px;`
+          : ''
+      }
+      ${
+        this.displayMode === 'inline'
+          ? `border-top-right-radius: ${Math.round(
+              this.uiStyleSettings.toolbarHeight / 10
+            )}px;`
+          : ''
+      }
       overflow: hidden;
     `
       )
@@ -334,21 +399,36 @@ export class Toolbar {
     );
 
     const buttonPadding = this.uiStyleSettings.toolbarHeight / 4;
-    this.toolbarButtonStyleClass = Style.addClass(new StyleClass('toolbar_button', `
+    this.toolbarButtonStyleClass = Style.addClass(
+      new StyleClass(
+        'toolbar_button',
+        `
       display: inline-block;
       width: ${this.uiStyleSettings.toolbarHeight - buttonPadding * 2}px;
       height: ${this.uiStyleSettings.toolbarHeight - buttonPadding * 2}px;
       padding: ${buttonPadding}px;
       box-sizing: content-box;
-    `));
-    this.toolbarButtonStyleColorsClass = Style.addClass(new StyleClass('toolbar_button_colors', `
+    `
+      )
+    );
+    this.toolbarButtonStyleColorsClass = Style.addClass(
+      new StyleClass(
+        'toolbar_button_colors',
+        `
       fill: ${this.uiStyleSettings.toolbarColor};
-    `));
+    `
+      )
+    );
 
-    this.toolbarActiveButtonStyleColorsClass = Style.addClass(new StyleClass('toolbar_active_button', `
+    this.toolbarActiveButtonStyleColorsClass = Style.addClass(
+      new StyleClass(
+        'toolbar_active_button',
+        `
       fill: ${this.uiStyleSettings.toolbarColor};
       background-color: ${this.uiStyleSettings.toolbarBackgroundHoverColor}
-    `));
+    `
+      )
+    );
 
     Style.addRule(
       new StyleRule(
@@ -369,7 +449,10 @@ export class Toolbar {
     );
   }
 
-  private markerToolbarButtonClicked(button: HTMLDivElement, markerType: typeof MarkerBase) {
+  private markerToolbarButtonClicked(
+    button: HTMLDivElement,
+    markerType: typeof MarkerBase
+  ) {
     this.setActiveButton(button);
     if (this.buttonClickListeners && this.buttonClickListeners.length > 0) {
       this.buttonClickListeners.forEach((listener) =>
@@ -392,25 +475,37 @@ export class Toolbar {
   private setActiveButton(button: HTMLDivElement) {
     this.resetButtonStyles();
     button.className = button.className
-      .replace(this.uiStyleSettings.toolbarButtonStyleColorsClassName ? 
-        this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name, '')
+      .replace(
+        this.uiStyleSettings.toolbarButtonStyleColorsClassName
+          ? this.uiStyleSettings.toolbarButtonStyleColorsClassName
+          : this.toolbarButtonStyleColorsClass.name,
+        ''
+      )
       .trim();
-    button.className += ` ${this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName ? 
-      this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName : this.toolbarActiveButtonStyleColorsClass.name}`;
+    button.className += ` ${
+      this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName
+        ? this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName
+        : this.toolbarActiveButtonStyleColorsClass.name
+    }`;
   }
 
   /**
-   * Sets current marker and enables/disables the delete button accordingly.
-   * @param marker 
+   * Sets current marker and enables/disables action buttons accordingly.
+   * @param marker
    */
   public setCurrentMarker(marker?: MarkerBase): void {
     this.currentMarker = marker;
-    if (this.currentMarker === undefined) {
-      this.buttons[1].style.fillOpacity = '0.4';
-      this.buttons[1].style.pointerEvents = 'none';
-    } else {
-      this.buttons[1].style.fillOpacity = '1';
-      this.buttons[1].style.pointerEvents = 'all';
-    }
+    const activeMarkerButtons = this.buttons.filter((btn) =>
+      /delete|notes/.test(btn.getAttribute('data-action'))
+    );
+    activeMarkerButtons.forEach(btn => {
+      if (this.currentMarker === undefined) {
+        btn.style.fillOpacity = '0.4';
+        btn.style.pointerEvents = 'none';
+      } else {
+        btn.style.fillOpacity = '1';
+        btn.style.pointerEvents = 'all';
+      }
+    })
   }
 }
