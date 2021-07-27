@@ -134,5 +134,10 @@ export interface IStyleSettings {
    */
   toolboxPanelRowStyleColorsClassName?: string;
 
+  /**
+   * CSS class name defining the visual style of the note editing text area.
+   * 
+   * @since 2.10.0
+   */
   notesAreaStyleClassName?: string;
 }
