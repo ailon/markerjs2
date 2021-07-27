@@ -552,11 +552,16 @@ export class MarkerArea {
   }
 
   private scaleMarkers(scaleX: number, scaleY: number) {
+    let preScaleSelectedMarker: MarkerBase;
     if (!(this.currentMarker && this.currentMarker instanceof TextMarker)) {
+      preScaleSelectedMarker = this.currentMarker;
       this.setCurrentMarker();
       this.toolbar.setSelectMode();
     }
     this.markers.forEach((marker) => marker.scale(scaleX, scaleY));
+    if (preScaleSelectedMarker !== undefined) {
+      this.setCurrentMarker(preScaleSelectedMarker);
+    }
   }
 
   private setEditingTarget() {
@@ -906,9 +911,12 @@ export class MarkerArea {
   }
 
   private notesArea?: HTMLTextAreaElement;
+  private get isNotesAreaOpen(): boolean {
+    return this.notesArea !== undefined;
+  }
+
   private showNotesEditor() {
     if (this.currentMarker !== undefined) {
-      //this.currentMarker.notes = 'temp notes for testing';
       this.overlayContainer.innerHTML = '';
       this.notesArea = document.createElement('textarea');
       this.notesArea.className = this.uiStyleSettings.notesAreaStyleClassName;
@@ -923,7 +931,7 @@ export class MarkerArea {
     }
   }
   private hideNotesEditor() {
-    if (this.notesArea !== undefined) {
+    if (this.isNotesAreaOpen) {
       if (this.currentMarker !== undefined) {
         this.currentMarker.notes =
           this.notesArea.value.trim() !== '' ? this.notesArea.value : undefined;
