@@ -79,6 +79,7 @@ export class MarkerArea {
   private left: number;
   private top: number;
   private windowHeight: number;
+  private createMarkerCallbacks = [];
 
   private markerImage: SVGSVGElement;
   private markerImageHolder: HTMLDivElement;
@@ -1013,6 +1014,14 @@ export class MarkerArea {
     return result;
   }
 
+  public addBoxCreateCallback(boxCreateCallback){
+    this.createMarkerCallbacks.push(boxCreateCallback)
+  }
+
+  public resetBoxCallbacks(){
+    this.createMarkerCallbacks = []
+  }
+
   /**
    * Restores MarkerArea state to continue previous annotation session.
    *
@@ -1089,6 +1098,11 @@ export class MarkerArea {
     this.mode = 'select';
     this.markerImage.style.cursor = 'default';
     this.markers.push(marker);
+
+    this.createMarkerCallbacks.forEach((callback)=>{
+      callback()
+    })
+
     this.setCurrentMarker(marker);
     if (
       marker instanceof FreehandMarker &&
