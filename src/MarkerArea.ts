@@ -23,6 +23,7 @@ import { MeasurementMarker } from './markers/measurement-marker/MeasurementMarke
 import { IPoint } from './core/IPoint';
 import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 import { UndoRedoManager } from './core/UndoRedoManager';
+import { CurveMarker } from './markers/curve-marker/CurveMarker';
 
 /**
  * @ignore
@@ -127,6 +128,7 @@ export class MarkerArea {
       MeasurementMarker,
       CoverMarker,
       LineMarker,
+      CurveMarker
     ];
   }
 

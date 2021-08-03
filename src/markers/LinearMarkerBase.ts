@@ -34,8 +34,8 @@ export class LinearMarkerBase extends MarkerBase {
    */
   protected defaultLength = 50;
 
-  private manipulationStartX = 0;
-  private manipulationStartY = 0;
+  protected manipulationStartX = 0;
+  protected manipulationStartY = 0;
 
   private manipulationStartX1 = 0;
   private manipulationStartY1 = 0;
@@ -51,7 +51,7 @@ export class LinearMarkerBase extends MarkerBase {
 
   private grip1: ResizeGrip;
   private grip2: ResizeGrip;
-  private activeGrip: ResizeGrip;
+  protected activeGrip: ResizeGrip;
 
   /**
    * Creates a LineMarkerBase object.
@@ -211,7 +211,7 @@ export class LinearMarkerBase extends MarkerBase {
     this.controlBox.style.display = 'none';
   }
 
-  private setupControlBox() {
+  protected setupControlBox(): void {
     this.controlBox = SvgHelper.createGroup();
     this.container.appendChild(this.controlBox);
 
@@ -224,14 +224,14 @@ export class LinearMarkerBase extends MarkerBase {
     this.positionGrips();
   }
 
-  private addControlGrips() {
+  protected addControlGrips(): void {
     this.grip1 = this.createGrip();
     this.grip2 = this.createGrip();
 
     this.positionGrips();
   }
 
-  private createGrip(): ResizeGrip {
+  protected createGrip(): ResizeGrip {
     const grip = new ResizeGrip();
     grip.visual.transform.baseVal.appendItem(SvgHelper.createTransform());
     this.controlBox.appendChild(grip.visual);
@@ -239,14 +239,14 @@ export class LinearMarkerBase extends MarkerBase {
     return grip;
   }
 
-  private positionGrips() {
+  protected positionGrips(): void {
     const gripSize = this.grip1.GRIP_SIZE;
 
     this.positionGrip(this.grip1.visual, this.x1 - gripSize / 2, this.y1 - gripSize / 2);
     this.positionGrip(this.grip2.visual, this.x2 - gripSize / 2, this.y2 - gripSize / 2);
   }
 
-  private positionGrip(grip: SVGGraphicsElement, x: number, y: number) {
+  protected positionGrip(grip: SVGGraphicsElement, x: number, y: number): void {
     const translate = grip.transform.baseVal.getItem(0);
     translate.setTranslate(x, y);
     grip.transform.baseVal.replaceItem(translate, 0);

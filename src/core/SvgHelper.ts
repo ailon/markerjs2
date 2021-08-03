@@ -281,4 +281,23 @@ export class SvgHelper {
   
       return svgPoint;
   }
+
+  /**
+   * Creates an SVG path with the specified shape (d).
+   * @param d - path shape
+   * @param attributes - additional attributes.
+   */
+   public static createPath(
+    d: string,
+    attributes?: Array<[string, string]>
+  ): SVGPathElement {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+    path.setAttribute('d', d);
+    if (attributes) {
+      SvgHelper.setAttributes(path, attributes);
+    }
+
+    return path;
+  }
 }

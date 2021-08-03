@@ -34,6 +34,8 @@ export { ArrowMarkerState } from './markers/arrow-marker/ArrowMarkerState';
 export { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 export { CalloutMarkerState } from './markers/callout-marker/CalloutMarkerState';
 export { CoverMarker } from './markers/cover-marker/CoverMarker';
+export { CurveMarker } from './markers/curve-marker/CurveMarker';
+export { CurveMarkerState } from './markers/curve-marker/CurveMarkerState';
 export { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
 export { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 export { FrameMarker } from './markers/frame-marker/FrameMarker';
