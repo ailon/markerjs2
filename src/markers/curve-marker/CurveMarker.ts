@@ -70,6 +70,8 @@ export class CurveMarker extends LinearMarkerBase {
   private manipulationStartCurveX = 0;
   private manipulationStartCurveY = 0;
 
+  private curveControlLine1: SVGLineElement;
+  private curveControlLine2: SVGLineElement;
 
   /**
    * Creates a new marker.
@@ -206,6 +208,33 @@ export class CurveMarker extends LinearMarkerBase {
 
   protected setupControlBox(): void {
     super.setupControlBox();
+    this.curveControlLine1 = SvgHelper.createLine(
+      this.x1,
+      this.y1,
+      this.curveX,
+      this.curveY,
+      [
+        ['stroke', 'black'],
+        ['stroke-width', '1'],
+        ['stroke-opacity', '0.5'],
+        ['stroke-dasharray', '3, 2'],
+      ]
+    );
+    this.curveControlLine2 = SvgHelper.createLine(
+      this.x2,
+      this.y2,
+      this.curveX,
+      this.curveY,
+      [
+        ['stroke', 'black'],
+        ['stroke-width', '1'],
+        ['stroke-opacity', '0.5'],
+        ['stroke-dasharray', '3, 2'],
+      ]
+    );
+
+    this.controlBox.insertBefore(this.curveControlLine1, this.controlBox.firstChild);
+    this.controlBox.insertBefore(this.curveControlLine2, this.controlBox.firstChild);
   }
 
   protected addControlGrips(): void {
@@ -219,6 +248,18 @@ export class CurveMarker extends LinearMarkerBase {
     super.positionGrips();
     const gripSize = this.curveGrip.GRIP_SIZE;
     this.positionGrip(this.curveGrip.visual, this.curveX - gripSize / 2, this.curveY - gripSize / 2);
+
+    if (this.curveControlLine1 && this.curveControlLine2) {
+      this.curveControlLine1.setAttribute('x1', this.x1.toString());
+      this.curveControlLine1.setAttribute('y1', this.y1.toString());
+      this.curveControlLine1.setAttribute('x2', this.curveX.toString());
+      this.curveControlLine1.setAttribute('y2', this.curveY.toString());
+
+      this.curveControlLine2.setAttribute('x1', this.x2.toString());
+      this.curveControlLine2.setAttribute('y1', this.y2.toString());
+      this.curveControlLine2.setAttribute('x2', this.curveX.toString());
+      this.curveControlLine2.setAttribute('y2', this.curveY.toString());
+    }
   }
 
   public manipulate(point: IPoint): void {

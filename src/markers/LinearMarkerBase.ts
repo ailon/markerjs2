@@ -47,10 +47,10 @@ export class LinearMarkerBase extends MarkerBase {
    */
   protected visual: SVGGraphicsElement;
 
-  private controlBox: SVGGElement;
+  protected controlBox: SVGGElement;
 
-  private grip1: ResizeGrip;
-  private grip2: ResizeGrip;
+  protected grip1: ResizeGrip;
+  protected grip2: ResizeGrip;
   protected activeGrip: ResizeGrip;
 
   /**
