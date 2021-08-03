@@ -34,6 +34,9 @@ export class LinearMarkerBase extends MarkerBase {
    */
   protected defaultLength = 50;
 
+  /**
+   * Pointer coordinates at the satart of move or resize.
+   */
   protected manipulationStartX = 0;
   protected manipulationStartY = 0;
 
@@ -47,10 +50,22 @@ export class LinearMarkerBase extends MarkerBase {
    */
   protected visual: SVGGraphicsElement;
 
+  /**
+   * Container for control elements.
+   */
   protected controlBox: SVGGElement;
 
+  /**
+   * First manipulation grip
+   */
   protected grip1: ResizeGrip;
+  /**
+   * Second manipulation grip.
+   */
   protected grip2: ResizeGrip;
+  /**
+   * Active manipulation grip.
+   */
   protected activeGrip: ResizeGrip;
 
   /**
@@ -211,6 +226,9 @@ export class LinearMarkerBase extends MarkerBase {
     this.controlBox.style.display = 'none';
   }
 
+  /**
+   * Creates control box for manipulation controls.
+   */
   protected setupControlBox(): void {
     this.controlBox = SvgHelper.createGroup();
     this.container.appendChild(this.controlBox);
@@ -224,6 +242,9 @@ export class LinearMarkerBase extends MarkerBase {
     this.positionGrips();
   }
 
+  /**
+   * Adds control grips to control box.
+   */
   protected addControlGrips(): void {
     this.grip1 = this.createGrip();
     this.grip2 = this.createGrip();
@@ -231,6 +252,10 @@ export class LinearMarkerBase extends MarkerBase {
     this.positionGrips();
   }
 
+  /**
+   * Creates manipulation grip.
+   * @returns - manipulation grip.
+   */
   protected createGrip(): ResizeGrip {
     const grip = new ResizeGrip();
     grip.visual.transform.baseVal.appendItem(SvgHelper.createTransform());
@@ -239,6 +264,9 @@ export class LinearMarkerBase extends MarkerBase {
     return grip;
   }
 
+  /**
+   * Updates manipulation grip layout.
+   */
   protected positionGrips(): void {
     const gripSize = this.grip1.GRIP_SIZE;
 
@@ -246,6 +274,12 @@ export class LinearMarkerBase extends MarkerBase {
     this.positionGrip(this.grip2.visual, this.x2 - gripSize / 2, this.y2 - gripSize / 2);
   }
 
+  /**
+   * Positions manipulation grip.
+   * @param grip - grip to position
+   * @param x - new X coordinate
+   * @param y - new Y coordinate
+   */
   protected positionGrip(grip: SVGGraphicsElement, x: number, y: number): void {
     const translate = grip.transform.baseVal.getItem(0);
     translate.setTranslate(x, y);

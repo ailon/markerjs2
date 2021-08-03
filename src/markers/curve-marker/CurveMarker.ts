@@ -29,11 +29,11 @@ export class CurveMarker extends LinearMarkerBase {
   public static icon = Icon;
 
   /**
-   * Invisible wider line to make selection easier/possible.
+   * Invisible wider curve to make selection easier/possible.
    */
   protected selectorCurve: SVGPathElement;
   /**
-   * Visible marker line.
+   * Visible marker curve.
    */
   protected visibleCurve: SVGPathElement;
 
@@ -51,7 +51,7 @@ export class CurveMarker extends LinearMarkerBase {
   protected strokeDasharray = '';
 
   /**
-   * Color pickar panel for line color.
+   * Color picker panel for line color.
    */
   protected strokePanel: ColorPickerPanel;
   /**
@@ -206,6 +206,9 @@ export class CurveMarker extends LinearMarkerBase {
     SvgHelper.setAttributes(this.visibleCurve, [['stroke-dasharray', this.strokeDasharray.toString()]]);
   }
 
+  /**
+   * Sets manipulation grips up.
+   */
   protected setupControlBox(): void {
     super.setupControlBox();
     this.curveControlLine1 = SvgHelper.createLine(
@@ -237,6 +240,9 @@ export class CurveMarker extends LinearMarkerBase {
     this.controlBox.insertBefore(this.curveControlLine2, this.controlBox.firstChild);
   }
 
+  /**
+   * Add manipulation grips to the control box.
+   */
   protected addControlGrips(): void {
     this.curveGrip = this.createGrip();
     this.curveX = 0;
@@ -244,6 +250,9 @@ export class CurveMarker extends LinearMarkerBase {
     super.addControlGrips();
   }
 
+  /**
+   * Positions manipulation grips.
+   */
   protected positionGrips(): void {
     super.positionGrips();
     const gripSize = this.curveGrip.GRIP_SIZE;
@@ -262,6 +271,10 @@ export class CurveMarker extends LinearMarkerBase {
     }
   }
 
+  /**
+   * Moves or resizes the marker.
+   * @param point event coordinates
+   */
   public manipulate(point: IPoint): void {
     if (this.state === 'move') {
       this.curveX = this.manipulationStartCurveX + point.x - this.manipulationStartX;
@@ -270,7 +283,10 @@ export class CurveMarker extends LinearMarkerBase {
     super.manipulate(point);
   }
 
-
+  /**
+   * Resizes the marker.
+   * @param point event coordinates.
+   */
   protected resize(point: IPoint): void {
     if (this.activeGrip === this.curveGrip) {
       this.curveX = point.x;
