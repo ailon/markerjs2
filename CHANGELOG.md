@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.0] - 2021-08-04
+###
+- CurveMarker - quadratic bezier curve marker support.
+
 ## [2.10.0] - 2021-07-27
 ### Added
 - marker notes (UI off by default) - stored in MarkerBase.notes and state
@@ -258,6 +262,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.11.0]: https://github.com/ailon/markerjs2/releases/tag/v2.11.0
 [2.10.0]: https://github.com/ailon/markerjs2/releases/tag/v2.10.0
 [2.9.0]: https://github.com/ailon/markerjs2/releases/tag/v2.9.0
 [2.8.4]: https://github.com/ailon/markerjs2/releases/tag/v2.8.4
