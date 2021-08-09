@@ -4,8 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.1] - 2021-08-09
+### Fixed
+- clicking on delete button for the second time resulted in exception
+- setting properties on some marker types before drawing them caused exceptions
+
 ## [2.11.0] - 2021-08-04
-###
+### Added
 - CurveMarker - quadratic bezier curve marker support.
 
 ## [2.10.0] - 2021-07-27
