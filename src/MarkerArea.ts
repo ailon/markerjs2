@@ -908,6 +908,7 @@ export class MarkerArea {
       this.currentMarker.dispose();
       this.markerImage.removeChild(this.currentMarker.container);
       this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+      this.setCurrentMarker();
       this.addUndoStep();
     }
   }
