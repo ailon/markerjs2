@@ -267,6 +267,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.11.1]: https://github.com/ailon/markerjs2/releases/tag/v2.11.1
 [2.11.0]: https://github.com/ailon/markerjs2/releases/tag/v2.11.0
 [2.10.0]: https://github.com/ailon/markerjs2/releases/tag/v2.10.0
 [2.9.0]: https://github.com/ailon/markerjs2/releases/tag/v2.9.0
