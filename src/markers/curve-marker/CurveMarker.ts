@@ -197,13 +197,15 @@ export class CurveMarker extends LinearMarkerBase {
    * Adjusts visual after manipulation.
    */
   protected adjustVisual(): void {
-    this.selectorCurve.setAttribute('d', this.getPathD());
+    if (this.selectorCurve && this.visibleCurve) {
+      this.selectorCurve.setAttribute('d', this.getPathD());
 
-    this.visibleCurve.setAttribute('d', this.getPathD());
+      this.visibleCurve.setAttribute('d', this.getPathD());
 
-    SvgHelper.setAttributes(this.visibleCurve, [['stroke', this.strokeColor]]);
-    SvgHelper.setAttributes(this.visibleCurve, [['stroke-width', this.strokeWidth.toString()]]);
-    SvgHelper.setAttributes(this.visibleCurve, [['stroke-dasharray', this.strokeDasharray.toString()]]);
+      SvgHelper.setAttributes(this.visibleCurve, [['stroke', this.strokeColor]]);
+      SvgHelper.setAttributes(this.visibleCurve, [['stroke-width', this.strokeWidth.toString()]]);
+      SvgHelper.setAttributes(this.visibleCurve, [['stroke-dasharray', this.strokeDasharray.toString()]]);
+    }
   }
 
   /**

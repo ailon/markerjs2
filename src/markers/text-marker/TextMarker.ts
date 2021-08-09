@@ -186,23 +186,25 @@ export class TextMarker extends RectangularBoxMarkerBase {
   private renderText() {
     const LINE_SIZE = '1.2em';
 
-    while (this.textElement.lastChild) {
-      this.textElement.removeChild(this.textElement.lastChild);
+    if (this.textElement) {
+      while (this.textElement.lastChild) {
+        this.textElement.removeChild(this.textElement.lastChild);
+      }
+
+      const lines = this.text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
+      lines.forEach((line) => {
+        this.textElement.appendChild(
+          SvgHelper.createTSpan(
+            // workaround for swallowed empty lines
+            line.trim() === '' ? ' ' : line.trim(), [
+            ['x', '0'],
+            ['dy', LINE_SIZE],
+          ])
+        );
+      });
+
+      setTimeout(this.sizeText, 10);
     }
-
-    const lines = this.text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
-    lines.forEach((line) => {
-      this.textElement.appendChild(
-        SvgHelper.createTSpan(
-          // workaround for swallowed empty lines
-          line.trim() === '' ? ' ' : line.trim(), [
-          ['x', '0'],
-          ['dy', LINE_SIZE],
-        ])
-      );
-    });
-
-    setTimeout(this.sizeText, 10);
   }
 
   private getTextScale(): number {
@@ -278,14 +280,16 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected setSize(): void {
     super.setSize();
-    SvgHelper.setAttributes(this.visual, [
-      ['width', this.width.toString()],
-      ['height', this.height.toString()],
-    ]);
-    SvgHelper.setAttributes(this.bgRectangle, [
-      ['width', this.width.toString()],
-      ['height', this.height.toString()],
-    ]);
+    if (this.visual && this.bgRectangle) {
+      SvgHelper.setAttributes(this.visual, [
+        ['width', this.width.toString()],
+        ['height', this.height.toString()],
+      ]);
+      SvgHelper.setAttributes(this.bgRectangle, [
+        ['width', this.width.toString()],
+        ['height', this.height.toString()],
+      ]);
+    }
   }
 
   /**
@@ -421,7 +425,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
    * @param color - new text color.
    */
   protected setColor(color: string): void {
-    SvgHelper.setAttributes(this.textElement, [['fill', color]]);
+    if (this.textElement) {
+      SvgHelper.setAttributes(this.textElement, [['fill', color]]);
+    }
     this.color = color;
     if (this.textEditor) {
       this.textEditor.style.color = this.color;
@@ -434,7 +440,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
    * @param font - new font family.
    */
   protected setFont(font: string): void {
-    SvgHelper.setAttributes(this.textElement, [['font-family', font]]);
+    if (this.textElement) {
+      SvgHelper.setAttributes(this.textElement, [['font-family', font]]);
+    }
     this.fontFamily = font;
     if (this.textEditor) {
       this.textEditor.style.fontFamily = this.fontFamily;
