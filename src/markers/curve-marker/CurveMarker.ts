@@ -329,6 +329,19 @@ export class CurveMarker extends LinearMarkerBase {
   }
 
   /**
+   * Scales marker. Used after the image resize.
+   * 
+   * @param scaleX - horizontal scale
+   * @param scaleY - vertical scale
+   */
+  public scale(scaleX: number, scaleY: number): void {
+    this.curveX = this.curveX * scaleX;
+    this.curveY = this.curveY * scaleY;
+    super.scale(scaleX, scaleY);
+  }
+
+
+  /**
    * Returns the list of toolbox panels for this marker type.
    */
   public get toolboxPanels(): ToolboxPanel[] {
