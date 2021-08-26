@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.2] - 2021-08-26
+### Fixed
+- CurveMarker wasn't scaled properly when resizing
+
 ## [2.11.1] - 2021-08-09
 ### Fixed
 - clicking on delete button for the second time resulted in exception
@@ -267,6 +271,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.11.2]: https://github.com/ailon/markerjs2/releases/tag/v2.11.2
 [2.11.1]: https://github.com/ailon/markerjs2/releases/tag/v2.11.1
 [2.11.0]: https://github.com/ailon/markerjs2/releases/tag/v2.11.0
 [2.10.0]: https://github.com/ailon/markerjs2/releases/tag/v2.10.0
