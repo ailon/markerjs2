@@ -284,8 +284,12 @@ export class MarkerArea {
   }
   public set zoomLevel(value: number) {
     this._zoomLevel = value;
-    if (this.editorCanvas) {
+    if (this.editorCanvas && this.contentDiv) {
       this.editorCanvas.style.transform = `scale(${this._zoomLevel})`;
+      this.contentDiv.scrollTo({
+        left: (this.editorCanvas.clientWidth * this._zoomLevel - this.contentDiv.clientWidth) / 2,
+        top: (this.editorCanvas.clientHeight * this._zoomLevel - this.contentDiv.clientHeight) / 2,
+      });
     }
   }
 
@@ -1254,7 +1258,10 @@ export class MarkerArea {
 
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
-    return { x: (x - clientRect.left) / this.zoomLevel, y: (y - clientRect.top) / this.zoomLevel};
+    return {
+      x: (x - clientRect.left) / this.zoomLevel,
+      y: (y - clientRect.top) / this.zoomLevel,
+    };
   }
 
   private onWindowResize() {
