@@ -44,6 +44,7 @@ export class Experiments {
     // this.markerArea1.uiStyleSettings.undoButtonVisible = false;
     this.markerArea1.uiStyleSettings.redoButtonVisible = true;
     this.markerArea1.uiStyleSettings.notesButtonVisible = true;
+    this.markerArea1.uiStyleSettings.zoomButtonVisible = true;
 
     // this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
     // this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';

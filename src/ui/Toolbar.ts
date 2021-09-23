@@ -9,6 +9,7 @@ import OverflowIcon from './toolbar-core-icons/overflow.svg';
 import UndoIcon from './toolbar-core-icons/undo.svg';
 import RedoIcon from './toolbar-core-icons/redo.svg';
 import NotesIcon from './toolbar-core-icons/notes.svg';
+import ZoomIcon from './toolbar-core-icons/zoom.svg';
 import { IStyleSettings } from '../core/IStyleSettings';
 import { DisplayMode } from '../core/Settings';
 
@@ -109,6 +110,9 @@ export class Toolbar {
     }
     if (this.uiStyleSettings.redoButtonVisible) {
       this.addActionButton(actionButtonBlock, RedoIcon, 'redo');
+    }
+    if (this.uiStyleSettings.zoomButtonVisible) {
+      this.addActionButton(actionButtonBlock, ZoomIcon, 'zoom');
     }
     if (this.uiStyleSettings.notesButtonVisible) {
       this.addActionButton(actionButtonBlock, NotesIcon, 'notes');

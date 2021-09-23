@@ -128,7 +128,7 @@ export class MarkerArea {
       MeasurementMarker,
       CoverMarker,
       LineMarker,
-      CurveMarker
+      CurveMarker,
     ];
   }
 
@@ -277,6 +277,18 @@ export class MarkerArea {
    */
   public renderHeight?: number;
 
+  public zoomSteps = [1, 1.5, 2, 4];
+  private _zoomLevel = 1;
+  public get zoomLevel(): number {
+    return this._zoomLevel;
+  }
+  public set zoomLevel(value: number) {
+    this._zoomLevel = value;
+    if (this.editorCanvas) {
+      this.editorCanvas.style.transform = `scale(${this._zoomLevel})`;
+    }
+  }
+
   /**
    * Creates a new MarkerArea for the specified target image.
    *
@@ -330,6 +342,7 @@ export class MarkerArea {
     this.onPopupTargetResize = this.onPopupTargetResize.bind(this);
     this.showNotesEditor = this.showNotesEditor.bind(this);
     this.hideNotesEditor = this.hideNotesEditor.bind(this);
+    this.stepZoom = this.stepZoom.bind(this);
   }
 
   private open(): void {
@@ -794,6 +807,7 @@ export class MarkerArea {
         this.settings.popupMargin * 2
       }px)`;
     }
+    this.contentDiv.style.overflow = 'auto';
     this.uiDiv.appendChild(this.contentDiv);
 
     this.editorCanvas = document.createElement('div');
@@ -807,6 +821,8 @@ export class MarkerArea {
       this.editorCanvas.style.justifyContent = 'center';
     }
     this.editorCanvas.style.pointerEvents = 'none';
+    this.editorCanvas.style.transformOrigin = 'left top';
+    this.editorCanvas.style.transform = `scale(${this.zoomLevel})`;
     this.contentDiv.appendChild(this.editorCanvas);
 
     this.editingTarget = document.createElement('img');
@@ -876,6 +892,10 @@ export class MarkerArea {
         case 'redo': {
           this.switchToSelectMode();
           this.redo();
+          break;
+        }
+        case 'zoom': {
+          this.stepZoom();
           break;
         }
         case 'notes': {
@@ -983,6 +1003,14 @@ export class MarkerArea {
       this.restoreState(stepData);
       this.selectLastMarker();
     }
+  }
+
+  public stepZoom(): void {
+    const zoomStepIndex = this.zoomSteps.indexOf(this.zoomLevel);
+    this.zoomLevel =
+      zoomStepIndex < this.zoomSteps.length - 1
+        ? this.zoomSteps[zoomStepIndex + 1]
+        : this.zoomSteps[0];
   }
 
   /**
