@@ -639,8 +639,8 @@ export class MarkerArea {
   }
 
   private positionMarkerImage() {
-    this.markerImageHolder.style.top = this.top + 'px';
-    this.markerImageHolder.style.left = this.left + 'px';
+    this.markerImageHolder.style.top = this.top / this.zoomLevel + 'px';
+    this.markerImageHolder.style.left = this.left / this.zoomLevel + 'px';
   }
 
   private attachEvents() {
@@ -1254,7 +1254,7 @@ export class MarkerArea {
 
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
-    return { x: x - clientRect.left, y: y - clientRect.top };
+    return { x: (x - clientRect.left) / this.zoomLevel, y: (y - clientRect.top) / this.zoomLevel};
   }
 
   private onWindowResize() {
