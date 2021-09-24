@@ -287,8 +287,14 @@ export class MarkerArea {
     if (this.editorCanvas && this.contentDiv) {
       this.editorCanvas.style.transform = `scale(${this._zoomLevel})`;
       this.contentDiv.scrollTo({
-        left: (this.editorCanvas.clientWidth * this._zoomLevel - this.contentDiv.clientWidth) / 2,
-        top: (this.editorCanvas.clientHeight * this._zoomLevel - this.contentDiv.clientHeight) / 2,
+        left:
+          (this.editorCanvas.clientWidth * this._zoomLevel -
+            this.contentDiv.clientWidth) /
+          2,
+        top:
+          (this.editorCanvas.clientHeight * this._zoomLevel -
+            this.contentDiv.clientHeight) /
+          2,
       });
     }
   }
@@ -1017,6 +1023,15 @@ export class MarkerArea {
         : this.zoomSteps[0];
   }
 
+  private prevPanPoint: IPoint = { x: 0, y: 0 };
+  private panTo(point: IPoint) {
+    this.contentDiv.scrollBy({
+      left: this.prevPanPoint.x - point.x,
+      top: this.prevPanPoint.y - point.y,
+    });
+    this.prevPanPoint = point;
+  }
+
   /**
    * Initiates markup rendering.
    *
@@ -1190,6 +1205,8 @@ export class MarkerArea {
           );
         } else {
           this.setCurrentMarker();
+          this.isDragging = true;
+          this.prevPanPoint = { x: ev.clientX, y: ev.clientY };
         }
       }
     }
@@ -1222,9 +1239,14 @@ export class MarkerArea {
         ) {
           ev.preventDefault();
         }
-        this.currentMarker.manipulate(
-          this.clientToLocalCoordinates(ev.clientX, ev.clientY)
-        );
+
+        if (this.currentMarker !== undefined) {
+          this.currentMarker.manipulate(
+            this.clientToLocalCoordinates(ev.clientX, ev.clientY)
+          );
+        } else if (this.zoomLevel > 1) {
+          this.panTo({ x: ev.clientX, y: ev.clientY });
+        }
       }
     }
   }
