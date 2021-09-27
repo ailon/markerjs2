@@ -911,6 +911,7 @@ export class MarkerArea {
         case 'notes': {
           if (this.notesArea === undefined) {
             this.switchToSelectMode();
+            this.zoomLevel = 1;
             this.showNotesEditor();
           } else {
             this.switchToSelectMode();
