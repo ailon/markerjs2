@@ -277,11 +277,26 @@ export class MarkerArea {
    */
   public renderHeight?: number;
 
+  /**
+   * Pressing zoom button iterates through values in this array.
+   * 
+   * @since 2.12.0
+   */
   public zoomSteps = [1, 1.5, 2, 4];
   private _zoomLevel = 1;
+  /**
+   * Gets current zoom level.
+   * 
+   * @since 2.12.0
+   */
   public get zoomLevel(): number {
     return this._zoomLevel;
   }
+  /**
+   * Sets current zoom level.
+   * 
+   * @since 2.12.0
+   */
   public set zoomLevel(value: number) {
     this._zoomLevel = value;
     if (this.editorCanvas && this.contentDiv) {
@@ -1016,6 +1031,12 @@ export class MarkerArea {
     }
   }
 
+  /**
+   * Iterate zoom steps (@linkcode zoomSteps). 
+   * Next zoom level is selected or returns to the first zoom level restarting the sequence.
+   * 
+   * @since 2.12.0
+   */
   public stepZoom(): void {
     const zoomStepIndex = this.zoomSteps.indexOf(this.zoomLevel);
     this.zoomLevel =
