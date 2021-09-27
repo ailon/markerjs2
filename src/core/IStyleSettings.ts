@@ -49,6 +49,12 @@ export interface IStyleSettings {
    */
   notesButtonVisible?: boolean;
   /**
+   * Is zoom button visible?
+   * 
+   * @since 2.12.0
+   */
+  zoomButtonVisible?: boolean;
+  /**
    * Background color of the toolbox (property panel) block.
    */
   toolboxBackgroundColor?: string;

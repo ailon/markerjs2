@@ -128,7 +128,7 @@ export class MarkerArea {
       MeasurementMarker,
       CoverMarker,
       LineMarker,
-      CurveMarker
+      CurveMarker,
     ];
   }
 
@@ -278,6 +278,43 @@ export class MarkerArea {
   public renderHeight?: number;
 
   /**
+   * Pressing zoom button iterates through values in this array.
+   * 
+   * @since 2.12.0
+   */
+  public zoomSteps = [1, 1.5, 2, 4];
+  private _zoomLevel = 1;
+  /**
+   * Gets current zoom level.
+   * 
+   * @since 2.12.0
+   */
+  public get zoomLevel(): number {
+    return this._zoomLevel;
+  }
+  /**
+   * Sets current zoom level.
+   * 
+   * @since 2.12.0
+   */
+  public set zoomLevel(value: number) {
+    this._zoomLevel = value;
+    if (this.editorCanvas && this.contentDiv) {
+      this.editorCanvas.style.transform = `scale(${this._zoomLevel})`;
+      this.contentDiv.scrollTo({
+        left:
+          (this.editorCanvas.clientWidth * this._zoomLevel -
+            this.contentDiv.clientWidth) /
+          2,
+        top:
+          (this.editorCanvas.clientHeight * this._zoomLevel -
+            this.contentDiv.clientHeight) /
+          2,
+      });
+    }
+  }
+
+  /**
    * Creates a new MarkerArea for the specified target image.
    *
    * ```typescript
@@ -330,6 +367,7 @@ export class MarkerArea {
     this.onPopupTargetResize = this.onPopupTargetResize.bind(this);
     this.showNotesEditor = this.showNotesEditor.bind(this);
     this.hideNotesEditor = this.hideNotesEditor.bind(this);
+    this.stepZoom = this.stepZoom.bind(this);
   }
 
   private open(): void {
@@ -626,8 +664,8 @@ export class MarkerArea {
   }
 
   private positionMarkerImage() {
-    this.markerImageHolder.style.top = this.top + 'px';
-    this.markerImageHolder.style.left = this.left + 'px';
+    this.markerImageHolder.style.top = this.top / this.zoomLevel + 'px';
+    this.markerImageHolder.style.left = this.left / this.zoomLevel + 'px';
   }
 
   private attachEvents() {
@@ -794,6 +832,7 @@ export class MarkerArea {
         this.settings.popupMargin * 2
       }px)`;
     }
+    this.contentDiv.style.overflow = 'auto';
     this.uiDiv.appendChild(this.contentDiv);
 
     this.editorCanvas = document.createElement('div');
@@ -807,6 +846,8 @@ export class MarkerArea {
       this.editorCanvas.style.justifyContent = 'center';
     }
     this.editorCanvas.style.pointerEvents = 'none';
+    this.editorCanvas.style.transformOrigin = 'left top';
+    this.editorCanvas.style.transform = `scale(${this.zoomLevel})`;
     this.contentDiv.appendChild(this.editorCanvas);
 
     this.editingTarget = document.createElement('img');
@@ -878,9 +919,14 @@ export class MarkerArea {
           this.redo();
           break;
         }
+        case 'zoom': {
+          this.stepZoom();
+          break;
+        }
         case 'notes': {
           if (this.notesArea === undefined) {
             this.switchToSelectMode();
+            this.zoomLevel = 1;
             this.showNotesEditor();
           } else {
             this.switchToSelectMode();
@@ -983,6 +1029,29 @@ export class MarkerArea {
       this.restoreState(stepData);
       this.selectLastMarker();
     }
+  }
+
+  /**
+   * Iterate zoom steps (@linkcode zoomSteps). 
+   * Next zoom level is selected or returns to the first zoom level restarting the sequence.
+   * 
+   * @since 2.12.0
+   */
+  public stepZoom(): void {
+    const zoomStepIndex = this.zoomSteps.indexOf(this.zoomLevel);
+    this.zoomLevel =
+      zoomStepIndex < this.zoomSteps.length - 1
+        ? this.zoomSteps[zoomStepIndex + 1]
+        : this.zoomSteps[0];
+  }
+
+  private prevPanPoint: IPoint = { x: 0, y: 0 };
+  private panTo(point: IPoint) {
+    this.contentDiv.scrollBy({
+      left: this.prevPanPoint.x - point.x,
+      top: this.prevPanPoint.y - point.y,
+    });
+    this.prevPanPoint = point;
   }
 
   /**
@@ -1158,6 +1227,8 @@ export class MarkerArea {
           );
         } else {
           this.setCurrentMarker();
+          this.isDragging = true;
+          this.prevPanPoint = { x: ev.clientX, y: ev.clientY };
         }
       }
     }
@@ -1190,9 +1261,14 @@ export class MarkerArea {
         ) {
           ev.preventDefault();
         }
-        this.currentMarker.manipulate(
-          this.clientToLocalCoordinates(ev.clientX, ev.clientY)
-        );
+
+        if (this.currentMarker !== undefined) {
+          this.currentMarker.manipulate(
+            this.clientToLocalCoordinates(ev.clientX, ev.clientY)
+          );
+        } else if (this.zoomLevel > 1) {
+          this.panTo({ x: ev.clientX, y: ev.clientY });
+        }
       }
     }
   }
@@ -1226,7 +1302,10 @@ export class MarkerArea {
 
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
-    return { x: x - clientRect.left, y: y - clientRect.top };
+    return {
+      x: (x - clientRect.left) / this.zoomLevel,
+      y: (y - clientRect.top) / this.zoomLevel,
+    };
   }
 
   private onWindowResize() {

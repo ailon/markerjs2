@@ -50,6 +50,7 @@ export class Style {
       toolboxAccentColor: '#3080c3',
       undoButtonVisible: true,
       redoButtonVisible: false,
+      zoomButtonVisible: false
     };
   }
 
