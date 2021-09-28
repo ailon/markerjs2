@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.13.0] - 2021-09-28
+### Added
+- Zoom out button for one-click restoring to 100% zoom (enable via markerArea.uiStyleSettings.zoomOutButtonVisible)
+
 ## [2.12.0] - 2021-09-27
 ### Added
 - Zooming feature (enable by setting markerArea.uiStyleSettings.zoomButtonVisible = true)
@@ -275,6 +279,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.13.0]: https://github.com/ailon/markerjs2/releases/tag/v2.13.0
 [2.12.0]: https://github.com/ailon/markerjs2/releases/tag/v2.12.0
 [2.11.2]: https://github.com/ailon/markerjs2/releases/tag/v2.11.2
 [2.11.1]: https://github.com/ailon/markerjs2/releases/tag/v2.11.1

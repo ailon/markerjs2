@@ -923,6 +923,10 @@ export class MarkerArea {
           this.stepZoom();
           break;
         }
+        case 'zoom-out': {
+          this.zoomLevel = 1;
+          break;
+        }
         case 'notes': {
           if (this.notesArea === undefined) {
             this.switchToSelectMode();
