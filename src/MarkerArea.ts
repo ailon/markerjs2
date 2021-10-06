@@ -278,9 +278,9 @@ export class MarkerArea {
   public renderHeight?: number;
 
   /**
-   * If a canvas is specified here, then marker.js will render the output to this canvas 
+   * If a canvas is specified here, then marker.js will render the output to this canvas
    * in addition to generating an image.
-   * 
+   *
    * @since 2.14.0
    */
   public renderTarget?: HTMLCanvasElement;
@@ -329,7 +329,7 @@ export class MarkerArea {
    * // create an instance of MarkerArea and pass the target image (or other HTML element) reference as a parameter
    * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
    * ```
-   * 
+   *
    * When `target` is not an image object the output is limited to "markers only" (@linkcode renderMarkersOnly)
    * and "popup" mode won't work properly as the target object stays in it's original position and, unlike images,
    * is not copied.
@@ -757,7 +757,16 @@ export class MarkerArea {
 
   private positionLogo() {
     if (this.logoUI) {
-      this.logoUI.style.left = `${this.markerImageHolder.offsetLeft + 10}px`;
+      if (this.uiStyleSettings.logoPosition !== 'right') {
+        this.logoUI.style.left = `${this.markerImageHolder.offsetLeft + 10}px`;
+      } else {
+        this.logoUI.style.left = `${
+          this.markerImageHolder.offsetLeft +
+          this.markerImageHolder.offsetWidth -
+          this.logoUI.clientWidth -
+          10
+        }px`;
+      }
       this.logoUI.style.top = `${
         this.markerImageHolder.offsetTop +
         this.markerImageHolder.offsetHeight -
@@ -792,7 +801,6 @@ export class MarkerArea {
     // hardcode font size so nothing inside is affected by higher up settings
     this.coverDiv.style.fontSize = '16px';
     this.coverDiv.style.userSelect = 'none';
-
 
     switch (this.settings.displayMode) {
       case 'inline': {
@@ -887,7 +895,9 @@ export class MarkerArea {
         ? document.createElement('img')
         : document.createElement('canvas');
     if (this.target.offsetTop < Style.settings.toolbarHeight) {
-      this.editingTarget.style.marginTop = `${this.target.offsetTop - Style.settings.toolbarHeight}px`;
+      this.editingTarget.style.marginTop = `${
+        this.target.offsetTop - Style.settings.toolbarHeight
+      }px`;
     }
     this.editorCanvas.appendChild(this.editingTarget);
 

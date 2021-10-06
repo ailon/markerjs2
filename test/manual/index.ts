@@ -47,6 +47,8 @@ export class Experiments {
     this.markerArea1.uiStyleSettings.zoomButtonVisible = true;
     this.markerArea1.uiStyleSettings.zoomOutButtonVisible = true;
 
+    this.markerArea1.uiStyleSettings.logoPosition = 'right';
+
     // this.markerArea1.uiStyleSettings.toolbarStyleColorsClassName = 'toolbar';
     // this.markerArea1.uiStyleSettings.toolbarButtonStyleColorsClassName = 'toolbar-button';
     // this.markerArea1.uiStyleSettings.toolbarActiveButtonStyleColorsClassName = 'toolbar-active-button';

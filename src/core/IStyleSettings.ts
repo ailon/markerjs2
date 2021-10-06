@@ -152,4 +152,11 @@ export interface IStyleSettings {
    * @since 2.10.0
    */
   notesAreaStyleClassName?: string;
+
+  /**
+   * Position logo in the free version on the bottom left or right of the marker area. Default - left.
+   * 
+   * @since 2.14.0
+   */
+  logoPosition?: 'left' | 'right';
 }
