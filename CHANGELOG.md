@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.14.0] - 2021-10-06
+### Added
+- renderTarget property to specify a canvas for rendering the results to (in addition to rendering an image)
+- ability to pass non-image target to the constructor (sizes UI according to the target and renders markers only)
+- positioning of the logo (left (default) or right) in the free version
+
 ## [2.13.0] - 2021-09-28
 ### Added
 - Zoom out button for one-click restoring to 100% zoom (enable via markerArea.uiStyleSettings.zoomOutButtonVisible)
@@ -279,6 +285,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.14.0]: https://github.com/ailon/markerjs2/releases/tag/v2.14.0
 [2.13.0]: https://github.com/ailon/markerjs2/releases/tag/v2.13.0
 [2.12.0]: https://github.com/ailon/markerjs2/releases/tag/v2.12.0
 [2.11.2]: https://github.com/ailon/markerjs2/releases/tag/v2.11.2
