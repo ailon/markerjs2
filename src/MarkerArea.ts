@@ -70,7 +70,7 @@ export type CloseEventHandler = () => void;
  * ```
  */
 export class MarkerArea {
-  private target: HTMLImageElement;
+  private target: HTMLImageElement | HTMLElement;
   private targetObserver: ResizeObserver;
 
   private width: number;
@@ -89,7 +89,7 @@ export class MarkerArea {
   private uiDiv: HTMLDivElement;
   private contentDiv: HTMLDivElement;
   private editorCanvas: HTMLDivElement;
-  private editingTarget: HTMLImageElement;
+  private editingTarget: HTMLImageElement | HTMLCanvasElement;
   private overlayContainer: HTMLDivElement;
 
   private touchPoints = 0;
@@ -278,15 +278,23 @@ export class MarkerArea {
   public renderHeight?: number;
 
   /**
-   * Pressing zoom button iterates through values in this array.
+   * If a canvas is specified here, then marker.js will render the output to this canvas 
+   * in addition to generating an image.
    * 
+   * @since 2.14.0
+   */
+  public renderTarget?: HTMLCanvasElement;
+
+  /**
+   * Pressing zoom button iterates through values in this array.
+   *
    * @since 2.12.0
    */
   public zoomSteps = [1, 1.5, 2, 4];
   private _zoomLevel = 1;
   /**
    * Gets current zoom level.
-   * 
+   *
    * @since 2.12.0
    */
   public get zoomLevel(): number {
@@ -294,7 +302,7 @@ export class MarkerArea {
   }
   /**
    * Sets current zoom level.
-   * 
+   *
    * @since 2.12.0
    */
   public set zoomLevel(value: number) {
@@ -318,13 +326,17 @@ export class MarkerArea {
    * Creates a new MarkerArea for the specified target image.
    *
    * ```typescript
-   * // create an instance of MarkerArea and pass the target image reference as a parameter
+   * // create an instance of MarkerArea and pass the target image (or other HTML element) reference as a parameter
    * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
    * ```
+   * 
+   * When `target` is not an image object the output is limited to "markers only" (@linkcode renderMarkersOnly)
+   * and "popup" mode won't work properly as the target object stays in it's original position and, unlike images,
+   * is not copied.
    *
    * @param target image object to mark up.
    */
-  constructor(target: HTMLImageElement) {
+  constructor(target: HTMLImageElement | HTMLElement) {
     Style.settings = Style.defaultSettings;
     this.uiStyleSettings = Style.settings;
 
@@ -420,9 +432,17 @@ export class MarkerArea {
 
     // workaround for an issue in Safari where FreeHand marker
     // is not rendered on the first try for some reason
-    await renderer.rasterize(this.target, this.markerImage);
+    await renderer.rasterize(
+      this.target instanceof HTMLImageElement ? this.target : null,
+      this.markerImage,
+      this.renderTarget
+    );
 
-    return await renderer.rasterize(this.target, this.markerImage);
+    return await renderer.rasterize(
+      this.target instanceof HTMLImageElement ? this.target : null,
+      this.markerImage,
+      this.renderTarget
+    );
   }
 
   /**
@@ -556,7 +576,12 @@ export class MarkerArea {
 
     this.imageWidth = Math.round(newWidth);
     this.imageHeight = Math.round(newHeight);
-    this.editingTarget.src = this.target.src;
+    if (
+      this.target instanceof HTMLImageElement &&
+      this.editingTarget instanceof HTMLImageElement
+    ) {
+      this.editingTarget.src = this.target.src;
+    }
     this.editingTarget.width = this.imageWidth;
     this.editingTarget.height = this.imageHeight;
     this.editingTarget.style.width = `${this.imageWidth}px`;
@@ -607,7 +632,12 @@ export class MarkerArea {
   private setEditingTarget() {
     this.imageWidth = Math.round(this.target.clientWidth);
     this.imageHeight = Math.round(this.target.clientHeight);
-    this.editingTarget.src = this.target.src;
+    if (
+      this.target instanceof HTMLImageElement &&
+      this.editingTarget instanceof HTMLImageElement
+    ) {
+      this.editingTarget.src = this.target.src;
+    }
     this.editingTarget.width = this.imageWidth;
     this.editingTarget.height = this.imageHeight;
     this.editingTarget.style.width = `${this.imageWidth}px`;
@@ -762,6 +792,8 @@ export class MarkerArea {
     // hardcode font size so nothing inside is affected by higher up settings
     this.coverDiv.style.fontSize = '16px';
     this.coverDiv.style.userSelect = 'none';
+
+
     switch (this.settings.displayMode) {
       case 'inline': {
         this.coverDiv.style.position = 'absolute';
@@ -819,8 +851,8 @@ export class MarkerArea {
     this.contentDiv.style.flexDirection = 'row';
     this.contentDiv.style.flexGrow = '2';
     this.contentDiv.style.flexShrink = '1';
-    this.contentDiv.style.backgroundColor = this.uiStyleSettings.canvasBackgroundColor;
     if (this.settings.displayMode === 'popup') {
+      this.contentDiv.style.backgroundColor = this.uiStyleSettings.canvasBackgroundColor;
       this.contentDiv.style.maxHeight = `${
         this.windowHeight -
         this.settings.popupMargin * 2 -
@@ -850,7 +882,13 @@ export class MarkerArea {
     this.editorCanvas.style.transform = `scale(${this.zoomLevel})`;
     this.contentDiv.appendChild(this.editorCanvas);
 
-    this.editingTarget = document.createElement('img');
+    this.editingTarget =
+      this.target instanceof HTMLImageElement
+        ? document.createElement('img')
+        : document.createElement('canvas');
+    if (this.target.offsetTop < Style.settings.toolbarHeight) {
+      this.editingTarget.style.marginTop = `${this.target.offsetTop - Style.settings.toolbarHeight}px`;
+    }
     this.editorCanvas.appendChild(this.editingTarget);
 
     this.toolbox = new Toolbox(
@@ -1036,9 +1074,9 @@ export class MarkerArea {
   }
 
   /**
-   * Iterate zoom steps (@linkcode zoomSteps). 
+   * Iterate zoom steps (@linkcode zoomSteps).
    * Next zoom level is selected or returns to the first zoom level restarting the sequence.
-   * 
+   *
    * @since 2.12.0
    */
   public stepZoom(): void {

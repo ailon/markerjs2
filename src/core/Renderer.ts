@@ -46,10 +46,16 @@ export class Renderer {
      */
     public rasterize(
         target: HTMLImageElement, 
-        markerImage: SVGSVGElement, 
+        markerImage: SVGSVGElement,
+        targetCanvas?: HTMLCanvasElement 
     ): Promise<string> {
         return new Promise<string>((resolve) => {
-            const canvas = document.createElement("canvas");
+            const canvas = targetCanvas !== undefined ? targetCanvas : document.createElement("canvas");
+
+            if (target === null) {
+                this.markersOnly = true;
+                this.naturalSize = false;
+            }
 
             const markerImageCopy = document.createElementNS(
             'http://www.w3.org/2000/svg',
