@@ -52,7 +52,7 @@ export class Style {
       redoButtonVisible: false,
       zoomButtonVisible: false,
       zoomOutButtonVisible: false,
-      logoPosition: 'left'
+      logoPosition: 'left',
     };
   }
 
@@ -83,7 +83,11 @@ export class Style {
       Style.addStyleSheet();
     }
     Style.classes.push(styleClass);
-    Style.styleSheet.sheet.addRule('.' + styleClass.name, styleClass.style);
+    // Style.styleSheet.sheet.addRule('.' + styleClass.name, styleClass.style);
+    Style.styleSheet.sheet.insertRule(
+      `.${styleClass.name} {${styleClass.style}}`,
+      Style.styleSheet.sheet.cssRules.length
+    );
     return styleClass;
   }
 
@@ -99,7 +103,7 @@ export class Style {
     // Style.styleSheet.sheet.addRule(styleRule.selector, styleRule.style); // crashes in Edge
     Style.styleSheet.sheet.insertRule(
       `${styleRule.selector} {${styleRule.style}}`,
-      Style.styleSheet.sheet.rules.length
+      Style.styleSheet.sheet.cssRules.length
     );
   }
 

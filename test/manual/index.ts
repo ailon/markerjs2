@@ -70,7 +70,7 @@ export class Experiments {
     // this.markerArea1.renderImageQuality = 0.2;
     // this.markerArea1.renderMarkersOnly = true;
 
-    this.markerArea1.renderTarget = <HTMLCanvasElement>document.getElementById('resultCanvas');
+    // this.markerArea1.renderTarget = <HTMLCanvasElement>document.getElementById('resultCanvas');
 
     this.markerArea1.show();
     if (this.currentState) {
