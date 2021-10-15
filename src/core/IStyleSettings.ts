@@ -159,4 +159,13 @@ export interface IStyleSettings {
    * @since 2.14.0
    */
   logoPosition?: 'left' | 'right';
+
+  /**
+   * zIndex for the marker.js UI.
+   * 
+   * Defaults to 5 in inline mode and 1000 in popup mode.
+   * 
+   * @since 2.15.0
+   */
+  zIndex?: string;
 }

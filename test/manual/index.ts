@@ -36,6 +36,8 @@ export class Experiments {
     // }
     // this.oddLaunch = !this.oddLaunch;
 
+    // this.markerArea1.uiStyleSettings.zIndex = '5000';
+
     this.markerArea1.uiStyleSettings.selectButtonColor = 'lightblue';
     this.markerArea1.uiStyleSettings.deleteButtonColor = 'red';
     this.markerArea1.uiStyleSettings.okButtonColor = 'green';

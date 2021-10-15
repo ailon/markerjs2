@@ -813,7 +813,10 @@ export class MarkerArea {
         this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
         //this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
-        this.coverDiv.style.zIndex = '5';
+        this.coverDiv.style.zIndex =
+          this.uiStyleSettings.zIndex !== undefined
+            ? this.uiStyleSettings.zIndex
+            : '5';
         // flex causes the ui to stretch when toolbox has wider nowrap panels
         //this.coverDiv.style.display = 'flex';
         break;
@@ -825,7 +828,10 @@ export class MarkerArea {
         this.coverDiv.style.width = '100vw';
         this.coverDiv.style.height = `${window.innerHeight}px`;
         this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
-        this.coverDiv.style.zIndex = '1000';
+        this.coverDiv.style.zIndex =
+          this.uiStyleSettings.zIndex !== undefined
+            ? this.uiStyleSettings.zIndex
+            : '1000';
         this.coverDiv.style.display = 'flex';
         // this.coverDiv.style.overflow = 'auto';
       }
@@ -1391,16 +1397,15 @@ export class MarkerArea {
     this.positionMarkerImage();
     this.positionLogo();
   }
-  
+
   /**
    * Add license key.
-   * 
+   *
    * This is a proxy method for {@linkcode Activator.addKey()}.
-   * 
+   *
    * @param key - commercial license key.
    */
   public addLicenseKey(key: string): void {
     Activator.addKey(key);
   }
-  
 }
