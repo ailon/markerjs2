@@ -1391,4 +1391,16 @@ export class MarkerArea {
     this.positionMarkerImage();
     this.positionLogo();
   }
+  
+  /**
+   * Add license key.
+   * 
+   * This is a proxy method for {@linkcode Activator.addKey()}.
+   * 
+   * @param key - commercial license key.
+   */
+  public addLicenseKey(key: string): void {
+    Activator.addKey(key);
+  }
+  
 }
