@@ -52,6 +52,7 @@ export class Style {
       redoButtonVisible: false,
       zoomButtonVisible: false,
       zoomOutButtonVisible: false,
+      clearButtonVisible: false,
       logoPosition: 'left',
     };
   }

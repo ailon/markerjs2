@@ -3,6 +3,7 @@ import { Style, StyleClass, StyleRule } from './../core/Style';
 
 import CursorIcon from './toolbar-core-icons/cursor.svg';
 import DeleteIcon from './toolbar-core-icons/delete.svg';
+import ClearIcon from './toolbar-core-icons/clear.svg';
 import CheckIcon from './toolbar-core-icons/check.svg';
 import CloseIcon from './toolbar-core-icons/close.svg';
 import OverflowIcon from './toolbar-core-icons/overflow.svg';
@@ -106,6 +107,9 @@ export class Toolbar {
 
     this.addActionButton(actionButtonBlock, CursorIcon, 'select');
     this.addActionButton(actionButtonBlock, DeleteIcon, 'delete');
+    if (this.uiStyleSettings.clearButtonVisible) {
+      this.addActionButton(actionButtonBlock, ClearIcon, 'clear');
+    }
     if (this.uiStyleSettings.undoButtonVisible) {
       this.addActionButton(actionButtonBlock, UndoIcon, 'undo');
     }
@@ -314,6 +318,7 @@ export class Toolbar {
         actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
         break;
       case 'delete':
+      case 'clear':
         actionButton.style.fill = this.uiStyleSettings.deleteButtonColor;
         break;
       case 'undo':

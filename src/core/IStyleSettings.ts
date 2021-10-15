@@ -61,6 +61,12 @@ export interface IStyleSettings {
    */
   zoomOutButtonVisible?: boolean;
   /**
+   * Is clear button visible?
+   * 
+   * @since 2.15.0
+   */
+  clearButtonVisible?: boolean;
+  /**
    * Background color of the toolbox (property panel) block.
    */
   toolboxBackgroundColor?: string;

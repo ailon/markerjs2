@@ -962,6 +962,10 @@ export class MarkerArea {
           this.deleteSelectedMarker();
           break;
         }
+        case 'clear': {
+          this.clear();
+          break;
+        }
         case 'undo': {
           this.switchToSelectMode();
           this.addUndoStep();
@@ -1015,6 +1019,22 @@ export class MarkerArea {
       this.setCurrentMarker();
       this.addUndoStep();
     }
+  }
+
+  /**
+   * Removes all markers.
+   * 
+   * @since 2.15.0
+   */
+  public clear(): void {
+    this.setCurrentMarker();
+    for (let i = this.markers.length - 1; i >= 0; i--) {
+      this.setCurrentMarker(this.markers[i]);
+      this.currentMarker.dispose();
+      this.markerImage.removeChild(this.currentMarker.container);
+      this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+    }
+    this.addUndoStep();
   }
 
   private notesArea?: HTMLTextAreaElement;
