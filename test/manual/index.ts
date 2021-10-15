@@ -25,6 +25,8 @@ export class Experiments {
     this.markerArea1.settings.popupMargin = 10;
 
     this.markerArea1.settings.defaultColorsFollowCurrentColors = true;
+
+    this.markerArea1.targetRoot = document.getElementById('app');
     
     // this.markerArea1.settings.defaultStrokeWidth = 10;
 

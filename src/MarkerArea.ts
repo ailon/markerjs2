@@ -806,7 +806,7 @@ export class MarkerArea {
       case 'inline': {
         this.coverDiv.style.position = 'absolute';
         const coverTop =
-          this.target.offsetTop > Style.settings.toolbarHeight
+          this.target.getClientRects().item(0).y > Style.settings.toolbarHeight
             ? this.target.offsetTop - Style.settings.toolbarHeight
             : 0;
         this.coverDiv.style.top = `${coverTop}px`;
@@ -900,7 +900,7 @@ export class MarkerArea {
       this.target instanceof HTMLImageElement
         ? document.createElement('img')
         : document.createElement('canvas');
-    if (this.target.offsetTop < Style.settings.toolbarHeight) {
+    if (this.target.getClientRects().item(0).y < Style.settings.toolbarHeight) {
       this.editingTarget.style.marginTop = `${
         this.target.offsetTop - Style.settings.toolbarHeight
       }px`;
