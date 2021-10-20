@@ -108,4 +108,9 @@ export class Settings {
    * @since 2.7.0
    */
   public defaultColorsFollowCurrentColors = false;
+
+  /**
+   * If set to true, it's allowed to rotate FrameMarker
+   */
+  public isRotationAllowed = true;
 }

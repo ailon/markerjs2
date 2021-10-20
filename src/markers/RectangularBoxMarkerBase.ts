@@ -37,7 +37,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   /**
    * The default marker size when the marker is created with a click (without dragging).
    */
-  protected defaultSize: IPoint = {x: 50, y: 20};
+  protected defaultSize: IPoint = { x: 50, y: 20 };
 
   /**
    * x coordinate of the top-left corner at the start of manipulation.
@@ -116,6 +116,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   private controlGrips: RectangularBoxMarkerGrips;
   private rotatorGrip: ResizeGrip;
   private activeGrip: ResizeGrip;
+  private isRotationAllowed: boolean;
 
   /**
    * Creates a new marker.
@@ -127,6 +128,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
     super(container, overlayContainer, settings);
 
+    this.isRotationAllowed = settings.isRotationAllowed;
     // add rotation transform
     this.container.transform.baseVal.appendItem(SvgHelper.createTransform());
 
@@ -142,8 +144,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     if (super.ownsTarget(el)) {
       return true;
     } else if (
-      this.controlGrips.findGripByVisual(el) !== undefined ||
-      this.rotatorGrip.ownsTarget(el)
+      this.controlGrips.findGripByVisual(el) !== undefined || (this.isRotationAllowed && this.rotatorGrip.ownsTarget(el))
     ) {
       return true;
     } else {
@@ -182,10 +183,10 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       this.activeGrip = this.controlGrips.findGripByVisual(target as SVGGraphicsElement);
       if (this.activeGrip !== undefined) {
         this._state = 'resize';
-      } else if (this.rotatorGrip.ownsTarget(target)) {
+      } else if (this.isRotationAllowed && this.rotatorGrip.ownsTarget(target)) {
         this.activeGrip = this.rotatorGrip;
 
-        const rotatedCenter = this.rotatePoint({x: this.centerX, y: this.centerY});
+        const rotatedCenter = this.rotatePoint({ x: this.centerX, y: this.centerY });
         this.left = rotatedCenter.x - this.width / 2;
         this.top = rotatedCenter.y - this.height / 2;
         this.moveVisual({ x: this.left, y: this.top });
@@ -254,7 +255,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
         this.manipulationStartTop +
         (rotatedPoint.y - this.manipulationStartTop) -
         this.offsetY;
-      this.moveVisual({x: this.left, y: this.top});
+      this.moveVisual({ x: this.left, y: this.top });
       this.adjustControlBox();
     } else if (this.state === 'resize') {
       this.resize(rotatedPoint);
@@ -273,34 +274,34 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     let newY = this.manipulationStartTop;
     let newHeight = this.manipulationStartHeight;
 
-    switch(this.activeGrip) {
+    switch (this.activeGrip) {
       case this.controlGrips.bottomLeft:
       case this.controlGrips.centerLeft:
       case this.controlGrips.topLeft:
         newX = this.manipulationStartLeft + point.x - this.manipulationStartX;
         newWidth = this.manipulationStartWidth + this.manipulationStartLeft - newX;
-        break; 
+        break;
       case this.controlGrips.bottomRight:
       case this.controlGrips.centerRight:
       case this.controlGrips.topRight:
       case undefined:
         newWidth = this.manipulationStartWidth + point.x - this.manipulationStartX;
-        break; 
+        break;
     }
 
-    switch(this.activeGrip) {
+    switch (this.activeGrip) {
       case this.controlGrips.topCenter:
       case this.controlGrips.topLeft:
       case this.controlGrips.topRight:
         newY = this.manipulationStartTop + point.y - this.manipulationStartY;
         newHeight = this.manipulationStartHeight + this.manipulationStartTop - newY;
-        break; 
+        break;
       case this.controlGrips.bottomCenter:
       case this.controlGrips.bottomLeft:
       case this.controlGrips.bottomRight:
       case undefined:
         newHeight = this.manipulationStartHeight + point.y - this.manipulationStartY;
-        break; 
+        break;
     }
 
     if (newWidth >= 0) {
@@ -325,7 +326,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
    * Sets control box size and location.
    */
   protected setSize(): void {
-    this.moveVisual({x: this.left, y: this.top});
+    this.moveVisual({ x: this.left, y: this.top });
     this.adjustControlBox();
   }
 
@@ -335,7 +336,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       const sign = Math.sign(point.x - this.centerX);
       this.rotationAngle =
         (Math.atan((point.y - this.centerY) / (point.x - this.centerX)) * 180) /
-          Math.PI +
+        Math.PI +
         90 * sign;
       this.applyRotation();
     }
@@ -355,7 +356,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     if (this.rotationAngle === 0) {
       return point;
     }
-    
+
     const matrix = this.container.getCTM();
     let svgPoint = SvgHelper.createPoint(point.x, point.y);
     svgPoint = svgPoint.matrixTransform(matrix);
@@ -373,7 +374,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     if (this.rotationAngle === 0) {
       return point;
     }
-    
+
     let matrix = this.container.getCTM();
     matrix = matrix.inverse();
     let svgPoint = SvgHelper.createPoint(point.x, point.y);
@@ -437,7 +438,9 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       ]
     );
 
-    this.controlBox.appendChild(this.rotatorGripLine);
+    if (this.isRotationAllowed) {
+      this.controlBox.appendChild(this.rotatorGripLine);
+    }
 
     this.controlGrips = new RectangularBoxMarkerGrips();
     this.addControlGrips();
@@ -483,7 +486,9 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     this.controlGrips.bottomCenter = this.createGrip();
     this.controlGrips.bottomRight = this.createGrip();
 
-    this.rotatorGrip = this.createGrip();
+    if (this.isRotationAllowed) {
+      this.rotatorGrip = this.createGrip();
+    }
 
     this.positionGrips();
   }
@@ -515,7 +520,9 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     this.positionGrip(this.controlGrips.bottomCenter.visual, cx, bottom);
     this.positionGrip(this.controlGrips.bottomRight.visual, right, bottom);
 
-    this.positionGrip(this.rotatorGrip.visual, cx, top - this.CB_DISTANCE * 3);
+    if (this.isRotationAllowed) {
+      this.positionGrip(this.rotatorGrip.visual, cx, top - this.CB_DISTANCE * 3);
+    }
   }
 
   private positionGrip(grip: SVGGraphicsElement, x: number, y: number) {
@@ -550,7 +557,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       visualTransformMatrix: TransformMatrix.toITransformMatrix(this.visual.transform.baseVal.getItem(0).matrix),
       containerTransformMatrix: TransformMatrix.toITransformMatrix(this.container.transform.baseVal.getItem(0).matrix)
     },
-    super.getState());
+      super.getState());
 
     return result;
   }
@@ -586,8 +593,8 @@ export class RectangularBoxMarkerBase extends MarkerBase {
   public scale(scaleX: number, scaleY: number): void {
     super.scale(scaleX, scaleY);
 
-    const rPoint = this.rotatePoint({x: this.left, y: this.top});
-    const point = this.unrotatePoint({x: rPoint.x * scaleX, y: rPoint.y * scaleY});
+    const rPoint = this.rotatePoint({ x: this.left, y: this.top });
+    const point = this.unrotatePoint({ x: rPoint.x * scaleX, y: rPoint.y * scaleY });
 
     this.left = point.x;
     this.top = point.y;
