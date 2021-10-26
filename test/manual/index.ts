@@ -20,7 +20,17 @@ export class Experiments {
   public openMarkerArea(target: HTMLImageElement): void {
     this.markerArea1 = new MarkerArea(target);
     Style.styleSheetRoot = document.head;
+
     this.markerArea1.addRenderEventListener(this.renderResult);
+    //this.markerArea1.addCloseEventListener(() => alert('close'));
+    this.markerArea1.addEventListener('beforeclose', (event) => {
+      if (!confirm('close?')) {
+        event.preventDefault();
+      }
+    })
+    //this.markerArea1.addEventListener('show', () => document.body.style.backgroundColor = 'cyan');
+    //this.markerArea1.addEventListener('restorestate', () => document.body.style.backgroundColor = 'magenta');
+
     this.markerArea1.settings.displayMode = this.displayMode;
     this.markerArea1.settings.popupMargin = 10;
 

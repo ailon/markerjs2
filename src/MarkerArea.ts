@@ -24,6 +24,7 @@ import { IPoint } from './core/IPoint';
 import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 import { UndoRedoManager } from './core/UndoRedoManager';
 import { CurveMarker } from './markers/curve-marker/CurveMarker';
+import { EventHandler, EventListenerRepository, IEventListenerRepository, MarkerAreaEvent, MarkerAreaRenderEvent } from './core/Events';
 
 /**
  * @ignore
@@ -411,6 +412,7 @@ export class MarkerArea {
     this.setWindowHeight();
     this.showUI();
     this.open();
+    this.eventListeners['show'].forEach(listener => listener(new MarkerAreaEvent(this)));
   }
 
   /**
@@ -448,19 +450,34 @@ export class MarkerArea {
   /**
    * Closes the MarkerArea UI.
    */
-  public close(): void {
+  public close(suppressBeforeClose = false): void {
     if (this.isOpen) {
-      if (this.coverDiv) {
-        this.closeUI();
+      let cancel = false;
+
+      if (!suppressBeforeClose) {
+        this.eventListeners['beforeclose'].forEach(listener => {
+          const ev = new MarkerAreaEvent(this, true);
+          listener(ev);
+          if (ev.defaultPrevented) {
+            cancel = true;
+          }
+        });
       }
-      if (this.targetObserver) {
-        this.targetObserver.unobserve(this.target);
+      
+      if (!cancel) {
+        if (this.coverDiv) {
+          this.closeUI();
+        }
+        if (this.targetObserver) {
+          this.targetObserver.unobserve(this.target);
+        }
+        if (this.settings.displayMode === 'popup') {
+          window.removeEventListener('resize', this.setWindowHeight);
+        }
+        //this.closeEventListeners.forEach((listener) => listener());
+        this.eventListeners['close'].forEach(listener => listener(new MarkerAreaEvent(this)));      
+        this._isOpen = false;
       }
-      if (this.settings.displayMode === 'popup') {
-        window.removeEventListener('resize', this.setWindowHeight);
-      }
-      this.closeEventListeners.forEach((listener) => listener());
-      this._isOpen = false;
     }
   }
 
@@ -491,23 +508,29 @@ export class MarkerArea {
    * @param listener - a method handling rendering results
    *
    * @see {@link MarkerAreaState}
+   * @deprecated use `addEventListener('render', ...)` instead.
    */
   public addRenderEventListener(listener: RenderEventHandler): void {
-    this.renderEventListeners.push(listener);
+    //this.renderEventListeners.push(listener);
+    this.addEventListener('render', (event: MarkerAreaRenderEvent) => {
+      listener(event.dataUrl, event.state);
+    });
   }
 
   /**
    * Remove a `render` event handler.
    *
    * @param listener - previously registered `render` event handler.
+   * @deprecated use `removeEventListener('render', ...)` instead.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public removeRenderEventListener(listener: RenderEventHandler): void {
-    if (this.renderEventListeners.indexOf(listener) > -1) {
-      this.renderEventListeners.splice(
-        this.renderEventListeners.indexOf(listener),
-        1
-      );
-    }
+    // if (this.renderEventListeners.indexOf(listener) > -1) {
+    //   this.renderEventListeners.splice(
+    //     this.renderEventListeners.indexOf(listener),
+    //     1
+    //   );
+    // }
   }
 
   /**
@@ -515,23 +538,29 @@ export class MarkerArea {
    * clicks on the close button (without saving).
    *
    * @param listener - close event listener
+   * @deprecated use `addEventListener('close', ...)` instead.
    */
   public addCloseEventListener(listener: CloseEventHandler): void {
-    this.closeEventListeners.push(listener);
+    //this.closeEventListeners.push(listener);
+    this.addEventListener('close', () => {
+      listener();
+    });
   }
 
   /**
    * Remove a `close` event handler.
    *
    * @param listener - previously registered `close` event handler.
+   * @deprecated use `removeEventListener('close', ...)` instead.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public removeCloseEventListener(listener: CloseEventHandler): void {
-    if (this.closeEventListeners.indexOf(listener) > -1) {
-      this.closeEventListeners.splice(
-        this.closeEventListeners.indexOf(listener),
-        1
-      );
-    }
+    // if (this.closeEventListeners.indexOf(listener) > -1) {
+    //   this.closeEventListeners.splice(
+    //     this.closeEventListeners.indexOf(listener),
+    //     1
+    //   );
+    // }
   }
 
   private setupResizeObserver() {
@@ -1140,8 +1169,9 @@ export class MarkerArea {
   public async startRenderAndClose(): Promise<void> {
     const result = await this.render();
     const state = this.getState();
-    this.renderEventListeners.forEach((listener) => listener(result, state));
-    this.close();
+    //this.renderEventListeners.forEach((listener) => listener(result, state));
+    this.eventListeners['render'].forEach(listener => listener(new MarkerAreaRenderEvent(this, result, state)));
+    this.close(true);
   }
 
   /**
@@ -1202,6 +1232,7 @@ export class MarkerArea {
         this.imageHeight / state.height
       );
     }
+    this.eventListeners['restorestate'].forEach(listener => listener(new MarkerAreaEvent(this)));
   }
 
   private addNewMarker(markerType: typeof MarkerBase): MarkerBase {
@@ -1428,4 +1459,32 @@ export class MarkerArea {
   public addLicenseKey(key: string): void {
     Activator.addKey(key);
   }
+
+  private eventListeners = new EventListenerRepository();
+  /**
+   * Adds an event listener for one of the marker.js Live events.
+   * 
+   * @param eventType - type of the event.
+   * @param handler - function handling the event.
+   */
+  public addEventListener<T extends keyof IEventListenerRepository>(
+    eventType: T,
+    handler: EventHandler<T>
+  ): void {
+    this.eventListeners.addEventListener(eventType, handler);
+  }
+
+  /**
+   * Removes an event listener for one of the marker.js Live events.
+   * 
+   * @param eventType - type of the event.
+   * @param handler - function currently handling the event.
+   */
+  public removeEventListener<T extends keyof IEventListenerRepository>(
+    eventType: T,
+    handler: EventHandler<T>
+  ): void {
+    this.eventListeners.removeEventListener(eventType, handler);
+  }
+
 }
