@@ -27,9 +27,19 @@ export class Experiments {
       if (!confirm('close?')) {
         event.preventDefault();
       }
-    })
+    });
     //this.markerArea1.addEventListener('show', () => document.body.style.backgroundColor = 'cyan');
     //this.markerArea1.addEventListener('restorestate', () => document.body.style.backgroundColor = 'magenta');
+    this.markerArea1.addEventListener('markercreating', (event) => console.log(`creating: ${event.marker?.typeName}`));
+    this.markerArea1.addEventListener('markercreate', (event) => console.log(`created: ${event.marker?.typeName}`));
+    this.markerArea1.addEventListener('markerselect', (event) => console.log(`selected: ${event.marker?.typeName}`));
+    this.markerArea1.addEventListener('markerdeselect', (event) => console.log(`deselected: ${event.marker?.typeName}`));
+    this.markerArea1.addEventListener('markerdelete', (event) => console.log(`deleted: ${event.marker?.typeName}`));
+    this.markerArea1.addEventListener('markerbeforedelete', (event) => {
+      if (!confirm('delete?')) {
+        event.preventDefault();
+      }
+    });
 
     this.markerArea1.settings.displayMode = this.displayMode;
     this.markerArea1.settings.popupMargin = 10;

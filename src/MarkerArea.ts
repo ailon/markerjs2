@@ -24,7 +24,7 @@ import { IPoint } from './core/IPoint';
 import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 import { UndoRedoManager } from './core/UndoRedoManager';
 import { CurveMarker } from './markers/curve-marker/CurveMarker';
-import { EventHandler, EventListenerRepository, IEventListenerRepository, MarkerAreaEvent, MarkerAreaRenderEvent } from './core/Events';
+import { EventHandler, EventListenerRepository, IEventListenerRepository, MarkerAreaEvent, MarkerAreaRenderEvent, MarkerEvent } from './core/Events';
 
 /**
  * @ignore
@@ -475,7 +475,7 @@ export class MarkerArea {
           window.removeEventListener('resize', this.setWindowHeight);
         }
         //this.closeEventListeners.forEach((listener) => listener());
-        this.eventListeners['close'].forEach(listener => listener(new MarkerAreaEvent(this)));      
+        this.eventListeners['close'].forEach(listener => listener(new MarkerAreaEvent(this)));
         this._isOpen = false;
       }
     }
@@ -1042,11 +1042,25 @@ export class MarkerArea {
    */
   public deleteSelectedMarker(): void {
     if (this.currentMarker !== undefined) {
-      this.currentMarker.dispose();
-      this.markerImage.removeChild(this.currentMarker.container);
-      this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
-      this.setCurrentMarker();
-      this.addUndoStep();
+      let cancel = false;
+
+      this.eventListeners['markerbeforedelete'].forEach(listener => {
+        const ev = new MarkerEvent(this, this.currentMarker, true);
+        listener(ev);
+        if (ev.defaultPrevented) {
+          cancel = true;
+        }
+      });
+      
+      if (!cancel) {
+        const marker = this.currentMarker;
+        this.currentMarker.dispose();
+        this.markerImage.removeChild(this.currentMarker.container);
+        this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+        this.setCurrentMarker();
+        this.addUndoStep();
+        this.eventListeners['markerdelete'].forEach(listener => listener(new MarkerEvent(this, marker)));
+      }
     }
   }
 
@@ -1264,12 +1278,14 @@ export class MarkerArea {
     this.currentMarker.onFillColorChanged = this.fillColorChanged;
     this.markerImage.style.cursor = 'crosshair';
     this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
+    this.eventListeners['markercreating'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
   }
 
   private markerCreated(marker: MarkerBase) {
     this.mode = 'select';
     this.markerImage.style.cursor = 'default';
     this.markers.push(marker);
+    this.eventListeners['markercreate'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
     this.setCurrentMarker(marker);
     if (
       marker instanceof FreehandMarker &&
@@ -1300,16 +1316,20 @@ export class MarkerArea {
    * @param marker marker to select. Deselects current marker if undefined.
    */
   public setCurrentMarker(marker?: MarkerBase): void {
-    if (this.currentMarker !== undefined) {
-      this.currentMarker.deselect();
-      this.toolbar.setCurrentMarker();
-      this.toolbox.setPanelButtons([]);
+    if (this.currentMarker !== marker) { // no need to deselect if not changed
+      if (this.currentMarker !== undefined) {
+        this.currentMarker.deselect();
+        this.toolbar.setCurrentMarker();
+        this.toolbox.setPanelButtons([]);
+        this.eventListeners['markerdeselect'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
+      }
     }
     this.currentMarker = marker;
-    if (this.currentMarker !== undefined) {
+    if (this.currentMarker !== undefined && !this.currentMarker.isSelected) {
       this.currentMarker.select();
       this.toolbar.setCurrentMarker(this.currentMarker);
       this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
+      this.eventListeners['markerselect'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
     }
   }
 
@@ -1466,6 +1486,8 @@ export class MarkerArea {
    * 
    * @param eventType - type of the event.
    * @param handler - function handling the event.
+   * 
+   * @since 2.16.0
    */
   public addEventListener<T extends keyof IEventListenerRepository>(
     eventType: T,
@@ -1479,6 +1501,8 @@ export class MarkerArea {
    * 
    * @param eventType - type of the event.
    * @param handler - function currently handling the event.
+   * 
+   * @since 2.16.0
    */
   public removeEventListener<T extends keyof IEventListenerRepository>(
     eventType: T,
