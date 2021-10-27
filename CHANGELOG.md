@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.16.0] - 2021-10-27
+### Added
+- new and expanded event system with events for all kinds of MarkerArea and individual marker lifecycel events.
+- `typeName` instance property on markers
+- `isSelected` marker property returning true if marker is currently selected
+
 ## [2.15.0] - 2021-10-15
 ### Added
 - configurable zIndex for the whole UI
@@ -298,6 +304,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.16.0]: https://github.com/ailon/markerjs2/releases/tag/v2.16.0
 [2.15.0]: https://github.com/ailon/markerjs2/releases/tag/v2.15.0
 [2.14.1]: https://github.com/ailon/markerjs2/releases/tag/v2.14.1
 [2.14.0]: https://github.com/ailon/markerjs2/releases/tag/v2.14.0
