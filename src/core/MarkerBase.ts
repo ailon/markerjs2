@@ -16,6 +16,15 @@ export class MarkerBase {
    */
   public static typeName = 'MarkerBase';
 
+  /**
+   * Instance property returning marker's type name.
+   * 
+   * @since 2.16.0
+   */
+  public get typeName(): string {
+    return Object.getPrototypeOf(this).constructor.typeName;
+  }
+
   protected _container: SVGGElement;
   /**
    * SVG container object holding the marker's visual.
@@ -103,10 +112,27 @@ export class MarkerBase {
   }
 
   /**
+   * Is this marker selected?
+   * 
+   * @since 2.16.0
+   */
+  protected _isSelected = false;
+
+  /**
+   * Returns true if the marker is currently selected
+   * 
+   * @since 2.16.0
+   */
+  public get isSelected(): boolean {
+    return this._isSelected;
+  }
+
+  /**
    * Selects this marker and displays appropriate selected marker UI.
    */
   public select(): void {
     this.container.style.cursor = 'move';
+    this._isSelected = true;
   }
 
   /**
@@ -114,6 +140,7 @@ export class MarkerBase {
    */
   public deselect(): void {
     this.container.style.cursor = 'default';
+    this._isSelected = false;
   }
 
   /**
