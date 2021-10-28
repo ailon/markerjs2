@@ -41,6 +41,9 @@ export class Experiments {
       }
     });
 
+    //this.markerArea1.addEventListener('markercreate', event => event.markerArea.createNewMarker(FrameMarker));
+
+
     this.markerArea1.settings.displayMode = this.displayMode;
     this.markerArea1.settings.popupMargin = 10;
 

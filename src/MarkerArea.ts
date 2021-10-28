@@ -1285,7 +1285,6 @@ export class MarkerArea {
     this.mode = 'select';
     this.markerImage.style.cursor = 'default';
     this.markers.push(marker);
-    this.eventListeners['markercreate'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
     this.setCurrentMarker(marker);
     if (
       marker instanceof FreehandMarker &&
@@ -1296,6 +1295,7 @@ export class MarkerArea {
       this.toolbar.setSelectMode();
     }
     this.addUndoStep();
+    this.eventListeners['markercreate'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
   }
 
   private colorChanged(color: string): void {
