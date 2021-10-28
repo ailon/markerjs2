@@ -60,10 +60,10 @@ export type CloseEventHandler = () => void;
  * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
  *
  * // register an event listener for when user clicks OK/save in the marker.js UI
- * markerArea.addRenderEventListener(dataUrl => {
+ * markerArea.addEventListener('render', event => {
  *   // we are setting the markup result to replace our original image on the page
  *   // but you can set a different image or upload it to your server
- *   document.getElementById('myimg').src = dataUrl;
+ *   document.getElementById('myimg').src = event.dataUrl;
  * });
  *
  * // finally, call the show() method and marker.js UI opens
@@ -418,7 +418,7 @@ export class MarkerArea {
   /**
    * Renders the annotation result.
    *
-   * Normally, you should use {@linkcode addRenderEventListener} method to set a listener for the `render` event
+   * Normally, you should use {@linkcode addEventListener} method to set a listener for the `render` event
    * rather than calling this method directly.
    */
   public async render(): Promise<string> {
