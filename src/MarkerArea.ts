@@ -826,6 +826,8 @@ export class MarkerArea {
     }
 
     this.coverDiv = document.createElement('div');
+    // prevent UI from blinking when just rendering state
+    this.coverDiv.style.visibility = this._silentRenderMode ? 'hidden' : 'visible';
     this.coverDiv.className = Style.CLASS_PREFIX;
     // hardcode font size so nothing inside is affected by higher up settings
     this.coverDiv.style.fontSize = '16px';
@@ -1511,4 +1513,26 @@ export class MarkerArea {
     this.eventListeners.removeEventListener(eventType, handler);
   }
 
+
+  private _silentRenderMode = false;
+  /**
+   * Renders previously saved state without user intervention.
+   * 
+   * The rendered image is returned to the `render` event handlers (as in the regular interactive process).
+   * Rendering options set on `MarkerArea` are respected.
+   * 
+   * @param state state to render
+   * 
+   * @since 2.17.0
+   */
+  public renderState(state: MarkerAreaState): void {
+    this._silentRenderMode = true;
+    this.settings.displayMode = 'inline';
+    if (!this.isOpen) {
+      this.show();
+    }
+    this.restoreState(state);
+    this.startRenderAndClose();
+    this._silentRenderMode = false;
+  }
 }

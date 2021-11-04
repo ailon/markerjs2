@@ -144,6 +144,14 @@ export class Experiments {
     }
   }
 
+  public renderState(): void {
+    (document.getElementById('resultImage1') as HTMLImageElement).src = '';
+
+    this.markerArea1 = new MarkerArea(document.getElementById('testImage1'));
+    this.markerArea1.addEventListener('render', (event) => this.renderResult(event.dataUrl, event.state));
+    this.markerArea1.renderState(this.currentState);
+  }
+
   public openNoUI(target: HTMLImageElement): void {
     this.markerArea1 = new MarkerArea(target);
     this.markerArea1.addRenderEventListener(this.renderResult);
