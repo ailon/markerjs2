@@ -1272,16 +1272,28 @@ export class MarkerArea {
    *
    * @param markerType
    */
-  public createNewMarker(markerType: typeof MarkerBase): void {
-    this.setCurrentMarker();
-    this.currentMarker = this.addNewMarker(markerType);
-    this.currentMarker.onMarkerCreated = this.markerCreated;
-    this.currentMarker.onColorChanged = this.colorChanged;
-    this.currentMarker.onFillColorChanged = this.fillColorChanged;
-    this.markerImage.style.cursor = 'crosshair';
-    this.toolbar.setActiveMarkerButton(markerType.typeName);
-    this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
-    this.eventListeners['markercreating'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
+  public createNewMarker(markerType: typeof MarkerBase | string): void {
+    let mType: typeof MarkerBase;
+
+    if (typeof markerType === 'string') {
+      mType = this._availableMarkerTypes.find(
+        (mt) => mt.typeName === markerType
+      );
+    } else {
+      mType = markerType;
+    }
+
+    if (mType) {
+      this.setCurrentMarker();
+      this.currentMarker = this.addNewMarker(mType);
+      this.currentMarker.onMarkerCreated = this.markerCreated;
+      this.currentMarker.onColorChanged = this.colorChanged;
+      this.currentMarker.onFillColorChanged = this.fillColorChanged;
+      this.markerImage.style.cursor = 'crosshair';
+      this.toolbar.setActiveMarkerButton(mType.typeName);
+      this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
+      this.eventListeners['markercreating'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
+    }
   }
 
   private markerCreated(marker: MarkerBase) {
