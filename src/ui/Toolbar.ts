@@ -147,6 +147,7 @@ export class Toolbar {
       this.markerItems.forEach((mi) => {
         const buttonContainer = document.createElement('div');
         buttonContainer.className = `${this.toolbarButtonStyleClass.name}`;
+        buttonContainer.setAttribute('data-type-name', mi.typeName);
         //  ${
         //   this.uiStyleSettings.toolbarButtonStyleColorsClassName ?
         //   this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
@@ -500,6 +501,19 @@ export class Toolbar {
         ? this.uiStyleSettings.toolbarActiveButtonStyleColorsClassName
         : this.toolbarActiveButtonStyleColorsClass.name
     }`;
+  }
+
+  /**
+   * Selects toolbar button for a specified marker type.
+   * @param typeName Marker type name
+   * 
+   * @since 2.17.0
+   */
+  public setActiveMarkerButton(typeName: string): void {
+    const activeBtn = this.markerButtons.find(btn => btn.getAttribute('data-type-name') === typeName);
+    if (activeBtn) {
+      this.setActiveButton(activeBtn);
+    }
   }
 
   /**

@@ -1279,6 +1279,7 @@ export class MarkerArea {
     this.currentMarker.onColorChanged = this.colorChanged;
     this.currentMarker.onFillColorChanged = this.fillColorChanged;
     this.markerImage.style.cursor = 'crosshair';
+    this.toolbar.setActiveMarkerButton(markerType.typeName);
     this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
     this.eventListeners['markercreating'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
   }
