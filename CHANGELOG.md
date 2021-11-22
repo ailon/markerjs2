@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.17.1] - 2021-11-22
+### Fixed
+- `toolboxBackgroundColor` didn't change the toolbox flyout color
+
 ## [2.17.0] - 2021-11-15
 ### Added
 - renderState() method to render previously saved state without opening the UI
@@ -320,6 +324,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.17.1]: https://github.com/ailon/markerjs2/releases/tag/v2.17.1
 [2.17.0]: https://github.com/ailon/markerjs2/releases/tag/v2.17.0
 [2.16.2]: https://github.com/ailon/markerjs2/releases/tag/v2.16.2
 [2.16.1]: https://github.com/ailon/markerjs2/releases/tag/v2.16.1
