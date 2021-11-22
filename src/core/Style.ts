@@ -45,7 +45,7 @@ export class Style {
       toolbarBackgroundHoverColor: '#333333',
       toolbarColor: '#eeeeee',
       toolbarHeight: 40,
-      toolboxBackgroundColor: '#2a2a2a',
+      // toolboxBackgroundColor: '#2a2a2a',
       toolboxColor: '#eeeeee',
       toolboxAccentColor: '#3080c3',
       undoButtonVisible: true,

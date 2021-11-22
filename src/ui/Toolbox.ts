@@ -77,7 +77,7 @@ export class Toolbox {
       box-sizing: content-box;
     `));
     this.toolboxPanelRowStyleColorsClass = Style.addClass(new StyleClass('toolbox-panel-row_colors', `
-      background-color: ${this.uiStyleSettings.toolbarBackgroundHoverColor};
+      background-color: ${this.uiStyleSettings.toolboxBackgroundColor ?? this.uiStyleSettings.toolbarBackgroundHoverColor};
     `));
 
     this.toolboxButtonStyleClass = Style.addClass(new StyleClass('toolbox_button', `
