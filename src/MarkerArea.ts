@@ -889,7 +889,7 @@ export class MarkerArea {
       this.uiStyleSettings
     );
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
-    this.toolbar.show(this.uiStyleSettings.hideToolbar ? 'hidden' : 'visible');
+    this.toolbar.show((this._silentRenderMode || this.uiStyleSettings.hideToolbar) ? 'hidden' : 'visible');
 
     this.contentDiv = document.createElement('div');
     this.contentDiv.style.display = 'flex';
@@ -943,7 +943,7 @@ export class MarkerArea {
       this.settings.displayMode,
       this.uiStyleSettings
     );
-    this.toolbox.show(this.uiStyleSettings.hideToolbox ? 'hidden' : 'visible');
+    this.toolbox.show((this._silentRenderMode || this.uiStyleSettings.hideToolbox) ? 'hidden' : 'visible');
   }
 
   private closeUI() {
