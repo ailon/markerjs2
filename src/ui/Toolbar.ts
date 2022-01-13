@@ -119,7 +119,10 @@ export class Toolbar {
     if (this.uiStyleSettings.zoomButtonVisible) {
       this.addActionButton(actionButtonBlock, ZoomIcon, 'zoom');
     }
-    if (this.uiStyleSettings.zoomButtonVisible && this.uiStyleSettings.zoomOutButtonVisible) {
+    if (
+      this.uiStyleSettings.zoomButtonVisible &&
+      this.uiStyleSettings.zoomOutButtonVisible
+    ) {
       this.addActionButton(actionButtonBlock, ZoomOutIcon, 'zoom-out');
     }
     if (this.uiStyleSettings.notesButtonVisible) {
@@ -173,6 +176,8 @@ export class Toolbar {
     const resultButtonBlock = document.createElement('div');
     resultButtonBlock.className = this.toolbarBlockStyleClass.name;
     resultButtonBlock.style.whiteSpace = 'nowrap';
+    resultButtonBlock.style.display =
+      this.uiStyleSettings.resultButtonBlockVisible !== false ? '' : 'none';
     this.uiContainer.appendChild(resultButtonBlock);
 
     this.addActionButton(resultButtonBlock, CheckIcon, 'render');
@@ -506,11 +511,13 @@ export class Toolbar {
   /**
    * Selects toolbar button for a specified marker type.
    * @param typeName Marker type name
-   * 
+   *
    * @since 2.17.0
    */
   public setActiveMarkerButton(typeName: string): void {
-    const activeBtn = this.markerButtons.find(btn => btn.getAttribute('data-type-name') === typeName);
+    const activeBtn = this.markerButtons.find(
+      (btn) => btn.getAttribute('data-type-name') === typeName
+    );
     if (activeBtn) {
       this.setActiveButton(activeBtn);
     }
@@ -525,7 +532,7 @@ export class Toolbar {
     const activeMarkerButtons = this.buttons.filter((btn) =>
       /delete|notes/.test(btn.getAttribute('data-action'))
     );
-    activeMarkerButtons.forEach(btn => {
+    activeMarkerButtons.forEach((btn) => {
       if (this.currentMarker === undefined) {
         btn.style.fillOpacity = '0.4';
         btn.style.pointerEvents = 'none';
@@ -533,6 +540,6 @@ export class Toolbar {
         btn.style.fillOpacity = '1';
         btn.style.pointerEvents = 'all';
       }
-    })
+    });
   }
 }

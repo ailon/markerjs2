@@ -67,6 +67,12 @@ export interface IStyleSettings {
    */
   clearButtonVisible?: boolean;
   /**
+   * Are render and close buttons visible?
+   * 
+   * @since 2.18.0
+   */
+  resultButtonBlockVisible?: boolean;
+  /**
    * Background color of the toolbox (property panel) block.
    */
   toolboxBackgroundColor?: string;

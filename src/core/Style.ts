@@ -53,6 +53,7 @@ export class Style {
       zoomButtonVisible: false,
       zoomOutButtonVisible: false,
       clearButtonVisible: false,
+      resultButtonBlockVisible: true,
       logoPosition: 'left',
     };
   }
