@@ -330,6 +330,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textEditor.innerText = this.text;
     this.textEditor.contentEditable = 'true';
     this.textEditor.style.color = this.color;
+    this.textEditor.style.whiteSpace = 'pre';
     this.positionTextEditor();
     this.textEditor.addEventListener('pointerup', (ev) => {
       ev.stopPropagation();
@@ -347,6 +348,17 @@ export class TextMarker extends RectangularBoxMarkerBase {
     });
     this.textEditor.addEventListener('keyup', (ev) => {
       ev.cancelBubble = true;
+    });
+    this.textEditor.addEventListener('paste', (ev) => {
+      if (ev.clipboardData) {
+        // paste plain text
+        const content = ev.clipboardData.getData('text');
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return false;
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(content));
+        ev.preventDefault();
+      }
     });
 
     this.textEditDiv.addEventListener('pointerup', () => {
