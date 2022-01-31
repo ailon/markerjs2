@@ -1468,10 +1468,10 @@ export class MarkerArea {
       this.notesArea === undefined &&
       (ev.key === 'Delete' || ev.key === 'Backspace')
     ) {
-      this.removeMarker(this.currentMarker);
-      this.setCurrentMarker();
-      this.markerImage.style.cursor = 'default';
-      this.addUndoStep();
+      this.deleteSelectedMarker();
+      // this.setCurrentMarker();
+      // this.markerImage.style.cursor = 'default';
+      // this.addUndoStep();
     }
   }
 
