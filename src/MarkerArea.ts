@@ -382,6 +382,8 @@ export class MarkerArea {
     this.showNotesEditor = this.showNotesEditor.bind(this);
     this.hideNotesEditor = this.hideNotesEditor.bind(this);
     this.stepZoom = this.stepZoom.bind(this);
+    this.focus = this.focus.bind(this);
+    this.blur = this.blur.bind(this);
   }
 
   private open(): void {
@@ -404,6 +406,7 @@ export class MarkerArea {
     }
 
     this._isOpen = true;
+    this._isFocused = true;
   }
 
   /**
@@ -1363,6 +1366,10 @@ export class MarkerArea {
   }
 
   private onPointerDown(ev: PointerEvent) {
+    if (!this._isFocused) {
+      this.focus();
+    }
+
     this.touchPoints++;
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
       if (
@@ -1393,6 +1400,10 @@ export class MarkerArea {
   }
 
   private onDblClick(ev: PointerEvent) {
+    if (!this._isFocused) {
+      this.focus();
+    }
+
     if (this.mode === 'select') {
       const hitMarker = this.markers.find((m) => m.ownsTarget(ev.target));
       if (hitMarker !== undefined && hitMarker !== this.currentMarker) {
@@ -1568,4 +1579,52 @@ export class MarkerArea {
     this.startRenderAndClose();
     this._silentRenderMode = false;
   }
+
+  private _isFocused = false;
+  /**
+   * Returns true when this MarkerArea is focused.
+   * 
+   * @since 2.19.0
+   */
+  public get isFocused(): boolean {
+    return this._isFocused;
+  }
+
+  private _previousCurrentMarker?: MarkerBase;
+
+  /**
+   * Focuses the MarkerArea to receive all input from the window.
+   * 
+   * Is called automatically when user clicks inside of the marker area. Call manually to set focus explicitly.
+   * 
+   * @since 2.19.0
+   */
+  public focus(): void {
+    if (!this._isFocused) {
+      this.attachWindowEvents();
+      this._isFocused = true;
+      if (this._previousCurrentMarker !== undefined) {
+        this.setCurrentMarker(this._previousCurrentMarker);
+      }
+      this.eventListeners['focus'].forEach(listener => listener(new MarkerAreaEvent(this)));
+    }
+  }
+
+  /**
+   * Tells MarkerArea to stop reacting to input outside of the immediate marker image.
+   * 
+   * Call `focus()` to re-enable.
+   * 
+   * @since 2.19.0
+   */
+  public blur(): void {
+    if (this._isFocused) {
+      this.detachWindowEvents();
+      this._isFocused = false;
+      this._previousCurrentMarker = this.currentMarker;
+      this.setCurrentMarker();
+      this.eventListeners['blur'].forEach(listener => listener(new MarkerAreaEvent(this)));
+    }
+  }
+
 }

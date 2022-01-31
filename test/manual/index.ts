@@ -40,6 +40,8 @@ export class Experiments {
         event.preventDefault();
       }
     });
+    this.markerArea1.addEventListener('focus', () => console.log(`focused`));
+    this.markerArea1.addEventListener('blur', () => console.log(`blured`));
 
     // this.markerArea1.addEventListener('markercreate', event => event.markerArea.createNewMarker('FrameMarker'));
 
@@ -109,6 +111,10 @@ export class Experiments {
     if (this.currentState) {
       this.markerArea1.restoreState(this.currentState);
     }
+
+    const tb = document.getElementById('testInput');
+    tb.addEventListener('focus', () => this.markerArea1.blur());
+    tb.addEventListener('blur', () => this.markerArea1.focus());
   }
 
   private renderResult(dataUrl: string, state: MarkerAreaState) {
