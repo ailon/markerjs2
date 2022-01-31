@@ -477,7 +477,7 @@ export class MarkerArea {
         }
         //this.closeEventListeners.forEach((listener) => listener());
         this.eventListeners['close'].forEach(listener => listener(new MarkerAreaEvent(this)));
-        this.dettachEvents();
+        this.detachEvents();
         this._isOpen = false;
       }
     }
@@ -732,6 +732,10 @@ export class MarkerArea {
   private attachEvents() {
     this.markerImage.addEventListener('pointerdown', this.onPointerDown);
     this.markerImage.addEventListener('dblclick', this.onDblClick);
+    this.attachWindowEvents();
+  }
+
+  private attachWindowEvents() {
     window.addEventListener('pointermove', this.onPointerMove);
     window.addEventListener('pointerup', this.onPointerUp);
     window.addEventListener('pointercancel', this.onPointerOut);
@@ -741,9 +745,13 @@ export class MarkerArea {
     window.addEventListener('keyup', this.onKeyUp);
   }
 
-  private dettachEvents() {
+  private detachEvents() {
     this.markerImage.removeEventListener('pointerdown', this.onPointerDown);
     this.markerImage.removeEventListener('dblclick', this.onDblClick);
+    this.detachWindowEvents();
+  }
+
+  private detachWindowEvents() {
     window.removeEventListener('pointermove', this.onPointerMove);
     window.removeEventListener('pointerup', this.onPointerUp);
     window.removeEventListener('pointercancel', this.onPointerOut);
