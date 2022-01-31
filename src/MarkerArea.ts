@@ -361,6 +361,7 @@ export class MarkerArea {
     this.onDblClick = this.onDblClick.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
+    this.onPointerOut = this.onPointerOut.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
     this.overrideOverflow = this.overrideOverflow.bind(this);
     this.restoreOverflow = this.restoreOverflow.bind(this);
@@ -476,6 +477,7 @@ export class MarkerArea {
         }
         //this.closeEventListeners.forEach((listener) => listener());
         this.eventListeners['close'].forEach(listener => listener(new MarkerAreaEvent(this)));
+        this.dettachEvents();
         this._isOpen = false;
       }
     }
@@ -732,19 +734,23 @@ export class MarkerArea {
     this.markerImage.addEventListener('dblclick', this.onDblClick);
     window.addEventListener('pointermove', this.onPointerMove);
     window.addEventListener('pointerup', this.onPointerUp);
-    window.addEventListener('pointercancel', () => {
-      if (this.touchPoints > 0) {
-        this.touchPoints--;
-      }
-    });
-    window.addEventListener('pointerout', () => {
-      if (this.touchPoints > 0) {
-        this.touchPoints--;
-      }
-    });
+    window.addEventListener('pointercancel', this.onPointerOut);
+    window.addEventListener('pointerout', this.onPointerOut);
     window.addEventListener('pointerleave', this.onPointerUp);
     window.addEventListener('resize', this.onWindowResize);
     window.addEventListener('keyup', this.onKeyUp);
+  }
+
+  private dettachEvents() {
+    this.markerImage.removeEventListener('pointerdown', this.onPointerDown);
+    this.markerImage.removeEventListener('dblclick', this.onDblClick);
+    window.removeEventListener('pointermove', this.onPointerMove);
+    window.removeEventListener('pointerup', this.onPointerUp);
+    window.removeEventListener('pointercancel', this.onPointerOut);
+    window.removeEventListener('pointerout', this.onPointerOut);
+    window.removeEventListener('pointerleave', this.onPointerUp);
+    window.removeEventListener('resize', this.onWindowResize);
+    window.removeEventListener('keyup', this.onKeyUp);
   }
 
   /**
@@ -1429,6 +1435,12 @@ export class MarkerArea {
     }
     this.isDragging = false;
     this.addUndoStep();
+  }
+
+  private onPointerOut(/*ev: PointerEvent*/) {
+    if (this.touchPoints > 0) {
+      this.touchPoints--;
+    }
   }
 
   private onKeyUp(ev: KeyboardEvent) {
