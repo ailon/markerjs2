@@ -48,6 +48,8 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   private drawing = false;
 
+  private pixelRatio = 1;
+
   /**
    * Creates a new marker.
    *
@@ -64,6 +66,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
     this.color = settings.defaultColor;
     this.lineWidth = settings.defaultStrokeWidth;
+    this.pixelRatio = settings.freehandPixelRatio;
 
     this.setColor = this.setColor.bind(this);
     this.addCanvas = this.addCanvas.bind(this);
@@ -194,9 +197,10 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     this.overlayContainer.innerHTML = '';
 
     this.canvasElement = document.createElement('canvas');
-    this.canvasElement.width = this.overlayContainer.clientWidth;
-    this.canvasElement.height = this.overlayContainer.clientHeight;
+    this.canvasElement.width = this.overlayContainer.clientWidth * this.pixelRatio;
+    this.canvasElement.height = this.overlayContainer.clientHeight * this.pixelRatio;
     this.canvasContext = this.canvasElement.getContext('2d');
+    this.canvasContext.scale(this.pixelRatio, this.pixelRatio);
     this.overlayContainer.appendChild(this.canvasElement);
   }
 
@@ -258,14 +262,14 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     }
 
     if (containsData) {
-      this.left = startX;
-      this.top = startY;
-      this.width = endX - startX;
-      this.height = endY - startY;
+      this.left = startX / this.pixelRatio;
+      this.top = startY / this.pixelRatio;
+      this.width = (endX - startX) / this.pixelRatio;
+      this.height = (endY - startY) / this.pixelRatio;
 
       const tmpCanvas = document.createElement('canvas');
-      tmpCanvas.width = this.width;
-      tmpCanvas.height = this.height;
+      tmpCanvas.width = endX - startX;
+      tmpCanvas.height = endY - startY;
       const tmpCtx = tmpCanvas.getContext('2d');
       tmpCtx.putImageData(
         this.canvasContext.getImageData(

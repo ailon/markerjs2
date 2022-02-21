@@ -100,12 +100,14 @@ export class Experiments {
 
     // this.markerArea1.renderWidth = 1000;
     // this.markerArea1.renderHeight = 400;
-    // this.markerArea1.renderAtNaturalSize = true;
+    this.markerArea1.renderAtNaturalSize = true;
     // this.markerArea1.renderImageType = 'image/jpeg';
     // this.markerArea1.renderImageQuality = 0.2;
     // this.markerArea1.renderMarkersOnly = true;
 
     // this.markerArea1.renderTarget = <HTMLCanvasElement>document.getElementById('resultCanvas');
+
+    this.markerArea1.settings.freehandPixelRatio = 10;
 
     this.markerArea1.show();
     if (this.currentState) {

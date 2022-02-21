@@ -108,4 +108,12 @@ export class Settings {
    * @since 2.7.0
    */
   public defaultColorsFollowCurrentColors = false;
+
+  /**
+   * Increase this setting for smoother FreehandMarker lines.
+   * Note that it will also take more space when you save the state.
+   *
+   * @since 2.20.0
+   */
+  public freehandPixelRatio = 1;
 }
