@@ -655,7 +655,6 @@ export class MarkerArea {
     if (!(this.currentMarker && this.currentMarker instanceof TextMarker)) {
       preScaleSelectedMarker = this.currentMarker;
       this.setCurrentMarker();
-      this.toolbar.setSelectMode();
     }
     this.markers.forEach((marker) => marker.scale(scaleX, scaleY));
     if (preScaleSelectedMarker !== undefined) {
