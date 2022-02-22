@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.0] - 2022-02-22
+### Added
+- Settings.freehandPixelRatio to control resolution of the FreehandMarker
+
+### Fixed
+- toolbar loses currently selected marker type on resize
+
 ## [2.19.0] - 2022-01-31
 ### Added
 - `MarkerArea.focus()` and `blur()` methods and `focus`/`blur` events
@@ -343,6 +350,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.20.0]: https://github.com/ailon/markerjs2/releases/tag/v2.20.0
 [2.19.0]: https://github.com/ailon/markerjs2/releases/tag/v2.19.0
 [2.18.0]: https://github.com/ailon/markerjs2/releases/tag/v2.18.0
 [2.17.2]: https://github.com/ailon/markerjs2/releases/tag/v2.17.2
