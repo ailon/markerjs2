@@ -707,12 +707,23 @@ export class MarkerArea {
     this.markerImageHolder.style.transformOrigin = 'top left';
     this.positionMarkerImage();
 
-    this.defs = SvgHelper.createDefs();
-    this.markerImage.appendChild(this.defs);
-
     this.markerImageHolder.appendChild(this.markerImage);
 
     this.editorCanvas.appendChild(this.markerImageHolder);
+  }
+
+  /**
+   * Adds "defs" element to the marker SVG element. 
+   * Useful for using custom fonts and potentially other scenarios.
+   *
+   * @param {(...(string | Node)[])} nodes
+   * @see Documentation article on adding custom fonts for an example
+   */
+  public addDefs(...nodes: (string | Node)[]): void {
+    this.defs = SvgHelper.createDefs();
+    this.markerImage.insertBefore(this.defs, this.markerImage.firstChild);
+
+    this.defs.append(...nodes);
   }
 
   private initOverlay(): void {
@@ -1244,6 +1255,7 @@ export class MarkerArea {
     while (this.markerImage.lastChild) {
       this.markerImage.removeChild(this.markerImage.lastChild);
     }
+    
     state.markers.forEach((markerState) => {
       const markerType = this._availableMarkerTypes.find(
         (mType) => mType.typeName === markerState.typeName
