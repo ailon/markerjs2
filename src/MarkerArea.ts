@@ -24,7 +24,14 @@ import { IPoint } from './core/IPoint';
 import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 import { UndoRedoManager } from './core/UndoRedoManager';
 import { CurveMarker } from './markers/curve-marker/CurveMarker';
-import { EventHandler, EventListenerRepository, IEventListenerRepository, MarkerAreaEvent, MarkerAreaRenderEvent, MarkerEvent } from './core/Events';
+import {
+  EventHandler,
+  EventListenerRepository,
+  IEventListenerRepository,
+  MarkerAreaEvent,
+  MarkerAreaRenderEvent,
+  MarkerEvent,
+} from './core/Events';
 
 /**
  * @ignore
@@ -416,7 +423,9 @@ export class MarkerArea {
     this.setWindowHeight();
     this.showUI();
     this.open();
-    this.eventListeners['show'].forEach(listener => listener(new MarkerAreaEvent(this)));
+    this.eventListeners['show'].forEach((listener) =>
+      listener(new MarkerAreaEvent(this))
+    );
   }
 
   /**
@@ -459,7 +468,7 @@ export class MarkerArea {
       let cancel = false;
 
       if (!suppressBeforeClose) {
-        this.eventListeners['beforeclose'].forEach(listener => {
+        this.eventListeners['beforeclose'].forEach((listener) => {
           const ev = new MarkerAreaEvent(this, true);
           listener(ev);
           if (ev.defaultPrevented) {
@@ -467,7 +476,7 @@ export class MarkerArea {
           }
         });
       }
-      
+
       if (!cancel) {
         if (this.coverDiv) {
           this.closeUI();
@@ -479,7 +488,9 @@ export class MarkerArea {
           window.removeEventListener('resize', this.setWindowHeight);
         }
         //this.closeEventListeners.forEach((listener) => listener());
-        this.eventListeners['close'].forEach(listener => listener(new MarkerAreaEvent(this)));
+        this.eventListeners['close'].forEach((listener) =>
+          listener(new MarkerAreaEvent(this))
+        );
         this.detachEvents();
         this._isOpen = false;
       }
@@ -713,7 +724,7 @@ export class MarkerArea {
   }
 
   /**
-   * Adds "defs" element to the marker SVG element. 
+   * Adds "defs" element to the marker SVG element.
    * Useful for using custom fonts and potentially other scenarios.
    *
    * @param {(...(string | Node)[])} nodes
@@ -854,7 +865,9 @@ export class MarkerArea {
 
     this.coverDiv = document.createElement('div');
     // prevent UI from blinking when just rendering state
-    this.coverDiv.style.visibility = this._silentRenderMode ? 'hidden' : 'visible';
+    this.coverDiv.style.visibility = this._silentRenderMode
+      ? 'hidden'
+      : 'visible';
     this.coverDiv.className = Style.CLASS_PREFIX;
     // hardcode font size so nothing inside is affected by higher up settings
     this.coverDiv.style.fontSize = '16px';
@@ -916,7 +929,11 @@ export class MarkerArea {
       this.uiStyleSettings
     );
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
-    this.toolbar.show((this._silentRenderMode || this.uiStyleSettings.hideToolbar) ? 'hidden' : 'visible');
+    this.toolbar.show(
+      this._silentRenderMode || this.uiStyleSettings.hideToolbar
+        ? 'hidden'
+        : 'visible'
+    );
 
     this.contentDiv = document.createElement('div');
     this.contentDiv.style.display = 'flex';
@@ -970,7 +987,11 @@ export class MarkerArea {
       this.settings.displayMode,
       this.uiStyleSettings
     );
-    this.toolbox.show((this._silentRenderMode || this.uiStyleSettings.hideToolbox) ? 'hidden' : 'visible');
+    this.toolbox.show(
+      this._silentRenderMode || this.uiStyleSettings.hideToolbox
+        ? 'hidden'
+        : 'visible'
+    );
   }
 
   private closeUI() {
@@ -1073,14 +1094,14 @@ export class MarkerArea {
     if (this.currentMarker !== undefined) {
       let cancel = false;
 
-      this.eventListeners['markerbeforedelete'].forEach(listener => {
+      this.eventListeners['markerbeforedelete'].forEach((listener) => {
         const ev = new MarkerEvent(this, this.currentMarker, true);
         listener(ev);
         if (ev.defaultPrevented) {
           cancel = true;
         }
       });
-      
+
       if (!cancel) {
         const marker = this.currentMarker;
         this.currentMarker.dispose();
@@ -1088,14 +1109,16 @@ export class MarkerArea {
         this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
         this.setCurrentMarker();
         this.addUndoStep();
-        this.eventListeners['markerdelete'].forEach(listener => listener(new MarkerEvent(this, marker)));
+        this.eventListeners['markerdelete'].forEach((listener) =>
+          listener(new MarkerEvent(this, marker))
+        );
       }
     }
   }
 
   /**
    * Removes all markers.
-   * 
+   *
    * @since 2.15.0
    */
   public clear(): void {
@@ -1153,7 +1176,18 @@ export class MarkerArea {
       this.currentMarker === undefined ||
       this.currentMarker.state !== 'edit'
     ) {
-      this.undoRedoManager.addUndoStep(this.getState());
+      const currentState = this.getState();
+      const lastUndoState = this.undoRedoManager.getLastUndoStep();
+      if (
+        lastUndoState &&
+        (lastUndoState.width !== currentState.width ||
+          lastUndoState.height !== currentState.height)
+      ) {
+        // if the size changed just replace the last step with a resized one
+        this.undoRedoManager.replaceLastUndoStep(currentState);
+      } else {
+        this.undoRedoManager.addUndoStep(currentState);
+      }
     }
   }
 
@@ -1215,7 +1249,9 @@ export class MarkerArea {
     const result = await this.render();
     const state = this.getState();
     //this.renderEventListeners.forEach((listener) => listener(result, state));
-    this.eventListeners['render'].forEach(listener => listener(new MarkerAreaRenderEvent(this, result, state)));
+    this.eventListeners['render'].forEach((listener) =>
+      listener(new MarkerAreaRenderEvent(this, result, state))
+    );
     this.close(true);
   }
 
@@ -1257,7 +1293,7 @@ export class MarkerArea {
     while (this.markerImage.lastChild) {
       this.markerImage.removeChild(this.markerImage.lastChild);
     }
-    
+
     state.markers.forEach((markerState) => {
       const markerType = this._availableMarkerTypes.find(
         (mType) => mType.typeName === markerState.typeName
@@ -1278,7 +1314,9 @@ export class MarkerArea {
         this.imageHeight / state.height
       );
     }
-    this.eventListeners['restorestate'].forEach(listener => listener(new MarkerAreaEvent(this)));
+    this.eventListeners['restorestate'].forEach((listener) =>
+      listener(new MarkerAreaEvent(this))
+    );
   }
 
   private addNewMarker(markerType: typeof MarkerBase): MarkerBase {
@@ -1322,7 +1360,9 @@ export class MarkerArea {
       this.markerImage.style.cursor = 'crosshair';
       this.toolbar.setActiveMarkerButton(mType.typeName);
       this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
-      this.eventListeners['markercreating'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
+      this.eventListeners['markercreating'].forEach((listener) =>
+        listener(new MarkerEvent(this, this.currentMarker))
+      );
     }
   }
 
@@ -1340,7 +1380,9 @@ export class MarkerArea {
       this.toolbar.setSelectMode();
     }
     this.addUndoStep();
-    this.eventListeners['markercreate'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
+    this.eventListeners['markercreate'].forEach((listener) =>
+      listener(new MarkerEvent(this, this.currentMarker))
+    );
   }
 
   private colorChanged(color: string): void {
@@ -1361,12 +1403,15 @@ export class MarkerArea {
    * @param marker marker to select. Deselects current marker if undefined.
    */
   public setCurrentMarker(marker?: MarkerBase): void {
-    if (this.currentMarker !== marker) { // no need to deselect if not changed
+    if (this.currentMarker !== marker) {
+      // no need to deselect if not changed
       if (this.currentMarker !== undefined) {
         this.currentMarker.deselect();
         this.toolbar.setCurrentMarker();
         this.toolbox.setPanelButtons([]);
-        this.eventListeners['markerdeselect'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
+        this.eventListeners['markerdeselect'].forEach((listener) =>
+          listener(new MarkerEvent(this, this.currentMarker))
+        );
       }
     }
     this.currentMarker = marker;
@@ -1374,7 +1419,9 @@ export class MarkerArea {
       this.currentMarker.select();
       this.toolbar.setCurrentMarker(this.currentMarker);
       this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
-      this.eventListeners['markerselect'].forEach(listener => listener(new MarkerEvent(this, this.currentMarker)));
+      this.eventListeners['markerselect'].forEach((listener) =>
+        listener(new MarkerEvent(this, this.currentMarker))
+      );
     }
   }
 
@@ -1542,10 +1589,10 @@ export class MarkerArea {
   private eventListeners = new EventListenerRepository();
   /**
    * Adds an event listener for one of the marker.js Live events.
-   * 
+   *
    * @param eventType - type of the event.
    * @param handler - function handling the event.
-   * 
+   *
    * @since 2.16.0
    */
   public addEventListener<T extends keyof IEventListenerRepository>(
@@ -1557,10 +1604,10 @@ export class MarkerArea {
 
   /**
    * Removes an event listener for one of the marker.js Live events.
-   * 
+   *
    * @param eventType - type of the event.
    * @param handler - function currently handling the event.
-   * 
+   *
    * @since 2.16.0
    */
   public removeEventListener<T extends keyof IEventListenerRepository>(
@@ -1570,16 +1617,15 @@ export class MarkerArea {
     this.eventListeners.removeEventListener(eventType, handler);
   }
 
-
   private _silentRenderMode = false;
   /**
    * Renders previously saved state without user intervention.
-   * 
+   *
    * The rendered image is returned to the `render` event handlers (as in the regular interactive process).
    * Rendering options set on `MarkerArea` are respected.
-   * 
+   *
    * @param state state to render
-   * 
+   *
    * @since 2.17.0
    */
   public renderState(state: MarkerAreaState): void {
@@ -1596,7 +1642,7 @@ export class MarkerArea {
   private _isFocused = false;
   /**
    * Returns true when this MarkerArea is focused.
-   * 
+   *
    * @since 2.19.0
    */
   public get isFocused(): boolean {
@@ -1607,9 +1653,9 @@ export class MarkerArea {
 
   /**
    * Focuses the MarkerArea to receive all input from the window.
-   * 
+   *
    * Is called automatically when user clicks inside of the marker area. Call manually to set focus explicitly.
-   * 
+   *
    * @since 2.19.0
    */
   public focus(): void {
@@ -1619,15 +1665,17 @@ export class MarkerArea {
       if (this._previousCurrentMarker !== undefined) {
         this.setCurrentMarker(this._previousCurrentMarker);
       }
-      this.eventListeners['focus'].forEach(listener => listener(new MarkerAreaEvent(this)));
+      this.eventListeners['focus'].forEach((listener) =>
+        listener(new MarkerAreaEvent(this))
+      );
     }
   }
 
   /**
    * Tells MarkerArea to stop reacting to input outside of the immediate marker image.
-   * 
+   *
    * Call `focus()` to re-enable.
-   * 
+   *
    * @since 2.19.0
    */
   public blur(): void {
@@ -1636,8 +1684,9 @@ export class MarkerArea {
       this._isFocused = false;
       this._previousCurrentMarker = this.currentMarker;
       this.setCurrentMarker();
-      this.eventListeners['blur'].forEach(listener => listener(new MarkerAreaEvent(this)));
+      this.eventListeners['blur'].forEach((listener) =>
+        listener(new MarkerAreaEvent(this))
+      );
     }
   }
-
 }
