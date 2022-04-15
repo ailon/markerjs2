@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.21.0] - 2022-03-07
+## [2.21.1] - 2022-04-15
+### Fixed
+- delete button is not disabled after undo of the last remaining marker
+- undo doesn't work after window resize
+
+## [2.21.0] - 2022-04-07
 ### Added
 - `addDefs()` method for adding "defs" element to the marker SVG element. Useful for using custom fonts and potentially other scenarios. See documentation article on adding custom fonts for an example.
 
@@ -354,6 +359,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.21.1]: https://github.com/ailon/markerjs2/releases/tag/v2.21.1
 [2.21.0]: https://github.com/ailon/markerjs2/releases/tag/v2.21.0
 [2.20.0]: https://github.com/ailon/markerjs2/releases/tag/v2.20.0
 [2.19.0]: https://github.com/ailon/markerjs2/releases/tag/v2.19.0
