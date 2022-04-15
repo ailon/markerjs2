@@ -1143,6 +1143,8 @@ export class MarkerArea {
   private selectLastMarker() {
     if (this.markers.length > 0) {
       this.setCurrentMarker(this.markers[this.markers.length - 1]);
+    } else {
+      this.setCurrentMarker();
     }
   }
 
