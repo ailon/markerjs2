@@ -1416,7 +1416,9 @@ export class MarkerArea {
     }
     this.currentMarker = marker;
     if (this.currentMarker !== undefined && !this.currentMarker.isSelected) {
+      if (this.currentMarker.state !== 'new') {
       this.currentMarker.select();
+      }
       this.toolbar.setCurrentMarker(this.currentMarker);
       this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
       this.eventListeners['markerselect'].forEach((listener) =>
