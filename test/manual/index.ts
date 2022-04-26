@@ -110,7 +110,7 @@ export class Experiments {
     this.markerArea1.settings.defaultFontFamilies = ['Roboto', 'Shizuru', 'Rubik Moonrocks'];
     this.markerArea1.settings.defaultFontFamily = 'Roboto';
 
-    this.markerArea1.settings.freehandPixelRatio = 10;
+    this.markerArea1.settings.freehandPixelRatio = 2;
 
     this.markerArea1.show();
     if (this.currentState) {
@@ -383,6 +383,8 @@ export class Experiments {
     const tb = document.getElementById('testInput');
     tb.addEventListener('focus', () => this.markerArea1.blur());
     tb.addEventListener('blur', () => this.markerArea1.focus());
+
+    // this.markerArea1.createNewMarker('FreehandMarker');
   }
 
   private renderResult(dataUrl: string, state: MarkerAreaState) {

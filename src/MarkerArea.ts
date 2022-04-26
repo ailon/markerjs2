@@ -1353,6 +1353,7 @@ export class MarkerArea {
 
     if (mType) {
       this.setCurrentMarker();
+      this.addUndoStep();
       this.currentMarker = this.addNewMarker(mType);
       this.currentMarker.onMarkerCreated = this.markerCreated;
       this.currentMarker.onColorChanged = this.colorChanged;
