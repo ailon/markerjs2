@@ -615,7 +615,10 @@ export class MarkerArea {
     this.windowHeight = window.innerHeight;
   }
 
+  private _isResizing = false;
   private resize(newWidth: number, newHeight: number) {
+    this._isResizing = true;
+
     const scaleX = newWidth / this.imageWidth;
     const scaleY = newHeight / this.imageHeight;
 
@@ -659,6 +662,8 @@ export class MarkerArea {
     this.positionLogo();
 
     this.scaleMarkers(scaleX, scaleY);
+
+    this._isResizing = false;
   }
 
   private scaleMarkers(scaleX: number, scaleY: number) {
@@ -1410,9 +1415,12 @@ export class MarkerArea {
         this.currentMarker.deselect();
         this.toolbar.setCurrentMarker();
         this.toolbox.setPanelButtons([]);
-        this.eventListeners['markerdeselect'].forEach((listener) =>
-          listener(new MarkerEvent(this, this.currentMarker))
-        );
+
+        if (!this._isResizing) {
+          this.eventListeners['markerdeselect'].forEach((listener) =>
+            listener(new MarkerEvent(this, this.currentMarker))
+          );
+        }
       }
     }
     this.currentMarker = marker;
@@ -1422,9 +1430,12 @@ export class MarkerArea {
       }
       this.toolbar.setCurrentMarker(this.currentMarker);
       this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
-      this.eventListeners['markerselect'].forEach((listener) =>
-        listener(new MarkerEvent(this, this.currentMarker))
-      );
+
+      if (!this._isResizing) {
+        this.eventListeners['markerselect'].forEach((listener) =>
+          listener(new MarkerEvent(this, this.currentMarker))
+        );
+      }
     }
   }
 
