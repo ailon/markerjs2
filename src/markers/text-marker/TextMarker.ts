@@ -299,6 +299,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   public pointerUp(point: IPoint): void {
     const inState = this.state;
+    if (inState === 'creating') {
+      this._suppressMarkerCreateEvent = true;
+    }
     super.pointerUp(point);
     this.setSize();
     if (
@@ -409,6 +412,19 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.overlayContainer.innerHTML = '';
     this.renderText();
     this.showVisual();
+    if (this._suppressMarkerCreateEvent) {
+      this._suppressMarkerCreateEvent = false;
+      if (this.onMarkerCreated) {
+        this.onMarkerCreated(this);
+      }
+    }
+  }
+
+  public select(): void {
+    super.select();    
+    if (this.state === 'edit') {
+      this.textEditDivClicked(this.textEditor.innerText);
+    }
   }
 
   /**

@@ -1040,6 +1040,9 @@ export class MarkerArea {
       switch (value) {
         case 'select': {
           this.switchToSelectMode();
+          // workaround for text markers in continuos mode
+          // otherwise it continues creation until clicked a second time
+          this.switchToSelectMode();
           break;
         }
         case 'delete': {

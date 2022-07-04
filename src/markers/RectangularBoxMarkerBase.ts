@@ -203,6 +203,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     }
   }
 
+  protected _suppressMarkerCreateEvent = false;
   /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
    * 
@@ -219,7 +220,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       this.manipulate(point);
     }
     this._state = 'select';
-    if (inState === 'creating' && this.onMarkerCreated) {
+    if (inState === 'creating' && this.onMarkerCreated && this._suppressMarkerCreateEvent === false) {
       this.onMarkerCreated(this);
     }
   }

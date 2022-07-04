@@ -43,7 +43,13 @@ export class Experiments {
     this.markerArea1.addEventListener('focus', () => console.log(`focused`));
     this.markerArea1.addEventListener('blur', () => console.log(`blured`));
 
-    // this.markerArea1.addEventListener('markercreate', event => event.markerArea.createNewMarker('FrameMarker'));
+    // this.markerArea1.addEventListener('markerselect', event => { 
+    //   console.log('select');
+    // });
+    this.markerArea1.addEventListener('markercreate', event => { 
+      console.log('create');
+      event.markerArea.createNewMarker(event.marker.typeName)
+    });
 
 
     this.markerArea1.settings.displayMode = this.displayMode;
