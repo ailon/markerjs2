@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.21.5] - 2022-07-04
+### Fixed
+- markercreate event was fired too early on text-based markers. This caused unexpected side-effects when creating new markers from code on the event.
+
 ## [2.21.4] - 2022-05-10
 ### Fixed
 - 'markerselect' and 'markerdeselect' events were fired on resize
@@ -371,6 +375,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.21.5]: https://github.com/ailon/markerjs2/releases/tag/v2.21.5
 [2.21.4]: https://github.com/ailon/markerjs2/releases/tag/v2.21.4
 [2.21.3]: https://github.com/ailon/markerjs2/releases/tag/v2.21.3
 [2.21.2]: https://github.com/ailon/markerjs2/releases/tag/v2.21.2
