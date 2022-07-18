@@ -669,10 +669,17 @@ export class MarkerArea {
   private scaleMarkers(scaleX: number, scaleY: number) {
     let preScaleSelectedMarker: MarkerBase;
     if (!(this.currentMarker && this.currentMarker instanceof TextMarker)) {
+      // can't unselect text marker as it would hide keyboard on mobile
       preScaleSelectedMarker = this.currentMarker;
       this.setCurrentMarker();
+    } else {
+      this.currentMarker.scale(scaleX, scaleY);
     }
-    this.markers.forEach((marker) => marker.scale(scaleX, scaleY));
+    this.markers.forEach((marker) => {
+      if (marker !== this.currentMarker) {
+        marker.scale(scaleX, scaleY)
+      }
+    });
     if (preScaleSelectedMarker !== undefined) {
       this.setCurrentMarker(preScaleSelectedMarker);
     }
