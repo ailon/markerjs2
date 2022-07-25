@@ -116,4 +116,12 @@ export class Settings {
    * @since 2.20.0
    */
   public freehandPixelRatio = 1;
+
+  /**
+   * When set to true rotation feature is disabled on markers.
+   * This doesn't affect markers restored from a previously saved state.
+   * 
+   * @since 2.22.0
+   */
+  public disableRotation = false;
 }

@@ -143,7 +143,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       return true;
     } else if (
       this.controlGrips.findGripByVisual(el) !== undefined ||
-      this.rotatorGrip.ownsTarget(el)
+      (this.rotatorGrip !== undefined && this.rotatorGrip.ownsTarget(el))
     ) {
       return true;
     } else {
@@ -182,7 +182,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       this.activeGrip = this.controlGrips.findGripByVisual(target as SVGGraphicsElement);
       if (this.activeGrip !== undefined) {
         this._state = 'resize';
-      } else if (this.rotatorGrip.ownsTarget(target)) {
+      } else if (this.rotatorGrip !== undefined && this.rotatorGrip.ownsTarget(target)) {
         this.activeGrip = this.rotatorGrip;
 
         const rotatedCenter = this.rotatePoint({x: this.centerX, y: this.centerY});
@@ -425,20 +425,22 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
     this.controlBox.appendChild(this.controlRect);
 
-    this.rotatorGripLine = SvgHelper.createLine(
-      (this.width + this.CB_DISTANCE * 2) / 2,
-      this.top - this.CB_DISTANCE,
-      (this.width + this.CB_DISTANCE * 2) / 2,
-      this.top - this.CB_DISTANCE * 3,
-      [
-        ['stroke', 'black'],
-        ['stroke-width', '1'],
-        ['stroke-opacity', '0.5'],
-        ['stroke-dasharray', '3, 2'],
-      ]
-    );
+    if (this.globalSettings.disableRotation !== true) {
+      this.rotatorGripLine = SvgHelper.createLine(
+        (this.width + this.CB_DISTANCE * 2) / 2,
+        this.top - this.CB_DISTANCE,
+        (this.width + this.CB_DISTANCE * 2) / 2,
+        this.top - this.CB_DISTANCE * 3,
+        [
+          ['stroke', 'black'],
+          ['stroke-width', '1'],
+          ['stroke-opacity', '0.5'],
+          ['stroke-dasharray', '3, 2'],
+        ]
+      );
 
-    this.controlBox.appendChild(this.rotatorGripLine);
+      this.controlBox.appendChild(this.rotatorGripLine);
+    }
 
     this.controlGrips = new RectangularBoxMarkerGrips();
     this.addControlGrips();
@@ -461,16 +463,20 @@ export class RectangularBoxMarkerBase extends MarkerBase {
       'height',
       (this.height + this.CB_DISTANCE).toString()
     );
-    this.rotatorGripLine.setAttribute(
-      'x1',
-      ((this.width + this.CB_DISTANCE) / 2).toString()
-    );
-    this.rotatorGripLine.setAttribute('y1', (-this.CB_DISTANCE / 2).toString());
-    this.rotatorGripLine.setAttribute(
-      'x2',
-      ((this.width + this.CB_DISTANCE) / 2).toString()
-    );
-    this.rotatorGripLine.setAttribute('y2', (-this.CB_DISTANCE * 3).toString());
+
+    if (this.rotatorGripLine !== undefined) {
+      this.rotatorGripLine.setAttribute(
+        'x1',
+        ((this.width + this.CB_DISTANCE) / 2).toString()
+      );
+      this.rotatorGripLine.setAttribute('y1', (-this.CB_DISTANCE / 2).toString());
+      this.rotatorGripLine.setAttribute(
+        'x2',
+        ((this.width + this.CB_DISTANCE) / 2).toString()
+      );
+      this.rotatorGripLine.setAttribute('y2', (-this.CB_DISTANCE * 3).toString());
+    }
+    
     this.positionGrips();
   }
 
@@ -484,7 +490,9 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     this.controlGrips.bottomCenter = this.createGrip();
     this.controlGrips.bottomRight = this.createGrip();
 
-    this.rotatorGrip = this.createGrip();
+    if (this.globalSettings.disableRotation !== true) {
+      this.rotatorGrip = this.createGrip();
+    }
 
     this.positionGrips();
   }
@@ -516,7 +524,9 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     this.positionGrip(this.controlGrips.bottomCenter.visual, cx, bottom);
     this.positionGrip(this.controlGrips.bottomRight.visual, right, bottom);
 
-    this.positionGrip(this.rotatorGrip.visual, cx, top - this.CB_DISTANCE * 3);
+    if (this.rotatorGrip !== undefined) {
+      this.positionGrip(this.rotatorGrip.visual, cx, top - this.CB_DISTANCE * 3);
+    }
   }
 
   private positionGrip(grip: SVGGraphicsElement, x: number, y: number) {

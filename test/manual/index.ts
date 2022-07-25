@@ -46,10 +46,10 @@ export class Experiments {
     // this.markerArea1.addEventListener('markerselect', event => { 
     //   console.log('select');
     // });
-    this.markerArea1.addEventListener('markercreate', event => { 
-      console.log('create');
-      event.markerArea.createNewMarker(event.marker.typeName)
-    });
+    // this.markerArea1.addEventListener('markercreate', event => { 
+    //   console.log('create');
+    //   event.markerArea.createNewMarker(event.marker.typeName)
+    // });
 
 
     this.markerArea1.settings.displayMode = this.displayMode;
@@ -62,6 +62,8 @@ export class Experiments {
     // this.markerArea1.settings.defaultStrokeWidth = 10;
 
     this.markerArea1.settings.newFreehandMarkerOnPointerUp = true;
+
+    // this.markerArea1.settings.disableRotation = true;
 
     // this.markerArea1.uiStyleSettings.toolbarHeight = 40;
     // if (this.oddLaunch) {
