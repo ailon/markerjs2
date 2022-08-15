@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.23.0] - 2022-08-15
+### Added
+- `statechange` event. Fired when the state of marker area changes.
+- `markerchange` event - fired when marker state changes
+
+### Fixed
+- `markerdelete` and `markerbeforedelete` events weren't fired on clear all. Now `markerdelete` event is fired for each marker and `markerbeforedelete` is fired once with `marker` set to undefined.
+
 ## [2.22.0] - 2022-07-25
 ### Added
 - `disableRotation` setting to disable the rotation feature on all markers
@@ -383,7 +391,8 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
-[2.22.0]: https://github.com/ailon/markerjs2/releases/tag/v2.21.0
+[2.23.0]: https://github.com/ailon/markerjs2/releases/tag/v2.23.0
+[2.22.0]: https://github.com/ailon/markerjs2/releases/tag/v2.22.0
 [2.21.6]: https://github.com/ailon/markerjs2/releases/tag/v2.21.6
 [2.21.5]: https://github.com/ailon/markerjs2/releases/tag/v2.21.5
 [2.21.4]: https://github.com/ailon/markerjs2/releases/tag/v2.21.4
