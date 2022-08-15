@@ -36,7 +36,7 @@ export class Experiments {
     this.markerArea1.addEventListener('markerdeselect', (event) => console.log(`deselected: ${event.marker?.typeName}`));
     this.markerArea1.addEventListener('markerdelete', (event) => console.log(`deleted: ${event.marker?.typeName}`));
     this.markerArea1.addEventListener('markerbeforedelete', (event) => {
-      if (!confirm('delete?')) {
+      if (!confirm(`delete marker${event.marker ? '' : 's'}?`)) {
         event.preventDefault();
       }
     });

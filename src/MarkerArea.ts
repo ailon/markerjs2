@@ -1137,14 +1137,30 @@ export class MarkerArea {
    * @since 2.15.0
    */
   public clear(): void {
-    this.setCurrentMarker();
-    for (let i = this.markers.length - 1; i >= 0; i--) {
-      this.setCurrentMarker(this.markers[i]);
-      this.currentMarker.dispose();
-      this.markerImage.removeChild(this.currentMarker.container);
-      this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+    let cancel = false;
+    if (this.markers.length > 0) {
+      this.eventListeners['markerbeforedelete'].forEach((listener) => {
+        const ev = new MarkerEvent(this, undefined, true);
+        listener(ev);
+        if (ev.defaultPrevented) {
+          cancel = true;
+        }
+      });
+      if (!cancel) {
+        this.setCurrentMarker();
+        for (let i = this.markers.length - 1; i >= 0; i--) {
+          const marker = this.markers[i];
+          this.setCurrentMarker(this.markers[i]);
+          this.currentMarker.dispose();
+          this.markerImage.removeChild(this.currentMarker.container);
+          this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+          this.eventListeners['markerdelete'].forEach((listener) =>
+            listener(new MarkerEvent(this, marker))
+          );
+        }
+        this.addUndoStep();
+      }
     }
-    this.addUndoStep();
   }
 
   private notesArea?: HTMLTextAreaElement;
