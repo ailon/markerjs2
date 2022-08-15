@@ -82,6 +82,12 @@ export interface IEventListenerRepository {
    */
   restorestate: MarkerAreaEventHandler[];
   /**
+   * Event handlers for the `statechange` event.
+   * 
+   * @since 2.23.0
+   */
+  statechange: MarkerAreaEventHandler[];
+  /**
    * Event handlers for the `markerselect` event.
    */
   markerselect: MarkerEventHandler[];
@@ -164,6 +170,12 @@ export class EventListenerRepository implements IEventListenerRepository {
    * Event handlers for the `restorestate` event.
    */
   restorestate: MarkerAreaEventHandler[] = [];
+  /**
+   * Event handlers for the `statechange` event.
+   * 
+   * @since 2.23.0
+   */
+  statechange: MarkerAreaEventHandler[] = [];
   /**
    * Event handlers for the `markerselect` event.
    */

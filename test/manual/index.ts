@@ -43,6 +43,10 @@ export class Experiments {
     this.markerArea1.addEventListener('focus', () => console.log(`focused`));
     this.markerArea1.addEventListener('blur', () => console.log(`blured`));
 
+    this.markerArea1.addEventListener('statechange', (event) => {
+      console.log(`state change: ${event.markerArea.getState()}`);
+    });
+
     // this.markerArea1.addEventListener('markerselect', event => { 
     //   console.log('select');
     // });

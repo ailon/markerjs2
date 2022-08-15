@@ -1216,8 +1216,17 @@ export class MarkerArea {
       ) {
         // if the size changed just replace the last step with a resized one
         this.undoRedoManager.replaceLastUndoStep(currentState);
+        this.eventListeners['statechange'].forEach((listener) =>
+          listener(new MarkerAreaEvent(this))
+        );
       } else {
+        const beforeSteps = this.undoRedoManager.undoStepCount;
         this.undoRedoManager.addUndoStep(currentState);
+        if (beforeSteps < this.undoRedoManager.undoStepCount) {
+          this.eventListeners['statechange'].forEach((listener) =>
+            listener(new MarkerAreaEvent(this))
+          );
+        }
       }
     }
   }
@@ -1232,6 +1241,9 @@ export class MarkerArea {
     if (stepData !== undefined) {
       this.restoreState(stepData);
       this.selectLastMarker();
+      this.eventListeners['statechange'].forEach((listener) =>
+        listener(new MarkerAreaEvent(this))
+      );
     }
   }
 
@@ -1245,6 +1257,9 @@ export class MarkerArea {
     if (stepData !== undefined) {
       this.restoreState(stepData);
       this.selectLastMarker();
+      this.eventListeners['statechange'].forEach((listener) =>
+        listener(new MarkerAreaEvent(this))
+      );
     }
   }
 

@@ -22,6 +22,24 @@ export class UndoRedoManager<T> {
   }
 
   /**
+   * Returns the number of items in the undo stack
+   *
+   * @since 2.23.0
+   */
+  public get undoStepCount(): number {
+    return this.undoStack.length;
+  }
+
+  /**
+   * Returns the number of items in the redo stack
+   *
+   * @since 2.23.0
+   */
+   public get redoStepCount(): number {
+    return this.redoStack.length;
+  }
+
+  /**
    * Adds a step to the undo stack.
    * @param stepData data representing a state.
    */
