@@ -148,6 +148,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
       SvgHelper.setAttributes(this.visual, [['stroke', this.strokeColor]]);
     }
     this.colorChanged(color);
+    this.stateChanged();
   }
   /**
    * Sets rectangle's fill color.
@@ -158,6 +159,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['fill', this.fillColor]]);
     }
+    this.stateChanged();
   }
   /**
    * Sets rectangle's border stroke (line) width.
@@ -168,6 +170,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke-width', this.strokeWidth.toString()]]);
     }
+    this.stateChanged();
   }
   /**
    * Sets rectangle's border stroke dash array.
@@ -178,6 +181,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke-dasharray', this.strokeDasharray]]);
     }
+    this.stateChanged();
   }
 
   /**

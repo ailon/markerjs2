@@ -150,6 +150,7 @@ export class CalloutMarker extends TextMarker {
   public pointerUp(point: IPoint): void {
     if (this.tipMoving) {
       this.tipMoving = false;
+      super.pointerUp(point);
     } else {
       const isCreating = this.state === 'creating';
       super.pointerUp(point);

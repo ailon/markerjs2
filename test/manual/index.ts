@@ -46,6 +46,9 @@ export class Experiments {
     this.markerArea1.addEventListener('statechange', (event) => {
       console.log(`state change: ${event.markerArea.getState()}`);
     });
+    this.markerArea1.addEventListener('markerchange', (event) => {
+      console.log(`marker state change: ${JSON.stringify(event.marker?.getState())}`);
+    });
 
     // this.markerArea1.addEventListener('markerselect', event => { 
     //   console.log('select');

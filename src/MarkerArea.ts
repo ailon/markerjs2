@@ -391,6 +391,7 @@ export class MarkerArea {
     this.stepZoom = this.stepZoom.bind(this);
     this.focus = this.focus.bind(this);
     this.blur = this.blur.bind(this);
+    this.markerStateChanged = this.markerStateChanged.bind(this);
   }
 
   private open(): void {
@@ -1404,6 +1405,7 @@ export class MarkerArea {
       this.currentMarker.onMarkerCreated = this.markerCreated;
       this.currentMarker.onColorChanged = this.colorChanged;
       this.currentMarker.onFillColorChanged = this.fillColorChanged;
+      this.currentMarker.onStateChanged = this.markerStateChanged;
       this.markerImage.style.cursor = 'crosshair';
       this.toolbar.setActiveMarkerButton(mType.typeName);
       this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
@@ -1442,6 +1444,12 @@ export class MarkerArea {
     if (this.settings.defaultColorsFollowCurrentColors) {
       this.settings.defaultFillColor = color;
     }
+  }
+
+  private markerStateChanged(marker: MarkerBase): void {
+    this.eventListeners['markerchange'].forEach((listener) =>
+      listener(new MarkerEvent(this, marker))
+    );
   }
 
   /**

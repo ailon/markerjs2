@@ -209,6 +209,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
       SvgHelper.setAttributes(this.visual, [['stroke', this.strokeColor]]);
     }
     this.colorChanged(color);
+    this.stateChanged();
   }
   /**
    * Sets marker's fill (background) color.
@@ -220,6 +221,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
       SvgHelper.setAttributes(this.visual, [['fill', this.fillColor]]);
     }
     this.fillColorChanged(color);
+    this.stateChanged();
   }
   /**
    * Sets marker's line width.
@@ -230,6 +232,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke-width', this.strokeWidth.toString()]]);
     }
+    this.stateChanged();
   }
   /**
    * Sets marker's border dash array.
@@ -240,6 +243,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['stroke-dasharray', this.strokeDasharray]]);
     }
+    this.stateChanged();
   }
   /**
    * Sets marker's opacity.
@@ -250,6 +254,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [['opacity', this.opacity.toString()]]);
     }
+    this.stateChanged();
   }
 
   /**

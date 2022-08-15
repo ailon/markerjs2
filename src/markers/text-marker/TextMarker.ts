@@ -418,6 +418,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
         this.onMarkerCreated(this);
       }
     }
+    this.stateChanged();
   }
 
   public select(): void {
@@ -476,6 +477,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
       this.textEditor.style.fontFamily = this.fontFamily;
     }
     this.renderText();
+    this.stateChanged();
   }
 
   /**

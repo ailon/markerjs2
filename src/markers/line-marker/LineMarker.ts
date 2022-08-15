@@ -210,6 +210,7 @@ export class LineMarker extends LinearMarkerBase {
   protected setStrokeDasharray(dashes: string): void {
     this.strokeDasharray = dashes;
     this.adjustVisual();
+    this.stateChanged();
   }
 
   /**

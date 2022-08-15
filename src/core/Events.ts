@@ -112,6 +112,12 @@ export interface IEventListenerRepository {
    */
   markerdelete: MarkerEventHandler[];
   /**
+   * Event handlers for the `markerchange` event.
+   * 
+   * @since 2.23.0
+   */
+  markerchange: MarkerEventHandler[];
+  /**
    * Event handlers for the `focus` event.
    * 
    * @since 2.19.0
@@ -141,6 +147,8 @@ export type EventHandler<
   : T extends 'markerbeforedelete'
   ? MarkerEventHandler
   : T extends 'markerdelete'
+  ? MarkerEventHandler
+  : T extends 'markerchange'
   ? MarkerEventHandler
   : T extends 'render'
   ? MarkerAreaRenderEventHandler
@@ -200,6 +208,12 @@ export class EventListenerRepository implements IEventListenerRepository {
    * Event handlers for the `markerdelete` event.
    */
   markerdelete: MarkerEventHandler[] = [];
+  /**
+   * Event handlers for the `markerchange` event.
+   * 
+   * @since 2.23.0
+   */
+  markerchange: MarkerEventHandler[] = [];
   /**
    * Event handlers for the `focus` event.
    * 

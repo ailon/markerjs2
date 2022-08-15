@@ -143,6 +143,7 @@ export class ArrowMarker extends LineMarker {
   private setArrowType(arrowType: ArrowType) {
     this.arrowType = arrowType;
     this.adjustVisual();
+    this.stateChanged();
   }
 
   /**

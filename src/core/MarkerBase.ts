@@ -87,6 +87,19 @@ export class MarkerBase {
    * Method to call when background/fill color changes.
    */
   public onFillColorChanged?: (color: string) => void;
+  /**
+   * Method to call when marker state changes.
+   * 
+   * @since 2.23.0
+   */
+  public onStateChanged?: (marker: MarkerBase) => void;
+
+  /**
+   * Marker's state when it is selected
+   *
+   * @since 2.23.0
+   */
+  protected manipulationStartState?: MarkerBaseState;
 
   /**
    * Creates a new marker.
@@ -99,6 +112,10 @@ export class MarkerBase {
     this._container = container;
     this._overlayContainer = overlayContainer;
     this.globalSettings = settings;
+
+    this.stateChanged = this.stateChanged.bind(this);
+    this.colorChanged = this.colorChanged.bind(this);
+    this.fillColorChanged = this.fillColorChanged.bind(this);
   }
 
   /**
@@ -133,6 +150,7 @@ export class MarkerBase {
   public select(): void {
     this.container.style.cursor = 'move';
     this._isSelected = true;
+    this.manipulationStartState = this.getState();
   }
 
   /**
@@ -141,6 +159,7 @@ export class MarkerBase {
   public deselect(): void {
     this.container.style.cursor = 'default';
     this._isSelected = false;
+    this.stateChanged();
   }
 
   /**
@@ -175,7 +194,9 @@ export class MarkerBase {
    * @param point - event coordinates.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  public pointerUp(point: IPoint):void {}
+  public pointerUp(point: IPoint):void {
+    this.stateChanged();
+  }
 
   /**
    * Disposes the marker and clean's up.
@@ -229,6 +250,7 @@ export class MarkerBase {
     if (this.onColorChanged) {
       this.onColorChanged(color);
     }
+    this.stateChanged();
   }
   /**
    * Called by a marker when its background/fill color changes.
@@ -237,6 +259,27 @@ export class MarkerBase {
   protected fillColorChanged(color: string): void {
     if (this.onFillColorChanged) {
       this.onFillColorChanged(color);
+    }
+    this.stateChanged();
+  }
+
+  /**
+   * Called by a marker when its state could have changed.
+   * Does a check if the state has indeed changed before firing the handler.
+   * 
+   * @since 2.23.0
+   */
+  protected stateChanged(): void {
+    if (this.onStateChanged && this.state !== 'creating') {
+      const currentState = this.getState();
+      // avoid reacting to state (mode) differences
+      if (this.manipulationStartState !== undefined) {
+        this.manipulationStartState.state = 'select';
+      }
+      currentState.state = 'select';
+      if (JSON.stringify(this.manipulationStartState) != JSON.stringify(currentState)) {
+        this.onStateChanged(this);
+      }
     }
   }
 }
