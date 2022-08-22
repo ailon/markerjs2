@@ -86,7 +86,7 @@ export class Experiments {
     this.markerArea1.uiStyleSettings.closeButtonColor = 'yellow';
     
     // this.markerArea1.uiStyleSettings.undoButtonVisible = false;
-    // this.markerArea1.uiStyleSettings.redoButtonVisible = true;
+    this.markerArea1.uiStyleSettings.redoButtonVisible = true;
     // this.markerArea1.uiStyleSettings.notesButtonVisible = true;
     // this.markerArea1.uiStyleSettings.zoomButtonVisible = true;
     // this.markerArea1.uiStyleSettings.zoomOutButtonVisible = true;
@@ -400,6 +400,23 @@ export class Experiments {
     tb.addEventListener('blur', () => this.markerArea1.focus());
 
     // this.markerArea1.createNewMarker('FreehandMarker');
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "z" && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
+        this.markerArea1.undo();
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+      if (
+        (e.key === "y" && (e.ctrlKey || e.metaKey)) ||
+        (e.key === "z" && (e.ctrlKey || e.metaKey) && e.shiftKey)
+      ) {
+        this.markerArea1.redo();
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    });
+
   }
 
   private renderResult(dataUrl: string, state: MarkerAreaState) {
@@ -472,6 +489,17 @@ export class Experiments {
   public restoreState(): void {
     if (this.markerArea1 && this.currentState) {
       this.markerArea1.restoreState(this.currentState);
+    }
+  }
+
+  public undo(): void {
+    if (this.markerArea1) {
+      this.markerArea1.undo();
+    }
+  }
+  public redo(): void {
+    if (this.markerArea1) {
+      this.markerArea1.redo();
     }
   }
 

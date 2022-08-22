@@ -1063,13 +1063,10 @@ export class MarkerArea {
           break;
         }
         case 'undo': {
-          this.switchToSelectMode();
-          this.addUndoStep();
           this.undo();
           break;
         }
         case 'redo': {
-          this.switchToSelectMode();
           this.redo();
           break;
         }
@@ -1239,6 +1236,12 @@ export class MarkerArea {
    * @since 2.6.0
    */
   public undo(): void {
+    this.switchToSelectMode();
+    this.addUndoStep();
+    this.undoStep();
+  }
+
+  private undoStep(): void {
     const stepData = this.undoRedoManager.undo();
     if (stepData !== undefined) {
       this.restoreState(stepData);
@@ -1255,6 +1258,11 @@ export class MarkerArea {
    * @since 2.6.0
    */
   public redo(): void {
+    this.switchToSelectMode();
+    this.redoStep();
+  }
+
+  private redoStep(): void {
     const stepData = this.undoRedoManager.redo();
     if (stepData !== undefined) {
       this.restoreState(stepData);
