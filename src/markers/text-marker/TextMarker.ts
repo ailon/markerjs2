@@ -67,7 +67,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected textEditor: HTMLDivElement;
 
-  private isMoved = false;
+  protected isMoved = false;
   private pointerDownPoint: IPoint;
   private pointerDownTimestamp: number;
 
