@@ -468,10 +468,12 @@ export class Experiments {
     this.markerArea1 = new MarkerArea(target);
     this.markerArea1.addRenderEventListener(this.renderResult);
     this.markerArea1.settings.displayMode = this.displayMode;
-
+    
     // this.markerArea1.uiStyleSettings.toolbarHeight = 0;
     this.markerArea1.uiStyleSettings.hideToolbar = true;
     this.markerArea1.uiStyleSettings.hideToolbox = true;
+
+    this.markerArea1.targetRoot = document.getElementById('app');
 
     this.markerArea1.show();
     if (this.currentState) {

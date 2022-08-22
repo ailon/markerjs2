@@ -1624,7 +1624,7 @@ export class MarkerArea {
     switch (this.settings.displayMode) {
       case 'inline': {
         const coverTop =
-          this.target.offsetTop > Style.settings.toolbarHeight
+          this.target.getClientRects().item(0).y > Style.settings.toolbarHeight
             ? this.target.offsetTop - Style.settings.toolbarHeight
             : 0;
         this.coverDiv.style.top = `${coverTop}px`;
@@ -1639,7 +1639,7 @@ export class MarkerArea {
         this.contentDiv.style.maxHeight = `${
           this.windowHeight -
           this.settings.popupMargin * 2 -
-          this.uiStyleSettings.toolbarHeight * 3.5
+          Style.settings.toolbarHeight * 3.5
         }px`;
       }
     }
