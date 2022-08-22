@@ -392,6 +392,7 @@ export class MarkerArea {
     this.focus = this.focus.bind(this);
     this.blur = this.blur.bind(this);
     this.markerStateChanged = this.markerStateChanged.bind(this);
+    this.switchToSelectMode = this.switchToSelectMode.bind(this);
   }
 
   private open(): void {
@@ -1023,7 +1024,7 @@ export class MarkerArea {
     marker.dispose();
   }
 
-  private switchToSelectMode() {
+  public switchToSelectMode(): void {
     this.mode = 'select';
     this.hideNotesEditor();
     if (this.currentMarker !== undefined) {
