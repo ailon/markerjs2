@@ -270,7 +270,7 @@ export class MarkerBase {
    * @since 2.23.0
    */
   protected stateChanged(): void {
-    if (this.onStateChanged && this.state !== 'creating') {
+    if (this.onStateChanged && this.state !== 'creating' && this.state !== 'new') {
       const currentState = this.getState();
       // avoid reacting to state (mode) differences
       if (this.manipulationStartState !== undefined) {
