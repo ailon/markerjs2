@@ -1,10 +1,9 @@
-import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './arrow-type-panel-icon.svg';
 
 /**
  * Represents available arrow types.
- * 
+ *
  * - `both` - arrow tips on both sides.
  * - `start` - arrow tip on the starting point of line.
  * - `end` - arrow tip on the ending point of line.
@@ -35,7 +34,11 @@ export class ArrowTypePanel extends ToolboxPanel {
    * @param currentType - currently set arrow type.
    * @param icon - panel button icon (SVG image markup).
    */
-  constructor(title: string, currentType?: ArrowType, icon?: string) {
+  constructor(
+    title: string,
+    currentType?: ArrowType,
+    icon?: string
+  ) {
     super(title, icon ? icon : Icon);
     this.currentType = currentType;
 
@@ -52,7 +55,7 @@ export class ArrowTypePanel extends ToolboxPanel {
     panelDiv.style.flexGrow = '2';
     for (let ti = 0; ti < 4; ti++) {
       let arrowType: ArrowType = 'both';
-      switch(ti) {
+      switch (ti) {
         case 0:
           arrowType = 'both';
           break;
@@ -75,11 +78,13 @@ export class ArrowTypePanel extends ToolboxPanel {
       typeBoxContainer.style.borderWidth = '2px';
       typeBoxContainer.style.borderStyle = 'solid';
       typeBoxContainer.style.borderColor =
-        arrowType === this.currentType ? Style.settings.toolboxAccentColor : 'transparent';
+        arrowType === this.currentType
+          ? this.uiStyleSettings.toolboxAccentColor
+          : 'transparent';
 
       typeBoxContainer.addEventListener('click', () => {
         this.setCurrentType(arrowType, typeBoxContainer);
-      })
+      });
       panelDiv.appendChild(typeBoxContainer);
 
       if (arrowType === 'both' || arrowType === 'start') {
@@ -88,7 +93,11 @@ export class ArrowTypePanel extends ToolboxPanel {
         leftTip.style.alignItems = 'center';
         leftTip.style.minHeight = '20px';
         leftTip.innerHTML = `<svg viewBox="0 0 10 10" width="10" height="10" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="0,5 10,0 10,10" fill="${Style.settings.toolboxColor}" />
+          <polygon points="0,5 10,0 10,10" fill="${
+            this.uiStyleSettings !== undefined
+              ? this.uiStyleSettings.toolboxColor
+              : '#eeeeee'
+          }" />
         </svg>`;
         leftTip.style.marginLeft = '5px';
         typeBoxContainer.appendChild(leftTip);
@@ -103,7 +112,11 @@ export class ArrowTypePanel extends ToolboxPanel {
       const hr = document.createElement('hr');
       hr.style.minWidth = '20px';
       hr.style.border = '0px';
-      hr.style.borderTop = `3px solid ${Style.settings.toolboxColor}`;
+      hr.style.borderTop = `3px solid ${
+        this.uiStyleSettings !== undefined
+          ? this.uiStyleSettings.toolboxColor
+          : '#eeeeee'
+      }`;
       hr.style.flexGrow = '2';
       lineBox.appendChild(hr);
 
@@ -115,7 +128,11 @@ export class ArrowTypePanel extends ToolboxPanel {
         rightTip.style.alignItems = 'center';
         rightTip.style.minHeight = '20px';
         rightTip.innerHTML = `<svg viewBox="0 0 10 10" width="10" height="10" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="0,0 10,5 0,10" fill="${Style.settings.toolboxColor}" />
+          <polygon points="0,0 10,5 0,10" fill="${
+            this.uiStyleSettings !== undefined
+              ? this.uiStyleSettings.toolboxColor
+              : '#eeeeee'
+          }" />
         </svg>`;
         rightTip.style.marginRight = '5px';
         typeBoxContainer.appendChild(rightTip);
@@ -129,8 +146,13 @@ export class ArrowTypePanel extends ToolboxPanel {
   private setCurrentType(newType: ArrowType, target: HTMLDivElement) {
     this.currentType = newType;
 
-    this.typeBoxes.forEach(box => {
-      box.style.borderColor = box === target ? Style.settings.toolboxAccentColor : 'transparent';
+    this.typeBoxes.forEach((box) => {
+      box.style.borderColor =
+        box === target
+          ? this.uiStyleSettings !== undefined
+            ? this.uiStyleSettings.toolboxAccentColor
+            : '#3080c3'
+          : 'transparent';
     });
 
     if (this.onArrowTypeChanged) {

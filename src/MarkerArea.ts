@@ -8,7 +8,7 @@ import { Toolbar, ToolbarButtonType } from './ui/Toolbar';
 import { Toolbox } from './ui/Toolbox';
 import { FrameMarker } from './markers/frame-marker/FrameMarker';
 import { Settings } from './core/Settings';
-import { Style } from './core/Style';
+import { StyleManager, Style } from './core/Style';
 import { LineMarker } from './markers/line-marker/LineMarker';
 import { TextMarker } from './markers/text-marker/TextMarker';
 import { FreehandMarker } from './markers/freehand-marker/FreehandMarker';
@@ -330,6 +330,17 @@ export class MarkerArea {
     }
   }
 
+  private static instanceCounter = 0;
+  private _instanceNo: number;
+  public get instanceNo(): number {
+    return this._instanceNo;
+  }
+
+  /**
+   * Manage style releated settings via the `styles` property.
+   */
+   public styles: StyleManager;
+
   /**
    * Creates a new MarkerArea for the specified target image.
    *
@@ -345,8 +356,11 @@ export class MarkerArea {
    * @param target image object to mark up.
    */
   constructor(target: HTMLImageElement | HTMLElement) {
-    Style.settings = Style.defaultSettings;
-    this.uiStyleSettings = Style.settings;
+    this._instanceNo = MarkerArea.instanceCounter++;
+
+    this.styles = new StyleManager(this.instanceNo);
+
+    this.uiStyleSettings = this.styles.settings;
 
     this.target = target;
     this.targetRoot = document.body;
@@ -354,7 +368,7 @@ export class MarkerArea {
     this.width = target.clientWidth;
     this.height = target.clientHeight;
 
-    Style.removeStyleSheet();
+    this.styles.removeStyleSheet();
 
     this.open = this.open.bind(this);
     this.setTopLeft = this.setTopLeft.bind(this);
@@ -422,6 +436,11 @@ export class MarkerArea {
    * Initializes the MarkerArea and opens the UI.
    */
   public show(): void {
+    // backwards compatibility with deprecated static Style class
+    if (this.styles.styleSheetRoot === undefined && Style.styleSheetRoot !== undefined) {
+      this.styles.styleSheetRoot = Style.styleSheetRoot;
+    }
+
     this.setWindowHeight();
     this.showUI();
     this.open();
@@ -882,7 +901,7 @@ export class MarkerArea {
     this.coverDiv.style.visibility = this._silentRenderMode
       ? 'hidden'
       : 'visible';
-    this.coverDiv.className = Style.CLASS_PREFIX;
+    this.coverDiv.className = `${this.styles.classNamePrefixBase} ${this.styles.classNamePrefix}`;
     // hardcode font size so nothing inside is affected by higher up settings
     this.coverDiv.style.fontSize = '16px';
     this.coverDiv.style.userSelect = 'none';
@@ -891,8 +910,8 @@ export class MarkerArea {
       case 'inline': {
         this.coverDiv.style.position = 'absolute';
         const coverTop =
-          this.target.getClientRects().item(0).y > Style.settings.toolbarHeight
-            ? this.target.offsetTop - Style.settings.toolbarHeight
+          this.target.getClientRects().item(0).y > this.styles.settings.toolbarHeight
+            ? this.target.offsetTop - this.styles.settings.toolbarHeight
             : 0;
         this.coverDiv.style.top = `${coverTop}px`;
         this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
@@ -940,7 +959,8 @@ export class MarkerArea {
       this.uiDiv,
       this.settings.displayMode,
       this._availableMarkerTypes,
-      this.uiStyleSettings
+      this.uiStyleSettings,
+      this.styles
     );
     this.toolbar.addButtonClickListener(this.toolbarButtonClicked);
     this.toolbar.show(
@@ -989,9 +1009,9 @@ export class MarkerArea {
       this.target instanceof HTMLImageElement
         ? document.createElement('img')
         : document.createElement('canvas');
-    if (this.target.getClientRects().item(0).y < Style.settings.toolbarHeight) {
+    if (this.target.getClientRects().item(0).y < this.styles.settings.toolbarHeight) {
       this.editingTarget.style.marginTop = `${
-        this.target.offsetTop - Style.settings.toolbarHeight
+        this.target.offsetTop - this.styles.settings.toolbarHeight
       }px`;
     }
     this.editorCanvas.appendChild(this.editingTarget);
@@ -999,7 +1019,8 @@ export class MarkerArea {
     this.toolbox = new Toolbox(
       this.uiDiv,
       this.settings.displayMode,
-      this.uiStyleSettings
+      this.uiStyleSettings,
+      this.styles
     );
     this.toolbox.show(
       this._silentRenderMode || this.uiStyleSettings.hideToolbox
@@ -1624,8 +1645,8 @@ export class MarkerArea {
     switch (this.settings.displayMode) {
       case 'inline': {
         const coverTop =
-          this.target.getClientRects().item(0).y > Style.settings.toolbarHeight
-            ? this.target.offsetTop - Style.settings.toolbarHeight
+          this.target.getClientRects().item(0).y > this.styles.settings.toolbarHeight
+            ? this.target.offsetTop - this.styles.settings.toolbarHeight
             : 0;
         this.coverDiv.style.top = `${coverTop}px`;
         this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
@@ -1639,7 +1660,7 @@ export class MarkerArea {
         this.contentDiv.style.maxHeight = `${
           this.windowHeight -
           this.settings.popupMargin * 2 -
-          Style.settings.toolbarHeight * 3.5
+          this.styles.settings.toolbarHeight * 3.5
         }px`;
       }
     }

@@ -1,4 +1,3 @@
-import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './line-width-panel-icon.svg';
 
@@ -54,7 +53,7 @@ export class LineWidthPanel extends ToolboxPanel {
       widthBoxContainer.style.borderWidth = '2px';
       widthBoxContainer.style.borderStyle = 'solid';
       widthBoxContainer.style.borderColor =
-        lineWidth === this.currentWidth ? Style.settings.toolboxAccentColor : 'transparent';
+        lineWidth === this.currentWidth ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
 
       widthBoxContainer.addEventListener('click', () => {
         this.setCurrentWidth(lineWidth, widthBoxContainer);
@@ -75,12 +74,12 @@ export class LineWidthPanel extends ToolboxPanel {
       const hr = document.createElement('hr');
       hr.style.minWidth = '20px';
       hr.style.border = '0px';
-      hr.style.borderTop = `${lineWidth}px solid ${Style.settings.toolboxColor}`;
+      hr.style.borderTop = `${lineWidth}px solid ${this.uiStyleSettings.toolboxColor}`;
       hr.style.flexGrow = '2';
       widthBox.appendChild(hr);
 
       // widthBox.innerHTML = `<svg viewBox="0 0 140 20" width="140" height="20" xmlns="http://www.w3.org/2000/svg">
-      //   <line x1="0" y1="10" x2="140" y2="10" stroke="${Style.settings.toolboxColor}" stroke-width="${lineWidth}" />
+      //   <line x1="0" y1="10" x2="140" y2="10" stroke="${this.uiStyleSettings.toolboxColor}" stroke-width="${lineWidth}" />
       // </svg>`;
 
       widthBoxContainer.appendChild(widthBox);
@@ -94,7 +93,7 @@ export class LineWidthPanel extends ToolboxPanel {
     this.currentWidth = newWidth;
 
     this.widthBoxes.forEach(box => {
-      box.style.borderColor = box === target ? Style.settings.toolboxAccentColor : 'transparent';
+      box.style.borderColor = box === target ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
     });
 
     if (this.onWidthChanged) {

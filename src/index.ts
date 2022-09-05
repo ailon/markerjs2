@@ -3,7 +3,7 @@ export { MarkerAreaState } from './MarkerAreaState';
 
 export { Activator } from './core/Activator';
 export { SvgHelper } from './core/SvgHelper';
-export { Style, StyleClass } from './core/Style';
+export { Style, StyleManager, StyleClass } from './core/Style';
 export { Settings, ColorSet, DisplayMode } from './core/Settings';
 export { IStyleSettings } from './core/IStyleSettings';
 export { ITransformMatrix, TransformMatrix } from './core/TransformMatrix';

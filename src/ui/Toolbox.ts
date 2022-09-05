@@ -1,5 +1,5 @@
 import { ToolboxPanel } from './ToolboxPanel';
-import { Style, StyleClass, StyleRule } from './../core/Style';
+import { StyleManager, StyleClass, StyleRule } from './../core/Style';
 import { DisplayMode } from '../core/Settings';
 import { IStyleSettings } from '../core/IStyleSettings';
 
@@ -28,9 +28,10 @@ export class Toolbox {
   private toolboxPanelRowStyleColorsClass: StyleClass;
 
   private uiStyleSettings: IStyleSettings;
+  private styles: StyleManager;
   
   private addStyles() {
-    this.toolboxStyleClass = Style.addClass(
+    this.toolboxStyleClass = this.styles.addClass(
       new StyleClass(
         'toolbox',
         `
@@ -48,7 +49,7 @@ export class Toolbox {
     `
       )
     );
-    this.toolboxStyleColorsClass = Style.addClass(
+    this.toolboxStyleColorsClass = this.styles.addClass(
       new StyleClass(
         'toolbox_colors',
         `
@@ -58,16 +59,16 @@ export class Toolbox {
     );
 
     const buttonPadding = this.uiStyleSettings.toolbarHeight / 4;
-    this.toolboxButtonRowStyleClass = Style.addClass(new StyleClass('toolbox-button-row', `
+    this.toolboxButtonRowStyleClass = this.styles.addClass(new StyleClass('toolbox-button-row', `
       display: flex;
       cursor: default;
       box-sizing: content-box;
     `));
-    this.toolboxButtonRowStyleColorsClass = Style.addClass(new StyleClass('toolbox-button-row_colors', `
+    this.toolboxButtonRowStyleColorsClass = this.styles.addClass(new StyleClass('toolbox-button-row_colors', `
       background-color: ${this.uiStyleSettings.toolbarBackgroundColor};
     `));
 
-    this.toolboxPanelRowStyleClass = Style.addClass(new StyleClass('toolbox-panel-row', `
+    this.toolboxPanelRowStyleClass = this.styles.addClass(new StyleClass('toolbox-panel-row', `
       display: flex;
       ${this.displayMode === 'inline' ? 'position: absolute;' : '' }
       ${this.displayMode === 'inline' ? 'bottom: ' + this.uiStyleSettings.toolbarHeight + 'px;' : '' }
@@ -76,27 +77,27 @@ export class Toolbox {
       ${this.displayMode === 'inline' ? 'width: 100%;' : ''}
       box-sizing: content-box;
     `));
-    this.toolboxPanelRowStyleColorsClass = Style.addClass(new StyleClass('toolbox-panel-row_colors', `
+    this.toolboxPanelRowStyleColorsClass = this.styles.addClass(new StyleClass('toolbox-panel-row_colors', `
       background-color: ${this.uiStyleSettings.toolboxBackgroundColor ?? this.uiStyleSettings.toolbarBackgroundHoverColor};
     `));
 
-    this.toolboxButtonStyleClass = Style.addClass(new StyleClass('toolbox_button', `
+    this.toolboxButtonStyleClass = this.styles.addClass(new StyleClass('toolbox_button', `
       display: inline-block;
       width: ${this.uiStyleSettings.toolbarHeight - buttonPadding * 2}px;
       height: ${this.uiStyleSettings.toolbarHeight - buttonPadding * 2}px;
       padding: ${buttonPadding}px;
       box-sizing: content-box;
     `));
-    this.toolboxButtonStyleColorsClass = Style.addClass(new StyleClass('toolbox-button_colors', `
+    this.toolboxButtonStyleColorsClass = this.styles.addClass(new StyleClass('toolbox-button_colors', `
       fill: ${this.uiStyleSettings.toolbarColor};
     `));
 
-    this.toolboxActiveButtonStyleColorsClass = Style.addClass(new StyleClass('toolbox-active-button_colors', `
+    this.toolboxActiveButtonStyleColorsClass = this.styles.addClass(new StyleClass('toolbox-active-button_colors', `
       background-color: ${this.uiStyleSettings.toolbarBackgroundHoverColor};
       fill: ${this.uiStyleSettings.toolbarColor};
     `));
 
-    Style.addRule(
+    this.styles.addRule(
       new StyleRule(
         `.${this.toolboxButtonStyleColorsClass.name}:hover`,
         `
@@ -105,7 +106,7 @@ export class Toolbox {
       )
     );
 
-    Style.addRule(
+    this.styles.addRule(
       new StyleRule(
         `.${this.toolboxButtonStyleClass.name} svg`,
         `
@@ -122,10 +123,11 @@ export class Toolbox {
    * @param displayMode - marker.js display mode (`inline` or `popup`).
    * @param uiStyleSettings - settings for styling the toolbox elements.
    */
-  constructor(markerjsContainer: HTMLDivElement, displayMode: DisplayMode, uiStyleSettings: IStyleSettings) {
+  constructor(markerjsContainer: HTMLDivElement, displayMode: DisplayMode, uiStyleSettings: IStyleSettings, styles: StyleManager) {
     this.markerjsContainer = markerjsContainer;
     this.displayMode = displayMode;
     this.uiStyleSettings = uiStyleSettings;
+    this.styles = styles;
 
     this.panelButtonClick = this.panelButtonClick.bind(this);
 
@@ -165,6 +167,7 @@ export class Toolbox {
       this.panelButtons.splice(0);
 
       this.panels.forEach(panel => {
+        panel.uiStyleSettings = this.uiStyleSettings;
         const panelBtnDiv = document.createElement('div');
         panelBtnDiv.className = `${this.toolboxButtonStyleClass.name} ${
           this.uiStyleSettings.toolboxButtonStyleColorsClassName ?? this.toolboxButtonStyleColorsClass.name}`;
@@ -198,14 +201,14 @@ export class Toolbox {
       this.panelRow.appendChild(panelUI);
       this.panelRow.style.display = 'flex';
       this.panelRow.style.visibility = 'visible';
-      this.panelRow.className = this.panelRow.className.replace(Style.fadeOutAnimationClassName, '');
-      this.panelRow.className += ` ${Style.fadeInAnimationClassName}`;
+      this.panelRow.className = this.panelRow.className.replace(this.styles.fadeOutAnimationClassName, '');
+      this.panelRow.className += ` ${this.styles.fadeInAnimationClassName}`;
       this.activePanel = panel;
     } else {
       this.activePanel = undefined;
       // hide panel
-      this.panelRow.className = this.panelRow.className.replace(Style.fadeInAnimationClassName, '');
-      this.panelRow.className += ` ${Style.fadeOutAnimationClassName}`;
+      this.panelRow.className = this.panelRow.className.replace(this.styles.fadeInAnimationClassName, '');
+      this.panelRow.className += ` ${this.styles.fadeOutAnimationClassName}`;
       setTimeout(() => {
         if (this.displayMode === 'inline') {
           this.panelRow.style.display = 'none';

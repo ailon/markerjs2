@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Activator, FrameMarker, MarkerArea, Style } from '../../src';
+import { Activator, FrameMarker, MarkerArea, Style, StyleManager } from '../../src';
 import { DisplayMode } from '../../src/core/Settings';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
 
@@ -20,6 +20,7 @@ export class Experiments {
   public openMarkerArea(target: HTMLImageElement): void {
     this.markerArea1 = new MarkerArea(target);
     Style.styleSheetRoot = document.head;
+    //this.markerArea1.styles.styleSheetRoot = document.head;
 
     this.markerArea1.addRenderEventListener(this.renderResult);
     //this.markerArea1.addCloseEventListener(() => alert('close'));

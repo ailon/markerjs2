@@ -1,3 +1,5 @@
+import { IStyleSettings } from '../core/IStyleSettings';
+
 /**
  * Base class for all toolbox property panels.
  */
@@ -10,6 +12,12 @@ export abstract class ToolboxPanel {
    * Panel button icon as an SVG markup.
    */
   public icon: string;
+
+  /**
+   * UI style settings for colors, etc.
+   */
+  public uiStyleSettings: IStyleSettings;
+
   /**
    * Create panel with supplied title and icon.
    * @param title - panel name (used for accessibility)

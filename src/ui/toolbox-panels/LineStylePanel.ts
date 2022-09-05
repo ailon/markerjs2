@@ -1,4 +1,3 @@
-import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './line-style-panel-icon.svg';
 
@@ -55,7 +54,7 @@ export class LineStylePanel extends ToolboxPanel {
       styleBoxContainer.style.overflow = 'hidden';
       styleBoxContainer.style.maxWidth = `${100 / this.styles.length - 5}%`;
       styleBoxContainer.style.borderColor =
-        lineStyle === this.currentStyle ? Style.settings.toolboxAccentColor : 'transparent';
+        lineStyle === this.currentStyle ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
 
       styleBoxContainer.addEventListener('click', () => {
         this.setCurrentStyle(lineStyle, styleBoxContainer);
@@ -69,7 +68,7 @@ export class LineStylePanel extends ToolboxPanel {
 
       const styleSample = `<svg width="100" height="20">
       <line x1="0" y1="10" x2="100" y2="10" stroke="${
-        Style.settings.toolboxColor}" stroke-width="3" ${
+        this.uiStyleSettings.toolboxColor}" stroke-width="3" ${
           lineStyle !== '' ? 'stroke-dasharray="' + lineStyle + '"' : ''} />
   </svg>`;
 
@@ -86,7 +85,7 @@ export class LineStylePanel extends ToolboxPanel {
     this.currentStyle = newStyle;
 
     this.styleBoxes.forEach(box => {
-      box.style.borderColor = box === target ? Style.settings.toolboxAccentColor : 'transparent';
+      box.style.borderColor = box === target ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
     });
 
     if (this.onStyleChanged) {

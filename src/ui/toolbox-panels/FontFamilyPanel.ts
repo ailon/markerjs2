@@ -1,4 +1,3 @@
-import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './font-family-panel-icon.svg';
 
@@ -56,7 +55,7 @@ export class FontFamilyPanel extends ToolboxPanel {
       fontBoxContainer.style.overflow = 'hidden';
       fontBoxContainer.style.maxWidth = `${100 / this.fonts.length - 5}%`;
       fontBoxContainer.style.borderColor =
-        font === this.currentFont ? Style.settings.toolboxAccentColor : 'transparent';
+        font === this.currentFont ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
 
       fontBoxContainer.addEventListener('click', () => {
         this.setCurrentFont(font, fontBoxContainer);
@@ -89,7 +88,7 @@ export class FontFamilyPanel extends ToolboxPanel {
     this.currentFont = newFont;
 
     this.fontBoxes.forEach(box => {
-      box.style.borderColor = box === target ? Style.settings.toolboxAccentColor : 'transparent';
+      box.style.borderColor = box === target ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
     });
 
     if (this.onFontChanged) {

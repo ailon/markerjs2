@@ -1,5 +1,5 @@
 import { MarkerBase } from './../core/MarkerBase';
-import { Style, StyleClass, StyleRule } from './../core/Style';
+import { StyleManager, StyleClass, StyleRule } from './../core/Style';
 
 import CursorIcon from './toolbar-core-icons/cursor.svg';
 import DeleteIcon from './toolbar-core-icons/delete.svg';
@@ -62,6 +62,8 @@ export class Toolbar {
 
   private currentMarker?: MarkerBase;
 
+  private styles: StyleManager;
+
   /**
    * Creates the main marker.js toolbar.
    * @param markerjsContainer - container for the toolbar in the marker.js UI.
@@ -73,12 +75,14 @@ export class Toolbar {
     markerjsContainer: HTMLDivElement,
     displayMode: DisplayMode,
     markerItems: typeof MarkerBase[],
-    uiStyleSettings: IStyleSettings
+    uiStyleSettings: IStyleSettings,
+    styles: StyleManager
   ) {
     this.markerjsContainer = markerjsContainer;
     this.displayMode = displayMode;
     this.markerItems = markerItems;
     this.uiStyleSettings = uiStyleSettings;
+    this.styles = styles;
     this.addStyles();
 
     this.adjustLayout = this.adjustLayout.bind(this);
@@ -93,7 +97,7 @@ export class Toolbar {
     this.uiContainer = document.createElement('div');
     this.uiContainer.style.visibility = visiblity;
     this.uiContainer.className = `${this.toolbarStyleClass.name} ${
-      Style.fadeInAnimationClassName
+      this.styles.fadeInAnimationClassName
     } ${
       this.uiStyleSettings.toolbarStyleColorsClassName
         ? this.uiStyleSettings.toolbarStyleColorsClassName
@@ -259,12 +263,12 @@ export class Toolbar {
   private overflowButtonClicked() {
     if (this.markerButtonOverflowBlock.style.display !== 'none') {
       this.markerButtonOverflowBlock.className = this.markerButtonOverflowBlock.className.replace(
-        Style.fadeInAnimationClassName,
+        this.styles.fadeInAnimationClassName,
         ''
       );
       this.markerButtonOverflowBlock.style.display = 'none';
     } else {
-      this.markerButtonOverflowBlock.className += ` ${Style.fadeInAnimationClassName}`;
+      this.markerButtonOverflowBlock.className += ` ${this.styles.fadeInAnimationClassName}`;
       this.markerButtonOverflowBlock.style.top = `${
         this.uiContainer.offsetTop + this.overflowButton.offsetHeight
       }px`;
@@ -346,7 +350,7 @@ export class Toolbar {
   }
 
   private addStyles() {
-    this.toolbarStyleClass = Style.addClass(
+    this.toolbarStyleClass = this.styles.addClass(
       new StyleClass(
         'toolbar',
         `
@@ -376,7 +380,7 @@ export class Toolbar {
       )
     );
 
-    this.toolbarStyleColorsClass = Style.addClass(
+    this.toolbarStyleColorsClass = this.styles.addClass(
       new StyleClass(
         'toolbar_colors',
         `
@@ -386,7 +390,7 @@ export class Toolbar {
       )
     );
 
-    this.toolbarBlockStyleClass = Style.addClass(
+    this.toolbarBlockStyleClass = this.styles.addClass(
       new StyleClass(
         'toolbar-block',
         `
@@ -396,7 +400,7 @@ export class Toolbar {
       )
     );
 
-    this.toolbarOverflowBlockStyleClass = Style.addClass(
+    this.toolbarOverflowBlockStyleClass = this.styles.addClass(
       new StyleClass(
         'toolbar-overflow-block',
         `
@@ -408,7 +412,7 @@ export class Toolbar {
       `
       )
     );
-    this.toolbarOverflowBlockStyleColorsClass = Style.addClass(
+    this.toolbarOverflowBlockStyleColorsClass = this.styles.addClass(
       new StyleClass(
         'toolbar-overflow-block_colors',
         `
@@ -418,7 +422,7 @@ export class Toolbar {
     );
 
     const buttonPadding = this.uiStyleSettings.toolbarHeight / 4;
-    this.toolbarButtonStyleClass = Style.addClass(
+    this.toolbarButtonStyleClass = this.styles.addClass(
       new StyleClass(
         'toolbar_button',
         `
@@ -430,7 +434,7 @@ export class Toolbar {
     `
       )
     );
-    this.toolbarButtonStyleColorsClass = Style.addClass(
+    this.toolbarButtonStyleColorsClass = this.styles.addClass(
       new StyleClass(
         'toolbar_button_colors',
         `
@@ -439,7 +443,7 @@ export class Toolbar {
       )
     );
 
-    this.toolbarActiveButtonStyleColorsClass = Style.addClass(
+    this.toolbarActiveButtonStyleColorsClass = this.styles.addClass(
       new StyleClass(
         'toolbar_active_button',
         `
@@ -449,7 +453,7 @@ export class Toolbar {
       )
     );
 
-    Style.addRule(
+    this.styles.addRule(
       new StyleRule(
         `.${this.toolbarButtonStyleClass.name} svg`,
         `
@@ -458,7 +462,7 @@ export class Toolbar {
       )
     );
 
-    Style.addRule(
+    this.styles.addRule(
       new StyleRule(
         `.${this.toolbarButtonStyleColorsClass.name}:hover`,
         `

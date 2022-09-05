@@ -1,4 +1,3 @@
-import { Style } from '../../core/Style';
 import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './opacity-panel-icon.svg';
 
@@ -55,7 +54,7 @@ export class OpacityPanel extends ToolboxPanel {
       opacityBoxContainer.style.borderWidth = '2px';
       opacityBoxContainer.style.borderStyle = 'solid';
       opacityBoxContainer.style.borderColor =
-        opacity === this.currentOpacity ? Style.settings.toolboxAccentColor : 'transparent';
+        opacity === this.currentOpacity ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
 
       opacityBoxContainer.addEventListener('click', () => {
         this.setCurrentOpacity(opacity, opacityBoxContainer);
@@ -75,7 +74,7 @@ export class OpacityPanel extends ToolboxPanel {
     this.currentOpacity = newWidth;
 
     this.opacityBoxes.forEach(box => {
-      box.style.borderColor = box === target ? Style.settings.toolboxAccentColor : 'transparent';
+      box.style.borderColor = box === target ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
     });
 
     if (this.onOpacityChanged) {

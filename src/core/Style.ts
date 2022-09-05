@@ -1,17 +1,44 @@
 import { IStyleSettings } from './IStyleSettings';
 
 /**
- * Simple utility CSS-in-JS implementation.
+ * @see {@link StyleManager}
+ * @deprecated use instance level `styles` instead.
  */
 export class Style {
   /**
+   * @see {@link StyleManager}
+   * @deprecated use instance level `styles.styleSheetRoot` instead.
+   */
+  public static styleSheetRoot: HTMLElement;
+}
+
+/**
+ * Simple utility CSS-in-JS implementation.
+ */
+export class StyleManager {
+  /**
    * Prefix used for all internally created CSS classes.
    */
-  public static CLASS_PREFIX = '__markerjs2_';
+  private _classNamePrefixBase = '__markerjs2_';
 
-  private static classes: StyleClass[] = [];
-  private static rules: StyleRule[] = [];
-  private static styleSheet?: HTMLStyleElement;
+  /**
+   * Static CSS class name used for the wrapper element.
+   */
+  public get classNamePrefixBase(): string {
+    return this._classNamePrefixBase;
+  }
+
+  private _classNamePrefix: string;
+  /**
+   * Prefix used for all internally created CSS classes.
+   */
+  public get classNamePrefix(): string {
+    return this._classNamePrefix;
+  }
+
+  private classes: StyleClass[] = [];
+  private rules: StyleRule[] = [];
+  private styleSheet?: HTMLStyleElement;
 
   /**
    * For cases when you need to add the stylesheet to anything
@@ -25,20 +52,17 @@ export class Style {
    * ```javascript
    * const markerArea = new markerjs2.MarkerArea(target);
    * markerArea.targetRoot = this.shadowRoot;
-   * markerjs2.Style.styleSheetRoot = this.shadowRoot;
+   * markerArea.styles.styleSheetRoot = this.shadowRoot;
    * markerArea.show();
    * ```
    *
-   * Known issue/limitation:
-   * you can't use marker.js 2 in both main and Shadow DOM
-   * on the same page.
    */
-  public static styleSheetRoot: HTMLElement;
+  public styleSheetRoot: HTMLElement;
 
   /**
    * Returns default UI styles.
    */
-  public static get defaultSettings(): IStyleSettings {
+  public get defaultSettings(): IStyleSettings {
     return {
       canvasBackgroundColor: '#ffffff',
       toolbarBackgroundColor: '#111111',
@@ -61,34 +85,42 @@ export class Style {
   /**
    * Holds current UI styles.
    */
-  public static settings: IStyleSettings = Style.defaultSettings;
+  public settings: IStyleSettings = this.defaultSettings;
 
   /**
    * Returns global fade-in animation class name.
    */
-  public static get fadeInAnimationClassName(): string {
-    return `${Style.CLASS_PREFIX}fade_in`;
+  public get fadeInAnimationClassName(): string {
+    return `${this.classNamePrefix}fade_in`;
   }
   /**
    * Returns global fade-out animation class name.
    */
-  public static get fadeOutAnimationClassName(): string {
-    return `${Style.CLASS_PREFIX}fade_out`;
+  public get fadeOutAnimationClassName(): string {
+    return `${this.classNamePrefix}fade_out`;
+  }
+
+  /**
+   * Initializes a new style manager.
+   * @param instanceNo - instance id.
+   */
+  constructor(instanceNo: number) {
+    this._classNamePrefix = `${this._classNamePrefixBase}_${instanceNo}_`;
   }
 
   /**
    * Adds a CSS class declaration.
    * @param styleClass - class to add.
    */
-  public static addClass(styleClass: StyleClass): StyleClass {
-    if (Style.styleSheet === undefined) {
-      Style.addStyleSheet();
+  public addClass(styleClass: StyleClass): StyleClass {
+    if (this.styleSheet === undefined) {
+      this.addStyleSheet();
     }
-    Style.classes.push(styleClass);
-    // Style.styleSheet.sheet.addRule('.' + styleClass.name, styleClass.style);
-    Style.styleSheet.sheet.insertRule(
+    styleClass.name = `${this.classNamePrefix}${styleClass.localName}`;
+    this.classes.push(styleClass);
+    this.styleSheet.sheet.insertRule(
       `.${styleClass.name} {${styleClass.style}}`,
-      Style.styleSheet.sheet.cssRules.length
+      this.styleSheet.sheet.cssRules.length
     );
     return styleClass;
   }
@@ -97,30 +129,29 @@ export class Style {
    * Add arbitrary CSS rule
    * @param styleRule - CSS rule to add.
    */
-  public static addRule(styleRule: StyleRule): void {
-    if (Style.styleSheet === undefined) {
-      Style.addStyleSheet();
+  public addRule(styleRule: StyleRule): void {
+    if (this.styleSheet === undefined) {
+      this.addStyleSheet();
     }
-    Style.rules.push(styleRule);
-    // Style.styleSheet.sheet.addRule(styleRule.selector, styleRule.style); // crashes in Edge
-    Style.styleSheet.sheet.insertRule(
+    this.rules.push(styleRule);
+    this.styleSheet.sheet.insertRule(
       `${styleRule.selector} {${styleRule.style}}`,
-      Style.styleSheet.sheet.cssRules.length
+      this.styleSheet.sheet.cssRules.length
     );
   }
 
-  private static addStyleSheet() {
-    Style.styleSheet = document.createElement('style');
-    (Style.styleSheetRoot ?? document.head).appendChild(Style.styleSheet);
+  private addStyleSheet() {
+    this.styleSheet = document.createElement('style');
+    (this.styleSheetRoot ?? document.head).appendChild(this.styleSheet);
 
     // add global rules
-    Style.addRule(
-      new StyleRule(`.${Style.CLASS_PREFIX} h3`, 'font-family: sans-serif')
+    this.addRule(
+      new StyleRule(`.${this.classNamePrefix} h3`, 'font-family: sans-serif')
     );
 
-    Style.addRule(
+    this.addRule(
       new StyleRule(
-        `@keyframes ${Style.CLASS_PREFIX}_fade_in_animation_frames`,
+        `@keyframes ${this.classNamePrefix}_fade_in_animation_frames`,
         `
         from {
           opacity: 0;
@@ -131,9 +162,9 @@ export class Style {
     `
       )
     );
-    Style.addRule(
+    this.addRule(
       new StyleRule(
-        `@keyframes ${Style.CLASS_PREFIX}_fade_out_animation_frames`,
+        `@keyframes ${this.classNamePrefix}_fade_out_animation_frames`,
         `
         from {
           opacity: 1;
@@ -145,30 +176,30 @@ export class Style {
       )
     );
 
-    Style.addClass(
+    this.addClass(
       new StyleClass(
         'fade_in',
         `
       animation-duration: 0.3s;
-      animation-name: ${Style.CLASS_PREFIX}_fade_in_animation_frames;
+      animation-name: ${this.classNamePrefix}_fade_in_animation_frames;
     `
       )
     );
-    Style.addClass(
+    this.addClass(
       new StyleClass(
         'fade_out',
         `
       animation-duration: 0.3s;
-      animation-name: ${Style.CLASS_PREFIX}_fade_out_animation_frames;
+      animation-name: ${this.classNamePrefix}_fade_out_animation_frames;
     `
       )
     );
   }
 
-  public static removeStyleSheet(): void {
-    if (Style.styleSheet) {
-      (Style.styleSheetRoot ?? document.head).removeChild(Style.styleSheet);
-      Style.styleSheet = undefined;
+  public removeStyleSheet(): void {
+    if (this.styleSheet) {
+      (this.styleSheetRoot ?? document.head).removeChild(this.styleSheet);
+      this.styleSheet = undefined;
     }
   }
 }
@@ -205,13 +236,15 @@ export class StyleClass {
    */
   public style: string;
 
-  private _localName: string;
   /**
-   * Returns fully qualified CSS class name.
+   * Class name without the global prefix.
    */
-  public get name(): string {
-    return `${Style.CLASS_PREFIX}${this._localName}`;
-  }
+  public localName: string;
+
+  /**
+   * Fully qualified CSS class name.
+   */
+  public name: string;
 
   /**
    * Creates a CSS class declaration based on supplied (local) name and style rules.
@@ -219,7 +252,7 @@ export class StyleClass {
    * @param style - style declarations.
    */
   constructor(name: string, style: string) {
-    this._localName = name;
+    this.localName = name;
     this.style = style;
   }
 }
