@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.26.0] - 2022-09-12
+### Added
+- `isUndoPossible`/`isRedoPossible` properties on `MarkerArea` - true when operation is possible
+
 ## [2.25.0] - 2022-09-06
 ### Changed
 - static `Style` to instance level style management via `MarkerArea.styles`. 
@@ -406,6 +410,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.26.0]: https://github.com/ailon/markerjs2/releases/tag/v2.26.0
 [2.25.0]: https://github.com/ailon/markerjs2/releases/tag/v2.25.0
 [2.24.0]: https://github.com/ailon/markerjs2/releases/tag/v2.24.0
 [2.23.0]: https://github.com/ailon/markerjs2/releases/tag/v2.23.0
