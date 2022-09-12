@@ -46,6 +46,8 @@ export class Experiments {
 
     this.markerArea1.addEventListener('statechange', (event) => {
       console.log(`state change: ${event.markerArea.getState()}`);
+      console.log(`undo possible?: ${event.markerArea.isUndoPossible}`);
+      console.log(`redo possible?: ${event.markerArea.isRedoPossible}`);
     });
     this.markerArea1.addEventListener('markerchange', (event) => {
       console.log(`marker state change: ${JSON.stringify(event.marker?.getState())}`);
@@ -129,6 +131,9 @@ export class Experiments {
     this.markerArea1.settings.freehandPixelRatio = 2;
 
     this.markerArea1.show();
+    console.log(`undo possible?: ${this.markerArea1.isUndoPossible}`);
+    console.log(`redo possible?: ${this.markerArea1.isRedoPossible}`);
+
     if (this.currentState) {
       this.markerArea1.restoreState(this.currentState);
     }

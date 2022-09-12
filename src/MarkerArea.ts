@@ -242,6 +242,32 @@ export class MarkerArea {
   > = new UndoRedoManager<MarkerAreaState>();
 
   /**
+   * Returns true if undo operation can be performed (undo stack is not empty).
+   * 
+   * @since 2.26.0
+   */
+  public get isUndoPossible(): boolean {
+    if (this.undoRedoManager && this.undoRedoManager.isUndoPossible) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Returns true if redo operation can be performed (redo stack is not empty).
+   * 
+   * @since 2.26.0
+   */
+   public get isRedoPossible(): boolean {
+    if (this.undoRedoManager && this.undoRedoManager.isRedoPossible) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * When set to true resulting image will be rendered at the natural (original) resolution
    * of the target image. Otherwise (default), screen dimensions of the image are used.
    *
