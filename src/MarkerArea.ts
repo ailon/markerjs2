@@ -211,7 +211,16 @@ export class MarkerArea {
 
   private mode: MarkerAreaMode = 'select';
 
-  private currentMarker?: MarkerBase;
+  private _currentMarker?: MarkerBase;
+  /**
+   * Gets currently selected marker
+   *
+   * @readonly
+   * @since 2.27.0
+   */
+  public get currentMarker() : MarkerBase | undefined {
+    return this._currentMarker;
+  }
   private markers: MarkerBase[] = [];
 
   private isDragging = false;
@@ -717,15 +726,15 @@ export class MarkerArea {
 
   private scaleMarkers(scaleX: number, scaleY: number) {
     let preScaleSelectedMarker: MarkerBase;
-    if (!(this.currentMarker && this.currentMarker instanceof TextMarker)) {
+    if (!(this._currentMarker && this._currentMarker instanceof TextMarker)) {
       // can't unselect text marker as it would hide keyboard on mobile
-      preScaleSelectedMarker = this.currentMarker;
+      preScaleSelectedMarker = this._currentMarker;
       this.setCurrentMarker();
     } else {
-      this.currentMarker.scale(scaleX, scaleY);
+      this._currentMarker.scale(scaleX, scaleY);
     }
     this.markers.forEach((marker) => {
-      if (marker !== this.currentMarker) {
+      if (marker !== this._currentMarker) {
         marker.scale(scaleX, scaleY)
       }
     });
@@ -1082,11 +1091,11 @@ export class MarkerArea {
   public switchToSelectMode(): void {
     this.mode = 'select';
     this.hideNotesEditor();
-    if (this.currentMarker !== undefined) {
-      if (this.currentMarker.state !== 'new') {
-        this.currentMarker.select();
+    if (this._currentMarker !== undefined) {
+      if (this._currentMarker.state !== 'new') {
+        this._currentMarker.select();
       } else {
-        this.removeMarker(this.currentMarker);
+        this.removeMarker(this._currentMarker);
         this.setCurrentMarker();
         this.markerImage.style.cursor = 'default';
       }
@@ -1160,11 +1169,11 @@ export class MarkerArea {
    * Removes currently selected marker.
    */
   public deleteSelectedMarker(): void {
-    if (this.currentMarker !== undefined) {
+    if (this._currentMarker !== undefined) {
       let cancel = false;
 
       this.eventListeners['markerbeforedelete'].forEach((listener) => {
-        const ev = new MarkerEvent(this, this.currentMarker, true);
+        const ev = new MarkerEvent(this, this._currentMarker, true);
         listener(ev);
         if (ev.defaultPrevented) {
           cancel = true;
@@ -1172,10 +1181,10 @@ export class MarkerArea {
       });
 
       if (!cancel) {
-        const marker = this.currentMarker;
-        this.currentMarker.dispose();
-        this.markerImage.removeChild(this.currentMarker.container);
-        this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+        const marker = this._currentMarker;
+        this._currentMarker.dispose();
+        this.markerImage.removeChild(this._currentMarker.container);
+        this.markers.splice(this.markers.indexOf(this._currentMarker), 1);
         this.setCurrentMarker();
         this.addUndoStep();
         this.eventListeners['markerdelete'].forEach((listener) =>
@@ -1205,9 +1214,9 @@ export class MarkerArea {
         for (let i = this.markers.length - 1; i >= 0; i--) {
           const marker = this.markers[i];
           this.setCurrentMarker(this.markers[i]);
-          this.currentMarker.dispose();
-          this.markerImage.removeChild(this.currentMarker.container);
-          this.markers.splice(this.markers.indexOf(this.currentMarker), 1);
+          this._currentMarker.dispose();
+          this.markerImage.removeChild(this._currentMarker.container);
+          this.markers.splice(this.markers.indexOf(this._currentMarker), 1);
           this.eventListeners['markerdelete'].forEach((listener) =>
             listener(new MarkerEvent(this, marker))
           );
@@ -1223,7 +1232,7 @@ export class MarkerArea {
   }
 
   private showNotesEditor() {
-    if (this.currentMarker !== undefined) {
+    if (this._currentMarker !== undefined) {
       this.overlayContainer.innerHTML = '';
       this.notesArea = document.createElement('textarea');
       this.notesArea.className = this.uiStyleSettings.notesAreaStyleClassName;
@@ -1233,14 +1242,14 @@ export class MarkerArea {
       this.notesArea.style.margin = `${
         this.uiStyleSettings.toolbarHeight / 4
       }px`;
-      this.notesArea.value = this.currentMarker.notes ?? '';
+      this.notesArea.value = this._currentMarker.notes ?? '';
       this.overlayContainer.appendChild(this.notesArea);
     }
   }
   private hideNotesEditor() {
     if (this.isNotesAreaOpen) {
-      if (this.currentMarker !== undefined) {
-        this.currentMarker.notes =
+      if (this._currentMarker !== undefined) {
+        this._currentMarker.notes =
           this.notesArea.value.trim() !== '' ? this.notesArea.value : undefined;
       }
       this.overlayContainer.removeChild(this.notesArea);
@@ -1258,8 +1267,8 @@ export class MarkerArea {
 
   private addUndoStep() {
     if (
-      this.currentMarker === undefined ||
-      this.currentMarker.state !== 'edit'
+      this._currentMarker === undefined ||
+      this._currentMarker.state !== 'edit'
     ) {
       const currentState = this.getState();
       const lastUndoState = this.undoRedoManager.getLastUndoStep();
@@ -1467,16 +1476,16 @@ export class MarkerArea {
     if (mType) {
       this.setCurrentMarker();
       this.addUndoStep();
-      this.currentMarker = this.addNewMarker(mType);
-      this.currentMarker.onMarkerCreated = this.markerCreated;
-      this.currentMarker.onColorChanged = this.colorChanged;
-      this.currentMarker.onFillColorChanged = this.fillColorChanged;
-      this.currentMarker.onStateChanged = this.markerStateChanged;
+      this._currentMarker = this.addNewMarker(mType);
+      this._currentMarker.onMarkerCreated = this.markerCreated;
+      this._currentMarker.onColorChanged = this.colorChanged;
+      this._currentMarker.onFillColorChanged = this.fillColorChanged;
+      this._currentMarker.onStateChanged = this.markerStateChanged;
       this.markerImage.style.cursor = 'crosshair';
       this.toolbar.setActiveMarkerButton(mType.typeName);
-      this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
+      this.toolbox.setPanelButtons(this._currentMarker.toolboxPanels);
       this.eventListeners['markercreating'].forEach((listener) =>
-        listener(new MarkerEvent(this, this.currentMarker))
+        listener(new MarkerEvent(this, this._currentMarker))
       );
     }
   }
@@ -1496,7 +1505,7 @@ export class MarkerArea {
     }
     this.addUndoStep();
     this.eventListeners['markercreate'].forEach((listener) =>
-      listener(new MarkerEvent(this, this.currentMarker))
+      listener(new MarkerEvent(this, this._currentMarker))
     );
   }
 
@@ -1524,31 +1533,31 @@ export class MarkerArea {
    * @param marker marker to select. Deselects current marker if undefined.
    */
   public setCurrentMarker(marker?: MarkerBase): void {
-    if (this.currentMarker !== marker) {
+    if (this._currentMarker !== marker) {
       // no need to deselect if not changed
-      if (this.currentMarker !== undefined) {
-        this.currentMarker.deselect();
+      if (this._currentMarker !== undefined) {
+        this._currentMarker.deselect();
         this.toolbar.setCurrentMarker();
         this.toolbox.setPanelButtons([]);
 
         if (!this._isResizing) {
           this.eventListeners['markerdeselect'].forEach((listener) =>
-            listener(new MarkerEvent(this, this.currentMarker))
+            listener(new MarkerEvent(this, this._currentMarker))
           );
         }
       }
     }
-    this.currentMarker = marker;
-    if (this.currentMarker !== undefined && !this.currentMarker.isSelected) {
-      if (this.currentMarker.state !== 'new') {
-      this.currentMarker.select();
+    this._currentMarker = marker;
+    if (this._currentMarker !== undefined && !this._currentMarker.isSelected) {
+      if (this._currentMarker.state !== 'new') {
+      this._currentMarker.select();
       }
-      this.toolbar.setCurrentMarker(this.currentMarker);
-      this.toolbox.setPanelButtons(this.currentMarker.toolboxPanels);
+      this.toolbar.setCurrentMarker(this._currentMarker);
+      this.toolbox.setPanelButtons(this._currentMarker.toolboxPanels);
 
       if (!this._isResizing) {
         this.eventListeners['markerselect'].forEach((listener) =>
-          listener(new MarkerEvent(this, this.currentMarker))
+          listener(new MarkerEvent(this, this._currentMarker))
         );
       }
     }
@@ -1562,12 +1571,12 @@ export class MarkerArea {
     this.touchPoints++;
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
       if (
-        this.currentMarker !== undefined &&
-        (this.currentMarker.state === 'new' ||
-          this.currentMarker.state === 'creating')
+        this._currentMarker !== undefined &&
+        (this._currentMarker.state === 'new' ||
+          this._currentMarker.state === 'creating')
       ) {
         this.isDragging = true;
-        this.currentMarker.pointerDown(
+        this._currentMarker.pointerDown(
           this.clientToLocalCoordinates(ev.clientX, ev.clientY)
         );
       } else if (this.mode === 'select') {
@@ -1575,7 +1584,7 @@ export class MarkerArea {
         if (hitMarker !== undefined) {
           this.setCurrentMarker(hitMarker);
           this.isDragging = true;
-          this.currentMarker.pointerDown(
+          this._currentMarker.pointerDown(
             this.clientToLocalCoordinates(ev.clientX, ev.clientY),
             ev.target
           );
@@ -1595,11 +1604,11 @@ export class MarkerArea {
 
     if (this.mode === 'select') {
       const hitMarker = this.markers.find((m) => m.ownsTarget(ev.target));
-      if (hitMarker !== undefined && hitMarker !== this.currentMarker) {
+      if (hitMarker !== undefined && hitMarker !== this._currentMarker) {
         this.setCurrentMarker(hitMarker);
       }
-      if (this.currentMarker !== undefined) {
-        this.currentMarker.dblClick(
+      if (this._currentMarker !== undefined) {
+        this._currentMarker.dblClick(
           this.clientToLocalCoordinates(ev.clientX, ev.clientY),
           ev.target
         );
@@ -1611,17 +1620,17 @@ export class MarkerArea {
 
   private onPointerMove(ev: PointerEvent) {
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
-      if (this.currentMarker !== undefined || this.isDragging) {
+      if (this._currentMarker !== undefined || this.isDragging) {
         // don't swallow the event when editing text markers
         if (
-          this.currentMarker === undefined ||
-          this.currentMarker.state !== 'edit'
+          this._currentMarker === undefined ||
+          this._currentMarker.state !== 'edit'
         ) {
           ev.preventDefault();
         }
 
-        if (this.currentMarker !== undefined) {
-          this.currentMarker.manipulate(
+        if (this._currentMarker !== undefined) {
+          this._currentMarker.manipulate(
             this.clientToLocalCoordinates(ev.clientX, ev.clientY)
           );
         } else if (this.zoomLevel > 1) {
@@ -1635,8 +1644,8 @@ export class MarkerArea {
       this.touchPoints--;
     }
     if (this.touchPoints === 0) {
-      if (this.isDragging && this.currentMarker !== undefined) {
-        this.currentMarker.pointerUp(
+      if (this.isDragging && this._currentMarker !== undefined) {
+        this._currentMarker.pointerUp(
           this.clientToLocalCoordinates(ev.clientX, ev.clientY)
         );
       }
@@ -1653,7 +1662,7 @@ export class MarkerArea {
 
   private onKeyUp(ev: KeyboardEvent) {
     if (
-      this.currentMarker !== undefined &&
+      this._currentMarker !== undefined &&
       this.notesArea === undefined &&
       (ev.key === 'Delete' || ev.key === 'Backspace')
     ) {
@@ -1811,7 +1820,7 @@ export class MarkerArea {
     if (this._isFocused) {
       this.detachWindowEvents();
       this._isFocused = false;
-      this._previousCurrentMarker = this.currentMarker;
+      this._previousCurrentMarker = this._currentMarker;
       this.setCurrentMarker();
       this.eventListeners['blur'].forEach((listener) =>
         listener(new MarkerAreaEvent(this))
