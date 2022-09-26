@@ -433,6 +433,8 @@ export class MarkerArea {
     this.blur = this.blur.bind(this);
     this.markerStateChanged = this.markerStateChanged.bind(this);
     this.switchToSelectMode = this.switchToSelectMode.bind(this);
+    this.addDefs = this.addDefs.bind(this);
+    this.addDefsToImage = this.addDefsToImage.bind(this);
   }
 
   private open(): void {
@@ -791,9 +793,15 @@ export class MarkerArea {
    */
   public addDefs(...nodes: (string | Node)[]): void {
     this.defs = SvgHelper.createDefs();
-    this.markerImage.insertBefore(this.defs, this.markerImage.firstChild);
+    this.addDefsToImage();
 
     this.defs.append(...nodes);
+  }
+
+  private addDefsToImage() {
+    if (this.defs) {
+      this.markerImage.insertBefore(this.defs, this.markerImage.firstChild);
+    }
   }
 
   private initOverlay(): void {
@@ -1292,6 +1300,7 @@ export class MarkerArea {
     const stepData = this.undoRedoManager.undo();
     if (stepData !== undefined) {
       this.restoreState(stepData);
+      this.addDefsToImage();
       this.selectLastMarker();
       this.eventListeners['statechange'].forEach((listener) =>
         listener(new MarkerAreaEvent(this))
@@ -1313,6 +1322,7 @@ export class MarkerArea {
     const stepData = this.undoRedoManager.redo();
     if (stepData !== undefined) {
       this.restoreState(stepData);
+      this.addDefsToImage();
       this.selectLastMarker();
       this.eventListeners['statechange'].forEach((listener) =>
         listener(new MarkerAreaEvent(this))
