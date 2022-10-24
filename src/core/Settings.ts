@@ -124,4 +124,27 @@ export class Settings {
    * @since 2.22.0
    */
   public disableRotation = false;
+
+  /**
+   * If set, the UI will be offset by the specified value, 
+   * otherwise it will be offset by -toolbarHeight or 0 if 
+   * there's less space than toolbarHeight on top.
+   * 
+   * Use this if you want to control the position inside a
+   * `position: relative` parent, as auto-calculation
+   * will calculate available space from the relative
+   * container and not the whole page.
+   * 
+   * Common usage when used with a relatively positioned parent would be:
+   * 
+   * ```typescript
+   * markerArea.targetRoot = document.getElementById('relativeParent');
+   * markerArea.settings.uiOffsetTop = -markerArea.styles.settings.toolbarHeight;
+   * ```
+   * This would ensure that the toolbar is placed above the image
+   * even if the image's offset from the relative parent is 0.
+   * 
+   * @since 2.28.0
+   */
+   public uiOffsetTop?: number;
 }

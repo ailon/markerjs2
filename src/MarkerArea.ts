@@ -374,7 +374,7 @@ export class MarkerArea {
   /**
    * Manage style releated settings via the `styles` property.
    */
-   public styles: StyleManager;
+  public styles: StyleManager;
 
   /**
    * Creates a new MarkerArea for the specified target image.
@@ -952,10 +952,11 @@ export class MarkerArea {
     switch (this.settings.displayMode) {
       case 'inline': {
         this.coverDiv.style.position = 'absolute';
-        const coverTop =
-          this.target.getClientRects().item(0).y > this.styles.settings.toolbarHeight
-            ? this.target.offsetTop - this.styles.settings.toolbarHeight
-            : 0;
+        const coverTop = this.settings.uiOffsetTop !== undefined ? 
+          this.target.offsetTop + this.settings.uiOffsetTop :
+            this.target.offsetTop > this.styles.settings.toolbarHeight
+              ? this.target.offsetTop - this.styles.settings.toolbarHeight
+              : 0;
         this.coverDiv.style.top = `${coverTop}px`;
         this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
@@ -1052,7 +1053,8 @@ export class MarkerArea {
       this.target instanceof HTMLImageElement
         ? document.createElement('img')
         : document.createElement('canvas');
-    if (this.target.getClientRects().item(0).y < this.styles.settings.toolbarHeight) {
+    if (this.settings.uiOffsetTop === undefined 
+      && this.target.offsetTop < this.styles.settings.toolbarHeight) {
       this.editingTarget.style.marginTop = `${
         this.target.offsetTop - this.styles.settings.toolbarHeight
       }px`;
