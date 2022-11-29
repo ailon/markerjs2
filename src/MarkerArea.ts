@@ -541,6 +541,7 @@ export class MarkerArea {
         }
         if (this.targetObserver) {
           this.targetObserver.unobserve(this.target);
+          this.targetObserver.unobserve(this.editorCanvas);
         }
         if (this.settings.displayMode === 'popup') {
           window.removeEventListener('resize', this.setWindowHeight);
