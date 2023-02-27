@@ -31,11 +31,11 @@ export class Experiments {
     });
     //this.markerArea1.addEventListener('show', () => document.body.style.backgroundColor = 'cyan');
     //this.markerArea1.addEventListener('restorestate', () => document.body.style.backgroundColor = 'magenta');
-    this.markerArea1.addEventListener('markercreating', (event) => console.log(`creating: ${event.marker?.typeName}`));
-    this.markerArea1.addEventListener('markercreate', (event) => console.log(`created: ${event.marker?.typeName}`));
-    this.markerArea1.addEventListener('markerselect', (event) => console.log(`selected: ${event.marker?.typeName}`));
-    this.markerArea1.addEventListener('markerdeselect', (event) => console.log(`deselected: ${event.marker?.typeName}`));
-    this.markerArea1.addEventListener('markerdelete', (event) => console.log(`deleted: ${event.marker?.typeName}`));
+    // this.markerArea1.addEventListener('markercreating', (event) => console.log(`creating: ${event.marker?.typeName}`));
+    // this.markerArea1.addEventListener('markercreate', (event) => console.log(`created: ${event.marker?.typeName}`));
+    // this.markerArea1.addEventListener('markerselect', (event) => console.log(`selected: ${event.marker?.typeName}`));
+    // this.markerArea1.addEventListener('markerdeselect', (event) => console.log(`deselected: ${event.marker?.typeName}`));
+    // this.markerArea1.addEventListener('markerdelete', (event) => console.log(`deleted: ${event.marker?.typeName}`));
     this.markerArea1.addEventListener('markerbeforedelete', (event) => {
       if (!confirm(`delete marker${event.marker ? '' : 's'}?`)) {
         event.preventDefault();
@@ -45,12 +45,12 @@ export class Experiments {
     this.markerArea1.addEventListener('blur', () => console.log(`blured`));
 
     this.markerArea1.addEventListener('statechange', (event) => {
-      console.log(`state change: ${event.markerArea.getState()}`);
-      console.log(`undo possible?: ${event.markerArea.isUndoPossible}`);
-      console.log(`redo possible?: ${event.markerArea.isRedoPossible}`);
+      // console.log(`state change: ${event.markerArea.getState()}`);
+      // console.log(`undo possible?: ${event.markerArea.isUndoPossible}`);
+      // console.log(`redo possible?: ${event.markerArea.isRedoPossible}`);
     });
     this.markerArea1.addEventListener('markerchange', (event) => {
-      console.log(`marker state change: ${JSON.stringify(event.marker?.getState())}`);
+      // console.log(`marker state change: ${JSON.stringify(event.marker?.getState())}`);
     });
 
     // this.markerArea1.addEventListener('markerselect', event => { 
@@ -132,8 +132,8 @@ export class Experiments {
     this.markerArea1.settings.freehandPixelRatio = 2;
 
     this.markerArea1.show();
-    console.log(`undo possible?: ${this.markerArea1.isUndoPossible}`);
-    console.log(`redo possible?: ${this.markerArea1.isRedoPossible}`);
+    // console.log(`undo possible?: ${this.markerArea1.isUndoPossible}`);
+    // console.log(`redo possible?: ${this.markerArea1.isRedoPossible}`);
 
     if (this.currentState) {
       this.markerArea1.restoreState(this.currentState);
@@ -491,7 +491,7 @@ export class Experiments {
   public getState(): void {
     if (this.markerArea1) {
       this.currentState = this.markerArea1.getState(true);
-      console.log(this.currentState);
+      //console.log(this.currentState);
     }
   }
 

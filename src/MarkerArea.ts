@@ -24,6 +24,7 @@ import { IPoint } from './core/IPoint';
 import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 import { UndoRedoManager } from './core/UndoRedoManager';
 import { CurveMarker } from './markers/curve-marker/CurveMarker';
+import { CaptionFrameMarker } from './markers/caption-frame-marker/CaptionFrameMarker';
 import {
   EventHandler,
   EventListenerRepository,
@@ -125,6 +126,7 @@ export class MarkerArea {
    */
   public get ALL_MARKER_TYPES(): typeof MarkerBase[] {
     return [
+      CaptionFrameMarker,
       FrameMarker,
       FreehandMarker,
       ArrowMarker,
