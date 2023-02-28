@@ -66,6 +66,8 @@ export { LineMarkerState } from './markers/line-marker/LineMarkerState';
 export { MeasurementMarker } from './markers/measurement-marker/MeasurementMarker';
 export { TextMarker } from './markers/text-marker/TextMarker';
 export { TextMarkerState } from './markers/text-marker/TextMarkerState';
+export { CaptionFrameMarker } from './markers/caption-frame-marker/CaptionFrameMarker';
+export { CaptionFrameMarkerState } from './markers/caption-frame-marker/CaptionFrameMarkerState';
 
 export {
   EventHandler,

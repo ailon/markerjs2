@@ -3,18 +3,20 @@ import { IPoint } from '../../core/IPoint';
 import { SvgHelper } from '../../core/SvgHelper';
 import { RectangularBoxMarkerBase } from '../RectangularBoxMarkerBase';
 import { Settings } from '../../core/Settings';
-import { RectangleMarkerState } from '../RectangleMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
 import { ColorPickerPanel } from '../../ui/toolbox-panels/ColorPickerPanel';
 import { LineWidthPanel } from '../../ui/toolbox-panels/LineWidthPanel';
 import { LineStylePanel } from '../../ui/toolbox-panels/LineStylePanel';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import FillColorIcon from '../../ui/toolbox-panels/fill-color-icon.svg';
+import TextColorIcon from '../../ui/toolbox-panels/text-color-icon.svg';
+import { FontFamilyPanel } from '../../ui/toolbox-panels/FontFamilyPanel';
+import { CaptionFrameMarkerState } from './CaptionFrameMarkerState';
 
 export class CaptionFrameMarker extends RectangularBoxMarkerBase {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'CaptionFrameMarker';
@@ -28,33 +30,81 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
   public static icon = Icon;
 
   /**
-   * Ellipse fill color.
+   * Caption background (fill) color.
    */
   protected fillColor = 'transparent';
   /**
-   * Ellipse border color.
+   * Frame border color.
    */
   protected strokeColor = 'transparent';
   /**
-   * Ellipse border line width.
+   * Frame border line width.
    */
   protected strokeWidth = 0;
   /**
-   * Ellipse border dash array.
+   * Frame border dash array.
    */
   protected strokeDasharray = '';
-
-
+  /**
+   * Caption font family.
+   */
+  protected fontFamily: string;
+  /**
+   * Caption text color.
+   */
   protected textColor = 'transparent';
+  /**
+   * Caption font size.
+   */
+  protected fontSize = '1rem';
 
+  /**
+   * Frame stroke color toolbox panel.
+   */
   protected strokePanel: ColorPickerPanel;
+  /**
+   * Caption background (fill) color toolbox panel.
+   */
   protected fillPanel: ColorPickerPanel;
+  /**
+   * Frame stroke width toolbox panel.
+   */
   protected strokeWidthPanel: LineWidthPanel;
+  /**
+   * Frame stroke style toolbox panel.
+   */
   protected strokeStylePanel: LineStylePanel;
-
+  /**
+   * Text font family toolbox panel.
+   */
+  protected fontFamilyPanel: FontFamilyPanel;
+  /**
+   * Text color picker toolbox panel.
+   */
+  protected textColorPanel: ColorPickerPanel;
+  /**
+   * True if the marker has moved in the manipulation.
+   */
   protected isMoved = false;
   private pointerDownPoint: IPoint;
   private pointerDownTimestamp: number;
+
+  /**
+   * Frame rectangle.
+   */
+  protected frame: SVGRectElement;
+  /**
+   * Caption background element.
+   */
+  protected labelBg: SVGRectElement;
+  /**
+   * Caption text element.
+   */
+  protected labelElement!: SVGTextElement;
+  /**
+   * Caption text.
+   */
+  protected labelText = 'Label';
 
   /**
    * Creates a new marker.
@@ -63,7 +113,11 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.strokeColor = settings.defaultColor;
@@ -71,6 +125,9 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.strokeDasharray = settings.defaultStrokeDasharray;
     this.fillColor = settings.defaultFillColor;
     this.textColor = settings.defaultStrokeColor;
+    this.fontFamily = settings.defaultFontFamily;
+    this.fontSize = settings.defaultCaptionFontSize;
+    this.labelText = settings.defaultCaptionText;
 
     this.setStrokeColor = this.setStrokeColor.bind(this);
     this.setFillColor = this.setFillColor.bind(this);
@@ -82,6 +139,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.showTextEditor = this.showTextEditor.bind(this);
     this.positionTextEditor = this.positionTextEditor.bind(this);
     this.finishTextEditing = this.finishTextEditing.bind(this);
+    this.setFont = this.setFont.bind(this);
+    this.setTextColor = this.setTextColor.bind(this);
 
     this.strokePanel = new ColorPickerPanel(
       'Line color',
@@ -111,27 +170,42 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       settings.defaultStrokeDasharray
     );
     this.strokeStylePanel.onStyleChanged = this.setStrokeDasharray;
+
+    this.fontFamilyPanel = new FontFamilyPanel(
+      'Font',
+      settings.defaultFontFamilies,
+      settings.defaultFontFamily
+    );
+    this.fontFamilyPanel.onFontChanged = this.setFont;
+
+    this.textColorPanel = new ColorPickerPanel(
+      'Text color',
+      settings.defaultColorSet,
+      this.textColor,
+      TextColorIcon
+    );
+    this.textColorPanel.onColorChanged = this.setTextColor;
+
   }
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
-    if (super.ownsTarget(el) || el === this.visual || el === this.frame || el === this.labelBg) {
+    if (
+      super.ownsTarget(el) ||
+      el === this.visual ||
+      el === this.frame ||
+      el === this.labelBg ||
+      el === this.labelElement
+    ) {
       return true;
     } else {
       return false;
     }
   }
-
-  protected frame: SVGRectElement;
-  protected labelBg: SVGRectElement;
-  protected labelElement!: SVGTextElement;
-  protected labelText = 'Label';
-
-
 
   /**
    * Creates marker visual.
@@ -140,13 +214,14 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.visual = SvgHelper.createGroup();
     this.addMarkerVisualToContainer(this.visual);
 
-    this.labelBg = SvgHelper.createRect(100, 30, [
-      ['fill', this.fillColor],
-    ]);
+    this.labelBg = SvgHelper.createRect(1, 1, [['fill', this.fillColor]]);
     this.visual.appendChild(this.labelBg);
 
-    this.labelElement = SvgHelper.createText([['fill', this.textColor]]);
-    this.labelElement.style.fontSize = '1rem';
+    this.labelElement = SvgHelper.createText([
+      ['fill', this.textColor],
+      ['font-family', this.fontFamily],
+    ]);
+    this.labelElement.style.fontSize = this.fontSize;
     this.labelElement.style.textAnchor = 'start';
     this.labelElement.style.dominantBaseline = 'text-before-edge';
     this.labelElement.textContent = this.labelText;
@@ -160,8 +235,13 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     ]);
 
     this.visual.appendChild(this.frame);
+    this.sizeLabel();
   }
 
+  /**
+   * Sets label text.
+   * @param text - new label text.
+   */
   public setLabelText(text: string): void {
     this.labelText = text;
     this.labelElement.textContent = this.labelText;
@@ -170,7 +250,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -192,7 +272,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
+   *
    * @param point - event coordinates.
    */
   public manipulate(point: IPoint): void {
@@ -206,33 +286,47 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
 
   /**
    * Resize marker based on current pointer coordinates and context.
-   * @param point 
+   * @param point
    */
   protected resize(point: IPoint): void {
     super.resize(point);
     this.setSize();
   }
-  
+
   private readonly PADDING = 5;
   private labelBoxWidth = 0;
   private labelBoxHeight = 0;
   protected sizeLabel(): void {
     const textBBox = this.labelElement.getBBox();
-    this.labelBoxWidth = textBBox.width + this.PADDING * 2;
-    this.labelBoxHeight = textBBox.height + this.PADDING * 2;
+    if (this.labelText.trim() !== '') {
+      this.labelBoxWidth = textBBox.width + this.PADDING * 2;
+      this.labelBoxHeight = textBBox.height + this.PADDING * 2;
+    } else {
+      this.labelBoxWidth = 0;
+      this.labelBoxHeight = 0;
+    }
+
     SvgHelper.setAttributes(this.labelBg, [
       ['width', this.labelBoxWidth.toString()],
       ['height', this.labelBoxHeight.toString()],
-      ['clip-path', `path('M0,0 H${this.width} V${this.height} H${-this.width} Z')`]
+      [
+        'clip-path',
+        `path('M0,0 H${this.width} V${this.height} H${-this.width} Z')`,
+      ],
     ]);
     SvgHelper.setAttributes(this.labelElement, [
       ['x', this.PADDING.toString()],
       ['y', this.PADDING.toString()],
-      ['clip-path', `path('M0,0 H${this.width-this.PADDING} V${this.height} H${-this.width-this.PADDING} Z')`]
+      [
+        'clip-path',
+        `path('M0,0 H${this.width - this.PADDING} V${this.height} H${
+          -this.width - this.PADDING
+        } Z')`,
+      ],
     ]);
   }
 
-  private textEditDiv: HTMLDivElement
+  private textEditDiv: HTMLDivElement;
   private textEditBox: HTMLInputElement;
 
   private showTextEditor() {
@@ -244,14 +338,21 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.textEditDiv.style.alignItems = 'center';
     this.textEditDiv.style.justifyContent = 'center';
     this.textEditDiv.style.pointerEvents = 'auto';
-    this.textEditDiv.style.overflow = 'hidden';    
+    this.textEditDiv.style.overflow = 'hidden';
 
     this.textEditBox = document.createElement('input');
     this.textEditBox.style.position = 'absolute';
     this.textEditBox.style.width = `${this.width}px`;
-    this.textEditBox.style.height = `${this.labelBoxHeight}px`;
-    this.textEditBox.style.fontSize = `1rem`;
+    if (this.labelBoxHeight > 0) {
+      this.textEditBox.style.height = `${this.labelBoxHeight}px`;
+    }
+    this.textEditBox.style.fontSize = this.fontSize;
+    this.textEditBox.style.fontFamily = this.fontFamily;
+    this.textEditBox.style.backgroundColor = this.fillColor;
+    this.textEditBox.style.color = this.textColor;
+    this.textEditBox.style.borderWidth = '0';
     this.textEditBox.setAttribute('value', this.labelText);
+    this.textEditBox.select();
 
     this.textEditDiv.appendChild(this.textEditBox);
     this.overlayContainer.appendChild(this.textEditDiv);
@@ -264,9 +365,15 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
         this.finishTextEditing(this.textEditBox.value);
       }
     });
+    this.textEditBox.addEventListener('keyup', (ev) => {
+      ev.cancelBubble = true;
+    });
+    this.textEditBox.addEventListener('blur', () => {
+      this.finishTextEditing(this.textEditBox.value);
+    });
     this.textEditDiv.addEventListener('pointerup', () => {
       this.finishTextEditing(this.textEditBox.value);
-    });    
+    });
 
     this.positionTextEditor();
     this.textEditBox.focus();
@@ -280,7 +387,9 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
         this.textEditBox.style.left = `${this.left}px`;
         this.textEditBox.style.top = `${this.top}px`;
         this.textEditBox.style.transform = `rotate(${this.rotationAngle}deg)`;
-        this.textEditBox.style.transformOrigin = `${this.width / 2}px ${this.height / 2}px`;
+        this.textEditBox.style.transformOrigin = `${this.width / 2}px ${
+          this.height / 2
+        }px`;
       }
     }
   }
@@ -288,6 +397,37 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
   private finishTextEditing(text: string) {
     this.setLabelText(text.trim());
     this.overlayContainer.innerHTML = '';
+    this.stateChanged();
+  }
+
+  /**
+   * Sets font family.
+   * @param font - new font family.
+   */
+  protected setFont(font: string): void {
+    if (this.labelElement) {
+      SvgHelper.setAttributes(this.labelElement, [['font-family', font]]);
+    }
+    this.fontFamily = font;
+    if (this.textEditBox) {
+      this.textEditBox.style.fontFamily = this.fontFamily;
+    }
+    this.sizeLabel();
+    this.stateChanged();
+  }
+
+  /**
+   * Sets text color.
+   * @param color - new text color.
+   */
+  protected setTextColor(color: string): void {
+    if (this.labelElement) {
+      SvgHelper.setAttributes(this.labelElement, [['fill', color]]);
+    }
+    this.textColor = color;
+    if (this.textEditBox) {
+      this.textEditBox.style.color = this.textColor;
+    }
     this.stateChanged();
   }
 
@@ -305,19 +445,17 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
-   * 
+   *
    * @param point - event coordinates.
    */
   public pointerUp(point: IPoint): void {
     super.pointerUp(point);
     this.setSize();
 
-    if ((!this.isMoved && Date.now() - this.pointerDownTimestamp > 500)) {
-      // this.showTextEditor();
-      this.setLabelText('Longer label');
+    if (!this.isMoved && Date.now() - this.pointerDownTimestamp > 500) {
+      this.showTextEditor();
     }
     this.pointerDownPoint = undefined;
-
   }
 
   /**
@@ -329,9 +467,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     super.dblClick(point, target);
 
     this.showTextEditor();
-    // this.setLabelText('dbl Longer label');
   }
-
 
   /**
    * Sets marker's line color.
@@ -339,8 +475,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
    */
   protected setStrokeColor(color: string): void {
     this.strokeColor = color;
-    if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['stroke', this.strokeColor]]);
+    if (this.frame) {
+      SvgHelper.setAttributes(this.frame, [['stroke', this.strokeColor]]);
     }
     this.colorChanged(color);
     this.stateChanged();
@@ -351,8 +487,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
    */
   protected setFillColor(color: string): void {
     this.fillColor = color;
-    if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['fill', this.fillColor]]);
+    if (this.labelBg) {
+      SvgHelper.setAttributes(this.labelBg, [['fill', this.fillColor]]);
     }
     this.fillColorChanged(color);
     this.stateChanged();
@@ -363,8 +499,10 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
    */
   protected setStrokeWidth(width: number): void {
     this.strokeWidth = width;
-    if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['stroke-width', this.strokeWidth.toString()]]);
+    if (this.frame) {
+      SvgHelper.setAttributes(this.frame, [
+        ['stroke-width', this.strokeWidth.toString()],
+      ]);
     }
     this.stateChanged();
   }
@@ -374,8 +512,10 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
    */
   protected setStrokeDasharray(dashes: string): void {
     this.strokeDasharray = dashes;
-    if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['stroke-dasharray', this.strokeDasharray]]);
+    if (this.frame) {
+      SvgHelper.setAttributes(this.frame, [
+        ['stroke-dasharray', this.strokeDasharray],
+      ]);
     }
     this.stateChanged();
   }
@@ -384,20 +524,34 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
    * Returns the list of toolbox panels for this marker type.
    */
   public get toolboxPanels(): ToolboxPanel[] {
-    return [this.strokePanel, this.fillPanel, this.strokeWidthPanel, this.strokeStylePanel];
+    return [
+      this.strokePanel,
+      this.fillPanel,
+      this.strokeWidthPanel,
+      this.strokeStylePanel,
+      this.fontFamilyPanel,
+      this.textColorPanel,
+    ];
   }
 
   /**
    * Returns current marker state that can be restored in the future.
    */
-  public getState(): RectangleMarkerState {
-    const result: RectangleMarkerState = Object.assign({
-      fillColor: this.fillColor,
-      strokeColor: this.strokeColor,
-      strokeWidth: this.strokeWidth,
-      strokeDasharray: this.strokeDasharray,
-      opacity: 1
-    }, super.getState());
+  public getState(): CaptionFrameMarkerState {
+    const result: CaptionFrameMarkerState = Object.assign(
+      {
+        fillColor: this.fillColor,
+        strokeColor: this.strokeColor,
+        strokeWidth: this.strokeWidth,
+        strokeDasharray: this.strokeDasharray,
+        opacity: 1,
+        textColor: this.textColor,
+        fontFamily: this.fontFamily,
+        fontSize: this.fontSize,
+        labelText: this.labelText
+      },
+      super.getState()
+    );
     result.typeName = this.typeName;
 
     return result;
@@ -405,15 +559,19 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {
-    const rectState = state as RectangleMarkerState;
-    this.fillColor = rectState.fillColor;
-    this.strokeColor = rectState.strokeColor;
-    this.strokeWidth = rectState.strokeWidth;
-    this.strokeDasharray = rectState.strokeDasharray;
+    const frState = state as CaptionFrameMarkerState;
+    this.fillColor = frState.fillColor;
+    this.strokeColor = frState.strokeColor;
+    this.strokeWidth = frState.strokeWidth;
+    this.strokeDasharray = frState.strokeDasharray;
+    this.textColor = frState.textColor;
+    this.fontFamily = frState.fontFamily;
+    this.labelText = frState.labelText;
+    this.fontSize = frState.fontSize;
 
     this.createVisual();
     super.restoreState(state);
@@ -422,7 +580,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
 
   /**
    * Scales marker. Used after the image resize.
-   * 
+   *
    * @param scaleX - horizontal scale
    * @param scaleY - vertical scale
    */

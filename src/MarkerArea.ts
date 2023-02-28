@@ -126,7 +126,6 @@ export class MarkerArea {
    */
   public get ALL_MARKER_TYPES(): typeof MarkerBase[] {
     return [
-      CaptionFrameMarker,
       FrameMarker,
       FreehandMarker,
       ArrowMarker,
@@ -139,6 +138,7 @@ export class MarkerArea {
       CoverMarker,
       LineMarker,
       CurveMarker,
+      CaptionFrameMarker,
     ];
   }
 

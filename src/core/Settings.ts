@@ -147,4 +147,17 @@ export class Settings {
    * @since 2.28.0
    */
    public uiOffsetTop?: number;
+
+   /**
+    * Default font size for the `CaptionFrameMarker`
+    * 
+    * @since 2.29.0
+    */
+   public defaultCaptionFontSize = '1rem';
+   /**
+    * Default caption text for the `CaptionFrameMarker`
+    * 
+    * @since 2.29.0
+    */
+   public defaultCaptionText = 'Text';
 }

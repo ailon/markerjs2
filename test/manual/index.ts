@@ -126,10 +126,13 @@ export class Experiments {
 
     // this.markerArea1.renderTarget = <HTMLCanvasElement>document.getElementById('resultCanvas');
 
-    this.markerArea1.settings.defaultFontFamilies = ['Roboto', 'Shizuru', 'Rubik Moonrocks'];
-    this.markerArea1.settings.defaultFontFamily = 'Roboto';
+    // this.markerArea1.settings.defaultFontFamilies = ['Roboto', 'Shizuru', 'Rubik Moonrocks'];
+    // this.markerArea1.settings.defaultFontFamily = 'Roboto';
 
     this.markerArea1.settings.freehandPixelRatio = 2;
+
+    // this.markerArea1.settings.defaultCaptionFontSize = '12pt';
+    // this.markerArea1.settings.defaultCaptionText = '';
 
     this.markerArea1.show();
     // console.log(`undo possible?: ${this.markerArea1.isUndoPossible}`);
