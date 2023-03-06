@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.29.0] - 2023-03-06
+### Added
+- `CaptionFrameMarker` - rectangular frame marker with built-in text caption
+
 ## [2.28.1] - 2022-11-29
 ### Fixed
 - resize observer isn't unobserving editor canvas in popup mode on close.
@@ -433,6 +437,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.29.0]: https://github.com/ailon/markerjs2/releases/tag/v2.29.0
 [2.28.1]: https://github.com/ailon/markerjs2/releases/tag/v2.28.1
 [2.28.0]: https://github.com/ailon/markerjs2/releases/tag/v2.28.0
 [2.27.0]: https://github.com/ailon/markerjs2/releases/tag/v2.27.0
