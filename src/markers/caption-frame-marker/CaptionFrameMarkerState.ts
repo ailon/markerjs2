@@ -19,5 +19,5 @@ export interface CaptionFrameMarkerState extends RectangleMarkerState {
   /**
    * Caption text
    */
-  labelText: string;
+  captionText: string;
 }

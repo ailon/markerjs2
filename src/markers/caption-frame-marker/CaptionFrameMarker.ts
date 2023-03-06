@@ -96,15 +96,15 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
   /**
    * Caption background element.
    */
-  protected labelBg: SVGRectElement;
+  protected captionBg: SVGRectElement;
   /**
    * Caption text element.
    */
-  protected labelElement!: SVGTextElement;
+  protected captionElement!: SVGTextElement;
   /**
    * Caption text.
    */
-  protected labelText = 'Label';
+  protected captionText = 'Caption';
 
   /**
    * Creates a new marker.
@@ -127,15 +127,15 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.textColor = settings.defaultStrokeColor;
     this.fontFamily = settings.defaultFontFamily;
     this.fontSize = settings.defaultCaptionFontSize;
-    this.labelText = settings.defaultCaptionText;
+    this.captionText = settings.defaultCaptionText;
 
     this.setStrokeColor = this.setStrokeColor.bind(this);
     this.setFillColor = this.setFillColor.bind(this);
     this.setStrokeWidth = this.setStrokeWidth.bind(this);
     this.setStrokeDasharray = this.setStrokeDasharray.bind(this);
     this.createVisual = this.createVisual.bind(this);
-    this.sizeLabel = this.sizeLabel.bind(this);
-    this.setLabelText = this.setLabelText.bind(this);
+    this.sizeCaption = this.sizeCaption.bind(this);
+    this.setCaptionText = this.setCaptionText.bind(this);
     this.showTextEditor = this.showTextEditor.bind(this);
     this.positionTextEditor = this.positionTextEditor.bind(this);
     this.finishTextEditing = this.finishTextEditing.bind(this);
@@ -198,8 +198,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       super.ownsTarget(el) ||
       el === this.visual ||
       el === this.frame ||
-      el === this.labelBg ||
-      el === this.labelElement
+      el === this.captionBg ||
+      el === this.captionElement
     ) {
       return true;
     } else {
@@ -214,18 +214,18 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.visual = SvgHelper.createGroup();
     this.addMarkerVisualToContainer(this.visual);
 
-    this.labelBg = SvgHelper.createRect(1, 1, [['fill', this.fillColor]]);
-    this.visual.appendChild(this.labelBg);
+    this.captionBg = SvgHelper.createRect(1, 1, [['fill', this.fillColor]]);
+    this.visual.appendChild(this.captionBg);
 
-    this.labelElement = SvgHelper.createText([
+    this.captionElement = SvgHelper.createText([
       ['fill', this.textColor],
       ['font-family', this.fontFamily],
     ]);
-    this.labelElement.style.fontSize = this.fontSize;
-    this.labelElement.style.textAnchor = 'start';
-    this.labelElement.style.dominantBaseline = 'text-before-edge';
-    this.labelElement.textContent = this.labelText;
-    this.visual.appendChild(this.labelElement);
+    this.captionElement.style.fontSize = this.fontSize;
+    this.captionElement.style.textAnchor = 'start';
+    this.captionElement.style.dominantBaseline = 'text-before-edge';
+    this.captionElement.textContent = this.captionText;
+    this.visual.appendChild(this.captionElement);
 
     this.frame = SvgHelper.createRect(this.width, this.height, [
       ['fill', 'transparent'],
@@ -235,17 +235,17 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     ]);
 
     this.visual.appendChild(this.frame);
-    this.sizeLabel();
+    this.sizeCaption();
   }
 
   /**
-   * Sets label text.
-   * @param text - new label text.
+   * Sets caption text.
+   * @param text - new caption text.
    */
-  public setLabelText(text: string): void {
-    this.labelText = text;
-    this.labelElement.textContent = this.labelText;
-    this.sizeLabel();
+  public setCaptionText(text: string): void {
+    this.captionText = text;
+    this.captionElement.textContent = this.captionText;
+    this.sizeCaption();
   }
 
   /**
@@ -294,27 +294,30 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
   }
 
   private readonly PADDING = 5;
-  private labelBoxWidth = 0;
-  private labelBoxHeight = 0;
-  protected sizeLabel(): void {
-    const textBBox = this.labelElement.getBBox();
-    if (this.labelText.trim() !== '') {
-      this.labelBoxWidth = textBBox.width + this.PADDING * 2;
-      this.labelBoxHeight = textBBox.height + this.PADDING * 2;
+  private captionBoxWidth = 0;
+  private captionBoxHeight = 0;
+  /**
+   * Adjusts caption size and location.
+   */
+  protected sizeCaption(): void {
+    const textBBox = this.captionElement.getBBox();
+    if (this.captionText.trim() !== '') {
+      this.captionBoxWidth = textBBox.width + this.PADDING * 2;
+      this.captionBoxHeight = textBBox.height + this.PADDING * 2;
     } else {
-      this.labelBoxWidth = 0;
-      this.labelBoxHeight = 0;
+      this.captionBoxWidth = 0;
+      this.captionBoxHeight = 0;
     }
 
-    SvgHelper.setAttributes(this.labelBg, [
-      ['width', this.labelBoxWidth.toString()],
-      ['height', this.labelBoxHeight.toString()],
+    SvgHelper.setAttributes(this.captionBg, [
+      ['width', this.captionBoxWidth.toString()],
+      ['height', this.captionBoxHeight.toString()],
       [
         'clip-path',
         `path('M0,0 H${this.width} V${this.height} H${-this.width} Z')`,
       ],
     ]);
-    SvgHelper.setAttributes(this.labelElement, [
+    SvgHelper.setAttributes(this.captionElement, [
       ['x', this.PADDING.toString()],
       ['y', this.PADDING.toString()],
       [
@@ -343,15 +346,15 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.textEditBox = document.createElement('input');
     this.textEditBox.style.position = 'absolute';
     this.textEditBox.style.width = `${this.width}px`;
-    if (this.labelBoxHeight > 0) {
-      this.textEditBox.style.height = `${this.labelBoxHeight}px`;
+    if (this.captionBoxHeight > 0) {
+      this.textEditBox.style.height = `${this.captionBoxHeight}px`;
     }
     this.textEditBox.style.fontSize = this.fontSize;
     this.textEditBox.style.fontFamily = this.fontFamily;
     this.textEditBox.style.backgroundColor = this.fillColor;
     this.textEditBox.style.color = this.textColor;
     this.textEditBox.style.borderWidth = '0';
-    this.textEditBox.setAttribute('value', this.labelText);
+    this.textEditBox.setAttribute('value', this.captionText);
     this.textEditBox.select();
 
     this.textEditDiv.appendChild(this.textEditBox);
@@ -395,7 +398,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
   }
 
   private finishTextEditing(text: string) {
-    this.setLabelText(text.trim());
+    this.setCaptionText(text.trim());
     this.overlayContainer.innerHTML = '';
     this.stateChanged();
   }
@@ -405,14 +408,14 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
    * @param font - new font family.
    */
   protected setFont(font: string): void {
-    if (this.labelElement) {
-      SvgHelper.setAttributes(this.labelElement, [['font-family', font]]);
+    if (this.captionElement) {
+      SvgHelper.setAttributes(this.captionElement, [['font-family', font]]);
     }
     this.fontFamily = font;
     if (this.textEditBox) {
       this.textEditBox.style.fontFamily = this.fontFamily;
     }
-    this.sizeLabel();
+    this.sizeCaption();
     this.stateChanged();
   }
 
@@ -421,8 +424,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
    * @param color - new text color.
    */
   protected setTextColor(color: string): void {
-    if (this.labelElement) {
-      SvgHelper.setAttributes(this.labelElement, [['fill', color]]);
+    if (this.captionElement) {
+      SvgHelper.setAttributes(this.captionElement, [['fill', color]]);
     }
     this.textColor = color;
     if (this.textEditBox) {
@@ -440,7 +443,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       ['width', this.width.toString()],
       ['height', this.height.toString()],
     ]);
-    this.sizeLabel();
+    this.sizeCaption();
   }
 
   /**
@@ -487,8 +490,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
    */
   protected setFillColor(color: string): void {
     this.fillColor = color;
-    if (this.labelBg) {
-      SvgHelper.setAttributes(this.labelBg, [['fill', this.fillColor]]);
+    if (this.captionBg) {
+      SvgHelper.setAttributes(this.captionBg, [['fill', this.fillColor]]);
     }
     this.fillColorChanged(color);
     this.stateChanged();
@@ -548,7 +551,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
         textColor: this.textColor,
         fontFamily: this.fontFamily,
         fontSize: this.fontSize,
-        labelText: this.labelText
+        captionText: this.captionText
       },
       super.getState()
     );
@@ -570,7 +573,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.strokeDasharray = frState.strokeDasharray;
     this.textColor = frState.textColor;
     this.fontFamily = frState.fontFamily;
-    this.labelText = frState.labelText;
+    this.captionText = frState.captionText;
     this.fontSize = frState.fontSize;
 
     this.createVisual();
