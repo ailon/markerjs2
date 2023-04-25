@@ -125,18 +125,18 @@ export class ArrowMarker extends LineMarker {
         ['fill', this.strokeColor]
       ]);
 
+      let lineAngle1 = 0;
       if (Math.abs(this.x1 - this.x2) > 0.1) {
-        const lineAngle1 =
+        lineAngle1 =
           (Math.atan((this.y2 - this.y1) / (this.x2 - this.x1)) * 180) / Math.PI + 90 * Math.sign(this.x1 - this.x2);
-
-        const a1transform = this.arrow1.transform.baseVal.getItem(0);
-        a1transform.setRotate(lineAngle1, this.x1, this.y1);
-        this.arrow1.transform.baseVal.replaceItem(a1transform, 0);
-
-        const a2transform = this.arrow2.transform.baseVal.getItem(0);
-        a2transform.setRotate(lineAngle1 + 180, this.x2, this.y2);
-        this.arrow2.transform.baseVal.replaceItem(a2transform, 0);
       }
+      const a1transform = this.arrow1.transform.baseVal.getItem(0);
+      a1transform.setRotate(lineAngle1, this.x1, this.y1);
+      this.arrow1.transform.baseVal.replaceItem(a1transform, 0);
+
+      const a2transform = this.arrow2.transform.baseVal.getItem(0);
+      a2transform.setRotate(lineAngle1 + 180, this.x2, this.y2);
+      this.arrow2.transform.baseVal.replaceItem(a2transform, 0);
     }
   }
 
