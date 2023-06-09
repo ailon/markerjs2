@@ -541,6 +541,10 @@ export class MarkerArea {
         if (this.coverDiv) {
           this.closeUI();
         }
+
+        // remove all markers
+        this.markers.splice(0);
+        
         if (this.targetObserver) {
           this.targetObserver.unobserve(this.target);
           this.targetObserver.unobserve(this.editorCanvas);
