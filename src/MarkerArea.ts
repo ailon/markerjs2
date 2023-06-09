@@ -543,7 +543,7 @@ export class MarkerArea {
         }
 
         // remove all markers
-        this.markers.splice(0);
+        this.clear(false);
         
         if (this.targetObserver) {
           this.targetObserver.unobserve(this.target);
@@ -1208,16 +1208,18 @@ export class MarkerArea {
    *
    * @since 2.15.0
    */
-  public clear(): void {
+  public clear(withEvents = true): void {
     let cancel = false;
     if (this.markers.length > 0) {
-      this.eventListeners['markerbeforedelete'].forEach((listener) => {
-        const ev = new MarkerEvent(this, undefined, true);
-        listener(ev);
-        if (ev.defaultPrevented) {
-          cancel = true;
-        }
-      });
+      if (withEvents) {
+        this.eventListeners['markerbeforedelete'].forEach((listener) => {
+          const ev = new MarkerEvent(this, undefined, true);
+          listener(ev);
+          if (ev.defaultPrevented) {
+            cancel = true;
+          }
+        });
+      }
       if (!cancel) {
         this.setCurrentMarker();
         for (let i = this.markers.length - 1; i >= 0; i--) {
@@ -1226,9 +1228,11 @@ export class MarkerArea {
           this._currentMarker.dispose();
           this.markerImage.removeChild(this._currentMarker.container);
           this.markers.splice(this.markers.indexOf(this._currentMarker), 1);
-          this.eventListeners['markerdelete'].forEach((listener) =>
-            listener(new MarkerEvent(this, marker))
-          );
+          if (withEvents) {
+            this.eventListeners['markerdelete'].forEach((listener) =>
+              listener(new MarkerEvent(this, marker))
+            );
+          }
         }
         this.addUndoStep();
       }
