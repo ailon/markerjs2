@@ -480,6 +480,9 @@ export class MarkerArea {
       this.styles.styleSheetRoot = Style.styleSheetRoot;
     }
 
+    // reset markers array
+    this.markers.splice(0);
+
     this.setWindowHeight();
     this.showUI();
     this.open();
@@ -541,10 +544,6 @@ export class MarkerArea {
         if (this.coverDiv) {
           this.closeUI();
         }
-
-        // remove all markers
-        this.clear(false);
-        
         if (this.targetObserver) {
           this.targetObserver.unobserve(this.target);
           this.targetObserver.unobserve(this.editorCanvas);
@@ -1087,6 +1086,8 @@ export class MarkerArea {
     }
     // @todo better cleanup
     this.targetRoot.removeChild(this.coverDiv);
+    this.coverDiv.remove();
+    this.coverDiv = null;
   }
 
   private removeMarker(marker: MarkerBase) {
@@ -1208,18 +1209,16 @@ export class MarkerArea {
    *
    * @since 2.15.0
    */
-  public clear(withEvents = true): void {
+  public clear(): void {
     let cancel = false;
     if (this.markers.length > 0) {
-      if (withEvents) {
-        this.eventListeners['markerbeforedelete'].forEach((listener) => {
-          const ev = new MarkerEvent(this, undefined, true);
-          listener(ev);
-          if (ev.defaultPrevented) {
-            cancel = true;
-          }
-        });
-      }
+      this.eventListeners['markerbeforedelete'].forEach((listener) => {
+        const ev = new MarkerEvent(this, undefined, true);
+        listener(ev);
+        if (ev.defaultPrevented) {
+          cancel = true;
+        }
+      });
       if (!cancel) {
         this.setCurrentMarker();
         for (let i = this.markers.length - 1; i >= 0; i--) {
@@ -1228,11 +1227,9 @@ export class MarkerArea {
           this._currentMarker.dispose();
           this.markerImage.removeChild(this._currentMarker.container);
           this.markers.splice(this.markers.indexOf(this._currentMarker), 1);
-          if (withEvents) {
-            this.eventListeners['markerdelete'].forEach((listener) =>
-              listener(new MarkerEvent(this, marker))
-            );
-          }
+          this.eventListeners['markerdelete'].forEach((listener) =>
+            listener(new MarkerEvent(this, marker))
+          );
         }
         this.addUndoStep();
       }

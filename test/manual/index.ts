@@ -25,9 +25,9 @@ export class Experiments {
 
       this.markerArea1.addRenderEventListener(this.renderResult);
       //this.markerArea1.addCloseEventListener(() => alert('close'));
-      this.markerArea1.addEventListener('close', (event) => {
-        event.markerArea.clear();
-      });
+      // this.markerArea1.addEventListener('close', (event) => {
+      //   event.markerArea.clear();
+      // });
       // this.markerArea1.addEventListener('beforeclose', (event) => {
       //   if (!confirm('close?')) {
       //     event.preventDefault();
