@@ -364,6 +364,7 @@ export class MarkerArea {
             this.contentDiv.clientHeight) /
           2,
       });
+      this.resize(this.editorCanvas.clientWidth, this.editorCanvas.clientHeight)
     }
   }
 
@@ -711,13 +712,9 @@ export class MarkerArea {
 
     this.overlayContainer.style.width = `${this.imageWidth}px`;
     this.overlayContainer.style.height = `${this.imageHeight}px`;
+    this.setTopLeft();
+    this.positionMarkerImage();
 
-    if (this.settings.displayMode !== 'popup') {
-      this.coverDiv.style.width = `${this.imageWidth.toString()}px`;
-    } else {
-      this.setTopLeft();
-      this.positionMarkerImage();
-    }
 
     if (this.toolbar !== undefined) {
       this.toolbar.adjustLayout();
