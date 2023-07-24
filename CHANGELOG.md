@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.29.5] - 2023-07-24
+### Added
+- `title` and `aria-label` attributes on toolbar buttons
+
 ## [2.29.4] - 2023-06-12
 ### Fixed
 - (third attempt) markers not removed from instance when closing and reopening the same MarkerArea.
@@ -453,6 +457,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.29.5]: https://github.com/ailon/markerjs2/releases/tag/v2.29.5
 [2.29.4]: https://github.com/ailon/markerjs2/releases/tag/v2.29.4
 [2.29.3]: https://github.com/ailon/markerjs2/releases/tag/v2.29.3
 [2.29.2]: https://github.com/ailon/markerjs2/releases/tag/v2.29.2
