@@ -109,28 +109,28 @@ export class Toolbar {
     actionButtonBlock.style.whiteSpace = 'nowrap';
     this.uiContainer.appendChild(actionButtonBlock);
 
-    this.addActionButton(actionButtonBlock, CursorIcon, 'select');
-    this.addActionButton(actionButtonBlock, DeleteIcon, 'delete');
+    this.addActionButton(actionButtonBlock, CursorIcon, 'select', 'Select mode');
+    this.addActionButton(actionButtonBlock, DeleteIcon, 'delete', 'Delete marker');
     if (this.uiStyleSettings.clearButtonVisible) {
-      this.addActionButton(actionButtonBlock, ClearIcon, 'clear');
+      this.addActionButton(actionButtonBlock, ClearIcon, 'clear', 'Delete all markers');
     }
     if (this.uiStyleSettings.undoButtonVisible) {
-      this.addActionButton(actionButtonBlock, UndoIcon, 'undo');
+      this.addActionButton(actionButtonBlock, UndoIcon, 'undo', 'Undo');
     }
     if (this.uiStyleSettings.redoButtonVisible) {
-      this.addActionButton(actionButtonBlock, RedoIcon, 'redo');
+      this.addActionButton(actionButtonBlock, RedoIcon, 'redo', 'Redo');
     }
     if (this.uiStyleSettings.zoomButtonVisible) {
-      this.addActionButton(actionButtonBlock, ZoomIcon, 'zoom');
+      this.addActionButton(actionButtonBlock, ZoomIcon, 'zoom', 'Zoom in');
     }
     if (
       this.uiStyleSettings.zoomButtonVisible &&
       this.uiStyleSettings.zoomOutButtonVisible
     ) {
-      this.addActionButton(actionButtonBlock, ZoomOutIcon, 'zoom-out');
+      this.addActionButton(actionButtonBlock, ZoomOutIcon, 'zoom-out', 'Zoom out');
     }
     if (this.uiStyleSettings.notesButtonVisible) {
-      this.addActionButton(actionButtonBlock, NotesIcon, 'notes');
+      this.addActionButton(actionButtonBlock, NotesIcon, 'notes', 'Notes');
     }
 
     this.markerButtonBlock = document.createElement('div');
@@ -155,6 +155,8 @@ export class Toolbar {
         const buttonContainer = document.createElement('div');
         buttonContainer.className = `${this.toolbarButtonStyleClass.name}`;
         buttonContainer.setAttribute('data-type-name', mi.typeName);
+        buttonContainer.setAttribute('aria-label', mi.title);
+        buttonContainer.setAttribute('title', mi.title);
         //  ${
         //   this.uiStyleSettings.toolbarButtonStyleColorsClassName ?
         //   this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
@@ -184,8 +186,8 @@ export class Toolbar {
       this.uiStyleSettings.resultButtonBlockVisible !== false ? '' : 'none';
     this.uiContainer.appendChild(resultButtonBlock);
 
-    this.addActionButton(resultButtonBlock, CheckIcon, 'render');
-    this.addActionButton(resultButtonBlock, CloseIcon, 'close');
+    this.addActionButton(resultButtonBlock, CheckIcon, 'render', 'Save and close');
+    this.addActionButton(resultButtonBlock, CloseIcon, 'close', 'Close');
 
     this.markerjsContainer.appendChild(this.uiContainer);
     this.setSelectMode();
@@ -311,7 +313,8 @@ export class Toolbar {
   private addActionButton(
     container: HTMLDivElement,
     icon: string,
-    value: string
+    value: string,
+    title: string
   ) {
     const actionButton = document.createElement('div');
     actionButton.className = `${this.toolbarButtonStyleClass.name}`;
@@ -320,6 +323,8 @@ export class Toolbar {
     //   this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
     actionButton.innerHTML = icon;
     actionButton.setAttribute('data-action', value);
+    actionButton.title = title;
+    actionButton.setAttribute('aria-label', title);
     actionButton.addEventListener('click', () => {
       this.actionToolbarButtonClicked(actionButton, value);
     });
