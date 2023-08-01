@@ -1,131 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>marker.js 2 manual testing</title>
-  <script>
-    let experiments;
-    document.addEventListener("DOMContentLoaded", function () {
-      experiments = new markerjs2.Experiments();
-    });    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>marker.js 2 manual testing</title>
+    <script>
+      let experiments;
+      document.addEventListener('DOMContentLoaded', function () {
+        experiments = new markerjs2.Experiments();
+      });
 
-    // class ComponentImage extends HTMLElement {
-    //   constructor() {
-    //     super();
-    //     this.attachShadow({mode: 'open'})
-    //   }
-    //   connectedCallback() {
-    //     const img = document.createElement('img');
-    //     img.src = 'images/landscape.jpg';
-    //     img.style.maxWidth = '50%';
-    //     img.className = 'img';
-    //     img.addEventListener('click', () => this.showMarkerArea(img));
-    //     this.shadowRoot.appendChild(img);
-    //   }
-    //   showMarkerArea(target) {
-    //     const markerArea = new markerjs2.MarkerArea(target);
-    //     markerArea.targetRoot = this.shadowRoot;
-    //     markerjs2.Style.styleSheetRoot = this.shadowRoot;
-    //     markerArea.show();
-    //   }
-    // }
+      // class ComponentImage extends HTMLElement {
+      //   constructor() {
+      //     super();
+      //     this.attachShadow({mode: 'open'})
+      //   }
+      //   connectedCallback() {
+      //     const img = document.createElement('img');
+      //     img.src = 'images/landscape.jpg';
+      //     img.style.maxWidth = '50%';
+      //     img.className = 'img';
+      //     img.addEventListener('click', () => this.showMarkerArea(img));
+      //     this.shadowRoot.appendChild(img);
+      //   }
+      //   showMarkerArea(target) {
+      //     const markerArea = new markerjs2.MarkerArea(target);
+      //     markerArea.targetRoot = this.shadowRoot;
+      //     markerjs2.Style.styleSheetRoot = this.shadowRoot;
+      //     markerArea.show();
+      //   }
+      // }
 
-    // customElements.define('component-image', ComponentImage);
-  </script>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      background-color: blue;
-      font-size: 40px;
-    }
-    /* #app {
+      // customElements.define('component-image', ComponentImage);
+    </script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background-color: blue;
+        font-size: 40px;
+      }
+      /* #app {
       background-color: aqua;
       padding: 19px;
     } */
-    .toolbar {
-      background-color:white;
-    }
-    .toolbar-button {
-      background-color:beige;
-      fill: pink;
-    }
-    .toolbar-button:hover {
-      background-color: burlywood;
-      fill: beige;
-    }
-    .toolbar-active-button {
-      background-color: antiquewhite;
-    }
+      .toolbar {
+        background-color: white;
+      }
+      .toolbar-button {
+        background-color: beige;
+        fill: pink;
+      }
+      .toolbar-button:hover {
+        background-color: burlywood;
+        fill: beige;
+      }
+      .toolbar-active-button {
+        background-color: antiquewhite;
+      }
 
-    .toolbox {
-      background-color:white;
-    }
-    .toolbox-button {
-      background-color:beige;
-      fill: pink;
-    }
-    .toolbox-button:hover {
-      background-color: burlywood;
-      fill: beige;
-    }
-    .toolbox-active-button {
-      background-color: antiquewhite;
-      fill: beige;
-    }
-    .toolbox-panel-row {
-      background-color: rgba(255, 200, 255, 0.8);
-    }
-    .notes-area {
-      color: red;
-      background-color: rgba(255, 200, 255, 0.8);
-      font-family: 'Comic Sans MS', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-      font-size: x-large;
-    }
-  </style>
-</head>
-<body>
-  <div id="app" style="display: flex; flex-direction: column; align-items: center;">
-    <img src="images/landscape.jpg" class="img" style="max-width: 50%;" id="testImage1" onclick="experiments.openMarkerArea(document.getElementById('testImage1'))" />
-    <!-- <canvas 
+      .toolbox {
+        background-color: white;
+      }
+      .toolbox-button {
+        background-color: beige;
+        fill: pink;
+      }
+      .toolbox-button:hover {
+        background-color: burlywood;
+        fill: beige;
+      }
+      .toolbox-active-button {
+        background-color: antiquewhite;
+        fill: beige;
+      }
+      .toolbox-panel-row {
+        background-color: rgba(255, 200, 255, 0.8);
+      }
+      .notes-area {
+        color: red;
+        background-color: rgba(255, 200, 255, 0.8);
+        font-family: 'Comic Sans MS', 'Franklin Gothic Medium', 'Arial Narrow',
+          Arial, sans-serif;
+        font-size: x-large;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="app"
+      style="display: flex; flex-direction: column; align-items: center"
+    >
+      <img
+        src="images/landscape.jpg"
+        class="img"
+        style="max-width: 50%"
+        id="testImage1"
+        onclick="experiments.openMarkerArea(document.getElementById('testImage1'))"
+      />
+      <!-- <canvas 
       id="targetElement1"
       style="max-width: 50%; height: 400px; border: 1px solid green; position: absolute; top: 18px; left: 40%;"
       onclick="experiments.openMarkerArea(document.getElementById('targetElement1'))"></canvas> -->
-    <!-- <div 
+      <!-- <div 
       id="targetElement1"
       style="width: 50%; height: 400px; border: 1px solid magenta; position: absolute; top: 18px; left: 40%;"
       onclick="experiments.openMarkerArea(document.getElementById('targetElement1'))"></div> -->
-    <br />
-    <select onchange="experiments.setDisplayMode(this.value)">
-      <option value="inline">inline</option>
-      <option value="popup">popup</option>
-    </select>
+      <br />
+      <!-- <div
+        id="consoleLog"
+        style="
+          width: 800px;
+          height: 400px;
+          border: 1px solid white;
+          overflow-y: scroll;
+          font-family: 'Courier New', Courier, monospace;
+          font-size: 1rem;
+          background-color: white;
+          color: black;
+        "
+      ></div> -->
+      <select onchange="experiments.setDisplayMode(this.value)">
+        <option value="inline">inline</option>
+        <option value="popup">popup</option>
+      </select>
 
-    <br />
-    <input id="testInput" type="text" />
+      <br />
+      <input id="testInput" type="text" />
 
-    <br />
-    <img id="resultImage1" onclick="experiments.openMarkerArea(this)"/>
+      <br />
+      <img id="resultImage1" onclick="experiments.openMarkerArea(this)" />
 
-    <button onclick="experiments.closeMarkerArea()">close</button>
+      <button onclick="experiments.closeMarkerArea()">close</button>
 
-    <div style="margin-top: 30px;">
-      <button onclick="experiments.openNoUI(document.getElementById('testImage1'))">open UIless</button>
-      <button onclick="experiments.addFrameMarker()">add frame</button>
-      <button onclick="experiments.deleteCurrentMarker()">delete current marker</button>
-      <button onclick="experiments.renderAndClose()">render</button>
-      <button onclick="experiments.renderState()">render state</button>
-      <button onclick="experiments.getState()">get state</button>
-      <button onclick="experiments.restoreState()">restore state</button>
-      <button onclick="experiments.undo()">undo</button>
-      <button onclick="experiments.redo()">redo</button>
+      <div style="margin-top: 30px">
+        <button
+          onclick="experiments.openNoUI(document.getElementById('testImage1'))"
+        >
+          open UIless
+        </button>
+        <button onclick="experiments.addFrameMarker()">add frame</button>
+        <button onclick="experiments.deleteCurrentMarker()">
+          delete current marker
+        </button>
+        <button onclick="experiments.renderAndClose()">render</button>
+        <button onclick="experiments.renderState()">render state</button>
+        <button onclick="experiments.getState()">get state</button>
+        <button onclick="experiments.restoreState()">restore state</button>
+        <button onclick="experiments.undo()">undo</button>
+        <button onclick="experiments.redo()">redo</button>
+      </div>
+
+      <canvas id="resultCanvas" style="border: 1px solid red"></canvas>
+
+      <!-- <component-image></component-image> -->
     </div>
-
-    <canvas id="resultCanvas" style="border: 1px solid red;"></canvas>
-
-    <!-- <component-image></component-image> -->
-  </div>
-</body>
+  </body>
 </html>

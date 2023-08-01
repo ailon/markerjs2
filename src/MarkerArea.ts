@@ -837,6 +837,10 @@ export class MarkerArea {
 
   private attachEvents() {
     this.markerImage.addEventListener('pointerdown', this.onPointerDown);
+    // workaround to prevent a bug with Apple Pencil
+    // https://bugs.webkit.org/show_bug.cgi?id=217430
+    this.markerImage.addEventListener('touchmove', ev => ev.preventDefault());
+    
     this.markerImage.addEventListener('dblclick', this.onDblClick);
     this.attachWindowEvents();
   }

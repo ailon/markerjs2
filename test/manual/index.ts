@@ -76,7 +76,7 @@ export class Experiments {
       
       // this.markerArea1.settings.defaultStrokeWidth = 10;
 
-      this.markerArea1.settings.newFreehandMarkerOnPointerUp = true;
+      this.markerArea1.settings.newFreehandMarkerOnPointerUp = false;
 
       // this.markerArea1.settings.disableRotation = true;
 
