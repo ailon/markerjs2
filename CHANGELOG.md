@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.29.7] - 2023-08-16
+### Fixed
+- in popup mode some property panels would extend beyond the UI boundaries
+
 ## [2.29.6] - 2023-08-01
 ### Fixed
 - missing strokes with Apple Pencil
@@ -461,6 +465,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.29.7]: https://github.com/ailon/markerjs2/releases/tag/v2.29.7
 [2.29.6]: https://github.com/ailon/markerjs2/releases/tag/v2.29.6
 [2.29.5]: https://github.com/ailon/markerjs2/releases/tag/v2.29.5
 [2.29.4]: https://github.com/ailon/markerjs2/releases/tag/v2.29.4
