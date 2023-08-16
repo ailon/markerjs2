@@ -1004,6 +1004,9 @@ export class MarkerArea {
       this.settings.displayMode === 'popup'
         ? `${this.settings.popupMargin}px`
         : '0px';
+    if (this.settings.displayMode === 'popup') {
+      this.uiDiv.style.maxWidth = `calc(100vw - ${this.settings.popupMargin * 2}px`;
+    }
     this.uiDiv.style.border = '0px';
     // this.uiDiv.style.overflow = 'hidden';
     //this.uiDiv.style.backgroundColor = '#ffffff';
