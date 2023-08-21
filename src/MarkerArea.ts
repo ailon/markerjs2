@@ -1692,9 +1692,11 @@ export class MarkerArea {
 
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
+    const scaleX = clientRect.width / this.imageWidth / this.zoomLevel;
+    const scaleY = clientRect.height / this.imageHeight / this.zoomLevel;
     return {
-      x: (x - clientRect.left) / this.zoomLevel,
-      y: (y - clientRect.top) / this.zoomLevel,
+      x: (x - clientRect.left) / this.zoomLevel / scaleX,
+      y: (y - clientRect.top) / this.zoomLevel / scaleY,
     };
   }
 
