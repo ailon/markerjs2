@@ -1708,8 +1708,10 @@ export class MarkerArea {
     this.setTopLeft();
     switch (this.settings.displayMode) {
       case 'inline': {
+        const rects = this.target.getClientRects();
         const coverTop =
-          this.target.getClientRects().item(0).y > this.styles.settings.toolbarHeight
+          rects.length > 0 && rects.item(0) &&
+          (rects.item(0).y > this.styles.settings.toolbarHeight)
             ? this.target.offsetTop - this.styles.settings.toolbarHeight
             : 0;
         this.coverDiv.style.top = `${coverTop}px`;
