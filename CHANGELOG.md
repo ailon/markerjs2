@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.29.9] - 2023-08-22
+### Fixed
+- null reference exceptions on resizing in some cases
+
 ## [2.29.8] - 2023-08-21
 ### Fixed
 - incorrect placement of markers when used inside a scaled parent element
@@ -469,6 +473,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.29.9]: https://github.com/ailon/markerjs2/releases/tag/v2.29.9
 [2.29.8]: https://github.com/ailon/markerjs2/releases/tag/v2.29.8
 [2.29.7]: https://github.com/ailon/markerjs2/releases/tag/v2.29.7
 [2.29.6]: https://github.com/ailon/markerjs2/releases/tag/v2.29.6
