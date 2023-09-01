@@ -1066,7 +1066,8 @@ export class MarkerArea {
       this.target instanceof HTMLImageElement
         ? document.createElement('img')
         : document.createElement('canvas');
-    if (this.settings.uiOffsetTop === undefined 
+    if (this.settings.displayMode === 'inline' 
+      && this.settings.uiOffsetTop === undefined 
       && this.target.offsetTop < this.styles.settings.toolbarHeight) {
       this.editingTarget.style.marginTop = `${
         this.target.offsetTop - this.styles.settings.toolbarHeight
