@@ -285,11 +285,12 @@ export class TextMarker extends RectangularBoxMarkerBase {
   }
 
   private getTextPosition(scale: number): IPoint {
+    const xSign = window.getComputedStyle(this.textElement).direction === 'rtl' ? 1 : -1;
     const textSize = this.textElement.getBBox();
     let x = 0;
     let y = 0;
     if (textSize.width > 0 && textSize.height > 0) {
-      x = (this.width - textSize.width * scale) / 2;
+      x = (this.width + xSign * textSize.width * scale) / 2;
       y = this.height / 2 - (textSize.height * scale) / 2;
     }
     return { x: x, y: y };
