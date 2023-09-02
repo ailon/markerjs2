@@ -220,7 +220,11 @@ export class TextMarker extends RectangularBoxMarkerBase {
           lines.forEach(line => {
             let reminderLine = line;
             while (reminderLine.length > maxLineLength) {
-              const maxEnd = reminderLine.lastIndexOf(' ', maxLineLength);
+              let maxEnd = reminderLine.lastIndexOf(' ', maxLineLength);
+              if (maxEnd < 0) {
+                // if the first word is longer than max, at least wrap after it
+                maxEnd = reminderLine.indexOf(' ');
+              }
               if (maxEnd > 0) {
                 processedLines.push(reminderLine.substring(0, maxEnd));
                 reminderLine = reminderLine.substring(maxEnd).trim();
