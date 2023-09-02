@@ -400,21 +400,24 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.textEditor.contentEditable = 'true';
     this.textEditor.style.color = this.color;
     this.textEditor.style.whiteSpace = 'pre';
+    //this.textEditor.style.outline = 'none';
     this.positionTextEditor();
     this.textEditor.addEventListener('pointerup', (ev) => {
       ev.stopPropagation();
     });
-    this.textEditor.addEventListener('input', () => {
-      let fontSize = Number.parseFloat(this.textEditor.style.fontSize);
-      while (
-        this.textEditor.clientWidth >=
-          Number.parseInt(this.textEditor.style.maxWidth) &&
-        fontSize > 0.9
-      ) {
-        fontSize -= 0.1;
-        this.textEditor.style.fontSize = `${Math.max(fontSize, 0.9)}em`;
-      }
-    });
+    if (!this.globalSettings.wrapText) {
+      this.textEditor.addEventListener('input', () => {
+        let fontSize = Number.parseFloat(this.textEditor.style.fontSize);
+        while (
+          this.textEditor.clientWidth >=
+            Number.parseInt(this.textEditor.style.maxWidth) &&
+          fontSize > 0.9
+        ) {
+          fontSize -= 0.1;
+          this.textEditor.style.fontSize = `${Math.max(fontSize, 0.9)}em`;
+        }
+      });
+    }
     this.textEditor.addEventListener('keyup', (ev) => {
       ev.cancelBubble = true;
     });
@@ -447,28 +450,37 @@ export class TextMarker extends RectangularBoxMarkerBase {
       if (this.textEditor === undefined) {
         this.showTextEditor();
       } else {
-        this.textElement.style.display = '';
-        const textScale = this.getTextScale();
-        // const textPosition = this.getTextPosition(textScale);
-        const rPosition = this.rotatePoint({
-          x: this.left + this.width / 2,
-          y: this.top + this.height / 2,
-        });
-        const textSize = this.textElement.getBBox();
-        const rWH = {
-          x: textSize.width * textScale,
-          y: textSize.height * textScale,
-        };
-        rPosition.x -= rWH.x / 2;
-        rPosition.y -= rWH.y / 2;
+        if (this.globalSettings.wrapText) {
+          this.textEditor.style.left = `${this.left + this.padding}px`;
+          this.textEditor.style.top = `${this.top + this.padding}px`;
+          this.textEditor.style.width = `${this.width - this.padding * 2}px`;
+          this.textEditor.style.height = `${this.height - this.padding * 2}px`;
+          this.textEditor.style.maxHeight = this.textEditor.style.height;
+          this.textEditor.style.whiteSpace = 'wrap';
+        } else {
+          this.textElement.style.display = '';
+          const textScale = this.getTextScale();
+          // const textPosition = this.getTextPosition(textScale);
+          const rPosition = this.rotatePoint({
+            x: this.left + this.width / 2,
+            y: this.top + this.height / 2,
+          });
+          const textSize = this.textElement.getBBox();
+          const rWH = {
+            x: textSize.width * textScale,
+            y: textSize.height * textScale,
+          };
+          rPosition.x -= rWH.x / 2;
+          rPosition.y -= rWH.y / 2;
 
-        this.textEditor.style.top = `${rPosition.y}px`;
-        this.textEditor.style.left = `${rPosition.x}px`;
-        this.textEditor.style.maxWidth = `${
-          this.overlayContainer.offsetWidth - rPosition.x
-        }px`;
-        this.textEditor.style.fontSize = `${Math.max(16 * textScale, 12)}px`;
-        this.textElement.style.display = 'none';
+          this.textEditor.style.top = `${rPosition.y}px`;
+          this.textEditor.style.left = `${rPosition.x}px`;
+          this.textEditor.style.maxWidth = `${
+            this.overlayContainer.offsetWidth - rPosition.x
+          }px`;
+          this.textEditor.style.fontSize = `${Math.max(16 * textScale, 12)}px`;
+          this.textElement.style.display = 'none';
+        }
       }
     }
   }
