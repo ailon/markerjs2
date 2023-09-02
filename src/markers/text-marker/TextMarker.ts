@@ -98,6 +98,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.showTextEditor = this.showTextEditor.bind(this);
     this.setSize = this.setSize.bind(this);
     this.positionTextEditor = this.positionTextEditor.bind(this);
+    this.wrapText = this.wrapText.bind(this);
 
     this.colorPanel = new ColorPickerPanel(
       'Color',
@@ -183,6 +184,66 @@ export class TextMarker extends RectangularBoxMarkerBase {
     }
   }
 
+  private wrapText(): string {
+    function getTextAspectRatio(textLines: string[]): number {
+      const charsLinesAspectRatio = 0.35;
+
+      let longestLineChars = textLines[0].length;
+      textLines.forEach(line => {
+        if (line.length > longestLineChars) {
+          longestLineChars = line.length;
+        }
+      });
+
+      return longestLineChars * charsLinesAspectRatio / textLines.length;
+    }
+
+    if (this.text !== '') {
+      const lines = this.text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
+      const boxAspectRatio = this.width * 1.0 / this.height;
+      let processedLines = new Array<string>(...lines);
+      
+      let textAspectRatio = getTextAspectRatio(processedLines);
+
+      let maxLineLength = Number.MAX_VALUE;
+      while (textAspectRatio > boxAspectRatio) {
+        let longestLine = processedLines[0];
+        processedLines.forEach(line => {
+          if (line.length > longestLine.length) {
+            longestLine = line;
+          }
+        });
+        maxLineLength = longestLine.lastIndexOf(' ', maxLineLength - 1);
+
+        if (maxLineLength > 0) {
+          processedLines = [];
+          lines.forEach(line => {
+            let reminderLine = line;
+            while (reminderLine.length > maxLineLength) {
+              const maxEnd = reminderLine.lastIndexOf(' ', maxLineLength);
+              if (maxEnd > 0) {
+                processedLines.push(reminderLine.substring(0, maxEnd));
+                reminderLine = reminderLine.substring(maxEnd).trim();
+              } else {
+                processedLines.push(reminderLine);
+                reminderLine = '';
+              }
+            }
+            processedLines.push(reminderLine);
+          });
+          textAspectRatio = getTextAspectRatio(processedLines);
+        } else {
+          // can't wrap no more
+          textAspectRatio = -1;
+        }
+      }
+
+      return processedLines.join(`\r\n`);
+    } else {
+      return this.text;
+    }
+  }
+
   private renderText() {
     const LINE_SIZE = '1.2em';
 
@@ -191,7 +252,8 @@ export class TextMarker extends RectangularBoxMarkerBase {
         this.textElement.removeChild(this.textElement.lastChild);
       }
 
-      const lines = this.text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
+      const processedText = this.globalSettings.wrapText ? this.wrapText() : this.text;
+      const lines = processedText.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
       lines.forEach((line) => {
         this.textElement.appendChild(
           SvgHelper.createTSpan(
@@ -272,7 +334,11 @@ export class TextMarker extends RectangularBoxMarkerBase {
     super.resize(point);
     this.isMoved = true;
     this.setSize();
-    this.sizeText();
+    if (this.globalSettings.wrapText) {
+      this.renderText();
+    } else {
+      this.sizeText();
+    }
   }
 
   /**

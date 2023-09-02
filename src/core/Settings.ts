@@ -160,4 +160,10 @@ export class Settings {
     * @since 2.29.0
     */
    public defaultCaptionText = 'Text';
+   /**
+    * Enable word wrapping in text markers (`TextMarker`, `CalloutMarker`)
+    * 
+    * @since 2.30.0
+    */
+   public wrapText = false;
 }
