@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.30.0] - 2023-09-04
+### Added
+- text wrapping option in text based markers. Set `settings.wrapText = true` to enable.
+
+### Fixed
+- incorrect text positioning in RTL mode
+
 ## [2.29.10] - 2023-09-01
 ### Fixed
 - `inline` mode image margin logic was applied to `popup` mode as well
@@ -477,6 +484,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.30.0]: https://github.com/ailon/markerjs2/releases/tag/v2.30.0
 [2.29.10]: https://github.com/ailon/markerjs2/releases/tag/v2.29.10
 [2.29.9]: https://github.com/ailon/markerjs2/releases/tag/v2.29.9
 [2.29.8]: https://github.com/ailon/markerjs2/releases/tag/v2.29.8
