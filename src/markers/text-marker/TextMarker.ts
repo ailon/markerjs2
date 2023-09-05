@@ -621,6 +621,10 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.createVisual();
     super.restoreState(state);
     this.setSize();
+    if (this.globalSettings.wrapText) {
+      // need a rerender post setting size for wrapping
+      this.renderText();
+    }
   }
 
   /**
