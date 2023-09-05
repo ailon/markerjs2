@@ -5,4 +5,5 @@ export interface TextMarkerState extends RectangularBoxMarkerBaseState {
   fontFamily: string;
   padding: number;
   text: string;
+  wrapText?: boolean;
 }

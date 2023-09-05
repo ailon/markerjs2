@@ -598,6 +598,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
         fontFamily: this.fontFamily,
         padding: this.padding,
         text: this.text,
+        wrapText: this.globalSettings.wrapText
       },
       super.getState()
     );
