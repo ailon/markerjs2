@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.30.1] - 2023-09-05
+### Added
+- `wrapText` to `TextMarkerState` (not used in marker.js but needed for mjs Live).
+
+### Fixed
+- `wrapText` wasn't applied when restoring state.
+
 ## [2.30.0] - 2023-09-04
 ### Added
 - text wrapping option in text based markers. Set `settings.wrapText = true` to enable.
@@ -484,6 +491,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.30.1]: https://github.com/ailon/markerjs2/releases/tag/v2.30.1
 [2.30.0]: https://github.com/ailon/markerjs2/releases/tag/v2.30.0
 [2.29.10]: https://github.com/ailon/markerjs2/releases/tag/v2.29.10
 [2.29.9]: https://github.com/ailon/markerjs2/releases/tag/v2.29.9
