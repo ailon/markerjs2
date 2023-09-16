@@ -147,6 +147,13 @@ export class Settings {
    * @since 2.28.0
    */
    public uiOffsetTop?: number;
+   
+   /**
+    * If set, the UI will be offset by the specefied number of pixels on the left.
+    * 
+    * @since 2.31.0
+    */
+   public uiOffsetLeft?: number;
 
    /**
     * Default font size for the `CaptionFrameMarker`
