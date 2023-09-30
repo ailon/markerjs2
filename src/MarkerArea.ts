@@ -967,7 +967,7 @@ export class MarkerArea {
             this.target.offsetTop > this.styles.settings.toolbarHeight
               ? this.target.offsetTop - this.styles.settings.toolbarHeight
               : 0;
-        const coverLeft = this.target.offsetLeft + this.settings.uiOffsetLeft ?? 0; 
+        const coverLeft = this.target.offsetLeft + (this.settings.uiOffsetLeft ?? 0); 
         this.coverDiv.style.top = `${coverTop}px`;
         this.coverDiv.style.left = `${coverLeft}px`;
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
