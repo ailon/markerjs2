@@ -1298,9 +1298,11 @@ export class MarkerArea {
       ) {
         // if the size changed just replace the last step with a resized one
         this.undoRedoManager.replaceLastUndoStep(currentState);
-        this.eventListeners['statechange'].forEach((listener) =>
-          listener(new MarkerAreaEvent(this))
-        );
+        // @todo was sometimes fired on zoom events in popup mode
+        // need to find the root cause before restoring statechange event here (if needed?)
+        // this.eventListeners['statechange'].forEach((listener) =>
+        //   listener(new MarkerAreaEvent(this))
+        // );
       } else {
         const beforeSteps = this.undoRedoManager.undoStepCount;
         this.undoRedoManager.addUndoStep(currentState);

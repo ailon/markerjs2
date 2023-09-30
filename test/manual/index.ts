@@ -49,7 +49,7 @@ export class Experiments {
       this.markerArea1.addEventListener('blur', () => console.log(`blured`));
 
       this.markerArea1.addEventListener('statechange', (event) => {
-        // console.log(`state change: ${event.markerArea.getState()}`);
+        console.log(`state change: ${event.markerArea.getState()}`);
         // console.log(`undo possible?: ${event.markerArea.isUndoPossible}`);
         // console.log(`redo possible?: ${event.markerArea.isRedoPossible}`);
       });
