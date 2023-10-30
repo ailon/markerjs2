@@ -981,7 +981,8 @@ export class MarkerArea {
         break;
       }
       case 'popup': {
-        this.coverDiv.style.position = 'absolute';
+        this.coverDiv.style.position = 'fixed';
+        // this.coverDiv.style.position = 'absolute';
         this.coverDiv.style.top = '0px';
         this.coverDiv.style.left = '0px';
         this.coverDiv.style.width = '100vw';
