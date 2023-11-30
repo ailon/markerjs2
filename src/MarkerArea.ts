@@ -1527,7 +1527,7 @@ export class MarkerArea {
     }
     this.addUndoStep();
     this.eventListeners['markercreate'].forEach((listener) =>
-      listener(new MarkerEvent(this, this._currentMarker))
+      listener(new MarkerEvent(this, marker))
     );
   }
 
