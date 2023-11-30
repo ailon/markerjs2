@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.31.3] - 2023-11-30
+### Fixed
+- `markercreate` event received a next (not yet finished) marker as an argument 
+in the `newFreehandMarkerOnPointerUp=true` scenario for Freehand markers.
+
 ## [2.31.2] - 2023-10-30
 ### Fixed
 - popup moves off-screen after editing text in Safari on iOS
@@ -504,6 +509,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.31.3]: https://github.com/ailon/markerjs2/releases/tag/v2.31.3
 [2.31.2]: https://github.com/ailon/markerjs2/releases/tag/v2.31.2
 [2.31.1]: https://github.com/ailon/markerjs2/releases/tag/v2.31.1
 [2.31.0]: https://github.com/ailon/markerjs2/releases/tag/v2.31.0
