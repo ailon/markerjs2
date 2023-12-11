@@ -115,6 +115,44 @@ export class Toolbox {
       )
     );
 
+    this.styles.addRule(
+      new StyleRule(
+        `.${this.toolboxPanelRowStyleClass.name} > div`,
+        `
+        scrollbar-width: thin;
+        `
+      )
+    );
+
+    this.styles.addRule(
+      new StyleRule(
+        `.${this.toolboxPanelRowStyleClass.name} > div::-webkit-scrollbar`,
+        `
+      height: 10px;
+      width: 10px;
+    `
+      )
+    );
+
+    this.styles.addRule(
+      new StyleRule(
+        `.${this.toolboxPanelRowStyleClass.name} > div::-webkit-scrollbar-track`,
+        `
+        background-color: transparent;
+        `
+      )
+    );
+
+    this.styles.addRule(
+      new StyleRule(
+        `.${this.toolboxPanelRowStyleClass.name} > div::-webkit-scrollbar-thumb`,
+        `
+        background-color: #444;
+        border-radius: 20px;
+        border: 2px solid #aaa;
+        `
+      )
+    );
   }
 
   /**

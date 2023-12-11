@@ -73,6 +73,8 @@ export class Experiments {
 
       this.markerArea1.settings.defaultColorsFollowCurrentColors = true;
 
+      this.markerArea1.settings.defaultColorSet = ['yellow', 'green','red','yellow', 'green','red','yellow', 'green','red','yellow', 'green','red','yellow', 'green','red','yellow', 'green','red',];
+
       // this.markerArea1.targetRoot = document.getElementById('app');
       // this.markerArea1.settings.uiOffsetTop = -this.markerArea1.styles.settings.toolbarHeight;
       
