@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.31.4] - 2023-12-11
+### Added
+- `role`, `aria-label`, `data-action` attributes to all toolbar and toolbox buttons
+
+### Changed
+- color picker panel behavior to scroll when all the colors don't fit
+
 ## [2.31.3] - 2023-11-30
 ### Fixed
 - `markercreate` event received a next (not yet finished) marker as an argument 
@@ -509,6 +516,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.31.4]: https://github.com/ailon/markerjs2/releases/tag/v2.31.4
 [2.31.3]: https://github.com/ailon/markerjs2/releases/tag/v2.31.3
 [2.31.2]: https://github.com/ailon/markerjs2/releases/tag/v2.31.2
 [2.31.1]: https://github.com/ailon/markerjs2/releases/tag/v2.31.1
