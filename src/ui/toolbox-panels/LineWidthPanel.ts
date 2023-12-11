@@ -32,6 +32,8 @@ export class LineWidthPanel extends ToolboxPanel {
     this.widths = widths;
     this.currentWidth = currentWidth;
 
+    this._id = 'line-width-panel';
+
     this.setCurrentWidth = this.setCurrentWidth.bind(this);
   }
 

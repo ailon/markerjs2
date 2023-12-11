@@ -32,6 +32,8 @@ export class OpacityPanel extends ToolboxPanel {
     this.opacities = opacities;
     this.currentOpacity = currentOpacity;
 
+    this._id = 'opacity-panel';
+
     this.setCurrentOpacity = this.setCurrentOpacity.bind(this);
   }
 

@@ -173,6 +173,11 @@ export class Toolbox {
           this.uiStyleSettings.toolboxButtonStyleColorsClassName ?? this.toolboxButtonStyleColorsClass.name}`;
         panelBtnDiv.innerHTML = panel.icon;
         panelBtnDiv.title = panel.title;
+        panelBtnDiv.setAttribute('role', 'button');
+        panelBtnDiv.setAttribute('aria-label', panel.title);
+        if (panel.id) {
+          panelBtnDiv.setAttribute('data-action', panel.id);
+        }
         panelBtnDiv.addEventListener('click', () => {
           this.panelButtonClick(panel);
         })

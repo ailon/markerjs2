@@ -4,6 +4,13 @@ import { IStyleSettings } from '../core/IStyleSettings';
  * Base class for all toolbox property panels.
  */
 export abstract class ToolboxPanel {
+  protected _id?: string;
+  /**
+   * Panel ID.
+   */
+  public get id(): string | undefined {
+    return this._id;
+  }
   /**
    * Panel name/title.
    */

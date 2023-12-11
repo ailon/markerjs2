@@ -32,6 +32,8 @@ export class FontFamilyPanel extends ToolboxPanel {
     this.fonts = fonts;
     this.currentFont = currentFont;
 
+    this._id = 'font-family-panel';
+
     this.setCurrentFont = this.setCurrentFont.bind(this);
   }
 

@@ -322,6 +322,7 @@ export class Toolbar {
     //   this.uiStyleSettings.toolbarButtonStyleColorsClassName ?
     //   this.uiStyleSettings.toolbarButtonStyleColorsClassName : this.toolbarButtonStyleColorsClass.name}`;
     actionButton.innerHTML = icon;
+    actionButton.setAttribute('role', 'button');
     actionButton.setAttribute('data-action', value);
     actionButton.title = title;
     actionButton.setAttribute('aria-label', title);

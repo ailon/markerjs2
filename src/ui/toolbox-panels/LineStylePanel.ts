@@ -32,6 +32,8 @@ export class LineStylePanel extends ToolboxPanel {
     this.styles = styles;
     this.currentStyle = currentStyle;
 
+    this._id = 'line-style-panel';
+
     this.setCurrentStyle = this.setCurrentStyle.bind(this);
   }
 

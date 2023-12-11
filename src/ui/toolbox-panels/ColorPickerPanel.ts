@@ -33,6 +33,8 @@ export class ColorPickerPanel extends ToolboxPanel {
     this.colors = colors;
     this.currentColor = currentColor;
 
+    this._id = 'color-picker-panel';
+
     this.setCurrentColor = this.setCurrentColor.bind(this);
     this.getColorBox = this.getColorBox.bind(this);
   }
