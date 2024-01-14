@@ -187,7 +187,7 @@ off-screen image.
 
 ## [2.18.0] - 2022-01-13
 ### Added
-- `resultButtonBlockVisible` setting determining if render (ok) and close buttons are visible (defauts to true)
+- `resultButtonBlockVisible` setting determining if render (ok) and close buttons are visible (defaults to true)
 
 ### Fixed
 - pasting rich text resulted in inconsistent results (now converts to plain text on paste)
@@ -218,7 +218,7 @@ off-screen image.
 
 ## [2.16.0] - 2021-10-27
 ### Added
-- new and expanded event system with events for all kinds of MarkerArea and individual marker lifecycel events.
+- new and expanded event system with events for all kinds of MarkerArea and individual marker lifecycle events.
 - `typeName` instance property on markers
 - `isSelected` marker property returning true if marker is currently selected
 
@@ -260,7 +260,7 @@ off-screen image.
 
 ## [2.11.0] - 2021-08-04
 ### Added
-- CurveMarker - quadratic bezier curve marker support.
+- CurveMarker - quadratic Bézier curve marker support.
 
 ## [2.10.0] - 2021-07-27
 ### Added
@@ -274,7 +274,7 @@ off-screen image.
 - optional `deselectCurrentMarker` parameter to `getState()` - when true deselects current marker before getting the state.
 
 ### Changed
-- `setCurrentMarker()` to public so markers can be [de]selected programatically
+- `setCurrentMarker()` to public so markers can be [de]selected programmatically
 
 ### Fixed
 - Uncaught TypeError exception when restoring TextMarker in edit state
@@ -392,7 +392,7 @@ of the whole page (and other events) are handled by the browser as expected).
 - white toolbar/toolbox corners in inline mode.
 - in popup mode when content didn't fit into window toolbars were cut.
 - popup sizing issues in Safari.
-- when resizing marker area was switchted to select mode but toolbar wasn't.
+- when resizing marker area was switched to select mode but toolbar wasn't.
 - momentary flicker when rendering with `renderAtNaturalSize`.
 - free-hand markers weren't rendered in Safari on the first try.
 
@@ -478,12 +478,12 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Fixed
 - Toolbox active button icon style wasn't set in default theme.
 - Delete button is now context sensitive (disabled when no marker is selected).
-- Rotated and moved renctangle-based marker positions were off on state restore.
+- Rotated and moved rectangle-based marker positions were off on state restore.
 - Removed debug messages.
 
 ## [2.0.0-beta.1] - 2020-12-08
 ### Added
-- toolbar styling customizaiton classes.
+- toolbar styling customization classes.
 - property to manage available marker types (`availableMarkerTypes`).
 
 ### Fixed
@@ -499,7 +499,7 @@ of the whole page (and other events) are handled by the browser as expected).
 
 ### Fixed
 - Callout tip color wasn't changed together with the background color.
-- Freehand marker wasn't "commited" unless explicitly switched to Select tool.
+- Freehand marker wasn't "committed" unless explicitly switched to Select tool.
 - Internal fixes.
 
 ## [2.0.0-alpha.2] - 2020-11-20

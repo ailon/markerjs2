@@ -155,8 +155,8 @@ export class TextMarker extends RectangularBoxMarkerBase {
       ['x', '0'],
       ['y', '0'],
     ]);
-    this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // translate transorm
-    this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transorm
+    this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // translate transform
+    this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transform
 
     this.visual.appendChild(this.textElement);
 
