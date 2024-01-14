@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.31.5] - 2024-01-14
+### Changed
+- change how toolbox panel ids are set to enable unique ids when same panel is used multiple times (eg. color picker)
+
 ## [2.31.4] - 2023-12-11
 ### Added
 - `role`, `aria-label`, `data-action` attributes to all toolbar and toolbox buttons
@@ -516,6 +520,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.31.5]: https://github.com/ailon/markerjs2/releases/tag/v2.31.5
 [2.31.4]: https://github.com/ailon/markerjs2/releases/tag/v2.31.4
 [2.31.3]: https://github.com/ailon/markerjs2/releases/tag/v2.31.3
 [2.31.2]: https://github.com/ailon/markerjs2/releases/tag/v2.31.2
