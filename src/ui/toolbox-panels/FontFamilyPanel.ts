@@ -26,13 +26,18 @@ export class FontFamilyPanel extends ToolboxPanel {
    * @param fonts - available font families.
    * @param currentFont - currently selected font family.
    * @param icon - panel button icon (SVG image markup).
+   * @param id - panel ID.
    */
-  constructor(title: string, fonts: string[], currentFont?: string, icon?: string) {
-    super(title, icon ? icon : Icon);
+  constructor(
+    title: string,
+    fonts: string[],
+    currentFont?: string,
+    icon?: string,
+    id?: string
+  ) {
+    super(title, icon ? icon : Icon, id ? id : 'font-family-panel');
     this.fonts = fonts;
     this.currentFont = currentFont;
-
-    this._id = 'font-family-panel';
 
     this.setCurrentFont = this.setCurrentFont.bind(this);
   }
@@ -57,11 +62,13 @@ export class FontFamilyPanel extends ToolboxPanel {
       fontBoxContainer.style.overflow = 'hidden';
       fontBoxContainer.style.maxWidth = `${100 / this.fonts.length - 5}%`;
       fontBoxContainer.style.borderColor =
-        font === this.currentFont ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
+        font === this.currentFont
+          ? this.uiStyleSettings.toolboxAccentColor
+          : 'transparent';
 
       fontBoxContainer.addEventListener('click', () => {
         this.setCurrentFont(font, fontBoxContainer);
-      })
+      });
       panelDiv.appendChild(fontBoxContainer);
 
       const fontBox = document.createElement('div');
@@ -89,8 +96,11 @@ export class FontFamilyPanel extends ToolboxPanel {
   private setCurrentFont(newFont: string, target: HTMLDivElement) {
     this.currentFont = newFont;
 
-    this.fontBoxes.forEach(box => {
-      box.style.borderColor = box === target ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
+    this.fontBoxes.forEach((box) => {
+      box.style.borderColor =
+        box === target
+          ? this.uiStyleSettings.toolboxAccentColor
+          : 'transparent';
     });
 
     if (this.onFontChanged) {

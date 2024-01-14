@@ -26,13 +26,18 @@ export class LineWidthPanel extends ToolboxPanel {
    * @param widths - available widths.
    * @param currentWidth - currently set width.
    * @param icon - toolbox panel icon (SVG image markup).
+   * @param id - panel ID.
    */
-  constructor(title: string, widths: number[], currentWidth?: number, icon?: string) {
-    super(title, icon ? icon : Icon);
+  constructor(
+    title: string,
+    widths: number[],
+    currentWidth?: number,
+    icon?: string,
+    id?: string
+  ) {
+    super(title, icon ? icon : Icon, id ? id : 'line-width-panel');
     this.widths = widths;
     this.currentWidth = currentWidth;
-
-    this._id = 'line-width-panel';
 
     this.setCurrentWidth = this.setCurrentWidth.bind(this);
   }
@@ -55,11 +60,13 @@ export class LineWidthPanel extends ToolboxPanel {
       widthBoxContainer.style.borderWidth = '2px';
       widthBoxContainer.style.borderStyle = 'solid';
       widthBoxContainer.style.borderColor =
-        lineWidth === this.currentWidth ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
+        lineWidth === this.currentWidth
+          ? this.uiStyleSettings.toolboxAccentColor
+          : 'transparent';
 
       widthBoxContainer.addEventListener('click', () => {
         this.setCurrentWidth(lineWidth, widthBoxContainer);
-      })
+      });
       panelDiv.appendChild(widthBoxContainer);
 
       const label = document.createElement('div');
@@ -94,8 +101,11 @@ export class LineWidthPanel extends ToolboxPanel {
   private setCurrentWidth(newWidth: number, target: HTMLDivElement) {
     this.currentWidth = newWidth;
 
-    this.widthBoxes.forEach(box => {
-      box.style.borderColor = box === target ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
+    this.widthBoxes.forEach((box) => {
+      box.style.borderColor =
+        box === target
+          ? this.uiStyleSettings.toolboxAccentColor
+          : 'transparent';
     });
 
     if (this.onWidthChanged) {

@@ -145,7 +145,9 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.strokePanel = new ColorPickerPanel(
       'Line color',
       [...settings.defaultColorSet, 'transparent'],
-      this.strokeColor
+      this.strokeColor,
+      undefined,
+      'stroke-color-panel'
     );
     this.strokePanel.onColorChanged = this.setStrokeColor;
 
@@ -153,7 +155,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       'Fill color',
       [...settings.defaultColorSet, 'transparent'],
       this.fillColor,
-      FillColorIcon
+      FillColorIcon,
+      'fill-color-panel'
     );
     this.fillPanel.onColorChanged = this.setFillColor;
 
@@ -182,7 +185,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       'Text color',
       settings.defaultColorSet,
       this.textColor,
-      TextColorIcon
+      TextColorIcon,
+      'text-color-panel'
     );
     this.textColorPanel.onColorChanged = this.setTextColor;
 

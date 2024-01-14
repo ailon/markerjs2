@@ -71,7 +71,8 @@ export class CalloutMarker extends TextMarker {
       'Text color',
       settings.defaultColorSet,
       this.color,
-      TextColorIcon
+      TextColorIcon,
+      'text-color-panel'
     );
     this.colorPanel.onColorChanged = this.setColor;
 
@@ -79,7 +80,8 @@ export class CalloutMarker extends TextMarker {
       'Fill color',
       settings.defaultColorSet,
       this.bgColor,
-      FillColorIcon
+      FillColorIcon,
+      'fill-color-panel'
     );
     this.bgColorPanel.onColorChanged = this.setBgColor;
 

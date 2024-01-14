@@ -26,14 +26,19 @@ export class ColorPickerPanel extends ToolboxPanel {
    * @param title - panel title.
    * @param colors - available colors.
    * @param currentColor - currently selected color.
-   * @param icon - panel button icon (SVG imager markup).
+   * @param icon - panel button icon (SVG image markup).
+   * @param id - panel ID.
    */
-  constructor(title: string, colors: string[], currentColor?: string, icon?: string) {
-    super(title, icon ? icon : Icon);
+  constructor(
+    title: string,
+    colors: string[],
+    currentColor?: string,
+    icon?: string,
+    id?: string
+  ) {
+    super(title, icon ? icon : Icon, id ? id : 'color-picker-panel');
     this.colors = colors;
     this.currentColor = currentColor;
-
-    this._id = 'color-picker-panel';
 
     this.setCurrentColor = this.setCurrentColor.bind(this);
     this.getColorBox = this.getColorBox.bind(this);
@@ -69,20 +74,22 @@ export class ColorPickerPanel extends ToolboxPanel {
     colorBoxContainer.style.marginBottom = '2px';
     colorBoxContainer.style.borderWidth = '2px';
     colorBoxContainer.style.borderStyle = 'solid';
-    colorBoxContainer.style.borderRadius = `${(buttonHeight + 2)/2}px`
+    colorBoxContainer.style.borderRadius = `${(buttonHeight + 2) / 2}px`;
     colorBoxContainer.style.borderColor =
-      color === this.currentColor ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
+      color === this.currentColor
+        ? this.uiStyleSettings.toolboxAccentColor
+        : 'transparent';
 
     colorBoxContainer.addEventListener('click', () => {
       this.setCurrentColor(color, colorBoxContainer);
-    })
+    });
 
     const colorBox = document.createElement('div');
     colorBox.style.display = 'inline-block';
     colorBox.style.width = `${buttonHeight - 2}px`;
     colorBox.style.height = `${buttonHeight - 2}px`;
     colorBox.style.backgroundColor = color;
-    colorBox.style.borderRadius = `${buttonHeight/2}px`;
+    colorBox.style.borderRadius = `${buttonHeight / 2}px`;
     if (color === 'transparent') {
       colorBox.style.fill = this.uiStyleSettings.toolboxAccentColor;
       colorBox.innerHTML = `<svg viewBox="0 0 24 24">
@@ -98,8 +105,11 @@ export class ColorPickerPanel extends ToolboxPanel {
   private setCurrentColor(color: string, target: HTMLDivElement) {
     this.currentColor = color;
 
-    this.colorBoxes.forEach(box => {
-      box.style.borderColor = box === target ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
+    this.colorBoxes.forEach((box) => {
+      box.style.borderColor =
+        box === target
+          ? this.uiStyleSettings.toolboxAccentColor
+          : 'transparent';
     });
 
     if (this.onColorChanged) {

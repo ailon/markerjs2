@@ -33,16 +33,16 @@ export class ArrowTypePanel extends ToolboxPanel {
    * @param title - panel title.
    * @param currentType - currently set arrow type.
    * @param icon - panel button icon (SVG image markup).
+   * @param id - panel ID.
    */
   constructor(
     title: string,
     currentType?: ArrowType,
-    icon?: string
+    icon?: string,
+    id?: string
   ) {
-    super(title, icon ? icon : Icon);
+    super(title, icon ? icon : Icon, id ? id : 'arrow-type-panel');
     this.currentType = currentType;
-
-    this._id = 'arrow-type-panel';
 
     this.setCurrentType = this.setCurrentType.bind(this);
   }

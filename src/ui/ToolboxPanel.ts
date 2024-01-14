@@ -29,10 +29,12 @@ export abstract class ToolboxPanel {
    * Create panel with supplied title and icon.
    * @param title - panel name (used for accessibility)
    * @param icon - panel button icon (SVG image markup)
+   * @param id - panel ID
    */
-  constructor(title: string, icon?: string) {
+  constructor(title: string, icon?: string, id?: string) {
     this.title = title;
     this.icon = icon;
+    this._id = id;
   }
   /**
    * Returns toolbox panel UI.

@@ -2,7 +2,7 @@ import { ToolboxPanel } from '../ToolboxPanel';
 import Icon from './opacity-panel-icon.svg';
 
 /**
- * Opacity chage event handler type.
+ * Opacity change event handler type.
  */
 export type OpacityChangeHandler = (newOpacity: number) => void;
 
@@ -26,13 +26,18 @@ export class OpacityPanel extends ToolboxPanel {
    * @param opacities - available opacities.
    * @param currentOpacity - current opacity.
    * @param icon - toolbox panel button (SVG image markup).
+   * @param id - panel ID.
    */
-  constructor(title: string, opacities: number[], currentOpacity?: number, icon?: string) {
-    super(title, icon ? icon : Icon);
+  constructor(
+    title: string,
+    opacities: number[],
+    currentOpacity?: number,
+    icon?: string,
+    id?: string
+  ) {
+    super(title, icon ? icon : Icon, id ? id : 'opacity-panel');
     this.opacities = opacities;
     this.currentOpacity = currentOpacity;
-
-    this._id = 'opacity-panel';
 
     this.setCurrentOpacity = this.setCurrentOpacity.bind(this);
   }
@@ -56,15 +61,17 @@ export class OpacityPanel extends ToolboxPanel {
       opacityBoxContainer.style.borderWidth = '2px';
       opacityBoxContainer.style.borderStyle = 'solid';
       opacityBoxContainer.style.borderColor =
-        opacity === this.currentOpacity ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
+        opacity === this.currentOpacity
+          ? this.uiStyleSettings.toolboxAccentColor
+          : 'transparent';
 
       opacityBoxContainer.addEventListener('click', () => {
         this.setCurrentOpacity(opacity, opacityBoxContainer);
-      })
+      });
       panelDiv.appendChild(opacityBoxContainer);
 
       const label = document.createElement('div');
-      label.innerText = `${(opacity * 100)}%`;
+      label.innerText = `${opacity * 100}%`;
       opacityBoxContainer.appendChild(label);
 
       this.opacityBoxes.push(opacityBoxContainer);
@@ -75,8 +82,11 @@ export class OpacityPanel extends ToolboxPanel {
   private setCurrentOpacity(newWidth: number, target: HTMLDivElement) {
     this.currentOpacity = newWidth;
 
-    this.opacityBoxes.forEach(box => {
-      box.style.borderColor = box === target ? this.uiStyleSettings.toolboxAccentColor : 'transparent';
+    this.opacityBoxes.forEach((box) => {
+      box.style.borderColor =
+        box === target
+          ? this.uiStyleSettings.toolboxAccentColor
+          : 'transparent';
     });
 
     if (this.onOpacityChanged) {
