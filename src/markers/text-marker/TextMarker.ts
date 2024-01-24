@@ -49,7 +49,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
   protected fontFamilyPanel: FontFamilyPanel;
 
   private readonly DEFAULT_TEXT = 'your text here';
-  private text: string = this.DEFAULT_TEXT;
+  private text: string;
   /**
    * Visual text element.
    */
@@ -87,6 +87,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
     this.color = settings.defaultColor;
     this.fontFamily = settings.defaultFontFamily;
+    this.text = settings.defaultText ?? this.DEFAULT_TEXT;
 
     this.defaultSize = { x: 100, y: 30 };
 

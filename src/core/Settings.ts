@@ -149,7 +149,7 @@ export class Settings {
    public uiOffsetTop?: number;
    
    /**
-    * If set, the UI will be offset by the specefied number of pixels on the left.
+    * If set, the UI will be offset by the specified number of pixels on the left.
     * 
     * @since 2.31.0
     */
@@ -173,4 +173,11 @@ export class Settings {
     * @since 2.30.0
     */
    public wrapText = false;
+   /**
+    * Default text for the `TextMarker` based markers
+    * 
+    * @since 2.32.0
+    */
+   public defaultText = 'Your text here';
+
 }

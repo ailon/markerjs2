@@ -66,6 +66,8 @@ export class Experiments {
       // });
 
 
+      this.markerArea1.settings.defaultText = 'Hello World!';
+
       this.markerArea1.settings.displayMode = this.displayMode;
       this.markerArea1.settings.popupMargin = 10;
 
