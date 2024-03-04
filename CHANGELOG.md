@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.32.1] - 2024-03-04
+### Fixed
+- marker events not firing on state-restored markers
+
 ## [2.32.0] - 2024-01-24
 ### Added
 - `defaultText` setting for modifying the initial text in `TextMarker` based markers
@@ -524,6 +528,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.32.1]: https://github.com/ailon/markerjs2/releases/tag/v2.32.1
 [2.32.0]: https://github.com/ailon/markerjs2/releases/tag/v2.32.0
 [2.31.5]: https://github.com/ailon/markerjs2/releases/tag/v2.31.5
 [2.31.4]: https://github.com/ailon/markerjs2/releases/tag/v2.31.4
