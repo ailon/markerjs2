@@ -54,7 +54,7 @@ export class Experiments {
         // console.log(`redo possible?: ${event.markerArea.isRedoPossible}`);
       });
       this.markerArea1.addEventListener('markerchange', (event) => {
-        // console.log(`marker state change: ${JSON.stringify(event.marker?.getState())}`);
+        console.log(`marker state change: ${JSON.stringify(event.marker?.getState())}`);
       });
 
       // this.markerArea1.addEventListener('markerselect', event => { 

@@ -446,6 +446,7 @@ export class MarkerArea {
     this.switchToSelectMode = this.switchToSelectMode.bind(this);
     this.addDefs = this.addDefs.bind(this);
     this.addDefsToImage = this.addDefsToImage.bind(this);
+    this.addMarkerEvents = this.addMarkerEvents.bind(this);
   }
 
   private open(): void {
@@ -1445,6 +1446,7 @@ export class MarkerArea {
       if (markerType !== undefined) {
         const marker = this.addNewMarker(markerType);
         marker.restoreState(markerState);
+        this.addMarkerEvents(marker);
         this.markers.push(marker);
       }
     });
@@ -1499,10 +1501,7 @@ export class MarkerArea {
       this.setCurrentMarker();
       this.addUndoStep();
       this._currentMarker = this.addNewMarker(mType);
-      this._currentMarker.onMarkerCreated = this.markerCreated;
-      this._currentMarker.onColorChanged = this.colorChanged;
-      this._currentMarker.onFillColorChanged = this.fillColorChanged;
-      this._currentMarker.onStateChanged = this.markerStateChanged;
+      this.addMarkerEvents(this._currentMarker);
       this.markerImage.style.cursor = 'crosshair';
       this.toolbar.setActiveMarkerButton(mType.typeName);
       this.toolbox.setPanelButtons(this._currentMarker.toolboxPanels);
@@ -1510,6 +1509,13 @@ export class MarkerArea {
         listener(new MarkerEvent(this, this._currentMarker))
       );
     }
+  }
+
+  private addMarkerEvents(marker: MarkerBase) {
+    marker.onMarkerCreated = this.markerCreated;
+    marker.onColorChanged = this.colorChanged;
+    marker.onFillColorChanged = this.fillColorChanged;
+    marker.onStateChanged = this.markerStateChanged;
   }
 
   private markerCreated(marker: MarkerBase) {
