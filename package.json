@@ -11,6 +11,9 @@
     "lint": "eslint src",
     "build": "npm run lint && rollup --config rollup.config.prod.js",
     "start": "rollup --config rollup.config.dev.js -w",
+    "prepare": "npx husky",
+    "format:write": "prettier --ignore-path .gitignore --write \"**/*.{ts,js,json}\"",
+    "format:check": "prettier --ignore-path .gitignore --check \"**/*.{ts,js,json}\"",
     "docs": "typedoc --excludePrivate --excludeExternals --exclude \"src/index.ts\" -mode file --out docs src --name \"marker.js 2 Class Reference\" --disableSources --readme none"
   },
   "repository": {
@@ -34,7 +37,8 @@
     "@typescript-eslint/parser": "^3.10.1",
     "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
-    "prettier": "^2.1.1",
+    "husky": "^9.0.11",
+    "prettier": "^2.8.8",
     "rollup": "^2.26.5",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-delete": "^2.0.0",
