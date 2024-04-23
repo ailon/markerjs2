@@ -154,7 +154,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
       ['font-family', this.fontFamily],
       ['font-size', '16px'],
       ['x', '0'],
-      ['y', '0'],
+      ['y', '0']
     ]);
     this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // translate transform
     this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transform
@@ -268,7 +268,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
             line.trim() === '' ? ' ' : line.trim(),
             [
               ['x', '0'],
-              ['dy', LINE_SIZE],
+              ['dy', LINE_SIZE]
             ]
           )
         );
@@ -360,11 +360,11 @@ export class TextMarker extends RectangularBoxMarkerBase {
     if (this.visual && this.bgRectangle) {
       SvgHelper.setAttributes(this.visual, [
         ['width', this.width.toString()],
-        ['height', this.height.toString()],
+        ['height', this.height.toString()]
       ]);
       SvgHelper.setAttributes(this.bgRectangle, [
         ['width', this.width.toString()],
-        ['height', this.height.toString()],
+        ['height', this.height.toString()]
       ]);
     }
   }
@@ -474,12 +474,12 @@ export class TextMarker extends RectangularBoxMarkerBase {
           // const textPosition = this.getTextPosition(textScale);
           const rPosition = this.rotatePoint({
             x: this.left + this.width / 2,
-            y: this.top + this.height / 2,
+            y: this.top + this.height / 2
           });
           const textSize = this.textElement.getBBox();
           const rWH = {
             x: textSize.width * textScale,
-            y: textSize.height * textScale,
+            y: textSize.height * textScale
           };
           rPosition.x -= rWH.x / 2;
           rPosition.y -= rWH.y / 2;
@@ -604,7 +604,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
         fontFamily: this.fontFamily,
         padding: this.padding,
         text: this.text,
-        wrapText: this.globalSettings.wrapText,
+        wrapText: this.globalSettings.wrapText
       },
       super.getState()
     );

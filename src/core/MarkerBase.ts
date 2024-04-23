@@ -223,7 +223,7 @@ export class MarkerBase {
     return {
       typeName: MarkerBase.typeName,
       state: this.state,
-      notes: this.notes,
+      notes: this.notes
     };
   }
 

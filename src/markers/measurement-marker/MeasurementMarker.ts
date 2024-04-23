@@ -67,7 +67,7 @@ export class MeasurementMarker extends LineMarker {
       this.y1,
       [
         ['stroke', this.strokeColor],
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]
     );
     this.tip1.transform.baseVal.appendItem(SvgHelper.createTransform());
@@ -80,7 +80,7 @@ export class MeasurementMarker extends LineMarker {
       this.y2,
       [
         ['stroke', this.strokeColor],
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]
     );
     this.tip2.transform.baseVal.appendItem(SvgHelper.createTransform());
@@ -113,7 +113,7 @@ export class MeasurementMarker extends LineMarker {
         ['x2', (this.x1 + this.tipLength / 2).toString()],
         ['y2', this.y1.toString()],
         ['stroke', this.strokeColor],
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]);
       SvgHelper.setAttributes(this.tip2, [
         ['x1', (this.x2 - this.tipLength / 2).toString()],
@@ -121,7 +121,7 @@ export class MeasurementMarker extends LineMarker {
         ['x2', (this.x2 + this.tipLength / 2).toString()],
         ['y2', this.y2.toString()],
         ['stroke', this.strokeColor],
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]);
 
       if (Math.abs(this.x1 - this.x2) > 0.1) {

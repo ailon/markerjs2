@@ -21,7 +21,7 @@ export class TransformMatrix {
       c: matrix.c,
       d: matrix.d,
       e: matrix.e,
-      f: matrix.f,
+      f: matrix.f
     };
   }
   public static toSVGMatrix(

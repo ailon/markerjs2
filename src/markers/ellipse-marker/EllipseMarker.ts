@@ -143,7 +143,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
       ['stroke', this.strokeColor],
       ['stroke-width', this.strokeWidth.toString()],
       ['stroke-dasharray', this.strokeDasharray],
-      ['opacity', this.opacity.toString()],
+      ['opacity', this.opacity.toString()]
     ]);
     this.addMarkerVisualToContainer(this.visual);
   }
@@ -192,7 +192,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
       ['cx', (this.width / 2).toString()],
       ['cy', (this.height / 2).toString()],
       ['rx', (this.width / 2).toString()],
-      ['ry', (this.height / 2).toString()],
+      ['ry', (this.height / 2).toString()]
     ]);
   }
 
@@ -238,7 +238,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     this.strokeWidth = width;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]);
     }
     this.stateChanged();
@@ -251,7 +251,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     this.strokeDasharray = dashes;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [
-        ['stroke-dasharray', this.strokeDasharray],
+        ['stroke-dasharray', this.strokeDasharray]
       ]);
     }
     this.stateChanged();
@@ -264,7 +264,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
     this.opacity = opacity;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [
-        ['opacity', this.opacity.toString()],
+        ['opacity', this.opacity.toString()]
       ]);
     }
     this.stateChanged();
@@ -279,7 +279,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
       this.fillPanel,
       this.strokeWidthPanel,
       this.strokeStylePanel,
-      this.opacityPanel,
+      this.opacityPanel
     ];
   }
 
@@ -293,7 +293,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
         strokeColor: this.strokeColor,
         strokeWidth: this.strokeWidth,
         strokeDasharray: this.strokeDasharray,
-        opacity: this.opacity,
+        opacity: this.opacity
       },
       super.getState()
     );

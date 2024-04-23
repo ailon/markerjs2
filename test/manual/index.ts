@@ -4,7 +4,7 @@ import {
   FrameMarker,
   MarkerArea,
   Style,
-  StyleManager,
+  StyleManager
 } from '../../src';
 import { DisplayMode } from '../../src/core/Settings';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
@@ -84,7 +84,7 @@ export class Experiments {
         'red',
         'yellow',
         'green',
-        'red',
+        'red'
       ];
 
       this.markerArea1.settings.newFreehandMarkerOnPointerUp = false;

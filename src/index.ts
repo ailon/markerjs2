@@ -13,27 +13,27 @@ export { ToolboxPanel } from './ui/ToolboxPanel';
 export {
   ArrowType,
   ArrowTypeChangeHandler,
-  ArrowTypePanel,
+  ArrowTypePanel
 } from './ui/toolbox-panels/ArrowTypePanel';
 export {
   ColorChangeHandler,
-  ColorPickerPanel,
+  ColorPickerPanel
 } from './ui/toolbox-panels/ColorPickerPanel';
 export {
   FontChangeHandler,
-  FontFamilyPanel,
+  FontFamilyPanel
 } from './ui/toolbox-panels/FontFamilyPanel';
 export {
   LineStylePanel,
-  StyleChangeHandler,
+  StyleChangeHandler
 } from './ui/toolbox-panels/LineStylePanel';
 export {
   LineWidthPanel,
-  WidthChangeHandler,
+  WidthChangeHandler
 } from './ui/toolbox-panels/LineWidthPanel';
 export {
   OpacityChangeHandler,
-  OpacityPanel,
+  OpacityPanel
 } from './ui/toolbox-panels/OpacityPanel';
 
 export { MarkerBase } from './core/MarkerBase';
@@ -78,5 +78,5 @@ export {
   MarkerAreaRenderEvent,
   MarkerAreaRenderEventHandler,
   MarkerEvent,
-  MarkerEventHandler,
+  MarkerEventHandler
 } from './core/Events';

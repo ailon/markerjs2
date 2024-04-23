@@ -21,7 +21,7 @@ export default [
   {
     input: ['./src/index.ts'],
     output: {
-      dir: './dts/',
+      dir: './dts/'
     },
     plugins: [
       del({ targets: ['dts/*', 'dist/*'] }),
@@ -29,15 +29,15 @@ export default [
         declaration: true,
         outDir: './dts/',
         rootDir: './src/',
-        exclude: ['./test/**/*', './dts/**/*', './dist/**/*'],
+        exclude: ['./test/**/*', './dts/**/*', './dist/**/*']
       }),
-      svgo(),
-    ],
+      svgo()
+    ]
   },
   {
     input: './dts/index.d.ts',
     output: [{ file: './dist/markerjs2.d.ts', format: 'es' }],
-    plugins: [dts()],
+    plugins: [dts()]
   },
   {
     input: ['src/index.ts'],
@@ -46,15 +46,15 @@ export default [
         file: outputDir + pkg.module,
         format: 'es',
         sourcemap: true,
-        banner: banner,
+        banner: banner
       },
       {
         file: outputDir + pkg.main,
         name: 'markerjs2',
         format: 'umd',
         sourcemap: true,
-        banner: banner,
-      },
+        banner: banner
+      }
     ],
     plugins: [
       generatePackageJson({
@@ -63,7 +63,7 @@ export default [
           pkg.dependencies = {};
           pkg.devDependencies = {};
           return pkg;
-        },
+        }
       }),
       typescript(),
       svgo(),
@@ -72,15 +72,15 @@ export default [
         targets: [
           {
             src: 'README.md',
-            dest: 'dist',
+            dest: 'dist'
           },
           {
             src: 'LICENSE',
-            dest: 'dist',
-          },
-        ],
+            dest: 'dist'
+          }
+        ]
       }),
-      del({ targets: ['dts/*'] }),
-    ],
-  },
+      del({ targets: ['dts/*'] })
+    ]
+  }
 ];

@@ -113,11 +113,11 @@ export class CalloutMarker extends TextMarker {
   private createTip() {
     SvgHelper.setAttributes(this.bgRectangle, [
       ['fill', this.bgColor],
-      ['rx', '10px'],
+      ['rx', '10px']
     ]);
 
     this.tip = SvgHelper.createPolygon(this.getTipPoints(), [
-      ['fill', this.bgColor],
+      ['fill', this.bgColor]
     ]);
     this.visual.appendChild(this.tip);
   }
@@ -172,7 +172,7 @@ export class CalloutMarker extends TextMarker {
       const rotatedPoint = this.unrotatePoint(point);
       this.tipPosition = {
         x: rotatedPoint.x - this.manipulationStartLeft,
-        y: rotatedPoint.y - this.manipulationStartTop,
+        y: rotatedPoint.y - this.manipulationStartTop
       };
       this.positionTip();
     } else {
@@ -256,13 +256,13 @@ export class CalloutMarker extends TextMarker {
         offset = Math.min(this.width / 2, 15);
         this.tipBase1Position = {
           x: this.width - offset - baseWidth,
-          y: this.height,
+          y: this.height
         };
         this.tipBase2Position = { x: this.width - offset, y: this.height };
       } else {
         this.tipBase1Position = {
           x: this.width,
-          y: this.height - offset - baseWidth,
+          y: this.height - offset - baseWidth
         };
         this.tipBase2Position = { x: this.width, y: this.height - offset };
       }
@@ -322,7 +322,7 @@ export class CalloutMarker extends TextMarker {
     const result: CalloutMarkerState = Object.assign(
       {
         bgColor: this.bgColor,
-        tipPosition: this.tipPosition,
+        tipPosition: this.tipPosition
       },
       super.getState()
     );
@@ -357,7 +357,7 @@ export class CalloutMarker extends TextMarker {
 
     this.tipPosition = {
       x: this.tipPosition.x * scaleX,
-      y: this.tipPosition.y * scaleY,
+      y: this.tipPosition.y * scaleY
     };
 
     this.positionTip();

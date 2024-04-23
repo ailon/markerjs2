@@ -308,7 +308,7 @@ export class LinearMarkerBase extends MarkerBase {
         x1: this.x1,
         y1: this.y1,
         x2: this.x2,
-        y2: this.y2,
+        y2: this.y2
       },
       super.getState()
     );

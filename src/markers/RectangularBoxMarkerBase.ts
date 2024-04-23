@@ -196,7 +196,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
 
         const rotatedCenter = this.rotatePoint({
           x: this.centerX,
-          y: this.centerY,
+          y: this.centerY
         });
         this.left = rotatedCenter.x - this.width / 2;
         this.top = rotatedCenter.y - this.height / 2;
@@ -439,7 +439,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
         ['stroke-opacity', '0.5'],
         ['stroke-dasharray', '3, 2'],
         ['fill', 'transparent'],
-        ['pointer-events', 'none'],
+        ['pointer-events', 'none']
       ]
     );
 
@@ -455,7 +455,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
           ['stroke', 'black'],
           ['stroke-width', '1'],
           ['stroke-opacity', '0.5'],
-          ['stroke-dasharray', '3, 2'],
+          ['stroke-dasharray', '3, 2']
         ]
       );
 
@@ -594,7 +594,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
         ),
         containerTransformMatrix: TransformMatrix.toITransformMatrix(
           this.container.transform.baseVal.getItem(0).matrix
-        ),
+        )
       },
       super.getState()
     );
@@ -646,7 +646,7 @@ export class RectangularBoxMarkerBase extends MarkerBase {
     const rPoint = this.rotatePoint({ x: this.left, y: this.top });
     const point = this.unrotatePoint({
       x: rPoint.x * scaleX,
-      y: rPoint.y * scaleY,
+      y: rPoint.y * scaleY
     });
 
     this.left = point.x;

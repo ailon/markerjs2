@@ -151,12 +151,12 @@ export class CurveMarker extends LinearMarkerBase {
     this.selectorCurve = SvgHelper.createPath(this.getPathD(), [
       ['stroke', 'transparent'],
       ['stroke-width', (this.strokeWidth + 10).toString()],
-      ['fill', 'transparent'],
+      ['fill', 'transparent']
     ]);
     this.visibleCurve = SvgHelper.createPath(this.getPathD(), [
       ['stroke', this.strokeColor],
       ['stroke-width', this.strokeWidth.toString()],
-      ['fill', 'transparent'],
+      ['fill', 'transparent']
     ]);
     this.visual.appendChild(this.selectorCurve);
     this.visual.appendChild(this.visibleCurve);
@@ -201,13 +201,13 @@ export class CurveMarker extends LinearMarkerBase {
       this.visibleCurve.setAttribute('d', this.getPathD());
 
       SvgHelper.setAttributes(this.visibleCurve, [
-        ['stroke', this.strokeColor],
+        ['stroke', this.strokeColor]
       ]);
       SvgHelper.setAttributes(this.visibleCurve, [
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]);
       SvgHelper.setAttributes(this.visibleCurve, [
-        ['stroke-dasharray', this.strokeDasharray.toString()],
+        ['stroke-dasharray', this.strokeDasharray.toString()]
       ]);
     }
   }
@@ -226,7 +226,7 @@ export class CurveMarker extends LinearMarkerBase {
         ['stroke', 'black'],
         ['stroke-width', '1'],
         ['stroke-opacity', '0.5'],
-        ['stroke-dasharray', '3, 2'],
+        ['stroke-dasharray', '3, 2']
       ]
     );
     this.curveControlLine2 = SvgHelper.createLine(
@@ -238,7 +238,7 @@ export class CurveMarker extends LinearMarkerBase {
         ['stroke', 'black'],
         ['stroke-width', '1'],
         ['stroke-opacity', '0.5'],
-        ['stroke-dasharray', '3, 2'],
+        ['stroke-dasharray', '3, 2']
       ]
     );
 
@@ -373,7 +373,7 @@ export class CurveMarker extends LinearMarkerBase {
         strokeWidth: this.strokeWidth,
         strokeDasharray: this.strokeDasharray,
         curveX: this.curveX,
-        curveY: this.curveY,
+        curveY: this.curveY
       },
       super.getState()
     );

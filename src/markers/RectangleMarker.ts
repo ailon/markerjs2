@@ -80,7 +80,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
       ['stroke', this.strokeColor],
       ['stroke-width', this.strokeWidth.toString()],
       ['stroke-dasharray', this.strokeDasharray],
-      ['opacity', this.opacity.toString()],
+      ['opacity', this.opacity.toString()]
     ]);
     this.addMarkerVisualToContainer(this.visual);
   }
@@ -127,7 +127,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     super.setSize();
     SvgHelper.setAttributes(this.visual, [
       ['width', this.width.toString()],
-      ['height', this.height.toString()],
+      ['height', this.height.toString()]
     ]);
   }
 
@@ -173,7 +173,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     this.strokeWidth = width;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]);
     }
     this.stateChanged();
@@ -186,7 +186,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     this.strokeDasharray = dashes;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [
-        ['stroke-dasharray', this.strokeDasharray],
+        ['stroke-dasharray', this.strokeDasharray]
       ]);
     }
     this.stateChanged();
@@ -202,7 +202,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
         strokeColor: this.strokeColor,
         strokeWidth: this.strokeWidth,
         strokeDasharray: this.strokeDasharray,
-        opacity: this.opacity,
+        opacity: this.opacity
       },
       super.getState()
     );

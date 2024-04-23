@@ -135,25 +135,24 @@ export interface IEventListenerRepository {
 /**
  * Event handler type for a specific event type.
  */
-export type EventHandler<
-  T extends keyof IEventListenerRepository
-> = T extends 'markerselect'
-  ? MarkerEventHandler
-  : T extends 'markerdeselect'
-  ? MarkerEventHandler
-  : T extends 'markercreating'
-  ? MarkerEventHandler
-  : T extends 'markercreate'
-  ? MarkerEventHandler
-  : T extends 'markerbeforedelete'
-  ? MarkerEventHandler
-  : T extends 'markerdelete'
-  ? MarkerEventHandler
-  : T extends 'markerchange'
-  ? MarkerEventHandler
-  : T extends 'render'
-  ? MarkerAreaRenderEventHandler
-  : MarkerAreaEventHandler;
+export type EventHandler<T extends keyof IEventListenerRepository> =
+  T extends 'markerselect'
+    ? MarkerEventHandler
+    : T extends 'markerdeselect'
+    ? MarkerEventHandler
+    : T extends 'markercreating'
+    ? MarkerEventHandler
+    : T extends 'markercreate'
+    ? MarkerEventHandler
+    : T extends 'markerbeforedelete'
+    ? MarkerEventHandler
+    : T extends 'markerdelete'
+    ? MarkerEventHandler
+    : T extends 'markerchange'
+    ? MarkerEventHandler
+    : T extends 'render'
+    ? MarkerAreaRenderEventHandler
+    : MarkerAreaEventHandler;
 
 /**
  * Event handler repository.

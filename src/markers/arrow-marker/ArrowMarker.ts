@@ -6,7 +6,7 @@ import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { LineMarker } from '../line-marker/LineMarker';
 import {
   ArrowType,
-  ArrowTypePanel,
+  ArrowTypePanel
 } from '../../ui/toolbox-panels/ArrowTypePanel';
 import { ArrowMarkerState } from './ArrowMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
@@ -129,11 +129,11 @@ export class ArrowMarker extends LineMarker {
 
       SvgHelper.setAttributes(this.arrow1, [
         ['points', this.getArrowPoints(this.x1, this.y1)],
-        ['fill', this.strokeColor],
+        ['fill', this.strokeColor]
       ]);
       SvgHelper.setAttributes(this.arrow2, [
         ['points', this.getArrowPoints(this.x2, this.y2)],
-        ['fill', this.strokeColor],
+        ['fill', this.strokeColor]
       ]);
 
       let lineAngle1 = 0;
@@ -167,7 +167,7 @@ export class ArrowMarker extends LineMarker {
       this.strokePanel,
       this.strokeWidthPanel,
       this.strokeStylePanel,
-      this.arrowTypePanel,
+      this.arrowTypePanel
     ];
   }
 
@@ -177,7 +177,7 @@ export class ArrowMarker extends LineMarker {
   public getState(): ArrowMarkerState {
     const result: ArrowMarkerState = Object.assign(
       {
-        arrowType: this.arrowType,
+        arrowType: this.arrowType
       },
       super.getState()
     );

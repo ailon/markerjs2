@@ -133,7 +133,7 @@ export class LineMarker extends LinearMarkerBase {
       this.y2,
       [
         ['stroke', 'transparent'],
-        ['stroke-width', (this.strokeWidth + 10).toString()],
+        ['stroke-width', (this.strokeWidth + 10).toString()]
       ]
     );
     this.visibleLine = SvgHelper.createLine(
@@ -143,7 +143,7 @@ export class LineMarker extends LinearMarkerBase {
       this.y2,
       [
         ['stroke', this.strokeColor],
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]
     );
     this.visual.appendChild(this.selectorLine);
@@ -185,10 +185,10 @@ export class LineMarker extends LinearMarkerBase {
 
       SvgHelper.setAttributes(this.visibleLine, [['stroke', this.strokeColor]]);
       SvgHelper.setAttributes(this.visibleLine, [
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]);
       SvgHelper.setAttributes(this.visibleLine, [
-        ['stroke-dasharray', this.strokeDasharray.toString()],
+        ['stroke-dasharray', this.strokeDasharray.toString()]
       ]);
     }
   }
@@ -236,7 +236,7 @@ export class LineMarker extends LinearMarkerBase {
       {
         strokeColor: this.strokeColor,
         strokeWidth: this.strokeWidth,
-        strokeDasharray: this.strokeDasharray,
+        strokeDasharray: this.strokeDasharray
       },
       super.getState()
     );

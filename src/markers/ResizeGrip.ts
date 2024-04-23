@@ -28,7 +28,7 @@ export class ResizeGrip {
         ['fill-opacity', '0.7'],
         ['stroke', '#333333'],
         ['stroke-width', '2'],
-        ['stroke-opacity', '0.7'],
+        ['stroke-opacity', '0.7']
       ])
     );
   }

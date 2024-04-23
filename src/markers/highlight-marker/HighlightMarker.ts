@@ -68,7 +68,7 @@ export class HighlightMarker extends CoverMarker {
     this.opacity = opacity;
     if (this.visual) {
       SvgHelper.setAttributes(this.visual, [
-        ['opacity', this.opacity.toString()],
+        ['opacity', this.opacity.toString()]
       ]);
     }
     this.stateChanged();

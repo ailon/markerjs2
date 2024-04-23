@@ -23,7 +23,7 @@ export class Settings {
     '#7C3AED', // purple
     '#F472B6', // pink
     '#000000', // black
-    '#FFFFFF', //white
+    '#FFFFFF' //white
   ];
 
   /**
@@ -88,7 +88,7 @@ export class Settings {
     'Helvetica, Arial, sans-serif',
     'Courier, "Courier New", monospace',
     'cursive',
-    'fantasy',
+    'fantasy'
   ];
 
   /**

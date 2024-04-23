@@ -34,7 +34,7 @@ export type ToolbarButtonClickHandler = (
  * Toolbar represents the main toolbar of the marker.js 2 interface.
  */
 export class Toolbar {
-  private markerItems: typeof MarkerBase[];
+  private markerItems: (typeof MarkerBase)[];
 
   private buttons: HTMLDivElement[] = [];
   private markerButtons: HTMLDivElement[] = [];
@@ -74,7 +74,7 @@ export class Toolbar {
   constructor(
     markerjsContainer: HTMLDivElement,
     displayMode: DisplayMode,
-    markerItems: typeof MarkerBase[],
+    markerItems: (typeof MarkerBase)[],
     uiStyleSettings: IStyleSettings,
     styles: StyleManager
   ) {
@@ -289,10 +289,11 @@ export class Toolbar {
 
   private overflowButtonClicked() {
     if (this.markerButtonOverflowBlock.style.display !== 'none') {
-      this.markerButtonOverflowBlock.className = this.markerButtonOverflowBlock.className.replace(
-        this.styles.fadeInAnimationClassName,
-        ''
-      );
+      this.markerButtonOverflowBlock.className =
+        this.markerButtonOverflowBlock.className.replace(
+          this.styles.fadeInAnimationClassName,
+          ''
+        );
       this.markerButtonOverflowBlock.style.display = 'none';
     } else {
       this.markerButtonOverflowBlock.className += ` ${this.styles.fadeInAnimationClassName}`;

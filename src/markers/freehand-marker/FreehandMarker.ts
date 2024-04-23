@@ -163,11 +163,11 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     super.resize(point);
     SvgHelper.setAttributes(this.visual, [
       ['width', this.width.toString()],
-      ['height', this.height.toString()],
+      ['height', this.height.toString()]
     ]);
     SvgHelper.setAttributes(this.drawingImage, [
       ['width', this.width.toString()],
-      ['height', this.height.toString()],
+      ['height', this.height.toString()]
     ]);
   }
 
@@ -235,7 +235,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
       this.canvasElement.width + 1,
       this.canvasElement.height + 1,
       -1,
-      -1,
+      -1
     ];
     let containsData = false;
     for (let row = 0; row < this.canvasElement.height; row++) {
@@ -295,7 +295,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
   private setDrawingImage() {
     SvgHelper.setAttributes(this.drawingImage, [
       ['width', this.width.toString()],
-      ['height', this.height.toString()],
+      ['height', this.height.toString()]
     ]);
     SvgHelper.setAttributes(this.drawingImage, [['href', this.drawingImgUrl]]);
     this.moveVisual({ x: this.left, y: this.top });
@@ -335,7 +335,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
   public getState(): FreehandMarkerState {
     const result: FreehandMarkerState = Object.assign(
       {
-        drawingImgUrl: this.drawingImgUrl,
+        drawingImgUrl: this.drawingImgUrl
       },
       super.getState()
     );

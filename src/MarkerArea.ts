@@ -31,7 +31,7 @@ import {
   IEventListenerRepository,
   MarkerAreaEvent,
   MarkerAreaRenderEvent,
-  MarkerEvent,
+  MarkerEvent
 } from './core/Events';
 
 /**
@@ -124,7 +124,7 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get ALL_MARKER_TYPES(): typeof MarkerBase[] {
+  public get ALL_MARKER_TYPES(): (typeof MarkerBase)[] {
     return [
       FrameMarker,
       FreehandMarker,
@@ -138,7 +138,7 @@ export class MarkerArea {
       CoverMarker,
       LineMarker,
       CurveMarker,
-      CaptionFrameMarker,
+      CaptionFrameMarker
     ];
   }
 
@@ -148,7 +148,7 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get DEFAULT_MARKER_TYPES(): typeof MarkerBase[] {
+  public get DEFAULT_MARKER_TYPES(): (typeof MarkerBase)[] {
     return [
       FrameMarker,
       FreehandMarker,
@@ -156,7 +156,7 @@ export class MarkerArea {
       TextMarker,
       EllipseMarker,
       HighlightMarker,
-      CalloutMarker,
+      CalloutMarker
     ];
   }
 
@@ -165,18 +165,18 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get BASIC_MARKER_TYPES(): typeof MarkerBase[] {
+  public get BASIC_MARKER_TYPES(): (typeof MarkerBase)[] {
     return [
       FrameMarker,
       FreehandMarker,
       ArrowMarker,
       TextMarker,
-      HighlightMarker,
+      HighlightMarker
     ];
   }
 
-  private _availableMarkerTypes: typeof MarkerBase[] = this
-    .DEFAULT_MARKER_TYPES;
+  private _availableMarkerTypes: (typeof MarkerBase)[] =
+    this.DEFAULT_MARKER_TYPES;
 
   /**
    * Gets or sets a list of marker types avaiable to the user in the toolbar.
@@ -248,9 +248,8 @@ export class MarkerArea {
     return this._isOpen;
   }
 
-  private undoRedoManager: UndoRedoManager<
-    MarkerAreaState
-  > = new UndoRedoManager<MarkerAreaState>();
+  private undoRedoManager: UndoRedoManager<MarkerAreaState> =
+    new UndoRedoManager<MarkerAreaState>();
 
   /**
    * Returns true if undo operation can be performed (undo stack is not empty).
@@ -354,7 +353,7 @@ export class MarkerArea {
         top:
           (this.editorCanvas.clientHeight * this._zoomLevel -
             this.contentDiv.clientHeight) /
-          2,
+          2
       });
     }
   }
@@ -562,7 +561,7 @@ export class MarkerArea {
    *
    * @param markers - one or more marker types to be added.
    */
-  public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
+  public addMarkersToToolbar(...markers: (typeof MarkerBase)[]): void {
     this._availableMarkerTypes.push(...markers);
   }
 
@@ -1015,7 +1014,8 @@ export class MarkerArea {
     this.contentDiv.style.flexGrow = '2';
     this.contentDiv.style.flexShrink = '1';
     if (this.settings.displayMode === 'popup') {
-      this.contentDiv.style.backgroundColor = this.uiStyleSettings.canvasBackgroundColor;
+      this.contentDiv.style.backgroundColor =
+        this.uiStyleSettings.canvasBackgroundColor;
       this.contentDiv.style.maxHeight = `${
         this.windowHeight -
         this.settings.popupMargin * 2 -
@@ -1362,7 +1362,7 @@ export class MarkerArea {
   private panTo(point: IPoint) {
     this.contentDiv.scrollBy({
       left: this.prevPanPoint.x - point.x,
-      top: this.prevPanPoint.y - point.y,
+      top: this.prevPanPoint.y - point.y
     });
     this.prevPanPoint = point;
   }
@@ -1395,7 +1395,7 @@ export class MarkerArea {
     const result: MarkerAreaState = {
       width: this.imageWidth,
       height: this.imageHeight,
-      markers: [],
+      markers: []
     };
     this.markers.forEach((marker) => result.markers.push(marker.getState()));
     return result;
@@ -1689,7 +1689,7 @@ export class MarkerArea {
     const scaleY = clientRect.height / this.imageHeight / this.zoomLevel;
     return {
       x: (x - clientRect.left) / this.zoomLevel / scaleX,
-      y: (y - clientRect.top) / this.zoomLevel / scaleY,
+      y: (y - clientRect.top) / this.zoomLevel / scaleY
     };
   }
 

@@ -78,7 +78,7 @@ export class StyleManager {
       zoomOutButtonVisible: false,
       clearButtonVisible: false,
       resultButtonBlockVisible: true,
-      logoPosition: 'left',
+      logoPosition: 'left'
     };
   }
 

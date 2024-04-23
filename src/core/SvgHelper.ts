@@ -198,7 +198,7 @@ export class SvgHelper {
       ['markerWidth', markerWidth.toString()],
       ['markerHeight', markerHeight.toString()],
       ['refX', refX.toString()],
-      ['refY', refY.toString()],
+      ['refY', refY.toString()]
     ]);
 
     marker.appendChild(markerElement);
