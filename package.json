@@ -9,7 +9,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "lint": "eslint src",
-    "build": "yarn lint && rollup --config rollup.config.prod.js",
+    "build": "npm run lint && rollup --config rollup.config.prod.js",
     "start": "rollup --config rollup.config.dev.js -w",
     "docs": "typedoc --excludePrivate --excludeExternals --exclude \"src/index.ts\" -mode file --out docs src --name \"marker.js 2 Class Reference\" --disableSources --readme none"
   },
