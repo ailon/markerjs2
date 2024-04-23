@@ -32,7 +32,6 @@ export class MarkerAreaRenderEvent extends MarkerAreaEvent {
   }
 }
 
-
 export class MarkerEvent extends MarkerAreaEvent {
   public marker?: MarkerBase;
 
@@ -50,7 +49,9 @@ export type MarkerAreaEventHandler = (event: MarkerAreaEvent) => void;
 /**
  * MarkerArea render event handler type.
  */
-export type MarkerAreaRenderEventHandler = (event: MarkerAreaRenderEvent) => void;
+export type MarkerAreaRenderEventHandler = (
+  event: MarkerAreaRenderEvent
+) => void;
 
 /**
  * Marker event handler type.
@@ -83,7 +84,7 @@ export interface IEventListenerRepository {
   restorestate: MarkerAreaEventHandler[];
   /**
    * Event handlers for the `statechange` event.
-   * 
+   *
    * @since 2.23.0
    */
   statechange: MarkerAreaEventHandler[];
@@ -113,19 +114,19 @@ export interface IEventListenerRepository {
   markerdelete: MarkerEventHandler[];
   /**
    * Event handlers for the `markerchange` event.
-   * 
+   *
    * @since 2.23.0
    */
   markerchange: MarkerEventHandler[];
   /**
    * Event handlers for the `focus` event.
-   * 
+   *
    * @since 2.19.0
    */
   focus: MarkerAreaEventHandler[];
   /**
    * Event handlers for the `blur` event.
-   * 
+   *
    * @since 2.19.0
    */
   blur: MarkerAreaEventHandler[];
@@ -180,7 +181,7 @@ export class EventListenerRepository implements IEventListenerRepository {
   restorestate: MarkerAreaEventHandler[] = [];
   /**
    * Event handlers for the `statechange` event.
-   * 
+   *
    * @since 2.23.0
    */
   statechange: MarkerAreaEventHandler[] = [];
@@ -210,23 +211,22 @@ export class EventListenerRepository implements IEventListenerRepository {
   markerdelete: MarkerEventHandler[] = [];
   /**
    * Event handlers for the `markerchange` event.
-   * 
+   *
    * @since 2.23.0
    */
   markerchange: MarkerEventHandler[] = [];
   /**
    * Event handlers for the `focus` event.
-   * 
+   *
    * @since 2.19.0
    */
   focus: MarkerAreaEventHandler[] = [];
   /**
    * Event handlers for the `blur` event.
-   * 
+   *
    * @since 2.19.0
    */
   blur: MarkerAreaEventHandler[] = [];
-
 
   /**
    * Add an event handler for a specific event type.

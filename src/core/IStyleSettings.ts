@@ -32,43 +32,43 @@ export interface IStyleSettings {
   hideToolbox?: boolean;
   /**
    * Is undo button visible?
-   * 
+   *
    * @since 2.6.0
    */
   undoButtonVisible?: boolean;
   /**
    * Is redo button visible?
-   * 
+   *
    * @since 2.6.0
    */
   redoButtonVisible?: boolean;
   /**
    * Is notes button visible?
-   * 
+   *
    * @since 2.10.0
    */
   notesButtonVisible?: boolean;
   /**
    * Is zoom button visible?
-   * 
+   *
    * @since 2.12.0
    */
   zoomButtonVisible?: boolean;
   /**
    * Is zoom out button visible?
-   * 
+   *
    * @since 2.13.0
    */
   zoomOutButtonVisible?: boolean;
   /**
    * Is clear button visible?
-   * 
+   *
    * @since 2.15.0
    */
   clearButtonVisible?: boolean;
   /**
    * Are render and close buttons visible?
-   * 
+   *
    * @since 2.18.0
    */
   resultButtonBlockVisible?: boolean;
@@ -102,81 +102,81 @@ export interface IStyleSettings {
   closeButtonColor?: string;
   /**
    * CSS class name defining the visual style of the toolbar block.
-   * 
+   *
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.
    */
   toolbarStyleColorsClassName?: string;
   /**
-   * CSS class name defining the visual style of the toolbar overflow block. 
+   * CSS class name defining the visual style of the toolbar overflow block.
    * Displayed when markers don't fit in the main toolbar block.
-   * 
+   *
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.
    */
   toolbarOverflowBlockStyleColorsClassName?: string;
   /**
    * CSS class name defining the visual style of the toolbar buttons.
-   * 
+   *
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.
    */
   toolbarButtonStyleColorsClassName?: string;
   /**
    * CSS class name defining the visual style of the active (selected) toolbar button.
-   * 
+   *
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.
    */
-  toolbarActiveButtonStyleColorsClassName?: string;  
+  toolbarActiveButtonStyleColorsClassName?: string;
   /**
    * CSS class name defining the visual style of the toolbox (property panel) block.
-   * 
+   *
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.
    */
   toolboxStyleColorsClassName?: string;
   /**
    * CSS class name defining the visual style of the toolbox buttons.
-   * 
+   *
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.
    */
   toolboxButtonStyleColorsClassName?: string;
   /**
    * CSS class name defining the visual style of the active (selected) toolbox button.
-   * 
+   *
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.
    */
   toolboxActiveButtonStyleColorsClassName?: string;
   /**
-   * CSS class name defining the visual style of the panel containing toolbox buttons. 
+   * CSS class name defining the visual style of the panel containing toolbox buttons.
    * That is the top level panel with buttons switching active toolbox panels.
-   * 
+   *
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.
    */
   toolboxButtonRowStyleColorsClassName?: string;
   /**
    * CSS class name defining the visual style of the panel containing specific toolbox properties.
    * This is the popup panel that opens when a toolbox button is pressed.
-   * 
+   *
    * _Note_: should only be used for colors and similar styles. Changing layout-related styles here can break the UI.
    */
   toolboxPanelRowStyleColorsClassName?: string;
 
   /**
    * CSS class name defining the visual style of the note editing text area.
-   * 
+   *
    * @since 2.10.0
    */
   notesAreaStyleClassName?: string;
 
   /**
    * Position logo in the free version on the bottom left or right of the marker area. Default - left.
-   * 
+   *
    * @since 2.14.0
    */
   logoPosition?: 'left' | 'right';
 
   /**
    * zIndex for the marker.js UI.
-   * 
+   *
    * Defaults to 5 in inline mode and 1000 in popup mode.
-   * 
+   *
    * @since 2.15.0
    */
   zIndex?: string;

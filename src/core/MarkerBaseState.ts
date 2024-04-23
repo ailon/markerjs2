@@ -1,7 +1,14 @@
 /**
  * Represents marker's state (status) in time.
  */
-export type MarkerState = 'new' | 'creating' | 'select' | 'move' | 'resize' | 'rotate' | 'edit';
+export type MarkerState =
+  | 'new'
+  | 'creating'
+  | 'select'
+  | 'move'
+  | 'resize'
+  | 'rotate'
+  | 'edit';
 
 /**
  * Represents marker's state used to save and restore state continue annotation in the future.
@@ -17,7 +24,7 @@ export interface MarkerBaseState {
   state: MarkerState;
   /**
    * Additional information about the marker.
-   * 
+   *
    * @since 2.10.0
    */
   notes?: string;

@@ -27,8 +27,8 @@ export class SvgHelper {
 
   /**
    * Creates an SVG rectangle with the specified width and height.
-   * @param width 
-   * @param height 
+   * @param width
+   * @param height
    * @param attributes - additional attributes.
    */
   public static createRect(
@@ -49,10 +49,10 @@ export class SvgHelper {
 
   /**
    * Creates an SVG line with specified end-point coordinates.
-   * @param x1 
-   * @param y1 
-   * @param x2 
-   * @param y2 
+   * @param x1
+   * @param y1
+   * @param x2
+   * @param y2
    * @param attributes - additional attributes.
    */
   public static createLine(
@@ -99,7 +99,7 @@ export class SvgHelper {
 
   /**
    * Creates an SVG circle with the specified radius.
-   * @param radius 
+   * @param radius
    * @param attributes - additional attributes.
    */
   public static createCircle(
@@ -123,8 +123,8 @@ export class SvgHelper {
 
   /**
    * Creates an SVG ellipse with the specified horizontal and vertical radii.
-   * @param rx 
-   * @param ry 
+   * @param rx
+   * @param ry
    * @param attributes - additional attributes.
    */
   public static createEllipse(
@@ -171,13 +171,13 @@ export class SvgHelper {
 
   /**
    * Creates an SVG marker.
-   * @param id 
-   * @param orient 
-   * @param markerWidth 
-   * @param markerHeight 
-   * @param refX 
-   * @param refY 
-   * @param markerElement 
+   * @param id
+   * @param orient
+   * @param markerWidth
+   * @param markerHeight
+   * @param refX
+   * @param refY
+   * @param markerElement
    */
   public static createMarker(
     id: string,
@@ -267,19 +267,16 @@ export class SvgHelper {
 
   /**
    * Creates an SVG point with the specified coordinates.
-   * @param x 
-   * @param y 
+   * @param x
+   * @param y
    */
-  public static createPoint(      
-    x: number,
-    y: number
-  ): SVGPoint {
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      const svgPoint = svg.createSVGPoint();
-      svgPoint.x = x;
-      svgPoint.y = y;
-  
-      return svgPoint;
+  public static createPoint(x: number, y: number): SVGPoint {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const svgPoint = svg.createSVGPoint();
+    svgPoint.x = x;
+    svgPoint.y = y;
+
+    return svgPoint;
   }
 
   /**
@@ -287,7 +284,7 @@ export class SvgHelper {
    * @param d - path shape
    * @param attributes - additional attributes.
    */
-   public static createPath(
+  public static createPath(
     d: string,
     attributes?: Array<[string, string]>
   ): SVGPathElement {

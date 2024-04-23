@@ -109,10 +109,25 @@ export class Toolbar {
     actionButtonBlock.style.whiteSpace = 'nowrap';
     this.uiContainer.appendChild(actionButtonBlock);
 
-    this.addActionButton(actionButtonBlock, CursorIcon, 'select', 'Select mode');
-    this.addActionButton(actionButtonBlock, DeleteIcon, 'delete', 'Delete marker');
+    this.addActionButton(
+      actionButtonBlock,
+      CursorIcon,
+      'select',
+      'Select mode'
+    );
+    this.addActionButton(
+      actionButtonBlock,
+      DeleteIcon,
+      'delete',
+      'Delete marker'
+    );
     if (this.uiStyleSettings.clearButtonVisible) {
-      this.addActionButton(actionButtonBlock, ClearIcon, 'clear', 'Delete all markers');
+      this.addActionButton(
+        actionButtonBlock,
+        ClearIcon,
+        'clear',
+        'Delete all markers'
+      );
     }
     if (this.uiStyleSettings.undoButtonVisible) {
       this.addActionButton(actionButtonBlock, UndoIcon, 'undo', 'Undo');
@@ -127,7 +142,12 @@ export class Toolbar {
       this.uiStyleSettings.zoomButtonVisible &&
       this.uiStyleSettings.zoomOutButtonVisible
     ) {
-      this.addActionButton(actionButtonBlock, ZoomOutIcon, 'zoom-out', 'Zoom out');
+      this.addActionButton(
+        actionButtonBlock,
+        ZoomOutIcon,
+        'zoom-out',
+        'Zoom out'
+      );
     }
     if (this.uiStyleSettings.notesButtonVisible) {
       this.addActionButton(actionButtonBlock, NotesIcon, 'notes', 'Notes');
@@ -186,7 +206,12 @@ export class Toolbar {
       this.uiStyleSettings.resultButtonBlockVisible !== false ? '' : 'none';
     this.uiContainer.appendChild(resultButtonBlock);
 
-    this.addActionButton(resultButtonBlock, CheckIcon, 'render', 'Save and close');
+    this.addActionButton(
+      resultButtonBlock,
+      CheckIcon,
+      'render',
+      'Save and close'
+    );
     this.addActionButton(resultButtonBlock, CloseIcon, 'close', 'Close');
 
     this.markerjsContainer.appendChild(this.uiContainer);

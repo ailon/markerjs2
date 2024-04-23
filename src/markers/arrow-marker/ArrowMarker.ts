@@ -4,7 +4,10 @@ import { Settings } from '../../core/Settings';
 import Icon from './arrow-marker-icon.svg';
 import { ToolboxPanel } from '../../ui/ToolboxPanel';
 import { LineMarker } from '../line-marker/LineMarker';
-import { ArrowType, ArrowTypePanel } from '../../ui/toolbox-panels/ArrowTypePanel';
+import {
+  ArrowType,
+  ArrowTypePanel,
+} from '../../ui/toolbox-panels/ArrowTypePanel';
 import { ArrowMarkerState } from './ArrowMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
 
@@ -13,8 +16,8 @@ import { MarkerBaseState } from '../../core/MarkerBaseState';
  */
 export class ArrowMarker extends LineMarker {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'ArrowMarker';
@@ -48,7 +51,11 @@ export class ArrowMarker extends LineMarker {
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.getArrowPoints = this.getArrowPoints.bind(this);
@@ -60,14 +67,11 @@ export class ArrowMarker extends LineMarker {
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
-    if (
-      super.ownsTarget(el) ||
-      el === this.arrow1 || el === this.arrow2
-    ) {
+    if (super.ownsTarget(el) || el === this.arrow1 || el === this.arrow2) {
       return true;
     } else {
       return false;
@@ -77,25 +81,30 @@ export class ArrowMarker extends LineMarker {
   private getArrowPoints(offsetX: number, offsetY: number): string {
     const width = this.arrowBaseWidth + this.strokeWidth * 2;
     const height = this.arrowBaseHeight + this.strokeWidth * 2;
-    return `${offsetX - width / 2},${
-      offsetY + height / 2
-    } ${offsetX},${offsetY - height / 2} ${
-      offsetX + width / 2},${offsetY + height / 2}`;
+    return `${offsetX - width / 2},${offsetY + height / 2} ${offsetX},${
+      offsetY - height / 2
+    } ${offsetX + width / 2},${offsetY + height / 2}`;
   }
 
   private createTips() {
-    this.arrow1 = SvgHelper.createPolygon(this.getArrowPoints(this.x1, this.y1), [['fill', this.strokeColor]]);
+    this.arrow1 = SvgHelper.createPolygon(
+      this.getArrowPoints(this.x1, this.y1),
+      [['fill', this.strokeColor]]
+    );
     this.arrow1.transform.baseVal.appendItem(SvgHelper.createTransform());
     this.visual.appendChild(this.arrow1);
 
-    this.arrow2 = SvgHelper.createPolygon(this.getArrowPoints(this.x2, this.y2), [['fill', this.strokeColor]]);
+    this.arrow2 = SvgHelper.createPolygon(
+      this.getArrowPoints(this.x2, this.y2),
+      [['fill', this.strokeColor]]
+    );
     this.arrow2.transform.baseVal.appendItem(SvgHelper.createTransform());
     this.visual.appendChild(this.arrow2);
   }
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -113,22 +122,26 @@ export class ArrowMarker extends LineMarker {
     super.adjustVisual();
 
     if (this.arrow1 && this.arrow2) {
-      this.arrow1.style.display = (this.arrowType === 'both' || this.arrowType === 'start') ? '' : 'none';
-      this.arrow2.style.display = (this.arrowType === 'both' || this.arrowType === 'end') ? '' : 'none';
+      this.arrow1.style.display =
+        this.arrowType === 'both' || this.arrowType === 'start' ? '' : 'none';
+      this.arrow2.style.display =
+        this.arrowType === 'both' || this.arrowType === 'end' ? '' : 'none';
 
       SvgHelper.setAttributes(this.arrow1, [
         ['points', this.getArrowPoints(this.x1, this.y1)],
-        ['fill', this.strokeColor]
+        ['fill', this.strokeColor],
       ]);
       SvgHelper.setAttributes(this.arrow2, [
         ['points', this.getArrowPoints(this.x2, this.y2)],
-        ['fill', this.strokeColor]
+        ['fill', this.strokeColor],
       ]);
 
       let lineAngle1 = 0;
       if (Math.abs(this.x1 - this.x2) > 0.1) {
         lineAngle1 =
-          (Math.atan((this.y2 - this.y1) / (this.x2 - this.x1)) * 180) / Math.PI + 90 * Math.sign(this.x1 - this.x2);
+          (Math.atan((this.y2 - this.y1) / (this.x2 - this.x1)) * 180) /
+            Math.PI +
+          90 * Math.sign(this.x1 - this.x2);
       }
       const a1transform = this.arrow1.transform.baseVal.getItem(0);
       a1transform.setRotate(lineAngle1, this.x1, this.y1);
@@ -150,16 +163,24 @@ export class ArrowMarker extends LineMarker {
    * Returns the list of toolbox panels for this marker type.
    */
   public get toolboxPanels(): ToolboxPanel[] {
-    return [this.strokePanel, this.strokeWidthPanel, this.strokeStylePanel, this.arrowTypePanel];
+    return [
+      this.strokePanel,
+      this.strokeWidthPanel,
+      this.strokeStylePanel,
+      this.arrowTypePanel,
+    ];
   }
 
   /**
    * Returns current marker state that can be restored in the future.
    */
   public getState(): ArrowMarkerState {
-    const result: ArrowMarkerState = Object.assign({
-      arrowType: this.arrowType
-    }, super.getState());
+    const result: ArrowMarkerState = Object.assign(
+      {
+        arrowType: this.arrowType,
+      },
+      super.getState()
+    );
     result.typeName = ArrowMarker.typeName;
 
     return result;
@@ -167,7 +188,7 @@ export class ArrowMarker extends LineMarker {
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {
@@ -179,5 +200,4 @@ export class ArrowMarker extends LineMarker {
     this.createTips();
     this.adjustVisual();
   }
-
 }

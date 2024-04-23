@@ -8,5 +8,5 @@ export interface ArrowMarkerState extends LineMarkerState {
   /**
    * Type of arrow.
    */
-  arrowType: ArrowType
+  arrowType: ArrowType;
 }

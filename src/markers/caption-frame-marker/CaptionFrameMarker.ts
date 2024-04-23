@@ -189,7 +189,6 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       'text-color-panel'
     );
     this.textColorPanel.onColorChanged = this.setTextColor;
-
   }
 
   /**
@@ -555,7 +554,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
         textColor: this.textColor,
         fontFamily: this.fontFamily,
         fontSize: this.fontSize,
-        captionText: this.captionText
+        captionText: this.captionText,
       },
       super.getState()
     );

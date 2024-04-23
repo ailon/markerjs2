@@ -13,12 +13,12 @@ import { ResizeGrip } from '../ResizeGrip';
 
 export class CurveMarker extends LinearMarkerBase {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'CurveMarker';
-  
+
   /**
    * Marker type title (display name) used for accessibility and other attributes.
    */
@@ -80,7 +80,11 @@ export class CurveMarker extends LinearMarkerBase {
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.setStrokeColor = this.setStrokeColor.bind(this);
@@ -120,7 +124,7 @@ export class CurveMarker extends LinearMarkerBase {
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
@@ -144,22 +148,16 @@ export class CurveMarker extends LinearMarkerBase {
 
   private createVisual() {
     this.visual = SvgHelper.createGroup();
-    this.selectorCurve = SvgHelper.createPath(
-      this.getPathD(),
-      [
-        ['stroke', 'transparent'],
-        ['stroke-width', (this.strokeWidth + 10).toString()],
-        ['fill', 'transparent'],
-      ]
-    );
-    this.visibleCurve = SvgHelper.createPath(
-      this.getPathD(),
-      [
-        ['stroke', this.strokeColor],
-        ['stroke-width', this.strokeWidth.toString()],
-        ['fill', 'transparent'],
-      ]
-    );
+    this.selectorCurve = SvgHelper.createPath(this.getPathD(), [
+      ['stroke', 'transparent'],
+      ['stroke-width', (this.strokeWidth + 10).toString()],
+      ['fill', 'transparent'],
+    ]);
+    this.visibleCurve = SvgHelper.createPath(this.getPathD(), [
+      ['stroke', this.strokeColor],
+      ['stroke-width', this.strokeWidth.toString()],
+      ['fill', 'transparent'],
+    ]);
     this.visual.appendChild(this.selectorCurve);
     this.visual.appendChild(this.visibleCurve);
 
@@ -168,7 +166,7 @@ export class CurveMarker extends LinearMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -202,9 +200,15 @@ export class CurveMarker extends LinearMarkerBase {
 
       this.visibleCurve.setAttribute('d', this.getPathD());
 
-      SvgHelper.setAttributes(this.visibleCurve, [['stroke', this.strokeColor]]);
-      SvgHelper.setAttributes(this.visibleCurve, [['stroke-width', this.strokeWidth.toString()]]);
-      SvgHelper.setAttributes(this.visibleCurve, [['stroke-dasharray', this.strokeDasharray.toString()]]);
+      SvgHelper.setAttributes(this.visibleCurve, [
+        ['stroke', this.strokeColor],
+      ]);
+      SvgHelper.setAttributes(this.visibleCurve, [
+        ['stroke-width', this.strokeWidth.toString()],
+      ]);
+      SvgHelper.setAttributes(this.visibleCurve, [
+        ['stroke-dasharray', this.strokeDasharray.toString()],
+      ]);
     }
   }
 
@@ -238,8 +242,14 @@ export class CurveMarker extends LinearMarkerBase {
       ]
     );
 
-    this.controlBox.insertBefore(this.curveControlLine1, this.controlBox.firstChild);
-    this.controlBox.insertBefore(this.curveControlLine2, this.controlBox.firstChild);
+    this.controlBox.insertBefore(
+      this.curveControlLine1,
+      this.controlBox.firstChild
+    );
+    this.controlBox.insertBefore(
+      this.curveControlLine2,
+      this.controlBox.firstChild
+    );
   }
 
   /**
@@ -258,7 +268,11 @@ export class CurveMarker extends LinearMarkerBase {
   protected positionGrips(): void {
     super.positionGrips();
     const gripSize = this.curveGrip.GRIP_SIZE;
-    this.positionGrip(this.curveGrip.visual, this.curveX - gripSize / 2, this.curveY - gripSize / 2);
+    this.positionGrip(
+      this.curveGrip.visual,
+      this.curveX - gripSize / 2,
+      this.curveY - gripSize / 2
+    );
 
     if (this.curveControlLine1 && this.curveControlLine2) {
       this.curveControlLine1.setAttribute('x1', this.x1.toString());
@@ -279,8 +293,10 @@ export class CurveMarker extends LinearMarkerBase {
    */
   public manipulate(point: IPoint): void {
     if (this.state === 'move') {
-      this.curveX = this.manipulationStartCurveX + point.x - this.manipulationStartX;
-      this.curveY = this.manipulationStartCurveY + point.y - this.manipulationStartY;
+      this.curveX =
+        this.manipulationStartCurveX + point.x - this.manipulationStartX;
+      this.curveY =
+        this.manipulationStartCurveY + point.y - this.manipulationStartY;
     }
     super.manipulate(point);
   }
@@ -315,7 +331,7 @@ export class CurveMarker extends LinearMarkerBase {
    * @param width - new width.
    */
   protected setStrokeWidth(width: number): void {
-    this.strokeWidth = width
+    this.strokeWidth = width;
     this.adjustVisual();
   }
 
@@ -330,7 +346,7 @@ export class CurveMarker extends LinearMarkerBase {
 
   /**
    * Scales marker. Used after the image resize.
-   * 
+   *
    * @param scaleX - horizontal scale
    * @param scaleY - vertical scale
    */
@@ -339,7 +355,6 @@ export class CurveMarker extends LinearMarkerBase {
     this.curveY = this.curveY * scaleY;
     super.scale(scaleX, scaleY);
   }
-
 
   /**
    * Returns the list of toolbox panels for this marker type.
@@ -352,13 +367,16 @@ export class CurveMarker extends LinearMarkerBase {
    * Returns current marker state that can be restored in the future.
    */
   public getState(): CurveMarkerState {
-    const result: CurveMarkerState = Object.assign({
-      strokeColor: this.strokeColor,
-      strokeWidth: this.strokeWidth,
-      strokeDasharray: this.strokeDasharray,
-      curveX: this.curveX,
-      curveY: this.curveY
-    }, super.getState());
+    const result: CurveMarkerState = Object.assign(
+      {
+        strokeColor: this.strokeColor,
+        strokeWidth: this.strokeWidth,
+        strokeDasharray: this.strokeDasharray,
+        curveX: this.curveX,
+        curveY: this.curveY,
+      },
+      super.getState()
+    );
     result.typeName = CurveMarker.typeName;
 
     return result;
@@ -366,7 +384,7 @@ export class CurveMarker extends LinearMarkerBase {
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {

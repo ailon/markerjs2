@@ -21,7 +21,10 @@ export class Activator {
     // by visiting https://markerjs.com/ for details
     // thank you!
     if (Activator.key) {
-      const keyRegex = new RegExp(/^MJS2-[A-Z][0-9]{3}-[A-Z][0-9]{3}-[0-9]{4}$/, 'i');
+      const keyRegex = new RegExp(
+        /^MJS2-[A-Z][0-9]{3}-[A-Z][0-9]{3}-[0-9]{4}$/,
+        'i'
+      );
       return keyRegex.test(Activator.key);
     } else {
       return false;

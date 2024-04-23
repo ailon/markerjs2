@@ -9,11 +9,10 @@ import { FreehandMarkerState } from './FreehandMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
 import { LineWidthPanel } from '../../ui/toolbox-panels/LineWidthPanel';
 
-
 export class FreehandMarker extends RectangularBoxMarkerBase {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'FreehandMarker';
@@ -38,7 +37,6 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   private colorPanel: ColorPickerPanel;
   private lineWidthPanel: LineWidthPanel;
-
 
   private canvasElement: HTMLCanvasElement;
   private canvasContext: CanvasRenderingContext2D;
@@ -86,12 +84,11 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
       settings.defaultStrokeWidth
     );
     this.lineWidthPanel.onWidthChanged = this.setLineWidth;
-
   }
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
@@ -118,7 +115,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -144,7 +141,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
+   *
    * @param point - event coordinates.
    */
   public manipulate(point: IPoint): void {
@@ -160,7 +157,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Resize marker based on current pointer coordinates and context.
-   * @param point 
+   * @param point
    */
   protected resize(point: IPoint): void {
     super.resize(point);
@@ -176,7 +173,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
-   * 
+   *
    * @param point - event coordinates.
    */
   public pointerUp(point: IPoint): void {
@@ -197,8 +194,10 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
     this.overlayContainer.innerHTML = '';
 
     this.canvasElement = document.createElement('canvas');
-    this.canvasElement.width = this.overlayContainer.clientWidth * this.pixelRatio;
-    this.canvasElement.height = this.overlayContainer.clientHeight * this.pixelRatio;
+    this.canvasElement.width =
+      this.overlayContainer.clientWidth * this.pixelRatio;
+    this.canvasElement.height =
+      this.overlayContainer.clientHeight * this.pixelRatio;
     this.canvasContext = this.canvasElement.getContext('2d');
     this.canvasContext.scale(this.pixelRatio, this.pixelRatio);
     this.overlayContainer.appendChild(this.canvasElement);
@@ -315,10 +314,9 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
    * Sets line width.
    * @param width - new line width
    */
-   protected setLineWidth(width: number): void {
+  protected setLineWidth(width: number): void {
     this.lineWidth = width;
   }
-
 
   /**
    * Returns the list of toolbox panels for this marker type.
@@ -335,9 +333,12 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
    * Returns current marker state that can be restored in the future.
    */
   public getState(): FreehandMarkerState {
-    const result: FreehandMarkerState = Object.assign({
-      drawingImgUrl: this.drawingImgUrl
-    }, super.getState());
+    const result: FreehandMarkerState = Object.assign(
+      {
+        drawingImgUrl: this.drawingImgUrl,
+      },
+      super.getState()
+    );
     result.typeName = FreehandMarker.typeName;
 
     return result;
@@ -345,7 +346,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {
@@ -357,7 +358,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Scales marker. Used after the image resize.
-   * 
+   *
    * @param scaleX - horizontal scale
    * @param scaleY - vertical scale
    */
@@ -366,5 +367,4 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
     this.setDrawingImage();
   }
-
 }

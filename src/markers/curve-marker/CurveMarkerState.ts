@@ -7,16 +7,16 @@ export interface CurveMarkerState extends LinearMarkerBaseState {
   /**
    * Line color.
    */
-  strokeColor: string,
+  strokeColor: string;
   /**
    * Line width.
    */
-  strokeWidth: number,
+  strokeWidth: number;
   /**
    * Line dash array.
    */
-  strokeDasharray: string,
+  strokeDasharray: string;
 
-  curveX: number,
-  curveY: number
+  curveX: number;
+  curveY: number;
 }
