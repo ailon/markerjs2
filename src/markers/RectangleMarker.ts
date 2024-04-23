@@ -10,8 +10,8 @@ import { MarkerBaseState } from '../core/MarkerBaseState';
  */
 export abstract class RectangleMarker extends RectangularBoxMarkerBase {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static title = 'Rectangle marker';
@@ -44,7 +44,11 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.setStrokeColor = this.setStrokeColor.bind(this);
@@ -56,7 +60,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
@@ -83,7 +87,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -100,7 +104,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
+   *
    * @param point - event coordinates.
    */
   public manipulate(point: IPoint): void {
@@ -123,13 +127,13 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
     super.setSize();
     SvgHelper.setAttributes(this.visual, [
       ['width', this.width.toString()],
-      ['height', this.height.toString()],
+      ['height', this.height.toString()]
     ]);
   }
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -168,7 +172,9 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
   protected setStrokeWidth(width: number): void {
     this.strokeWidth = width;
     if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['stroke-width', this.strokeWidth.toString()]]);
+      SvgHelper.setAttributes(this.visual, [
+        ['stroke-width', this.strokeWidth.toString()]
+      ]);
     }
     this.stateChanged();
   }
@@ -179,7 +185,9 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
   protected setStrokeDasharray(dashes: string): void {
     this.strokeDasharray = dashes;
     if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['stroke-dasharray', this.strokeDasharray]]);
+      SvgHelper.setAttributes(this.visual, [
+        ['stroke-dasharray', this.strokeDasharray]
+      ]);
     }
     this.stateChanged();
   }
@@ -188,20 +196,23 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
    * Returns current marker state that can be restored in the future.
    */
   public getState(): RectangleMarkerState {
-    const result: RectangleMarkerState = Object.assign({
-      fillColor: this.fillColor,
-      strokeColor: this.strokeColor,
-      strokeWidth: this.strokeWidth,
-      strokeDasharray: this.strokeDasharray,
-      opacity: this.opacity
-    }, super.getState());
+    const result: RectangleMarkerState = Object.assign(
+      {
+        fillColor: this.fillColor,
+        strokeColor: this.strokeColor,
+        strokeWidth: this.strokeWidth,
+        strokeDasharray: this.strokeDasharray,
+        opacity: this.opacity
+      },
+      super.getState()
+    );
 
     return result;
   }
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {
@@ -219,7 +230,7 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
 
   /**
    * Scales marker. Used after the image resize.
-   * 
+   *
    * @param scaleX - horizontal scale
    * @param scaleY - vertical scale
    */
@@ -228,5 +239,4 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
 
     this.setSize();
   }
-
 }

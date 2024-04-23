@@ -32,7 +32,6 @@ export class MarkerAreaRenderEvent extends MarkerAreaEvent {
   }
 }
 
-
 export class MarkerEvent extends MarkerAreaEvent {
   public marker?: MarkerBase;
 
@@ -50,7 +49,9 @@ export type MarkerAreaEventHandler = (event: MarkerAreaEvent) => void;
 /**
  * MarkerArea render event handler type.
  */
-export type MarkerAreaRenderEventHandler = (event: MarkerAreaRenderEvent) => void;
+export type MarkerAreaRenderEventHandler = (
+  event: MarkerAreaRenderEvent
+) => void;
 
 /**
  * Marker event handler type.
@@ -83,7 +84,7 @@ export interface IEventListenerRepository {
   restorestate: MarkerAreaEventHandler[];
   /**
    * Event handlers for the `statechange` event.
-   * 
+   *
    * @since 2.23.0
    */
   statechange: MarkerAreaEventHandler[];
@@ -113,19 +114,19 @@ export interface IEventListenerRepository {
   markerdelete: MarkerEventHandler[];
   /**
    * Event handlers for the `markerchange` event.
-   * 
+   *
    * @since 2.23.0
    */
   markerchange: MarkerEventHandler[];
   /**
    * Event handlers for the `focus` event.
-   * 
+   *
    * @since 2.19.0
    */
   focus: MarkerAreaEventHandler[];
   /**
    * Event handlers for the `blur` event.
-   * 
+   *
    * @since 2.19.0
    */
   blur: MarkerAreaEventHandler[];
@@ -134,25 +135,24 @@ export interface IEventListenerRepository {
 /**
  * Event handler type for a specific event type.
  */
-export type EventHandler<
-  T extends keyof IEventListenerRepository
-> = T extends 'markerselect'
-  ? MarkerEventHandler
-  : T extends 'markerdeselect'
-  ? MarkerEventHandler
-  : T extends 'markercreating'
-  ? MarkerEventHandler
-  : T extends 'markercreate'
-  ? MarkerEventHandler
-  : T extends 'markerbeforedelete'
-  ? MarkerEventHandler
-  : T extends 'markerdelete'
-  ? MarkerEventHandler
-  : T extends 'markerchange'
-  ? MarkerEventHandler
-  : T extends 'render'
-  ? MarkerAreaRenderEventHandler
-  : MarkerAreaEventHandler;
+export type EventHandler<T extends keyof IEventListenerRepository> =
+  T extends 'markerselect'
+    ? MarkerEventHandler
+    : T extends 'markerdeselect'
+    ? MarkerEventHandler
+    : T extends 'markercreating'
+    ? MarkerEventHandler
+    : T extends 'markercreate'
+    ? MarkerEventHandler
+    : T extends 'markerbeforedelete'
+    ? MarkerEventHandler
+    : T extends 'markerdelete'
+    ? MarkerEventHandler
+    : T extends 'markerchange'
+    ? MarkerEventHandler
+    : T extends 'render'
+    ? MarkerAreaRenderEventHandler
+    : MarkerAreaEventHandler;
 
 /**
  * Event handler repository.
@@ -180,7 +180,7 @@ export class EventListenerRepository implements IEventListenerRepository {
   restorestate: MarkerAreaEventHandler[] = [];
   /**
    * Event handlers for the `statechange` event.
-   * 
+   *
    * @since 2.23.0
    */
   statechange: MarkerAreaEventHandler[] = [];
@@ -210,23 +210,22 @@ export class EventListenerRepository implements IEventListenerRepository {
   markerdelete: MarkerEventHandler[] = [];
   /**
    * Event handlers for the `markerchange` event.
-   * 
+   *
    * @since 2.23.0
    */
   markerchange: MarkerEventHandler[] = [];
   /**
    * Event handlers for the `focus` event.
-   * 
+   *
    * @since 2.19.0
    */
   focus: MarkerAreaEventHandler[] = [];
   /**
    * Event handlers for the `blur` event.
-   * 
+   *
    * @since 2.19.0
    */
   blur: MarkerAreaEventHandler[] = [];
-
 
   /**
    * Add an event handler for a specific event type.

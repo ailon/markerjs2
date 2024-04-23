@@ -12,12 +12,12 @@ import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 export class LineMarker extends LinearMarkerBase {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'LineMarker';
-  
+
   /**
    * Marker type title (display name) used for accessibility and other attributes.
    */
@@ -69,7 +69,11 @@ export class LineMarker extends LinearMarkerBase {
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.setStrokeColor = this.setStrokeColor.bind(this);
@@ -104,7 +108,7 @@ export class LineMarker extends LinearMarkerBase {
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
@@ -129,7 +133,7 @@ export class LineMarker extends LinearMarkerBase {
       this.y2,
       [
         ['stroke', 'transparent'],
-        ['stroke-width', (this.strokeWidth + 10).toString()],
+        ['stroke-width', (this.strokeWidth + 10).toString()]
       ]
     );
     this.visibleLine = SvgHelper.createLine(
@@ -139,7 +143,7 @@ export class LineMarker extends LinearMarkerBase {
       this.y2,
       [
         ['stroke', this.strokeColor],
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]
     );
     this.visual.appendChild(this.selectorLine);
@@ -150,7 +154,7 @@ export class LineMarker extends LinearMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -180,8 +184,12 @@ export class LineMarker extends LinearMarkerBase {
       this.visibleLine.setAttribute('y2', this.y2.toString());
 
       SvgHelper.setAttributes(this.visibleLine, [['stroke', this.strokeColor]]);
-      SvgHelper.setAttributes(this.visibleLine, [['stroke-width', this.strokeWidth.toString()]]);
-      SvgHelper.setAttributes(this.visibleLine, [['stroke-dasharray', this.strokeDasharray.toString()]]);
+      SvgHelper.setAttributes(this.visibleLine, [
+        ['stroke-width', this.strokeWidth.toString()]
+      ]);
+      SvgHelper.setAttributes(this.visibleLine, [
+        ['stroke-dasharray', this.strokeDasharray.toString()]
+      ]);
     }
   }
 
@@ -199,7 +207,7 @@ export class LineMarker extends LinearMarkerBase {
    * @param width - new width.
    */
   protected setStrokeWidth(width: number): void {
-    this.strokeWidth = width
+    this.strokeWidth = width;
     this.adjustVisual();
   }
 
@@ -224,11 +232,14 @@ export class LineMarker extends LinearMarkerBase {
    * Returns current marker state that can be restored in the future.
    */
   public getState(): LineMarkerState {
-    const result: LineMarkerState = Object.assign({
-      strokeColor: this.strokeColor,
-      strokeWidth: this.strokeWidth,
-      strokeDasharray: this.strokeDasharray
-    }, super.getState());
+    const result: LineMarkerState = Object.assign(
+      {
+        strokeColor: this.strokeColor,
+        strokeWidth: this.strokeWidth,
+        strokeDasharray: this.strokeDasharray
+      },
+      super.getState()
+    );
     result.typeName = LineMarker.typeName;
 
     return result;
@@ -236,7 +247,7 @@ export class LineMarker extends LinearMarkerBase {
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {

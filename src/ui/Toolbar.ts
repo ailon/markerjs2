@@ -34,7 +34,7 @@ export type ToolbarButtonClickHandler = (
  * Toolbar represents the main toolbar of the marker.js 2 interface.
  */
 export class Toolbar {
-  private markerItems: typeof MarkerBase[];
+  private markerItems: (typeof MarkerBase)[];
 
   private buttons: HTMLDivElement[] = [];
   private markerButtons: HTMLDivElement[] = [];
@@ -74,7 +74,7 @@ export class Toolbar {
   constructor(
     markerjsContainer: HTMLDivElement,
     displayMode: DisplayMode,
-    markerItems: typeof MarkerBase[],
+    markerItems: (typeof MarkerBase)[],
     uiStyleSettings: IStyleSettings,
     styles: StyleManager
   ) {
@@ -109,10 +109,25 @@ export class Toolbar {
     actionButtonBlock.style.whiteSpace = 'nowrap';
     this.uiContainer.appendChild(actionButtonBlock);
 
-    this.addActionButton(actionButtonBlock, CursorIcon, 'select', 'Select mode');
-    this.addActionButton(actionButtonBlock, DeleteIcon, 'delete', 'Delete marker');
+    this.addActionButton(
+      actionButtonBlock,
+      CursorIcon,
+      'select',
+      'Select mode'
+    );
+    this.addActionButton(
+      actionButtonBlock,
+      DeleteIcon,
+      'delete',
+      'Delete marker'
+    );
     if (this.uiStyleSettings.clearButtonVisible) {
-      this.addActionButton(actionButtonBlock, ClearIcon, 'clear', 'Delete all markers');
+      this.addActionButton(
+        actionButtonBlock,
+        ClearIcon,
+        'clear',
+        'Delete all markers'
+      );
     }
     if (this.uiStyleSettings.undoButtonVisible) {
       this.addActionButton(actionButtonBlock, UndoIcon, 'undo', 'Undo');
@@ -127,7 +142,12 @@ export class Toolbar {
       this.uiStyleSettings.zoomButtonVisible &&
       this.uiStyleSettings.zoomOutButtonVisible
     ) {
-      this.addActionButton(actionButtonBlock, ZoomOutIcon, 'zoom-out', 'Zoom out');
+      this.addActionButton(
+        actionButtonBlock,
+        ZoomOutIcon,
+        'zoom-out',
+        'Zoom out'
+      );
     }
     if (this.uiStyleSettings.notesButtonVisible) {
       this.addActionButton(actionButtonBlock, NotesIcon, 'notes', 'Notes');
@@ -186,7 +206,12 @@ export class Toolbar {
       this.uiStyleSettings.resultButtonBlockVisible !== false ? '' : 'none';
     this.uiContainer.appendChild(resultButtonBlock);
 
-    this.addActionButton(resultButtonBlock, CheckIcon, 'render', 'Save and close');
+    this.addActionButton(
+      resultButtonBlock,
+      CheckIcon,
+      'render',
+      'Save and close'
+    );
     this.addActionButton(resultButtonBlock, CloseIcon, 'close', 'Close');
 
     this.markerjsContainer.appendChild(this.uiContainer);
@@ -264,10 +289,11 @@ export class Toolbar {
 
   private overflowButtonClicked() {
     if (this.markerButtonOverflowBlock.style.display !== 'none') {
-      this.markerButtonOverflowBlock.className = this.markerButtonOverflowBlock.className.replace(
-        this.styles.fadeInAnimationClassName,
-        ''
-      );
+      this.markerButtonOverflowBlock.className =
+        this.markerButtonOverflowBlock.className.replace(
+          this.styles.fadeInAnimationClassName,
+          ''
+        );
       this.markerButtonOverflowBlock.style.display = 'none';
     } else {
       this.markerButtonOverflowBlock.className += ` ${this.styles.fadeInAnimationClassName}`;

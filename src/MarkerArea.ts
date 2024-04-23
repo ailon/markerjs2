@@ -31,7 +31,7 @@ import {
   IEventListenerRepository,
   MarkerAreaEvent,
   MarkerAreaRenderEvent,
-  MarkerEvent,
+  MarkerEvent
 } from './core/Events';
 
 /**
@@ -124,7 +124,7 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get ALL_MARKER_TYPES(): typeof MarkerBase[] {
+  public get ALL_MARKER_TYPES(): (typeof MarkerBase)[] {
     return [
       FrameMarker,
       FreehandMarker,
@@ -138,7 +138,7 @@ export class MarkerArea {
       CoverMarker,
       LineMarker,
       CurveMarker,
-      CaptionFrameMarker,
+      CaptionFrameMarker
     ];
   }
 
@@ -148,7 +148,7 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get DEFAULT_MARKER_TYPES(): typeof MarkerBase[] {
+  public get DEFAULT_MARKER_TYPES(): (typeof MarkerBase)[] {
     return [
       FrameMarker,
       FreehandMarker,
@@ -156,7 +156,7 @@ export class MarkerArea {
       TextMarker,
       EllipseMarker,
       HighlightMarker,
-      CalloutMarker,
+      CalloutMarker
     ];
   }
 
@@ -165,18 +165,18 @@ export class MarkerArea {
    *
    * @readonly
    */
-  public get BASIC_MARKER_TYPES(): typeof MarkerBase[] {
+  public get BASIC_MARKER_TYPES(): (typeof MarkerBase)[] {
     return [
       FrameMarker,
       FreehandMarker,
       ArrowMarker,
       TextMarker,
-      HighlightMarker,
+      HighlightMarker
     ];
   }
 
-  private _availableMarkerTypes: typeof MarkerBase[] = this
-    .DEFAULT_MARKER_TYPES;
+  private _availableMarkerTypes: (typeof MarkerBase)[] =
+    this.DEFAULT_MARKER_TYPES;
 
   /**
    * Gets or sets a list of marker types avaiable to the user in the toolbar.
@@ -220,7 +220,7 @@ export class MarkerArea {
    * @readonly
    * @since 2.27.0
    */
-  public get currentMarker() : MarkerBase | undefined {
+  public get currentMarker(): MarkerBase | undefined {
     return this._currentMarker;
   }
   private markers: MarkerBase[] = [];
@@ -248,34 +248,25 @@ export class MarkerArea {
     return this._isOpen;
   }
 
-  private undoRedoManager: UndoRedoManager<
-    MarkerAreaState
-  > = new UndoRedoManager<MarkerAreaState>();
+  private undoRedoManager: UndoRedoManager<MarkerAreaState> =
+    new UndoRedoManager<MarkerAreaState>();
 
   /**
    * Returns true if undo operation can be performed (undo stack is not empty).
-   * 
+   *
    * @since 2.26.0
    */
   public get isUndoPossible(): boolean {
-    if (this.undoRedoManager && this.undoRedoManager.isUndoPossible) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.undoRedoManager && this.undoRedoManager.isUndoPossible;
   }
 
   /**
    * Returns true if redo operation can be performed (redo stack is not empty).
-   * 
+   *
    * @since 2.26.0
    */
-   public get isRedoPossible(): boolean {
-    if (this.undoRedoManager && this.undoRedoManager.isRedoPossible) {
-      return true;
-    } else {
-      return false;
-    }
+  public get isRedoPossible(): boolean {
+    return this.undoRedoManager && this.undoRedoManager.isRedoPossible;
   }
 
   /**
@@ -362,7 +353,7 @@ export class MarkerArea {
         top:
           (this.editorCanvas.clientHeight * this._zoomLevel -
             this.contentDiv.clientHeight) /
-          2,
+          2
       });
     }
   }
@@ -477,7 +468,10 @@ export class MarkerArea {
    */
   public show(): void {
     // backwards compatibility with deprecated static Style class
-    if (this.styles.styleSheetRoot === undefined && Style.styleSheetRoot !== undefined) {
+    if (
+      this.styles.styleSheetRoot === undefined &&
+      Style.styleSheetRoot !== undefined
+    ) {
       this.styles.styleSheetRoot = Style.styleSheetRoot;
     }
 
@@ -567,7 +561,7 @@ export class MarkerArea {
    *
    * @param markers - one or more marker types to be added.
    */
-  public addMarkersToToolbar(...markers: typeof MarkerBase[]): void {
+  public addMarkersToToolbar(...markers: (typeof MarkerBase)[]): void {
     this._availableMarkerTypes.push(...markers);
   }
 
@@ -742,7 +736,7 @@ export class MarkerArea {
     }
     this.markers.forEach((marker) => {
       if (marker !== this._currentMarker) {
-        marker.scale(scaleX, scaleY)
+        marker.scale(scaleX, scaleY);
       }
     });
     if (preScaleSelectedMarker !== undefined) {
@@ -840,8 +834,8 @@ export class MarkerArea {
     this.markerImage.addEventListener('pointerdown', this.onPointerDown);
     // workaround to prevent a bug with Apple Pencil
     // https://bugs.webkit.org/show_bug.cgi?id=217430
-    this.markerImage.addEventListener('touchmove', ev => ev.preventDefault());
-    
+    this.markerImage.addEventListener('touchmove', (ev) => ev.preventDefault());
+
     this.markerImage.addEventListener('dblclick', this.onDblClick);
     this.attachWindowEvents();
   }
@@ -946,10 +940,6 @@ export class MarkerArea {
   }
 
   private showUI(): void {
-    if (this.settings.displayMode === 'popup') {
-      this.overrideOverflow();
-    }
-
     this.coverDiv = document.createElement('div');
     // prevent UI from blinking when just rendering state
     this.coverDiv.style.visibility = this._silentRenderMode
@@ -963,12 +953,14 @@ export class MarkerArea {
     switch (this.settings.displayMode) {
       case 'inline': {
         this.coverDiv.style.position = 'absolute';
-        const coverTop = this.settings.uiOffsetTop !== undefined ? 
-          this.target.offsetTop + this.settings.uiOffsetTop :
-            this.target.offsetTop > this.styles.settings.toolbarHeight
-              ? this.target.offsetTop - this.styles.settings.toolbarHeight
-              : 0;
-        const coverLeft = this.target.offsetLeft + (this.settings.uiOffsetLeft ?? 0); 
+        const coverTop =
+          this.settings.uiOffsetTop !== undefined
+            ? this.target.offsetTop + this.settings.uiOffsetTop
+            : this.target.offsetTop > this.styles.settings.toolbarHeight
+            ? this.target.offsetTop - this.styles.settings.toolbarHeight
+            : 0;
+        const coverLeft =
+          this.target.offsetLeft + (this.settings.uiOffsetLeft ?? 0);
         this.coverDiv.style.top = `${coverTop}px`;
         this.coverDiv.style.left = `${coverLeft}px`;
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
@@ -980,21 +972,6 @@ export class MarkerArea {
         // flex causes the ui to stretch when toolbox has wider nowrap panels
         //this.coverDiv.style.display = 'flex';
         break;
-      }
-      case 'popup': {
-        this.coverDiv.style.position = 'fixed';
-        // this.coverDiv.style.position = 'absolute';
-        this.coverDiv.style.top = '0px';
-        this.coverDiv.style.left = '0px';
-        this.coverDiv.style.width = '100vw';
-        this.coverDiv.style.height = `${window.innerHeight}px`;
-        this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
-        this.coverDiv.style.zIndex =
-          this.uiStyleSettings.zIndex !== undefined
-            ? this.uiStyleSettings.zIndex
-            : '1000';
-        this.coverDiv.style.display = 'flex';
-        // this.coverDiv.style.overflow = 'auto';
       }
     }
     this.targetRoot.appendChild(this.coverDiv);
@@ -1008,7 +985,9 @@ export class MarkerArea {
         ? `${this.settings.popupMargin}px`
         : '0px';
     if (this.settings.displayMode === 'popup') {
-      this.uiDiv.style.maxWidth = `calc(100vw - ${this.settings.popupMargin * 2}px`;
+      this.uiDiv.style.maxWidth = `calc(100vw - ${
+        this.settings.popupMargin * 2
+      }px`;
     }
     this.uiDiv.style.border = '0px';
     // this.uiDiv.style.overflow = 'hidden';
@@ -1035,7 +1014,8 @@ export class MarkerArea {
     this.contentDiv.style.flexGrow = '2';
     this.contentDiv.style.flexShrink = '1';
     if (this.settings.displayMode === 'popup') {
-      this.contentDiv.style.backgroundColor = this.uiStyleSettings.canvasBackgroundColor;
+      this.contentDiv.style.backgroundColor =
+        this.uiStyleSettings.canvasBackgroundColor;
       this.contentDiv.style.maxHeight = `${
         this.windowHeight -
         this.settings.popupMargin * 2 -
@@ -1069,9 +1049,11 @@ export class MarkerArea {
       this.target instanceof HTMLImageElement
         ? document.createElement('img')
         : document.createElement('canvas');
-    if (this.settings.displayMode === 'inline' 
-      && this.settings.uiOffsetTop === undefined 
-      && this.target.offsetTop < this.styles.settings.toolbarHeight) {
+    if (
+      this.settings.displayMode === 'inline' &&
+      this.settings.uiOffsetTop === undefined &&
+      this.target.offsetTop < this.styles.settings.toolbarHeight
+    ) {
       this.editingTarget.style.marginTop = `${
         this.target.offsetTop - this.styles.settings.toolbarHeight
       }px`;
@@ -1380,7 +1362,7 @@ export class MarkerArea {
   private panTo(point: IPoint) {
     this.contentDiv.scrollBy({
       left: this.prevPanPoint.x - point.x,
-      top: this.prevPanPoint.y - point.y,
+      top: this.prevPanPoint.y - point.y
     });
     this.prevPanPoint = point;
   }
@@ -1413,7 +1395,7 @@ export class MarkerArea {
     const result: MarkerAreaState = {
       width: this.imageWidth,
       height: this.imageHeight,
-      markers: [],
+      markers: []
     };
     this.markers.forEach((marker) => result.markers.push(marker.getState()));
     return result;
@@ -1578,7 +1560,7 @@ export class MarkerArea {
     this._currentMarker = marker;
     if (this._currentMarker !== undefined && !this._currentMarker.isSelected) {
       if (this._currentMarker.state !== 'new') {
-      this._currentMarker.select();
+        this._currentMarker.select();
       }
       this.toolbar.setCurrentMarker(this._currentMarker);
       this.toolbox.setPanelButtons(this._currentMarker.toolboxPanels);
@@ -1707,7 +1689,7 @@ export class MarkerArea {
     const scaleY = clientRect.height / this.imageHeight / this.zoomLevel;
     return {
       x: (x - clientRect.left) / this.zoomLevel / scaleX,
-      y: (y - clientRect.top) / this.zoomLevel / scaleY,
+      y: (y - clientRect.top) / this.zoomLevel / scaleY
     };
   }
 
@@ -1721,8 +1703,9 @@ export class MarkerArea {
       case 'inline': {
         const rects = this.target.getClientRects();
         const coverTop =
-          rects.length > 0 && rects.item(0) &&
-          (rects.item(0).y > this.styles.settings.toolbarHeight)
+          rects.length > 0 &&
+          rects.item(0) &&
+          rects.item(0).y > this.styles.settings.toolbarHeight
             ? this.target.offsetTop - this.styles.settings.toolbarHeight
             : 0;
         this.coverDiv.style.top = `${coverTop}px`;

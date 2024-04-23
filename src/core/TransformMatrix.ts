@@ -22,9 +22,12 @@ export class TransformMatrix {
       d: matrix.d,
       e: matrix.e,
       f: matrix.f
-    }
+    };
   }
-  public static toSVGMatrix(currentMatrix: SVGMatrix, newMatrix: ITransformMatrix): SVGMatrix {
+  public static toSVGMatrix(
+    currentMatrix: SVGMatrix,
+    newMatrix: ITransformMatrix
+  ): SVGMatrix {
     currentMatrix.a = newMatrix.a;
     currentMatrix.b = newMatrix.b;
     currentMatrix.c = newMatrix.c;

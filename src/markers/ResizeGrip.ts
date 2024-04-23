@@ -35,7 +35,7 @@ export class ResizeGrip {
 
   /**
    * Returns true if passed SVG element belongs to the grip. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {

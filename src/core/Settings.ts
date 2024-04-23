@@ -64,7 +64,7 @@ export class Settings {
    * Stroke (line) width options.
    */
   public defaultStrokeWidths = [1, 2, 3, 5, 10];
-  
+
   /**
    * Stroke dash array options.
    */
@@ -102,9 +102,9 @@ export class Settings {
   public newFreehandMarkerOnPointerUp = false;
 
   /**
-   * If set to true, when colors on a marker are changed 
+   * If set to true, when colors on a marker are changed
    * it changes the default color for other markers as well.
-   * 
+   *
    * @since 2.7.0
    */
   public defaultColorsFollowCurrentColors = false;
@@ -120,64 +120,63 @@ export class Settings {
   /**
    * When set to true rotation feature is disabled on markers.
    * This doesn't affect markers restored from a previously saved state.
-   * 
+   *
    * @since 2.22.0
    */
   public disableRotation = false;
 
   /**
-   * If set, the UI will be offset by the specified value, 
-   * otherwise it will be offset by -toolbarHeight or 0 if 
+   * If set, the UI will be offset by the specified value,
+   * otherwise it will be offset by -toolbarHeight or 0 if
    * there's less space than toolbarHeight on top.
-   * 
+   *
    * Use this if you want to control the position inside a
    * `position: relative` parent, as auto-calculation
    * will calculate available space from the relative
    * container and not the whole page.
-   * 
+   *
    * Common usage when used with a relatively positioned parent would be:
-   * 
+   *
    * ```typescript
    * markerArea.targetRoot = document.getElementById('relativeParent');
    * markerArea.settings.uiOffsetTop = -markerArea.styles.settings.toolbarHeight;
    * ```
    * This would ensure that the toolbar is placed above the image
    * even if the image's offset from the relative parent is 0.
-   * 
+   *
    * @since 2.28.0
    */
-   public uiOffsetTop?: number;
-   
-   /**
-    * If set, the UI will be offset by the specified number of pixels on the left.
-    * 
-    * @since 2.31.0
-    */
-   public uiOffsetLeft?: number;
+  public uiOffsetTop?: number;
 
-   /**
-    * Default font size for the `CaptionFrameMarker`
-    * 
-    * @since 2.29.0
-    */
-   public defaultCaptionFontSize = '1rem';
-   /**
-    * Default caption text for the `CaptionFrameMarker`
-    * 
-    * @since 2.29.0
-    */
-   public defaultCaptionText = 'Text';
-   /**
-    * Enable word wrapping in text markers (`TextMarker`, `CalloutMarker`)
-    * 
-    * @since 2.30.0
-    */
-   public wrapText = false;
-   /**
-    * Default text for the `TextMarker` based markers
-    * 
-    * @since 2.32.0
-    */
-   public defaultText = 'Your text here';
+  /**
+   * If set, the UI will be offset by the specified number of pixels on the left.
+   *
+   * @since 2.31.0
+   */
+  public uiOffsetLeft?: number;
 
+  /**
+   * Default font size for the `CaptionFrameMarker`
+   *
+   * @since 2.29.0
+   */
+  public defaultCaptionFontSize = '1rem';
+  /**
+   * Default caption text for the `CaptionFrameMarker`
+   *
+   * @since 2.29.0
+   */
+  public defaultCaptionText = 'Text';
+  /**
+   * Enable word wrapping in text markers (`TextMarker`, `CalloutMarker`)
+   *
+   * @since 2.30.0
+   */
+  public wrapText = false;
+  /**
+   * Default text for the `TextMarker` based markers
+   *
+   * @since 2.32.0
+   */
+  public defaultText = 'Your text here';
 }

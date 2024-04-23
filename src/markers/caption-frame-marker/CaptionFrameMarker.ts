@@ -189,7 +189,6 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       'text-color-panel'
     );
     this.textColorPanel.onColorChanged = this.setTextColor;
-
   }
 
   /**
@@ -223,7 +222,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
 
     this.captionElement = SvgHelper.createText([
       ['fill', this.textColor],
-      ['font-family', this.fontFamily],
+      ['font-family', this.fontFamily]
     ]);
     this.captionElement.style.fontSize = this.fontSize;
     this.captionElement.style.textAnchor = 'start';
@@ -235,7 +234,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       ['fill', 'transparent'],
       ['stroke', this.strokeColor],
       ['stroke-width', this.strokeWidth.toString()],
-      ['stroke-dasharray', this.strokeDasharray],
+      ['stroke-dasharray', this.strokeDasharray]
     ]);
 
     this.visual.appendChild(this.frame);
@@ -318,8 +317,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       ['height', this.captionBoxHeight.toString()],
       [
         'clip-path',
-        `path('M0,0 H${this.width} V${this.height} H${-this.width} Z')`,
-      ],
+        `path('M0,0 H${this.width} V${this.height} H${-this.width} Z')`
+      ]
     ]);
     SvgHelper.setAttributes(this.captionElement, [
       ['x', this.PADDING.toString()],
@@ -328,8 +327,8 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
         'clip-path',
         `path('M0,0 H${this.width - this.PADDING} V${this.height} H${
           -this.width - this.PADDING
-        } Z')`,
-      ],
+        } Z')`
+      ]
     ]);
   }
 
@@ -445,7 +444,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     super.setSize();
     SvgHelper.setAttributes(this.frame, [
       ['width', this.width.toString()],
-      ['height', this.height.toString()],
+      ['height', this.height.toString()]
     ]);
     this.sizeCaption();
   }
@@ -508,7 +507,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.strokeWidth = width;
     if (this.frame) {
       SvgHelper.setAttributes(this.frame, [
-        ['stroke-width', this.strokeWidth.toString()],
+        ['stroke-width', this.strokeWidth.toString()]
       ]);
     }
     this.stateChanged();
@@ -521,7 +520,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
     this.strokeDasharray = dashes;
     if (this.frame) {
       SvgHelper.setAttributes(this.frame, [
-        ['stroke-dasharray', this.strokeDasharray],
+        ['stroke-dasharray', this.strokeDasharray]
       ]);
     }
     this.stateChanged();
@@ -537,7 +536,7 @@ export class CaptionFrameMarker extends RectangularBoxMarkerBase {
       this.strokeWidthPanel,
       this.strokeStylePanel,
       this.fontFamilyPanel,
-      this.textColorPanel,
+      this.textColorPanel
     ];
   }
 

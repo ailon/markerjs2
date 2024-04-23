@@ -9,8 +9,8 @@ import { RectangleMarkerState } from '../RectangleMarkerState';
 
 export class HighlightMarker extends CoverMarker {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'HighlightMarker';
@@ -32,7 +32,11 @@ export class HighlightMarker extends CoverMarker {
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.setOpacity = this.setOpacity.bind(this);
@@ -63,7 +67,9 @@ export class HighlightMarker extends CoverMarker {
   protected setOpacity(opacity: number): void {
     this.opacity = opacity;
     if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['opacity', this.opacity.toString()]]);
+      SvgHelper.setAttributes(this.visual, [
+        ['opacity', this.opacity.toString()]
+      ]);
     }
     this.stateChanged();
   }

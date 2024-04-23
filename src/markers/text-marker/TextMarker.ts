@@ -154,7 +154,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
       ['font-family', this.fontFamily],
       ['font-size', '16px'],
       ['x', '0'],
-      ['y', '0'],
+      ['y', '0']
     ]);
     this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // translate transform
     this.textElement.transform.baseVal.appendItem(SvgHelper.createTransform()); // scale transform
@@ -190,26 +190,26 @@ export class TextMarker extends RectangularBoxMarkerBase {
       const charsLinesAspectRatio = 0.35;
 
       let longestLineChars = textLines[0].length;
-      textLines.forEach(line => {
+      textLines.forEach((line) => {
         if (line.length > longestLineChars) {
           longestLineChars = line.length;
         }
       });
 
-      return longestLineChars * charsLinesAspectRatio / textLines.length;
+      return (longestLineChars * charsLinesAspectRatio) / textLines.length;
     }
 
     if (this.text !== '') {
       const lines = this.text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
-      const boxAspectRatio = this.width * 1.0 / this.height;
+      const boxAspectRatio = (this.width * 1.0) / this.height;
       let processedLines = new Array<string>(...lines);
-      
+
       let textAspectRatio = getTextAspectRatio(processedLines);
 
       let maxLineLength = Number.MAX_VALUE;
       while (textAspectRatio > boxAspectRatio) {
         let longestLine = processedLines[0];
-        processedLines.forEach(line => {
+        processedLines.forEach((line) => {
           if (line.length > longestLine.length) {
             longestLine = line;
           }
@@ -218,7 +218,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
 
         if (maxLineLength > 0) {
           processedLines = [];
-          lines.forEach(line => {
+          lines.forEach((line) => {
             let reminderLine = line;
             while (reminderLine.length > maxLineLength) {
               let maxEnd = reminderLine.lastIndexOf(' ', maxLineLength);
@@ -257,16 +257,20 @@ export class TextMarker extends RectangularBoxMarkerBase {
         this.textElement.removeChild(this.textElement.lastChild);
       }
 
-      const processedText = this.globalSettings.wrapText ? this.wrapText() : this.text;
+      const processedText = this.globalSettings.wrapText
+        ? this.wrapText()
+        : this.text;
       const lines = processedText.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
       lines.forEach((line) => {
         this.textElement.appendChild(
           SvgHelper.createTSpan(
             // workaround for swallowed empty lines
-            line.trim() === '' ? ' ' : line.trim(), [
-            ['x', '0'],
-            ['dy', LINE_SIZE],
-          ])
+            line.trim() === '' ? ' ' : line.trim(),
+            [
+              ['x', '0'],
+              ['dy', LINE_SIZE]
+            ]
+          )
         );
       });
 
@@ -290,7 +294,8 @@ export class TextMarker extends RectangularBoxMarkerBase {
   }
 
   private getTextPosition(scale: number): IPoint {
-    const xSign = window.getComputedStyle(this.textElement).direction === 'rtl' ? 1 : -1;
+    const xSign =
+      window.getComputedStyle(this.textElement).direction === 'rtl' ? 1 : -1;
     const textSize = this.textElement.getBBox();
     let x = 0;
     let y = 0;
@@ -355,11 +360,11 @@ export class TextMarker extends RectangularBoxMarkerBase {
     if (this.visual && this.bgRectangle) {
       SvgHelper.setAttributes(this.visual, [
         ['width', this.width.toString()],
-        ['height', this.height.toString()],
+        ['height', this.height.toString()]
       ]);
       SvgHelper.setAttributes(this.bgRectangle, [
         ['width', this.width.toString()],
-        ['height', this.height.toString()],
+        ['height', this.height.toString()]
       ]);
     }
   }
@@ -469,12 +474,12 @@ export class TextMarker extends RectangularBoxMarkerBase {
           // const textPosition = this.getTextPosition(textScale);
           const rPosition = this.rotatePoint({
             x: this.left + this.width / 2,
-            y: this.top + this.height / 2,
+            y: this.top + this.height / 2
           });
           const textSize = this.textElement.getBBox();
           const rWH = {
             x: textSize.width * textScale,
-            y: textSize.height * textScale,
+            y: textSize.height * textScale
           };
           rPosition.x -= rWH.x / 2;
           rPosition.y -= rWH.y / 2;
@@ -506,7 +511,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
   }
 
   public select(): void {
-    super.select();    
+    super.select();
     if (this.state === 'edit') {
       this.textEditDivClicked(this.textEditor.innerText);
     }

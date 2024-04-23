@@ -70,12 +70,16 @@ export class LinearMarkerBase extends MarkerBase {
 
   /**
    * Creates a LineMarkerBase object.
-   * 
+   *
    * @param container - SVG container to hold marker's visual.
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.setupControlBox();
@@ -83,25 +87,22 @@ export class LinearMarkerBase extends MarkerBase {
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
     if (super.ownsTarget(el)) {
       return true;
-    } else if (
-      this.grip1.ownsTarget(el) || this.grip2.ownsTarget(el)
-    ) {
+    } else if (this.grip1.ownsTarget(el) || this.grip2.ownsTarget(el)) {
       return true;
     } else {
       return false;
     }
   }
 
-  
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -143,17 +144,21 @@ export class LinearMarkerBase extends MarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
   public pointerUp(point: IPoint): void {
     const inState = this.state;
     super.pointerUp(point);
-    if (this.state === 'creating' && Math.abs(this.x1 - this.x2) < 10 && Math.abs(this.y1 - this.y2) < 10) {
+    if (
+      this.state === 'creating' &&
+      Math.abs(this.x1 - this.x2) < 10 &&
+      Math.abs(this.y1 - this.y2) < 10
+    ) {
       this.x2 = this.x1 + this.defaultLength;
       this.adjustVisual();
-      this.adjustControlBox()
+      this.adjustControlBox();
     } else {
       this.manipulate(point);
     }
@@ -171,7 +176,7 @@ export class LinearMarkerBase extends MarkerBase {
 
   /**
    * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
+   *
    * @param point - event coordinates.
    */
   public manipulate(point: IPoint): void {
@@ -194,16 +199,16 @@ export class LinearMarkerBase extends MarkerBase {
    * @param point - current manipulation coordinates.
    */
   protected resize(point: IPoint): void {
-    switch(this.activeGrip) {
+    switch (this.activeGrip) {
       case this.grip1:
         this.x1 = point.x;
         this.y1 = point.y;
-        break; 
+        break;
       case this.grip2:
       case undefined:
         this.x2 = point.x;
         this.y2 = point.y;
-        break; 
+        break;
     }
     this.adjustVisual();
     this.adjustControlBox();
@@ -270,8 +275,16 @@ export class LinearMarkerBase extends MarkerBase {
   protected positionGrips(): void {
     const gripSize = this.grip1.GRIP_SIZE;
 
-    this.positionGrip(this.grip1.visual, this.x1 - gripSize / 2, this.y1 - gripSize / 2);
-    this.positionGrip(this.grip2.visual, this.x2 - gripSize / 2, this.y2 - gripSize / 2);
+    this.positionGrip(
+      this.grip1.visual,
+      this.x1 - gripSize / 2,
+      this.y1 - gripSize / 2
+    );
+    this.positionGrip(
+      this.grip2.visual,
+      this.x2 - gripSize / 2,
+      this.y2 - gripSize / 2
+    );
   }
 
   /**
@@ -290,12 +303,15 @@ export class LinearMarkerBase extends MarkerBase {
    * Returns marker's state.
    */
   public getState(): LinearMarkerBaseState {
-    const result: LinearMarkerBaseState = Object.assign({
-      x1: this.x1,
-      y1: this.y1,
-      x2: this.x2,
-      y2: this.y2
-    }, super.getState());
+    const result: LinearMarkerBaseState = Object.assign(
+      {
+        x1: this.x1,
+        y1: this.y1,
+        x2: this.x2,
+        y2: this.y2
+      },
+      super.getState()
+    );
 
     return result;
   }
@@ -315,7 +331,7 @@ export class LinearMarkerBase extends MarkerBase {
 
   /**
    * Scales marker. Used after the image resize.
-   * 
+   *
    * @param scaleX - horizontal scale
    * @param scaleY - vertical scale
    */

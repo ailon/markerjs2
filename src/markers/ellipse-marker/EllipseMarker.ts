@@ -14,8 +14,8 @@ import { OpacityPanel } from '../../ui/toolbox-panels/OpacityPanel';
 
 export class EllipseMarker extends RectangularBoxMarkerBase {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'EllipseMarker';
@@ -62,7 +62,11 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     super(container, overlayContainer, settings);
 
     this.strokeColor = settings.defaultColor;
@@ -119,7 +123,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
@@ -146,7 +150,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -163,7 +167,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
+   *
    * @param point - event coordinates.
    */
   public manipulate(point: IPoint): void {
@@ -172,7 +176,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
 
   /**
    * Resize marker based on current pointer coordinates and context.
-   * @param point 
+   * @param point
    */
   protected resize(point: IPoint): void {
     super.resize(point);
@@ -188,13 +192,13 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
       ['cx', (this.width / 2).toString()],
       ['cy', (this.height / 2).toString()],
       ['rx', (this.width / 2).toString()],
-      ['ry', (this.height / 2).toString()],
+      ['ry', (this.height / 2).toString()]
     ]);
   }
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
-   * 
+   *
    * @param point - event coordinates.
    */
   public pointerUp(point: IPoint): void {
@@ -233,7 +237,9 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
   protected setStrokeWidth(width: number): void {
     this.strokeWidth = width;
     if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['stroke-width', this.strokeWidth.toString()]]);
+      SvgHelper.setAttributes(this.visual, [
+        ['stroke-width', this.strokeWidth.toString()]
+      ]);
     }
     this.stateChanged();
   }
@@ -244,7 +250,9 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
   protected setStrokeDasharray(dashes: string): void {
     this.strokeDasharray = dashes;
     if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['stroke-dasharray', this.strokeDasharray]]);
+      SvgHelper.setAttributes(this.visual, [
+        ['stroke-dasharray', this.strokeDasharray]
+      ]);
     }
     this.stateChanged();
   }
@@ -255,7 +263,9 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
   protected setOpacity(opacity: number): void {
     this.opacity = opacity;
     if (this.visual) {
-      SvgHelper.setAttributes(this.visual, [['opacity', this.opacity.toString()]]);
+      SvgHelper.setAttributes(this.visual, [
+        ['opacity', this.opacity.toString()]
+      ]);
     }
     this.stateChanged();
   }
@@ -264,20 +274,29 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
    * Returns the list of toolbox panels for this marker type.
    */
   public get toolboxPanels(): ToolboxPanel[] {
-    return [this.strokePanel, this.fillPanel, this.strokeWidthPanel, this.strokeStylePanel, this.opacityPanel];
+    return [
+      this.strokePanel,
+      this.fillPanel,
+      this.strokeWidthPanel,
+      this.strokeStylePanel,
+      this.opacityPanel
+    ];
   }
 
   /**
    * Returns current marker state that can be restored in the future.
    */
   public getState(): RectangleMarkerState {
-    const result: RectangleMarkerState = Object.assign({
-      fillColor: this.fillColor,
-      strokeColor: this.strokeColor,
-      strokeWidth: this.strokeWidth,
-      strokeDasharray: this.strokeDasharray,
-      opacity: this.opacity
-    }, super.getState());
+    const result: RectangleMarkerState = Object.assign(
+      {
+        fillColor: this.fillColor,
+        strokeColor: this.strokeColor,
+        strokeWidth: this.strokeWidth,
+        strokeDasharray: this.strokeDasharray,
+        opacity: this.opacity
+      },
+      super.getState()
+    );
     result.typeName = EllipseMarker.typeName;
 
     return result;
@@ -285,7 +304,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {
@@ -303,7 +322,7 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
 
   /**
    * Scales marker. Used after the image resize.
-   * 
+   *
    * @param scaleX - horizontal scale
    * @param scaleY - vertical scale
    */

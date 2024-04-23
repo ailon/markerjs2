@@ -5,20 +5,20 @@ import { Settings } from './Settings';
 
 /**
  * Base class for all available and custom marker types.
- * 
+ *
  * All markers used with marker.js 2 should be descendants of this class.
  */
 export class MarkerBase {
   /**
-   * String type name of the marker type. 
-   * 
+   * String type name of the marker type.
+   *
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'MarkerBase';
 
   /**
    * Instance property returning marker's type name.
-   * 
+   *
    * @since 2.16.0
    */
   public get typeName(): string {
@@ -35,7 +35,7 @@ export class MarkerBase {
   protected _overlayContainer: HTMLDivElement;
   /**
    * HTML container that can be used to render overlay objects while the marker is active.
-   * 
+   *
    * For example, this is used for the text editing layer while editing text in the {@see TextMarker}.
    */
   public get overlayContainer(): HTMLDivElement {
@@ -89,7 +89,7 @@ export class MarkerBase {
   public onFillColorChanged?: (color: string) => void;
   /**
    * Method to call when marker state changes.
-   * 
+   *
    * @since 2.23.0
    */
   public onStateChanged?: (marker: MarkerBase) => void;
@@ -108,7 +108,11 @@ export class MarkerBase {
    * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
    * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(
+    container: SVGGElement,
+    overlayContainer: HTMLDivElement,
+    settings: Settings
+  ) {
     this._container = container;
     this._overlayContainer = overlayContainer;
     this.globalSettings = settings;
@@ -120,7 +124,7 @@ export class MarkerBase {
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -130,14 +134,14 @@ export class MarkerBase {
 
   /**
    * Is this marker selected?
-   * 
+   *
    * @since 2.16.0
    */
   protected _isSelected = false;
 
   /**
    * Returns true if the marker is currently selected
-   * 
+   *
    * @since 2.16.0
    */
   public get isSelected(): boolean {
@@ -164,37 +168,37 @@ export class MarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  public pointerDown(point: IPoint, target?: EventTarget):void {}
+  public pointerDown(point: IPoint, target?: EventTarget): void {}
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) double click event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  public dblClick(point: IPoint, target?: EventTarget):void {}
+  public dblClick(point: IPoint, target?: EventTarget): void {}
 
   /**
    * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
+   *
    * @param point - event coordinates.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  public manipulate(point: IPoint):void {}
+  public manipulate(point: IPoint): void {}
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
-   * 
+   *
    * @param point - event coordinates.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  public pointerUp(point: IPoint):void {
+  public pointerUp(point: IPoint): void {
     this.stateChanged();
   }
 
@@ -216,8 +220,8 @@ export class MarkerBase {
    * Returns current marker state that can be restored in the future.
    */
   public getState(): MarkerBaseState {
-    return { 
-      typeName: MarkerBase.typeName, 
+    return {
+      typeName: MarkerBase.typeName,
       state: this.state,
       notes: this.notes
     };
@@ -225,7 +229,7 @@ export class MarkerBase {
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {
@@ -235,7 +239,7 @@ export class MarkerBase {
 
   /**
    * Scales marker. Used after the image resize.
-   * 
+   *
    * @param scaleX - horizontal scale
    * @param scaleY - vertical scale
    */
@@ -244,7 +248,7 @@ export class MarkerBase {
 
   /**
    * Called by a marker when its foreground color changes.
-   * @param color 
+   * @param color
    */
   protected colorChanged(color: string): void {
     if (this.onColorChanged) {
@@ -254,7 +258,7 @@ export class MarkerBase {
   }
   /**
    * Called by a marker when its background/fill color changes.
-   * @param color 
+   * @param color
    */
   protected fillColorChanged(color: string): void {
     if (this.onFillColorChanged) {
@@ -266,18 +270,25 @@ export class MarkerBase {
   /**
    * Called by a marker when its state could have changed.
    * Does a check if the state has indeed changed before firing the handler.
-   * 
+   *
    * @since 2.23.0
    */
   protected stateChanged(): void {
-    if (this.onStateChanged && this.state !== 'creating' && this.state !== 'new') {
+    if (
+      this.onStateChanged &&
+      this.state !== 'creating' &&
+      this.state !== 'new'
+    ) {
       const currentState = this.getState();
       // avoid reacting to state (mode) differences
       if (this.manipulationStartState !== undefined) {
         this.manipulationStartState.state = 'select';
       }
       currentState.state = 'select';
-      if (JSON.stringify(this.manipulationStartState) != JSON.stringify(currentState)) {
+      if (
+        JSON.stringify(this.manipulationStartState) !=
+        JSON.stringify(currentState)
+      ) {
         this.onStateChanged(this);
       }
     }

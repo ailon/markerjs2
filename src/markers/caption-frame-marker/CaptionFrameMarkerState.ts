@@ -1,4 +1,4 @@
-import { RectangleMarkerState } from "../RectangleMarkerState";
+import { RectangleMarkerState } from '../RectangleMarkerState';
 
 /**
  * Represents state of a CaptionFrameMarker,

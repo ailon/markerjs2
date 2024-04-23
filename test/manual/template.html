@@ -9,29 +9,6 @@
       document.addEventListener('DOMContentLoaded', function () {
         experiments = new markerjs2.Experiments();
       });
-
-      // class ComponentImage extends HTMLElement {
-      //   constructor() {
-      //     super();
-      //     this.attachShadow({mode: 'open'})
-      //   }
-      //   connectedCallback() {
-      //     const img = document.createElement('img');
-      //     img.src = 'images/landscape.jpg';
-      //     img.style.maxWidth = '50%';
-      //     img.className = 'img';
-      //     img.addEventListener('click', () => this.showMarkerArea(img));
-      //     this.shadowRoot.appendChild(img);
-      //   }
-      //   showMarkerArea(target) {
-      //     const markerArea = new markerjs2.MarkerArea(target);
-      //     markerArea.targetRoot = this.shadowRoot;
-      //     markerjs2.Style.styleSheetRoot = this.shadowRoot;
-      //     markerArea.show();
-      //   }
-      // }
-
-      // customElements.define('component-image', ComponentImage);
     </script>
     <style>
       * {
@@ -41,10 +18,6 @@
         background-color: blue;
         font-size: 40px;
       }
-      /* #app {
-      background-color: aqua;
-      padding: 19px;
-    } */
       .toolbar {
         background-color: white;
       }
@@ -99,35 +72,9 @@
         id="testImage1"
         onclick="experiments.openMarkerArea(document.getElementById('testImage1'))"
       />
-      <!-- <canvas 
-      id="targetElement1"
-      style="max-width: 50%; height: 400px; border: 1px solid green; position: absolute; top: 18px; left: 40%;"
-      onclick="experiments.openMarkerArea(document.getElementById('targetElement1'))"></canvas> -->
-      <!-- <div 
-      id="targetElement1"
-      style="width: 50%; height: 400px; border: 1px solid magenta; position: absolute; top: 18px; left: 40%;"
-      onclick="experiments.openMarkerArea(document.getElementById('targetElement1'))"></div> -->
       <br />
-      <!-- <div
-        id="consoleLog"
-        style="
-          width: 800px;
-          height: 400px;
-          border: 1px solid white;
-          overflow-y: scroll;
-          font-family: 'Courier New', Courier, monospace;
-          font-size: 1rem;
-          background-color: white;
-          color: black;
-        "
-      ></div> -->
-      <select onchange="experiments.setDisplayMode(this.value)">
-        <option value="inline">inline</option>
-        <option value="popup">popup</option>
-      </select>
 
       <br />
-      <input id="testInput" type="text" />
 
       <br />
       <img id="resultImage1" onclick="experiments.openMarkerArea(this)" />
@@ -151,10 +98,6 @@
         <button onclick="experiments.undo()">undo</button>
         <button onclick="experiments.redo()">redo</button>
       </div>
-
-      <canvas id="resultCanvas" style="border: 1px solid red"></canvas>
-
-      <!-- <component-image></component-image> -->
     </div>
   </body>
 </html>
