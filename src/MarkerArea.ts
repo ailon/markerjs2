@@ -258,11 +258,7 @@ export class MarkerArea {
    * @since 2.26.0
    */
   public get isUndoPossible(): boolean {
-    if (this.undoRedoManager && this.undoRedoManager.isUndoPossible) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.undoRedoManager && this.undoRedoManager.isUndoPossible;
   }
 
   /**
@@ -271,11 +267,7 @@ export class MarkerArea {
    * @since 2.26.0
    */
   public get isRedoPossible(): boolean {
-    if (this.undoRedoManager && this.undoRedoManager.isRedoPossible) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.undoRedoManager && this.undoRedoManager.isRedoPossible;
   }
 
   /**
@@ -949,10 +941,6 @@ export class MarkerArea {
   }
 
   private showUI(): void {
-    if (this.settings.displayMode === 'popup') {
-      this.overrideOverflow();
-    }
-
     this.coverDiv = document.createElement('div');
     // prevent UI from blinking when just rendering state
     this.coverDiv.style.visibility = this._silentRenderMode
@@ -985,21 +973,6 @@ export class MarkerArea {
         // flex causes the ui to stretch when toolbox has wider nowrap panels
         //this.coverDiv.style.display = 'flex';
         break;
-      }
-      case 'popup': {
-        this.coverDiv.style.position = 'fixed';
-        // this.coverDiv.style.position = 'absolute';
-        this.coverDiv.style.top = '0px';
-        this.coverDiv.style.left = '0px';
-        this.coverDiv.style.width = '100vw';
-        this.coverDiv.style.height = `${window.innerHeight}px`;
-        this.coverDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
-        this.coverDiv.style.zIndex =
-          this.uiStyleSettings.zIndex !== undefined
-            ? this.uiStyleSettings.zIndex
-            : '1000';
-        this.coverDiv.style.display = 'flex';
-        // this.coverDiv.style.overflow = 'auto';
       }
     }
     this.targetRoot.appendChild(this.coverDiv);
