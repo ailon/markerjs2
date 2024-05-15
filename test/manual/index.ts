@@ -96,8 +96,8 @@ export class Experiments {
 
       this.markerArea1.uiStyleSettings.redoButtonVisible = true;
 
-      this.markerArea1.uiStyleSettings.zoomButtonVisible = true;
-      this.markerArea1.uiStyleSettings.zoomOutButtonVisible = true;
+      this.markerArea1.uiStyleSettings.zoomButtonVisible = false;
+      this.markerArea1.uiStyleSettings.zoomOutButtonVisible = false;
 
       this.markerArea1.uiStyleSettings.clearButtonVisible = true;
 

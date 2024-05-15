@@ -13,18 +13,14 @@ import { LineMarker } from './markers/line-marker/LineMarker';
 import { TextMarker } from './markers/text-marker/TextMarker';
 import { FreehandMarker } from './markers/freehand-marker/FreehandMarker';
 import { ArrowMarker } from './markers/arrow-marker/ArrowMarker';
-import { CoverMarker } from './markers/cover-marker/CoverMarker';
 import { HighlightMarker } from './markers/highlight-marker/HighlightMarker';
 import { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 import { MarkerAreaState } from './MarkerAreaState';
 import { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
 import { IStyleSettings } from './core/IStyleSettings';
-import { MeasurementMarker } from './markers/measurement-marker/MeasurementMarker';
 import { IPoint } from './core/IPoint';
 import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
 import { UndoRedoManager } from './core/UndoRedoManager';
-import { CurveMarker } from './markers/curve-marker/CurveMarker';
-import { CaptionFrameMarker } from './markers/caption-frame-marker/CaptionFrameMarker';
 import {
   EventHandler,
   EventListenerRepository,
@@ -129,16 +125,10 @@ export class MarkerArea {
       FrameMarker,
       FreehandMarker,
       ArrowMarker,
-      TextMarker,
       EllipseFrameMarker,
       EllipseMarker,
-      HighlightMarker,
       CalloutMarker,
-      MeasurementMarker,
-      CoverMarker,
-      LineMarker,
-      CurveMarker,
-      CaptionFrameMarker
+      LineMarker
     ];
   }
 
@@ -411,7 +401,6 @@ export class MarkerArea {
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
     this.onPointerOut = this.onPointerOut.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
     this.overrideOverflow = this.overrideOverflow.bind(this);
     this.restoreOverflow = this.restoreOverflow.bind(this);
     this.close = this.close.bind(this);
@@ -847,7 +836,6 @@ export class MarkerArea {
     window.addEventListener('pointerout', this.onPointerOut);
     window.addEventListener('pointerleave', this.onPointerUp);
     window.addEventListener('resize', this.onWindowResize);
-    window.addEventListener('keyup', this.onKeyUp);
   }
 
   private detachEvents() {
@@ -863,7 +851,6 @@ export class MarkerArea {
     window.removeEventListener('pointerout', this.onPointerOut);
     window.removeEventListener('pointerleave', this.onPointerUp);
     window.removeEventListener('resize', this.onWindowResize);
-    window.removeEventListener('keyup', this.onKeyUp);
   }
 
   /**
@@ -953,24 +940,11 @@ export class MarkerArea {
     switch (this.settings.displayMode) {
       case 'inline': {
         this.coverDiv.style.position = 'absolute';
-        const coverTop =
-          this.settings.uiOffsetTop !== undefined
-            ? this.target.offsetTop + this.settings.uiOffsetTop
-            : this.target.offsetTop > this.styles.settings.toolbarHeight
-            ? this.target.offsetTop - this.styles.settings.toolbarHeight
-            : 0;
-        const coverLeft =
-          this.target.offsetLeft + (this.settings.uiOffsetLeft ?? 0);
-        this.coverDiv.style.top = `${coverTop}px`;
-        this.coverDiv.style.left = `${coverLeft}px`;
+        this.coverDiv.style.top = 'auto';
+        this.coverDiv.style.left = 'auto';
         this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
         //this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
-        this.coverDiv.style.zIndex =
-          this.uiStyleSettings.zIndex !== undefined
-            ? this.uiStyleSettings.zIndex
-            : '5';
-        // flex causes the ui to stretch when toolbox has wider nowrap panels
-        //this.coverDiv.style.display = 'flex';
+        this.coverDiv.style.zIndex = '9999999999999999999999999999';
         break;
       }
     }
@@ -980,6 +954,7 @@ export class MarkerArea {
     this.uiDiv.style.display = 'flex';
     this.uiDiv.style.flexDirection = 'column';
     this.uiDiv.style.flexGrow = '2';
+    this.uiDiv.style.height = '100%';
     this.uiDiv.style.margin =
       this.settings.displayMode === 'popup'
         ? `${this.settings.popupMargin}px`
@@ -1054,9 +1029,7 @@ export class MarkerArea {
       this.settings.uiOffsetTop === undefined &&
       this.target.offsetTop < this.styles.settings.toolbarHeight
     ) {
-      this.editingTarget.style.marginTop = `${
-        this.target.offsetTop - this.styles.settings.toolbarHeight
-      }px`;
+      this.editingTarget.style.marginTop = '0px';
     }
     this.editorCanvas.appendChild(this.editingTarget);
 
@@ -1510,8 +1483,6 @@ export class MarkerArea {
       this.settings.newFreehandMarkerOnPointerUp
     ) {
       this.createNewMarker(FreehandMarker);
-    } else {
-      this.toolbar.setSelectMode();
     }
     this.addUndoStep();
     this.eventListeners['markercreate'].forEach((listener) =>
@@ -1670,19 +1641,6 @@ export class MarkerArea {
     }
   }
 
-  private onKeyUp(ev: KeyboardEvent) {
-    if (
-      this._currentMarker !== undefined &&
-      this.notesArea === undefined &&
-      (ev.key === 'Delete' || ev.key === 'Backspace')
-    ) {
-      this.deleteSelectedMarker();
-      // this.setCurrentMarker();
-      // this.markerImage.style.cursor = 'default';
-      // this.addUndoStep();
-    }
-  }
-
   private clientToLocalCoordinates(x: number, y: number): IPoint {
     const clientRect = this.markerImage.getBoundingClientRect();
     const scaleX = clientRect.width / this.imageWidth / this.zoomLevel;
@@ -1701,20 +1659,13 @@ export class MarkerArea {
     this.setTopLeft();
     switch (this.settings.displayMode) {
       case 'inline': {
-        const rects = this.target.getClientRects();
-        const coverTop =
-          rects.length > 0 &&
-          rects.item(0) &&
-          rects.item(0).y > this.styles.settings.toolbarHeight
-            ? this.target.offsetTop - this.styles.settings.toolbarHeight
-            : 0;
-        this.coverDiv.style.top = `${coverTop}px`;
-        this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
+        this.coverDiv.style.top = 'auto';
+        this.coverDiv.style.left = 'auto';
         break;
       }
       case 'popup': {
-        this.coverDiv.style.top = '0px';
-        this.coverDiv.style.left = '0px';
+        this.coverDiv.style.top = 'auto';
+        this.coverDiv.style.left = 'auto';
         this.coverDiv.style.width = '100vw';
         this.coverDiv.style.height = `${this.windowHeight}px`;
         this.contentDiv.style.maxHeight = `${
