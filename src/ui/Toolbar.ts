@@ -224,6 +224,10 @@ export class Toolbar {
    * Add a listener to the toolbar button click event.
    * @param listener
    */
+  public setSelectMode(): void {
+    this.resetButtonStyles();
+    this.setActiveButton(this.buttons[0]);
+  }
   public addButtonClickListener(listener: ToolbarButtonClickHandler): void {
     this.buttonClickListeners.push(listener);
   }
@@ -351,6 +355,7 @@ export class Toolbar {
     switch (value) {
       case 'select':
         actionButton.style.fill = this.uiStyleSettings.selectButtonColor;
+        actionButton.style.display = 'none';
         break;
       case 'delete':
         actionButton.style.display = 'none';

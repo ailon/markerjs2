@@ -122,13 +122,11 @@ export class MarkerArea {
    */
   public get ALL_MARKER_TYPES(): (typeof MarkerBase)[] {
     return [
-      FrameMarker,
-      FreehandMarker,
       ArrowMarker,
+      FreehandMarker,
+      FrameMarker,
       EllipseFrameMarker,
-      EllipseMarker,
-      CalloutMarker,
-      LineMarker
+      CalloutMarker
     ];
   }
 
@@ -1044,6 +1042,10 @@ export class MarkerArea {
         ? 'hidden'
         : 'visible'
     );
+
+    setTimeout(() => {
+      this.toolbarButtonClicked('marker', ArrowMarker);
+    }, 400);
   }
 
   private closeUI() {
@@ -1483,6 +1485,8 @@ export class MarkerArea {
       this.settings.newFreehandMarkerOnPointerUp
     ) {
       this.createNewMarker(FreehandMarker);
+    } else {
+      this.toolbar.setSelectMode();
     }
     this.addUndoStep();
     this.eventListeners['markercreate'].forEach((listener) =>
@@ -1519,7 +1523,6 @@ export class MarkerArea {
       if (this._currentMarker !== undefined) {
         this._currentMarker.deselect();
         this.toolbar.setCurrentMarker();
-        this.toolbox.setPanelButtons([]);
 
         if (!this._isResizing) {
           this.eventListeners['markerdeselect'].forEach((listener) =>
