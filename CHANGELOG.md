@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.32.4] - 2025-03-19
+
+### Added
+- deprecation notice to readme since v3 is now out
+
+### Fixed
+- when switching to select mode programmatically while new marker is being created active toolbar button isn't updated correctly
+
 ## [2.32.3] - 2024-10-06
 ### Fixed
 - scrollbar is shown in color picker even when all colors fit without scrolling
@@ -536,6 +544,7 @@ of the whole page (and other events) are handled by the browser as expected).
 ### Added
 - Initial public release.
 
+[2.32.4]: https://github.com/ailon/markerjs2/releases/tag/v2.32.4
 [2.32.3]: https://github.com/ailon/markerjs2/releases/tag/v2.32.3
 [2.32.2]: https://github.com/ailon/markerjs2/releases/tag/v2.32.2
 [2.32.1]: https://github.com/ailon/markerjs2/releases/tag/v2.32.1
