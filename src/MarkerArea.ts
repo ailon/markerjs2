@@ -1131,6 +1131,7 @@ export class MarkerArea {
       }
       this.addUndoStep();
     }
+    this.toolbar.setSelectMode();
   }
 
   private toolbarButtonClicked(
