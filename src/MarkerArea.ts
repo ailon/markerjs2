@@ -1611,6 +1611,7 @@ export class MarkerArea {
 
     this.touchPoints++;
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
+      console.log(`Pointer down: ${ev.pointerType} (${this.touchPoints})`);
       if (
         this._currentMarker !== undefined &&
         (this._currentMarker.state === 'new' ||
@@ -1689,10 +1690,10 @@ export class MarkerArea {
         this._currentMarker.pointerUp(
           this.clientToLocalCoordinates(ev.clientX, ev.clientY)
         );
+        this.isDragging = false;
       }
+      this.addUndoStep();
     }
-    this.isDragging = false;
-    this.addUndoStep();
   }
 
   private onPointerOut(/*ev: PointerEvent*/) {
