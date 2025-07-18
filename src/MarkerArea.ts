@@ -1611,7 +1611,6 @@ export class MarkerArea {
 
     this.touchPoints++;
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
-      console.log(`Pointer down: ${ev.pointerType} (${this.touchPoints})`);
       if (
         this._currentMarker !== undefined &&
         (this._currentMarker.state === 'new' ||
