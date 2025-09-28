@@ -1689,8 +1689,8 @@ export class MarkerArea {
         this._currentMarker.pointerUp(
           this.clientToLocalCoordinates(ev.clientX, ev.clientY)
         );
-        this.isDragging = false;
       }
+      this.isDragging = false;
       this.addUndoStep();
     }
   }
